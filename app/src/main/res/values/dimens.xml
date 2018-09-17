@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- general common sizes -->
+    <dimen name="x_small">2dp</dimen>
+    <dimen name="small">4dp</dimen>
+    <dimen name="standard">8dp</dimen>
+    <dimen name="mid_small">12dp</dimen>
+    <dimen name="mid">16dp</dimen>
+    <dimen name="mid_x">24dp</dimen>
+    <dimen name="large">32dp</dimen>
+    <dimen name="x_large">48dp</dimen>
+    <dimen name="xx_large">64dp</dimen>
+    <dimen name="xxx_large">88dp</dimen>
+    <dimen name="xxxx_large">124dp</dimen>
+    <dimen name="elevation_small">4dp</dimen>
+    <dimen name="height_money">112dp</dimen>
+
+    <!-- font -->
+    <dimen name="font_size_12">12sp</dimen>
+    <dimen name="font_size_14">14sp</dimen>
+    <dimen name="font_size_15">15sp</dimen>
+    <dimen name="font_size_16">16sp</dimen>
+    <dimen name="font_size_18">18sp</dimen>
+    <dimen name="font_size_21">21sp</dimen>
+    <dimen name="font_size_20">20sp</dimen>
+    <dimen name="font_size_24">24sp</dimen>
+    <dimen name="font_size_28">28sp</dimen>
+    <dimen name="font_size_34">34sp</dimen>
+    <dimen name="font_size_42">42sp</dimen>
+    <dimen name="ok_btn_size">76dp</dimen>
+    <dimen name="round_button">54dp</dimen>
+    <dimen name="dpad_full_size">180dp</dimen>
+
+    <dimen name="top_bottom_arrow_width">160dp</dimen>
+    <dimen name="top_bottom_arrow_height">60dp</dimen>
+
+    <dimen name="left_right_arrow_width">60dp</dimen>
+    <dimen name="left_right_arrow_height">160dp</dimen>
+
+    <dimen name="controllers_height">180dp</dimen>
+    <dimen name="joystick_size">260dp</dimen>
+
+    <dimen name="divider_size">25dp</dimen>
+    <dimen name="tab_size">22dp</dimen>
+
+    <dimen name="app_icon_size">96dp</dimen>
+
+    <dimen name="control_buttons_padding">16dp</dimen>
+
+    <dimen name="online_status_dimen">30dp</dimen>
+    <dimen name="edit_icon_size">16dp</dimen>
+
+    <dimen name="indicator_size">42dp</dimen>
+
+    <dimen name="close_size">16dp</dimen>
+
+    <dimen name="button_height">64dp</dimen>
+
+    <dimen name="home_recycler_bottom_margin">80dp</dimen>
+    <dimen name="home_recycler_top_margin">60dp</dimen>
+
+    <dimen name="mute_margin_top">32dp</dimen>
+
+    <dimen name="channels_button_margin">10dp</dimen>
+
+    <dimen name="close_button_size">18dp</dimen>
+    <dimen name="scroll_margin">12dp</dimen>
+    <dimen name="scroll_width">32dp</dimen>
+    <dimen name="button_size">60dp</dimen>
+
+    <dimen name="panel_height">64dp</dimen>
+    <dimen name="video_container_size">300dp</dimen>
+    <dimen name="show_hide_top_margin">26dp</dimen>
+    <dimen name="show_hide_start_end_margin">24dp</dimen>
+    <dimen name="preview_thumbnail_size">48dp</dimen>
+    <dimen name="next_prev_size">54dp</dimen>
+    <dimen name="dpad_arrow_size">6dp</dimen>
+    <dimen name="sliding_layout_bottom_padding">72dp</dimen>
+    <dimen name="hide_show_clickable_area">64dp</dimen>
+    <dimen name="item_gallery_image">140dp</dimen>
+    <dimen name="devices_arrow_tip_size">20dp</dimen>
+    <dimen name="recent_devices_action_icon_size">56dp</dimen>
+    <dimen name="panel_icon_size">38dp</dimen>
+
+    <dimen name="notification_panel_icon_size">48dp</dimen>
+    <dimen name="disconnect_status_indicator_height">5dp</dimen>
+
+</resources>

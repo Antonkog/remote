@@ -1,0 +1,85 @@
+# Customize this file, documentation can be found here:
+# https://docs.fastlane.tools/actions/
+# All available actions: https://docs.fastlane.tools/actions
+# can also be listed using the `fastlane actions` command
+
+# Change the syntax highlighting to Ruby
+# All lines starting with a # are ignored when running `fastlane`
+
+# If you want to automatically update fastlane if a new version is available:
+# update_fastlane
+
+# This is the minimum version number required.
+# Update this, if you use features of a newer version
+fastlane_version "2.63.0"
+
+default_platform :android
+
+platform :android do
+  before_all do
+    # ENV["SLACK_URL"] = "https://hooks.slack.com/services/..."
+  end
+
+  #desc "Runs all the tests"
+  #lane :test do
+  #  gradle(task: "test")
+  #end
+
+  desc "Submit a new Beta Build to Crashlytics Beta"
+  lane :beta do
+    path = '../app/build.gradle'
+    re = /versionCode\s+(\d+)/
+    s = File.read(path)
+    versionCode = s[re, 1].to_i
+    s[re, 1] = (ENV["BUILD_NUMBER"]).to_s
+    f = File.new(path, 'w')
+    f.write(s)
+    f.close
+    
+    gradle(task: "assembleRelease", properties: { 'versionCode' => ENV["BUILD_NUMBER"] } )
+
+    srcapk = lane_context[SharedValues::GRADLE_ALL_APK_OUTPUT_PATHS].first
+    dstapk = "/tmp/kivi-remote-control-"+ ENV["BUILD_NUMBER"]+ ".apk"
+
+    sh("cp -R  #{srcapk} #{dstapk}")
+    sh ("curl -T #{dstapk} ftp://91.200.60.72:/apk-builds/kivi-remote-control/ --user wezommobile:7Q5m4Q5j")
+
+     tag_string = "build-" + ENV["BUILD_NUMBER"]
+     add_git_tag(tag: tag_string)      
+     push_to_git_remote
+     clean_build_artifacts
+    
+    #crashlytics
+
+    # sh "your_script.sh"
+    # You can also use other beta testing services here
+  end
+
+  desc "Deploy a new version to the Google Play"
+  lane :deploy do
+    #gradle(task: "assembleRelease")
+    #supply
+  end
+
+  # You can define as many lanes as you want
+
+  after_all do |lane|
+    # This block is called, only if the executed lane was successful
+    # slack(
+    #   message: "Successfully deployed new App Update."
+    # )
+  end
+
+  error do |lane, exception|
+    # slack(
+    #   message: exception.message,
+    #   success: false
+    # )
+  end
+end
+
+# More information about multiple platforms in fastlane: https://github.com/fastlane/fastlane/blob/master/fastlane/docs/Platforms.md
+# All available actions: https://docs.fastlane.tools/actions
+
+# fastlane reports which actions are used. No personal data is recorded.
+# Learn more at https://docs.fastlane.tools/#metrics

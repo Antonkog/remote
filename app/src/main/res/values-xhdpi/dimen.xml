@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="dpad_full_size">210dp</dimen>
+    <dimen name="control_buttons_padding">12dp</dimen>
+
+    <dimen name="close_button_size">18dp</dimen>
+
+    <dimen name="button_size">68dp</dimen>
+
+    <dimen name="rockers_width">78dp</dimen>
+    <dimen name="rockers_height">180dp</dimen>
+
+    <dimen name="ok_size">140dp</dimen>
+
+
+</resources>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" android:enterFadeDuration="@android:integer/config_shortAnimTime" android:exitFadeDuration="@android:integer/config_shortAnimTime">
+    <item android:drawable="@drawable/ok_button_stroke" android:state_pressed="true" /> <!-- pressed -->
+    <item android:drawable="@drawable/ok_button_stroke" android:state_focused="true" /> <!-- focused -->
+    <item android:drawable="@drawable/ok_btn_new" /> <!-- default -->
+</selector>

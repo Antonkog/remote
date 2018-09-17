@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_remote"
+        android:orientation="vertical">
+
+        <include layout="@layout/view_separator_horizontal" />
+
+        <com.wezom.kiviremote.views.KiviDPadView
+            android:id="@+id/dpad_view"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_margin="8dp"
+            android:clickable="false"
+            android:focusableInTouchMode="false"
+            android:scaleType="fitCenter"
+            android:src="@drawable/bg_joystick"
+            app:arrowSize="@dimen/dpad_arrow_size"
+            app:layout_constraintBottom_toTopOf="@+id/home"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mute" />
+
+        <View
+            android:id="@+id/dpad_bottom"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/dpad_view"
+            app:layout_constraintEnd_toEndOf="@+id/dpad_right"
+            app:layout_constraintStart_toStartOf="@+id/dpad_view"
+            app:layout_constraintTop_toBottomOf="@+id/dpad_ok" />
+
+        <View
+            android:id="@+id/dpad_left"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/dpad_bottom"
+            app:layout_constraintEnd_toStartOf="@+id/dpad_ok"
+            app:layout_constraintStart_toStartOf="@+id/dpad_view"
+            app:layout_constraintTop_toTopOf="@+id/dpad_top" />
+
+        <View
+            android:id="@+id/dpad_top"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/dpad_ok"
+            app:layout_constraintEnd_toEndOf="@+id/dpad_right"
+            app:layout_constraintStart_toStartOf="@+id/dpad_view"
+            app:layout_constraintTop_toTopOf="@+id/dpad_view" />
+
+        <View
+            android:id="@+id/dpad_right"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/dpad_view"
+            app:layout_constraintEnd_toEndOf="@+id/dpad_view"
+            app:layout_constraintStart_toEndOf="@+id/dpad_ok"
+            app:layout_constraintTop_toTopOf="@+id/dpad_view" />
+
+        <ImageView
+            android:id="@+id/dpad_ok"
+            android:layout_width="@dimen/ok_size"
+            android:layout_height="@dimen/ok_size"
+            android:background="@drawable/round_ok_button"
+            android:contentDescription="@string/ok"
+            app:layout_constraintBottom_toBottomOf="@id/dpad_view"
+            app:layout_constraintLeft_toLeftOf="@id/dpad_view"
+            app:layout_constraintRight_toRightOf="@id/dpad_view"
+            app:layout_constraintTop_toTopOf="@id/dpad_view"
+            app:srcCompat="@drawable/ok_button_selector" />
+
+        <com.wezom.kiviremote.views.RockersButtonView
+            android:id="@+id/volume"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="@dimen/mid"
+            android:layout_marginTop="@dimen/standard"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:rb_bottom_image="@drawable/selector_volume_down"
+            app:rb_textDescription="@string/volume_string"
+            app:rb_top_image="@drawable/selector_volume_up" />
+
+        <com.wezom.kiviremote.views.RockersButtonView
+            android:id="@+id/channels"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="@dimen/mid"
+            android:layout_marginTop="@dimen/standard"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:rb_bottom_image="@drawable/arrow_down_selector"
+            app:rb_textDescription="@string/chanels_string"
+            app:rb_top_image="@drawable/arrow_up_selector" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/switch_off"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:layout_alignParentTop="true"
+            android:layout_alignStart="@+id/mute"
+            android:layout_marginTop="@dimen/standard"
+            android:background="@drawable/button_selector"
+            android:padding="@dimen/mid"
+            android:scaleType="centerInside"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/selector_switch_off" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/mute"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
+            android:layout_below="@+id/switch_off"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/mute_margin_top"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="@dimen/mid"
+            android:scaleType="centerInside"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/switch_off"
+            app:srcCompat="@drawable/selector_mute_btn" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/large"
+            android:layout_marginStart="@dimen/large"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:srcCompat="@drawable/selector_back_btn" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/large"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="false"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintLeft_toRightOf="@+id/back"
+            app:layout_constraintRight_toLeftOf="@+id/menu"
+            app:srcCompat="@drawable/selector_home_btn" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/large"
+            android:layout_marginEnd="@dimen/large"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:srcCompat="@drawable/selector_menu_btn" />
+    </android.support.constraint.ConstraintLayout>
+</layout>

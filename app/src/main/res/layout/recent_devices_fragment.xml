@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/recent_devices_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/devices_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="?android:attr/actionBarSize"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:gravity="center"
+            android:text="@string/cancel"
+            android:textColor="@color/colorSecondaryText"
+            android:textStyle="bold"
+            app:layout_constraintRight_toLeftOf="@+id/devices_edit"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/devices_confirm"
+            android:layout_width="wrap_content"
+            android:layout_height="?android:attr/actionBarSize"
+            android:layout_marginEnd="16dp"
+            android:layout_marginStart="16dp"
+            android:gravity="center"
+            android:text="@string/confirm"
+            android:textColor="@color/colorPrimary"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@+id/devices_close"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/devices_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/recent_devices_action_icon_size"
+            android:padding="16dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_devices_edit" />
+
+        <ImageButton
+            android:id="@+id/devices_close"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/recent_devices_action_icon_size"
+            android:background="?android:attr/selectableItemBackgroundBorderless"
+            android:padding="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_close" />
+
+        <TextView
+            android:id="@+id/devices_title"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="@string/devices_list_of_connections"
+            android:textColor="@color/colorTextPrimary"
+            app:layout_constraintHorizontal_bias="0.48"
+            app:layout_constraintLeft_toRightOf="@+id/devices_edit"
+            app:layout_constraintRight_toLeftOf="@+id/devices_close"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/devices_edit_title"
+            android:layout_width="wrap_content"
+            android:layout_height="56dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:gravity="center"
+            android:text="@string/devices_list_edit"
+            android:textColor="@color/colorTextPrimary"
+            app:layout_constraintBottom_toTopOf="@id/devices_title"
+            app:layout_constraintHorizontal_bias="0.50"
+            app:layout_constraintLeft_toRightOf="@+id/devices_edit"
+            app:layout_constraintRight_toLeftOf="@+id/devices_close" />
+
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/devices_title">
+
+            <View
+                android:id="@+id/devices_shadow"
+                android:layout_width="match_parent"
+                android:layout_height="6dp"
+                android:background="@drawable/below_shadow"
+                android:visibility="gone" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/devices_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:id="@+id/devices_home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|bottom"
+                app:srcCompat="@drawable/bg_devices_add" />
+        </android.support.design.widget.CoordinatorLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</layout>

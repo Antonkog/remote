@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="KiviToolbarView">
+    <attr name="center_logo" format="reference"/>
+    <attr name="back_button" format="reference"/>
+    <attr name="additional_menu_button" format="reference"/>
+    <attr name="color_background" format="color"/>
+  </declare-styleable>
+
+  <declare-styleable name="RockersButtonView">
+    <attr name="rb_textDescription" format="string|reference"/>
+    <attr name="rb_top_image" format="reference"/>
+    <attr name="rb_bottom_image" format="reference"/>
+  </declare-styleable>
+
+  <declare-styleable name="KiviDPadView">
+    <attr name="arrowSize" format="dimension"/>
+  </declare-styleable>
+</resources>

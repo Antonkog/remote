@@ -1,0 +1,118 @@
+<resources>
+    <string name="app_name">KIVI Remote</string>
+
+    <string name="open">открыть</string>
+    <string name="close">закрыть</string>
+    <string name="ok">ОК</string>
+    <string name="cancel">Отмена</string>
+    <string name="error">Произошла ошибка, попробуйте ещё раз</string>
+    <string name="service_failure_message">Сервис недоступен. Попробуйте позже.</string>
+    <string name="network_failure_message">Сеть недоступна</string>
+
+
+    <!--CLIENT SIDE strings-->
+    <string name="type_command">Type Command&#8230;</string>
+    <string name="send.text">Send text</string>
+    <string name="connect">Connect</string>
+    <string name="server_ip" formatted="false">Server at IP: %s, port: %s</string>
+    <string name="connect_to_lan" formatted="false">Подключено к сети: "%s"</string>
+
+    <string name="lorem_ipsum">"Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet</string>
+    <string name="discovery_choose_tv">Выберите телевизор\nс которым вы хотите установить\nсоединение</string>
+
+    <string name="k.up">UP</string>
+    <string name="k.down">DOWN</string>
+    <string name="k.left">LEFT</string>
+    <string name="k.right">RIGNT</string>
+    <string name="k.ok">OK</string>
+    <string name="k.volume.up">VOL +</string>
+    <string name="k.volume.down">VOL -</string>
+    <string name="k.home">Home</string>
+    <string name="k.back">Back</string>
+    <string name="k.search">Search</string>
+    <string name="k.clear">Clear</string>
+    <string name="k.power">POWER</string>
+    <string name="k.menu">MENU</string>
+    <string name="k.media.menu">MENU_media</string>
+    <string name="k.channel.up">channel_up</string>
+    <string name="k.channel.down">channel_down</string>
+    <string name="k.enter">Enter</string>
+    <string name="discovery_connect">Подключиться</string>
+    <string name="no.contentDirectoryDevice.found">Не найдено ни одного устройства</string>
+    <string name="discovery.in.progress">Идет поиск доступных устройств</string>
+    <string name="search_again">Повторный поиск</string>
+    <string name="chanels_string">CH</string>
+    <string name="volume_string">VOL</string>
+    <string name="search_hint">Введите запрос</string>
+
+    <string name="wrong_input">Для корректной работы приложения необходимо изменить настройки ТВ.\nВ меню \&quot;Метод ввода\&quot; выберите пункт \&quot;KIVI Keyboard\&quot;.
+        \n\nПерейти в настройки?</string>
+    <string name="repeat_search">Повторный поиск</string>
+    <string name="left_button">Left button</string>
+    <string name="right_button">Right button</string>
+    <string name="input_text_hint">Введите текст</string>
+    <string name="apps">Приложения</string>
+
+    <string name="current_device">Установленные на %1$s</string>
+    <string name="placeholder">placeholdeefwefewfwefwefewfewfwefr</string>
+
+    <string name="devices_list_of_connections">Список подключений</string>
+    <string name="devices_list_edit">Редактировать список</string>
+
+    <string name="connected">Подключен</string>
+    <string name="online">В сети</string>
+    <string name="offline">Не в сети</string>
+    <string name="connection_name">Название подключения</string>
+
+    <string name="save">Сохранить</string>
+
+    <string name="save_success">Изменения сохранены</string>
+    <string name="confirm">Готово</string>
+    <string name="connected_to">Подключено к сети:</string>
+
+    <string name="digit_zero">0</string>
+    <string name="digit_one">1</string>
+    <string name="digit_two">2</string>
+    <string name="digit_three">3</string>
+    <string name="digit_four">4</string>
+    <string name="digit_five">5</string>
+    <string name="digit_six">6</string>
+    <string name="digit_seven">7</string>
+    <string name="digit_eight">8</string>
+    <string name="digit_nine">9</string>
+
+    <string name="channels">CHANNEL</string>
+    <string name="channels_placeholder">000</string>
+    <string name="refresh">ОБНОВИТЬ</string>
+
+    <string name="connectivity_error">Произошла ошибка при соединении с TV</string>
+    <string name="server_connection_error">Сервер разорвал соединение</string>
+
+    <string name="app_url">vvvvvvvv</string>
+    <string name="selectRenderer">Select a Renderer</string>
+    <string name="host_error">Хост не распознан приложением</string>
+
+    <string name="device_name_cannot_be_empty">Имя устройства не может быть пустым</string>
+
+    <string name="letters_and_digits">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR‌​STUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФЧЦЧШЩЪЫЬЭЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюяАБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ1234567890@</string>
+    <string name="playing_now">Сейчас играет</string>
+
+    <string name="current_position">%1$s/%2$s</string>
+    <string name="user_denied_permission">Некоторый функционал приложения не будет работать без разрешения</string>
+    <string name="open_settings_dialog">Для продолжения необходимо разрешение.\nОткрыть настройки?</string>
+    <string name="start_time">00:00:00</string>
+    <string name="counter_default">123/123</string>
+    <string name="search_title">Search</string>
+
+    <string name="connection_is_lost">Соединение с телевизором прервано</string>
+
+    <string name="restart_application">перезапустить?</string>
+
+    <string name="return_to_home_screen">вернуться?</string>
+    <string name="folder_name">folder name</string>
+    <string name="number_of_items">number of items</string>
+    <string name="number_of_images">%1$s фото</string>
+    <string name="number_of_videos">%1$s видео</string>
+    <string name="empty_directory">Директория пуста</string>
+
+</resources>

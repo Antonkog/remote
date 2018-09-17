@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/container_zero"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/large"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/channel_zero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/channels_button_margin"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:scaleType="centerInside" />
+
+        <TextView
+            style="@style/DigitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/digit_zero" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/container_one"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/container_four"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/container_two">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/channel_one"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/channels_button_margin"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:scaleType="centerInside" />
+
+        <TextView
+            style="@style/DigitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/digit_one" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/container_two"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/container_five"
+        app:layout_constraintLeft_toRightOf="@+id/container_one"
+        app:layout_constraintRight_toLeftOf="@+id/container_three">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/channel_two"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/channels_button_margin"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:scaleType="centerInside" />
+
+        <TextView
+            style="@style/DigitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/digit_two" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/container_three"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/container_six"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintLeft_toLeftOf="@+id/container_two"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/channel_three"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/channels_button_margin"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:scaleType="centerInside" />
+
+        <TextView
+            style="@style/DigitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/digit_three" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/container_four"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/container_seven"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/container_five">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/channel_four"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/channels_button_margin"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:scaleType="centerInside" />
+
+        <TextView
+            style="@style/DigitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/digit_four" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/container_five"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/container_eight"
+        app:layout_constraintLeft_toRightOf="@+id/container_four"
+        app:layout_constraintRight_toLeftOf="@+id/container_six">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/channel_five"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/channels_button_margin"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:scaleType="centerInside" />
+
+        <TextView
+            style="@style/DigitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/digit_five" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/container_six"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/container_nine"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintLeft_toLeftOf="@+id/container_five"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/channel_six"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/channels_button_margin"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:scaleType="centerInside" />
+
+        <TextView
+            style="@style/DigitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/digit_six" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/container_seven"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/container_eight"
+        app:layout_constraintHorizontal_bias="0.25"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/container_eight">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/channel_seven"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/channels_button_margin"
+            android:layout_marginEnd="@dimen/large"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:scaleType="centerInside" />
+
+        <TextView
+            style="@style/DigitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/digit_seven" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/container_eight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/container_zero"
+        app:layout_constraintLeft_toRightOf="@+id/container_seven"
+        app:layout_constraintRight_toLeftOf="@+id/container_nine">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/channel_eight"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/channels_button_margin"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:scaleType="centerInside" />
+
+        <TextView
+            style="@style/DigitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/digit_eight" />
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/container_nine"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/container_eight"
+        app:layout_constraintHorizontal_bias="0.75"
+        app:layout_constraintLeft_toLeftOf="@+id/container_eight"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/channel_nine"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/channels_button_margin"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:scaleType="centerInside" />
+
+        <TextView
+            style="@style/DigitButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/digit_nine" />
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/channel_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/channels"
+        android:textSize="@dimen/font_size_16"
+        app:layout_constraintBottom_toTopOf="@+id/container_two"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/channel_current"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/channel_current"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/channels_placeholder"
+        android:textSize="@dimen/font_size_42"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_logo" />
+
+    <ImageView
+        android:id="@+id/toolbar_logo"
+        android:layout_width="wrap_content"
+        android:layout_height="?attr/actionBarSize"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_logo_navbar" />
+
+    <ImageButton
+        android:id="@+id/channels_close"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="0dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_close" />
+
+    <ImageButton
+        android:id="@+id/channels_switch_off"
+        android:layout_width="wrap_content"
+        android:layout_height="56dp"
+        android:layout_marginStart="16dp"
+        android:background="?attr/selectableItemBackgroundBorderless"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_switch_off" />
+
+</android.support.constraint.ConstraintLayout>
