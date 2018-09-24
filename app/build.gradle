@@ -10,7 +10,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'io.fabric.tools:gradle:1.+'
+        classpath 'io.fabric.tools:gradle:1.25.4'
     }
 }
 
@@ -76,6 +76,7 @@ android {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.google.firebase:firebase-core:16.0.3'
     androidTestCompile 'com.android.support.test.uiautomator:uiautomator-v18:2.1.3'
     androidTestCompile 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
@@ -136,7 +137,7 @@ dependencies {
     implementation group: 'org.eclipse.jetty', name: 'jetty-client', version: versions.jetty
     implementation group: 'org.slf4j', name: 'slf4j-jdk14', version: '1.7.14'
 
-    implementation('com.crashlytics.sdk.android:crashlytics:2.6.8@aar') {
+    implementation('com.crashlytics.sdk.android:crashlytics:2.9.5@aar') {
         transitive = true
     }
 
@@ -158,3 +159,4 @@ kotlin {
         coroutines "enable"
     }
 }
+apply plugin: 'com.google.gms.google-services'
