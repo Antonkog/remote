@@ -212,7 +212,7 @@ public class MediaServer extends SimpleWebServer {
     @Override
     public Response serve(String uri, Method method, Map<String, String> header, Map<String, String> parms,
                           Map<String, String> files) {
-        Response res;
+        Response res = null;
 
         Timber.i("Serve uri : " + uri);
 
@@ -233,6 +233,8 @@ public class MediaServer extends SimpleWebServer {
                 res = serveFile(new File(obj.path), obj.mime, header);
             } catch (InvalidIdentificatorException e) {
                 return new Response(Response.Status.NOT_FOUND, MIME_PLAINTEXT, "Error 404, file not found.");
+            } catch (Exception e) {
+                Timber.i("exception while serving  "+ e.getMessage());
             }
 
             if (res != null) {
@@ -248,6 +250,8 @@ public class MediaServer extends SimpleWebServer {
                 res.addHeader("contentFeatures.dlna.org", "");
                 res.addHeader("transferMode.dlna.org", "Streaming");
                 res.addHeader("Server", "DLNADOC/1.50 UPnP/1.0 Cling/2.0 KIVI Remote/" + version + " Android/" + Build.VERSION.RELEASE);
+            } else {
+                Timber.i("MediaServer Response is null");
             }
 
             return res;

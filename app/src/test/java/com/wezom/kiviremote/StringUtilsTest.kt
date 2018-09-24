@@ -24,10 +24,10 @@ internal class StringUtilsUnitTest {
 
     @Test
     fun deviceFriendlyNameTest() {
-        assertEquals("KIVI 42SFXHAS", "LGE 42SFXHAS [49790](KIVI_TV)".removeMasks())
-        assertEquals("KIVI 42SFXHAS", "Samsung 42SFXHAS [49790](KIVI_TV)".removeMasks())
-        assertEquals("KIVI 42SFXHAS", "InnoTest 42SFXHAS [49790](KIVI_TV)".removeMasks())
-        assertEquals("KIVI 42SFXHAS", "MStar Semiconductor Inc. 42SFXHAS [49790](KIVI_TV)".removeMasks())
-        assertEquals("KIVI 42SFXHAS", "MStar\\032semiconductor\\032Inc.\\03242SFXHAS\\032[49790](KIVI_TV)".removeMasks())
+        assertEquals("42SFXHAS", "LGE 42SFXHAS [49790](KIVI_TV)".removeMasks())
+        assertEquals("42SFXHAS", "Samsung 42SFXHAS [49790](KIVI_TV)".removeMasks())
+        assertEquals("42SFXHAS", "InnoTest 42SFXHAS [49790](KIVI_TV)".removeMasks())
+        assertEquals("42SFXHAS", "MStar Semiconductor Inc. 42SFXHAS [49790](KIVI_TV)".removeMasks())
+        assertEquals("42SFXHAS", "MStar\\032semiconductor\\032Inc.\\03242SFXHAS\\032[49790](KIVI_TV)".removeMasks())
     }
 }

@@ -18,7 +18,7 @@ package com.wezom.kiviremote.common.extensions
 //    return this
 //}
 
-fun String.getModelName(): String = "KIVI " + this.substringBefore(" [").substringAfterLast(" ")
+fun String.getModelName(): String =  this.substringBefore(" [").substringAfterLast(" ")
 
 fun String.remove032Space(): String = this.replace("\\032", " ", true).replace("\\03", "", true)
 
