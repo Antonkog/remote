@@ -7,10 +7,11 @@ import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 @Entity(tableName = "recent_devices", indices = {@Index(value = {"actual_name"}, unique = true)})
-public class RecentDevice implements Parcelable {
+public class RecentDevice implements Parcelable, Comparable<RecentDevice> {
 
     public RecentDevice(String actualName, @Nullable String userDefinedName) {
         this.actualName = actualName;
@@ -24,11 +25,6 @@ public class RecentDevice implements Parcelable {
         this.userDefinedName = userDefinedName;
     }
 
-    protected RecentDevice(Parcel in) {
-        id = in.readInt();
-        actualName = in.readString();
-        userDefinedName = in.readString();
-    }
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -62,17 +58,32 @@ public class RecentDevice implements Parcelable {
         return actualName;
     }
 
-    public void setActualName(String actualName) {
-        this.actualName = actualName;
-    }
-
     public String getUserDefinedName() {
         return userDefinedName;
     }
 
-    public void setUserDefinedName(String userDefinedName) {
-        this.userDefinedName = userDefinedName;
+
+    @Override
+    public int compareTo(@NonNull RecentDevice o) {
+        if (isOnline()) {
+            if (o.isOnline()) return 0;
+            else return -1;
+        } else {
+            if (o.isOnline()) return 1;
+            else return 0;
+        }
     }
+
+    @Override
+    public String toString() {
+        return "RecentDevice{" +
+                "id=" + id +
+                ", actualName='" + actualName + '\'' +
+                ", userDefinedName='" + userDefinedName + '\'' +
+                ", online=" + online +
+                '}';
+    }
+
 
     @Override
     public int describeContents() {
@@ -80,10 +91,16 @@ public class RecentDevice implements Parcelable {
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeInt(id);
-        parcel.writeString(actualName);
-        parcel.writeString(userDefinedName);
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeString(this.actualName);
+        dest.writeString(this.userDefinedName);
+    }
+
+    protected RecentDevice(Parcel in) {
+        this.id = in.readInt();
+        this.actualName = in.readString();
+        this.userDefinedName = in.readString();
     }
 
     public static final Creator<RecentDevice> CREATOR = new Creator<RecentDevice>() {

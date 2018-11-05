@@ -19,6 +19,7 @@ package com.wezom.kiviremote.net;
 import android.os.StrictMode;
 import android.text.TextUtils;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
@@ -368,6 +369,7 @@ public class ChatConnection {
                                         RxBus.INSTANCE.publish(new ChangeSnackbarStateEvent(false));
                                         if (!pingTimer.isDisposed())
                                             pingTimer.dispose();
+                                        Crashlytics.logException(e);
                                     });
 
                     disposables.add(new ReceivingThread()
@@ -382,6 +384,7 @@ public class ChatConnection {
                     Timber.e(e, "Initializing socket failed: " + e.getMessage());
                     dispose();
                     RxBus.INSTANCE.publish(new ChangeSnackbarStateEvent(false));
+                    Crashlytics.logException(e);
                 }
             }
         }

@@ -6,8 +6,9 @@ import android.net.nsd.NsdServiceInfo
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.ConnectEvent
 import com.wezom.kiviremote.bus.NetworkStateEvent
+import com.wezom.kiviremote.bus.NewNameEvent
 import com.wezom.kiviremote.common.RxBus
-import com.wezom.kiviremote.common.extensions.remove032Space
+import com.wezom.kiviremote.common.extensions.getTvUniqueId
 import com.wezom.kiviremote.common.extensions.removeMasks
 import com.wezom.kiviremote.nsd.NsdHelper
 import com.wezom.kiviremote.nsd.NsdHelper.SERVICE_MASK
@@ -25,22 +26,22 @@ import java.util.concurrent.CopyOnWriteArrayList
 
 
 class DeviceSearchViewModel(
-    private val nsdHelper: NsdHelper,
-    private val router: Router,
-    private val database: AppDatabase
+        private val nsdHelper: NsdHelper,
+        private val router: Router,
+        private val database: AppDatabase
 ) : BaseViewModel() {
 
     init {
         disposables += RxBus.listen(NetworkStateEvent::class.java).subscribeBy(
-            onNext = {
-                if (it.isAvailable) {
-                    networkState.postValue(true)
-                } else {
-                    networkState.postValue(false)
-                    nsdHelper.nsdRelay.accept(setOf())
-                    discoverDevices()
-                }
-            }, onError = Timber::e
+                onNext = {
+                    if (it.isAvailable) {
+                        networkState.postValue(true)
+                    } else {
+                        networkState.postValue(false)
+                        nsdHelper.nsdRelay.accept(setOf())
+                        discoverDevices()
+                    }
+                }, onError = Timber::e
         )
     }
 
@@ -55,14 +56,14 @@ class DeviceSearchViewModel(
 
     fun updateRecentDevices() {
         disposables += database.recentDeviceDao()
-            .all
-            .subscribeOn(Schedulers.io())
-            .subscribe({
-                with(recentDevices) {
-                    clear()
-                    addAll(it)
-                }
-            }, { Timber.e(it, it.message) })
+                .all
+                .subscribeOn(Schedulers.io())
+                .subscribe({
+                    with(recentDevices) {
+                        clear()
+                        addAll(it)
+                    }
+                }, { Timber.e(it, it.message) })
     }
 
     fun connect(data: NsdServiceInfoWrapper) {
@@ -82,15 +83,17 @@ class DeviceSearchViewModel(
     }
 
     private fun checkIfRecent(
-        wrapper: NsdServiceInfoWrapper,
-        recentDevices: CopyOnWriteArrayList<RecentDevice>
+            wrapper: NsdServiceInfoWrapper,
+            recentDevices: CopyOnWriteArrayList<RecentDevice>
     ): NsdServiceInfoWrapper {
         recentDevices.takeIf { it.isNotEmpty() }?.let { devices ->
             devices.forEach {
                 val name = it.actualName
                 val userDefinedName = it.userDefinedName
-                if (name != null && userDefinedName != null && wrapper.serviceName == name.remove032Space())
+                if (name != null && userDefinedName != null && wrapper.serviceName.contains(name.getTvUniqueId())) {
+                    if (name != userDefinedName) RxBus.publish(NewNameEvent(it.userDefinedName))
                     return NsdServiceInfoWrapper(wrapper.service, it.userDefinedName)
+                }
             }
         }
         return NsdServiceInfoWrapper(wrapper.service, wrapper.serviceName.removeMasks())
@@ -126,13 +129,13 @@ class DeviceSearchViewModel(
                 if (service.host != null && service.serviceName != null) {
                     serviceInfo = service
                     RxBus.publish(
-                        ConnectEvent(
-                            NsdServiceModel(
-                                service.host,
-                                service.port,
-                                service.serviceName
+                            ConnectEvent(
+                                    NsdServiceModel(
+                                            service.host,
+                                            service.port,
+                                            service.serviceName
+                                    )
                             )
-                        )
                     )
                     navigateToMainScreen(service)
                     resolving = false
@@ -176,10 +179,10 @@ class DeviceSearchViewModel(
         if (service.host != null) {
             nsdHelper.stopDiscovery()
             router.navigateTo(
-                Screens.MAIN_FRAGMENT, NsdServiceModel(
+                    Screens.MAIN_FRAGMENT, NsdServiceModel(
                     service.host,
                     service.port, service.serviceName
-                )
+            )
             )
         }
     }

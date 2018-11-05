@@ -123,6 +123,9 @@ public class DeviceSearchFragment extends BaseFragment {
                     Log.i(this.getClass().getName(), "on Click2");
                 }
         );
+        binding.wifiSettings.setOnClickListener(click -> {
+            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
+        });
     }
 
     private void resetMediaPlayback(HomeActivity activity) {
@@ -194,12 +197,14 @@ public class DeviceSearchFragment extends BaseFragment {
             binding.wifiNameContainer.setVisibility(View.VISIBLE);
             binding.connectedToLabel.setVisibility(View.VISIBLE);
             binding.wifiName.setVisibility(View.VISIBLE);
+            binding.wifiSettings.setVisibility(View.GONE);
             binding.wifiName.setText(ssid.replace("\"", ""));
         } else {
             binding.wifiIcon.setVisibility(View.INVISIBLE);
             binding.connectedToLabel.setVisibility(View.GONE);
             binding.wifiIsNotAvailableContainer.setVisibility(View.VISIBLE);
             binding.wifiName.setVisibility(View.INVISIBLE);
+            binding.wifiSettings.setVisibility(View.VISIBLE);
         }
     }
 
@@ -215,6 +220,7 @@ public class DeviceSearchFragment extends BaseFragment {
         binding.devicesContainer.setVisibility(View.VISIBLE);
         binding.singleDeviceConnect.setVisibility(View.INVISIBLE);
         binding.multipleDeviceConnect.setVisibility(View.VISIBLE);
+        binding.wifiSettings.setVisibility(View.GONE);
         setMultipleDevicesConnectButtonState(true);
         setSingleDeviceConnectButtonState(false);
         hideProgress();
@@ -224,9 +230,9 @@ public class DeviceSearchFragment extends BaseFragment {
         binding.noDeviceContainer.setVisibility(View.VISIBLE);
         binding.devicesContainer.setVisibility(View.INVISIBLE);
         binding.singleDeviceContainer.setVisibility(View.INVISIBLE);
-        binding.singleDeviceConnect.setVisibility(View.VISIBLE);
+        binding.singleDeviceConnect.setVisibility(View.GONE);
+        binding.wifiSettings.setVisibility(View.VISIBLE);
         binding.searchProgressContainer.setVisibility(View.GONE);
-        setButtonText(R.string.repeat_search);
         hideProgress();
     }
 
@@ -236,6 +242,7 @@ public class DeviceSearchFragment extends BaseFragment {
         binding.noDeviceContainer.setVisibility(View.GONE);
         binding.devicesContainer.setVisibility(View.GONE);
         binding.singleDeviceConnect.setVisibility(View.VISIBLE);
+        binding.wifiSettings.setVisibility(View.GONE);
         setMultipleDevicesConnectButtonState(false);
         setSingleDeviceConnectButtonState(true);
         hideProgress();

@@ -2,6 +2,9 @@
 
 package com.wezom.kiviremote.common.extensions
 
+import java.util.regex.Pattern
+
+
 //private val mStar = "MStar Semiconductor, Inc."
 //private val lge = "LGE"
 //fun String.replaceLGE(): String {
@@ -18,9 +21,26 @@ package com.wezom.kiviremote.common.extensions
 //    return this
 //}
 
-fun String.getModelName(): String =  this.substringBefore(" [").substringAfterLast(" ")
+fun String.addKiviPrefix(): String {
+    val KIVI_PREFIX = "KIVI"
+    val re1 = "(\\d+)"
+    val re2 = "((?:[a-z][a-z]*[0-9]+[a-z0-9]*))"
+
+    val p = Pattern.compile(re1 + re2, Pattern.CASE_INSENSITIVE or Pattern.DOTALL)
+    val m = p.matcher(this)
+    if (m.find()) {
+        return if (contains(KIVI_PREFIX, true))
+            this
+        else KIVI_PREFIX + " " + this
+    }
+    return this
+}
+
+fun String.getModelName(): String = this.substringBefore(" [").addKiviPrefix()
 
 fun String.remove032Space(): String = this.replace("\\032", " ", true).replace("\\03", "", true)
+
+fun String.getTvUniqueId(): String =  this.substringAfter(" [").substringBefore("]")
 
 fun String.removeMasks(): String = this.remove032Space().getModelName()
 

@@ -141,6 +141,11 @@ class HomeActivityViewModel(
                 killPing()
             }, onError = Timber::e)
 
+        disposables += RxBus.listen(NewNameEvent::class.java)
+                .subscribeBy(onNext = {
+                   sendNameChanged(it.name)
+                }, onError = Timber::e)
+
         disposables += RxBus.listen(LaunchAppEvent::class.java)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(onNext = {
@@ -259,6 +264,16 @@ class HomeActivityViewModel(
             setAction(Action.keyevent)
         })
     }
+
+    private fun sendNameChanged(newName: String) {
+        serverConnection?.sendMessage(SocketConnectionModel().apply {
+            setArgs(ArrayList<String>().apply {
+                add(newName)
+            })
+            setAction(Action.NAME_CHANGE)
+        })
+    }
+
 
     private fun sendAction(action: Action) {
         serverConnection?.sendMessage(SocketConnectionModel().apply {

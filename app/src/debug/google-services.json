@@ -81,6 +81,37 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:525035275410:android:86460918be02b753",
+        "android_client_info": {
+          "package_name": "com.wezom.kiviremote.debug"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "525035275410-gfmia2s4nojt1b2uieh2kjpatd9o7u9u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfF_OGL53f5M7VyANkW-4C2opdJiow4lA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

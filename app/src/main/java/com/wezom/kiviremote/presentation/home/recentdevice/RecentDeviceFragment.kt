@@ -10,8 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import android.widget.Toast
 import com.wezom.kiviremote.R
+import com.wezom.kiviremote.bus.NewNameEvent
+import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.removeMasks
 import com.wezom.kiviremote.common.extensions.vanish
 import com.wezom.kiviremote.common.hideKeyboard
@@ -124,6 +125,7 @@ class RecentDeviceFragment : BaseFragment() {
             hideKeyboard(activity as Activity)
             launch(UI) {
                 viewModel?.saveChanges(value)
+                RxBus.publish(NewNameEvent(binding.recentDeviceEditText.text.toString()));
             }
             popBackStack()
         }

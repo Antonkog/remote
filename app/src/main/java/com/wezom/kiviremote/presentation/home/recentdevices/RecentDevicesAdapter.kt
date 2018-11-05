@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.Constants.CURRENT_CONNECTION_KEY
 import com.wezom.kiviremote.common.Constants.UNIDENTIFIED
+import com.wezom.kiviremote.common.extensions.getTvUniqueId
 import com.wezom.kiviremote.common.extensions.removeMasks
 import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
@@ -18,6 +19,7 @@ import com.wezom.kiviremote.persistence.model.RecentDevice
 import io.reactivex.Completable
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
+import java.util.*
 
 
 class RecentDevicesAdapter(private val context: Context,
@@ -76,6 +78,12 @@ class RecentDevicesAdapter(private val context: Context,
 
                 deviceTextStatus.text = context.resources.getString(R.string.connected)
             } else {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    deviceTvStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_tv_inactive, null))
+                } else {
+                    deviceTvStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_tv_inactive))
+                }
+
                 if (device.isOnline) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         deviceOnlineStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_online, null))
@@ -91,11 +99,6 @@ class RecentDevicesAdapter(private val context: Context,
 
                     deviceTextStatus.text = context.resources.getString(R.string.online)
                 } else {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        deviceTvStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_tv_inactive, null))
-                    } else {
-                        deviceTvStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_tv_inactive))
-                    }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                         deviceTextStatus.setTextColor(resources.getColor(R.color.colorSecondaryText, null))
@@ -105,15 +108,6 @@ class RecentDevicesAdapter(private val context: Context,
 
                     deviceTextStatus.text = context.resources.getText(R.string.offline)
                     deviceOnlineStatus.setImageDrawable(null)
-                }
-            }
-
-            if (device.actualName != currentConnection) {
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    deviceTvStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_tv_inactive, null))
-                } else {
-                    deviceTvStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_tv_inactive))
                 }
             }
 
@@ -161,7 +155,7 @@ class RecentDevicesAdapter(private val context: Context,
         Timber.d("New list of devices has arrived, size: ${devices.size}")
         this.devices = devices.toMutableList()
         initialList = ArrayList(devices)
-        notifyDataSetChanged()
+        if (devicesOnline != null) onDevicesOnlineStatusChange(devicesOnline!!)
     }
 
     fun showDelete() {
@@ -169,15 +163,25 @@ class RecentDevicesAdapter(private val context: Context,
         notifyDataSetChanged()
     }
 
-    fun onDevicesOnlineStatusChange(devicesOnline: Set<NsdServiceInfoWrapper>) {
+    fun onDevicesOnlineStatusChange(devicesOnline: Set<NsdServiceInfoWrapper>) {//nsd change
         this.devicesOnline = devicesOnline
         for (onlineDevice in devicesOnline) {
             devices?.let {
                 it.asSequence()
-                        .filter { onlineDevice.service.serviceName == it.actualName }
+                        .filter { onlineDevice.service.serviceName.contains(it.actualName.getTvUniqueId()) }
                         .forEach { it.isOnline = true }
-                notifyDataSetChanged()
             }
         }
+
+        if (devices != null) {
+            devices?.sort()
+            for (m in 0 until devices!!.size) {
+                if (devices!!.get(m).actualName == currentConnection) {
+                    Collections.swap(devices, 0, m)
+                }
+            }
+        }
+
+        notifyDataSetChanged()
     }
 }

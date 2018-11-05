@@ -24,10 +24,18 @@ internal class StringUtilsUnitTest {
 
     @Test
     fun deviceFriendlyNameTest() {
-        assertEquals("42SFXHAS", "LGE 42SFXHAS [49790](KIVI_TV)".removeMasks())
-        assertEquals("42SFXHAS", "Samsung 42SFXHAS [49790](KIVI_TV)".removeMasks())
-        assertEquals("42SFXHAS", "InnoTest 42SFXHAS [49790](KIVI_TV)".removeMasks())
-        assertEquals("42SFXHAS", "MStar Semiconductor Inc. 42SFXHAS [49790](KIVI_TV)".removeMasks())
-        assertEquals("42SFXHAS", "MStar\\032semiconductor\\032Inc.\\03242SFXHAS\\032[49790](KIVI_TV)".removeMasks())
+        assertEquals("KIVI TV", "KIVI TV [49790](KIVI_TV)".removeMasks())
+        assertEquals("Домашний кинотеатр", "Домашний кинотеатр [49790](KIVI_TV)".removeMasks())
+        assertEquals("Sleeping room", "Sleeping room [49790](KIVI_TV)".removeMasks())
+        assertEquals("MyHome01", "MyHome01 [49790](KIVI_TV)".removeMasks())
+        assertEquals("KIVI 50UK32G", "50UK32G [2c73](KIVI_TV)".removeMasks())
+        assertEquals("KIVI 49UP30g", "49UP30g [ewgge](KIVI_TV)".removeMasks())
+        assertEquals("KIVI 24fk30g", "24fk30g [ewgge](KIVI_TV)".removeMasks())
+        assertEquals("KIVI 24HK30G_-Ver01", "24HK30G_-Ver01 [ewgge](KIVI_TV)".removeMasks())
+        assertEquals("KIVI 24HK30G_-Ver01 new name", "24HK30G_-Ver01 new name [ewgge](KIVI_TV)".removeMasks())
+        assertEquals("KIVI 49UP30g", "49UP30g [ewgge](KIVI_TV)".removeMasks())
+        assertEquals("Прихожая", "Прихожая [49790](KIVI_TV)".removeMasks())
+        assertEquals("InnoTest 42SFXHAS", "InnoTest 42SFXHAS [49790](KIVI_TV)".removeMasks())
+        assertEquals("MStar Semiconductor Inc. 42SFXHAS", "MStar Semiconductor Inc. 42SFXHAS [49790](KIVI_TV)".removeMasks())
     }
 }

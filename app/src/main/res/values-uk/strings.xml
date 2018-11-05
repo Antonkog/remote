@@ -1,0 +1,119 @@
+<resources>
+    <string name="app_name">KIVI Remote</string>
+
+    <string name="open">відкрити</string>
+    <string name="close">закрити</string>
+    <string name="ok">ОК</string>
+    <string name="cancel">Скасувати</string>
+    <string name="error">Сталася помилка, спробуйте ще раз</string>
+    <string name="service_failure_message">Сервіс недоступний. Спробуйте пізніше.</string>
+    <string name="network_failure_message">Мережа недоступна</string>
+
+
+    <!--CLIENT SIDE strings-->
+    <string name="type_command">Type Command&#8230;</string>
+    <string name="send.text">Send text</string>
+    <string name="connect">Connect</string>
+    <string name="server_ip" formatted="false">Server at IP: %s, port: %s</string>
+    <string name="connect_to_lan" formatted="false">Підключено до мережі: "%s"</string>
+
+    <string name="lorem_ipsum">"Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet</string>
+    <string name="discovery_choose_tv">Перелік телевізорів\nв мережі WiFi</string>
+
+    <string name="k.up">UP</string>
+    <string name="k.down">DOWN</string>
+    <string name="k.left">LEFT</string>
+    <string name="k.right">RIGNT</string>
+    <string name="k.ok">OK</string>
+    <string name="k.volume.up">VOL +</string>
+    <string name="k.volume.down">VOL -</string>
+    <string name="k.home">Home</string>
+    <string name="k.back">Back</string>
+    <string name="k.search">Search</string>
+    <string name="k.clear">Clear</string>
+    <string name="k.power">POWER</string>
+    <string name="k.menu">MENU</string>
+    <string name="k.media.menu">MENU_media</string>
+    <string name="k.channel.up">channel_up</string>
+    <string name="k.channel.down">channel_down</string>
+    <string name="k.enter">Enter</string>
+    <string name="discovery_connect">Підключитися</string>
+    <string name="no.contentDirectoryDevice.found">Пристрої не знайдені\nБудь ласка, переконайтесь, що смартфон та ТВ підключені до однієї WiFi мережі</string>
+    <string name="discovery.in.progress">Йде пошук доступних пристроїв</string>
+    <string name="search_again">Повторний пошук</string>
+    <string name="chanels_string">CH</string>
+    <string name="volume_string">VOL</string>
+    <string name="search_hint">Введіть запит</string>
+
+    <string name="wrong_input">Для коректної роботи програми необхідно змінити налаштування ТВ.\nВ меню \&quot;Метод вводу\&quot; оберіть пункт \&quot;KIVI Keyboard\&quot;.
+        \n\nПерейти в налаштування?</string>
+    <string name="repeat_search">Повторний пошук</string>
+    <string name="wifi_settings">Налаштування WiFi</string>
+    <string name="left_button">Left button</string>
+    <string name="right_button">Right button</string>
+    <string name="input_text_hint">Введіть текст</string>
+    <string name="apps">Додатки</string>
+
+    <string name="current_device">Встановлені на %1$s</string>
+    <string name="placeholder">placeholdeefwefewfwefwefewfewfwefr</string>
+
+    <string name="devices_list_of_connections">Список підключень</string>
+    <string name="devices_list_edit">Редагувати список</string>
+
+    <string name="connected">Підключений</string>
+    <string name="online">В мережі</string>
+    <string name="offline">Не в мережі</string>
+    <string name="connection_name">Назва підключення</string>
+
+    <string name="save">Зберегти</string>
+
+    <string name="save_success">Зміни збережені</string>
+    <string name="confirm">Готово</string>
+    <string name="connected_to">Підключено до мережі:</string>
+
+    <string name="digit_zero">0</string>
+    <string name="digit_one">1</string>
+    <string name="digit_two">2</string>
+    <string name="digit_three">3</string>
+    <string name="digit_four">4</string>
+    <string name="digit_five">5</string>
+    <string name="digit_six">6</string>
+    <string name="digit_seven">7</string>
+    <string name="digit_eight">8</string>
+    <string name="digit_nine">9</string>
+
+    <string name="channels">CHANNEL</string>
+    <string name="channels_placeholder">000</string>
+    <string name="refresh">ОНОВИТИ</string>
+
+    <string name="connectivity_error">Сталася помилка при з'єднанні з ТВ</string>
+    <string name="server_connection_error">Сервер розірвав з'єднання</string>
+
+    <string name="app_url">vvvvvvvv</string>
+    <string name="selectRenderer">Select a Renderer</string>
+    <string name="host_error">Хост не розпізнано додатком</string>
+
+    <string name="device_name_cannot_be_empty">Ім'я пристрою не може бути порожнім</string>
+
+    <string name="letters_and_digits">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR‌​STUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФЧЦЧШЩЪЫЬЭЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюяАБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ1234567890@</string>
+    <string name="playing_now">Зараз грає</string>
+
+    <string name="current_position">%1$s/%2$s</string>
+    <string name="user_denied_permission">Деякий функціонал програми не буде працювати без дозволу</string>
+    <string name="open_settings_dialog">Для продовження необхідно надати дозвіл.\nВідкрити налаштування?</string>
+    <string name="start_time">00:00:00</string>
+    <string name="counter_default">123/123</string>
+    <string name="search_title">Search</string>
+
+    <string name="connection_is_lost">З'єднання з телевізором перервано</string>
+
+    <string name="restart_application">перезавантажити?</string>
+
+    <string name="return_to_home_screen">повернутись?</string>
+    <string name="folder_name">folder name</string>
+    <string name="number_of_items">number of items</string>
+    <string name="number_of_images">%1$s фото</string>
+    <string name="number_of_videos">%1$s відео</string>
+    <string name="empty_directory">Директорія порожня</string>
+
+</resources>

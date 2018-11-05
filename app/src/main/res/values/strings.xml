@@ -18,7 +18,7 @@
     <string name="connect_to_lan" formatted="false">Подключено к сети: "%s"</string>
 
     <string name="lorem_ipsum">"Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet</string>
-    <string name="discovery_choose_tv">Выберите телевизор\nс которым вы хотите установить\nсоединение</string>
+    <string name="discovery_choose_tv">Список телевизоров\nв сети WiFi</string>
 
     <string name="k.up">UP</string>
     <string name="k.down">DOWN</string>
@@ -38,7 +38,7 @@
     <string name="k.channel.down">channel_down</string>
     <string name="k.enter">Enter</string>
     <string name="discovery_connect">Подключиться</string>
-    <string name="no.contentDirectoryDevice.found">Не найдено ни одного устройства</string>
+    <string name="no.contentDirectoryDevice.found">Устройства не найдены\nПожалуйста, убедитесь, что смартфон и ТВ подключены к одной WiFi сети</string>
     <string name="discovery.in.progress">Идет поиск доступных устройств</string>
     <string name="search_again">Повторный поиск</string>
     <string name="chanels_string">CH</string>
@@ -48,6 +48,7 @@
     <string name="wrong_input">Для корректной работы приложения необходимо изменить настройки ТВ.\nВ меню \&quot;Метод ввода\&quot; выберите пункт \&quot;KIVI Keyboard\&quot;.
         \n\nПерейти в настройки?</string>
     <string name="repeat_search">Повторный поиск</string>
+    <string name="wifi_settings">Настройки WiFi</string>
     <string name="left_button">Left button</string>
     <string name="right_button">Right button</string>
     <string name="input_text_hint">Введите текст</string>
@@ -85,7 +86,7 @@
     <string name="channels_placeholder">000</string>
     <string name="refresh">ОБНОВИТЬ</string>
 
-    <string name="connectivity_error">Произошла ошибка при соединении с TV</string>
+    <string name="connectivity_error">Произошла ошибка при соединении с ТВ</string>
     <string name="server_connection_error">Сервер разорвал соединение</string>
 
     <string name="app_url">vvvvvvvv</string>

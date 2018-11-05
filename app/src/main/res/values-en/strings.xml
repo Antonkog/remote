@@ -1,0 +1,119 @@
+<resources>
+    <string name="app_name">KIVI Remote</string>
+
+    <string name="open">open</string>
+    <string name="close">close</string>
+    <string name="ok">ОК</string>
+    <string name="cancel">Cancel</string>
+    <string name="error">An error occurred, please try again</string>
+    <string name="service_failure_message">Service is unavailable. Try again later.</string>
+    <string name="network_failure_message">Network unavailable</string>
+
+
+    <!--CLIENT SIDE strings-->
+    <string name="type_command">Type Command&#8230;</string>
+    <string name="send.text">Send text</string>
+    <string name="connect">Connect</string>
+    <string name="server_ip" formatted="false">Server at IP: %s, port: %s</string>
+    <string name="connect_to_lan" formatted="false">Connected to network: "%s"</string>
+
+    <string name="lorem_ipsum">"Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet</string>
+    <string name="discovery_choose_tv">List of TVs in WiFi</string>
+
+    <string name="k.up">UP</string>
+    <string name="k.down">DOWN</string>
+    <string name="k.left">LEFT</string>
+    <string name="k.right">RIGNT</string>
+    <string name="k.ok">OK</string>
+    <string name="k.volume.up">VOL +</string>
+    <string name="k.volume.down">VOL -</string>
+    <string name="k.home">Home</string>
+    <string name="k.back">Back</string>
+    <string name="k.search">Search</string>
+    <string name="k.clear">Clear</string>
+    <string name="k.power">POWER</string>
+    <string name="k.menu">MENU</string>
+    <string name="k.media.menu">MENU_media</string>
+    <string name="k.channel.up">channel_up</string>
+    <string name="k.channel.down">channel_down</string>
+    <string name="k.enter">Enter</string>
+    <string name="discovery_connect">Подключиться</string>
+    <string name="no.contentDirectoryDevice.found">No devices found\nPlease make sure your smartphone and TV are connected to the same WiFi network.</string>
+    <string name="discovery.in.progress">Searching for available devices</string>
+    <string name="search_again">Repeat search</string>
+    <string name="chanels_string">CH</string>
+    <string name="volume_string">VOL</string>
+    <string name="search_hint">Type your search</string>
+
+    <string name="wrong_input">To make application work correctly, please change the TV settings.\nIn the\&quot;Input Method menu\&quot; select \&quot;KIVI Keyboard\&quot;.
+        \n\nGo to settings?</string>
+    <string name="repeat_search">Repeat search</string>
+    <string name="wifi_settings">WiFi settings</string>
+    <string name="left_button">Left button</string>
+    <string name="right_button">Right button</string>
+    <string name="input_text_hint">Enter text</string>
+    <string name="apps">Applications</string>
+
+    <string name="current_device">Installed on %1$s</string>
+    <string name="placeholder">placeholdeefwefewfwefwefewfewfwefr</string>
+
+    <string name="devices_list_of_connections">Connection list</string>
+    <string name="devices_list_edit">Edit list</string>
+
+    <string name="connected">Connected</string>
+    <string name="online">Online</string>
+    <string name="offline">Offline</string>
+    <string name="connection_name">Connection name</string>
+
+    <string name="save">Save</string>
+
+    <string name="save_success">Changes saved</string>
+    <string name="confirm">Done</string>
+    <string name="connected_to">Connected to network:</string>
+
+    <string name="digit_zero">0</string>
+    <string name="digit_one">1</string>
+    <string name="digit_two">2</string>
+    <string name="digit_three">3</string>
+    <string name="digit_four">4</string>
+    <string name="digit_five">5</string>
+    <string name="digit_six">6</string>
+    <string name="digit_seven">7</string>
+    <string name="digit_eight">8</string>
+    <string name="digit_nine">9</string>
+
+    <string name="channels">CHANNEL</string>
+    <string name="channels_placeholder">000</string>
+    <string name="refresh">Refresh</string>
+
+    <string name="connectivity_error">An error occurred while connecting to the TV</string>
+    <string name="server_connection_error">Server disconnected</string>
+
+    <string name="app_url">vvvvvvvv</string>
+    <string name="selectRenderer">Select a Renderer</string>
+    <string name="host_error">The host is not recognized by the application</string>
+
+    <string name="device_name_cannot_be_empty">Device name cannot be empty</string>
+
+    <string name="letters_and_digits">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR‌​STUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФЧЦЧШЩЪЫЬЭЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюяАБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ1234567890@</string>
+    <string name="playing_now">Now playing</string>
+
+    <string name="current_position">%1$s/%2$s</string>
+    <string name="user_denied_permission">Some application functionality will not work without permission.</string>
+    <string name="open_settings_dialog">Permission is required to continue.\nOpen settings?</string>
+    <string name="start_time">00:00:00</string>
+    <string name="counter_default">123/123</string>
+    <string name="search_title">Search</string>
+
+    <string name="connection_is_lost">TV connection is interrupted</string>
+
+    <string name="restart_application">restart?</string>
+
+    <string name="return_to_home_screen">return?</string>
+    <string name="folder_name">folder name</string>
+    <string name="number_of_items">number of items</string>
+    <string name="number_of_images">%1$s photo</string>
+    <string name="number_of_videos">%1$s video</string>
+    <string name="empty_directory">Directory is empty</string>
+
+</resources>

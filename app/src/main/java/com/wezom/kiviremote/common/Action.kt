@@ -16,4 +16,5 @@ enum class Action {
     leftClick,
     keyevent,
     text,
+    NAME_CHANGE,
 }
