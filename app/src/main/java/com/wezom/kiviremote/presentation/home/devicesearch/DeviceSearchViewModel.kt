@@ -6,7 +6,6 @@ import android.net.nsd.NsdServiceInfo
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.ConnectEvent
 import com.wezom.kiviremote.bus.NetworkStateEvent
-import com.wezom.kiviremote.bus.NewNameEvent
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.getTvUniqueId
 import com.wezom.kiviremote.common.extensions.removeMasks
@@ -20,6 +19,8 @@ import com.wezom.kiviremote.presentation.base.BaseViewModel
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
+import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.launch
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
 import java.util.concurrent.CopyOnWriteArrayList
@@ -90,9 +91,17 @@ class DeviceSearchViewModel(
             devices.forEach {
                 val name = it.actualName
                 val userDefinedName = it.userDefinedName
-                if (name != null && userDefinedName != null && wrapper.serviceName.contains(name.getTvUniqueId())) {
-                    if (name != userDefinedName) RxBus.publish(NewNameEvent(it.userDefinedName))
-                    return NsdServiceInfoWrapper(wrapper.service, it.userDefinedName)
+                if (name != null && wrapper.serviceName.contains(name.getTvUniqueId())) {
+                    if (name != wrapper.serviceName) {
+                        val value = RecentDevice(it.id, wrapper.serviceName, userDefinedName)
+                        launch(CommonPool) {
+                            database.recentDeviceDao().insertAll(value)
+                        }
+                    }
+
+                    if (userDefinedName != null) {
+                        return NsdServiceInfoWrapper(wrapper.service, userDefinedName)
+                    }
                 }
             }
         }
