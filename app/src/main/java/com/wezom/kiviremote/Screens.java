@@ -17,4 +17,5 @@ public class Screens {
     public static final String CHANNELS_FRAGMENT = "channels_screen";
     public static final String GALLERY_FRAGMENT = "gallery_screen";
     public static final String DIRECTORIES_FRAGMENT = "directories_screen";
+    public static final String TV_SETTINGS_FRAGMENT = "tv_settings_screen";
 }

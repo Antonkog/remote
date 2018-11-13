@@ -1,5 +1,6 @@
 package com.wezom.kiviremote.presentation.home.touchpad
 
+import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.bus.SendCursorCoordinatesEvent
 import com.wezom.kiviremote.bus.SendKeyEvent
@@ -7,10 +8,11 @@ import com.wezom.kiviremote.bus.SendScrollEvent
 import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.presentation.base.BaseViewModel
+import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
 
-class TouchpadViewModel : BaseViewModel() {
+class TouchpadViewModel (private val router: Router) : BaseViewModel() {
 
     fun sendMotionMessage(x: Double, y: Double) {
         RxBus.publish(SendCursorCoordinatesEvent(x, y))
@@ -28,6 +30,8 @@ class TouchpadViewModel : BaseViewModel() {
     fun sendKeyEvent(keyEvent: Int) {
         RxBus.publish(SendKeyEvent(keyEvent))
     }
+
+    fun goToSettings() = router.navigateTo(Screens.TV_SETTINGS_FRAGMENT)
 
     fun sendHomeDown() = RxBus.publish(SendActionEvent(Action.HOME_DOWN))
 

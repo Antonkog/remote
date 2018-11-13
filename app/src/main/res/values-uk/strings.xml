@@ -116,4 +116,9 @@
     <string name="number_of_videos">%1$s відео</string>
     <string name="empty_directory">Директорія порожня</string>
 
+    <string name="sharpness">Різкість</string>
+    <string name="saturation">Насиченість</string>
+    <string name="contrast">Контрастність</string>
+    <string name="brightness">Яскравість</string>
+    <string name="backlight">Підсвічування</string>
 </resources>

@@ -12,15 +12,16 @@ import com.wezom.kiviremote.nsd.NsdHelper
 import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.presentation.home.HomeActivityViewModel
 import com.wezom.kiviremote.presentation.home.apps.AppsViewModel
+import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchViewModel
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryViewModel
-import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchViewModel
 import com.wezom.kiviremote.presentation.home.main.MainFragmentViewModel
 import com.wezom.kiviremote.presentation.home.media.MediaViewModel
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceViewModel
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesViewModel
 import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlViewModel
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadViewModel
+import com.wezom.kiviremote.presentation.home.tvsettings.TvSettingsViewModel
 import com.wezom.kiviremote.upnp.UPnPManager
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
@@ -50,7 +51,7 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
             RemoteControlViewModel() as T
 
         modelClass.isAssignableFrom(TouchpadViewModel::class.java) ->
-            TouchpadViewModel() as T
+            TouchpadViewModel(router) as T
 
         modelClass.isAssignableFrom(AppsViewModel::class.java) ->
             AppsViewModel(database, cache, preferences, resourceProvider) as T
@@ -63,6 +64,9 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
 
         modelClass.isAssignableFrom(RecentDevicesViewModel::class.java) ->
             RecentDevicesViewModel(router, database, nsdHelper) as T
+
+       modelClass.isAssignableFrom(TvSettingsViewModel::class.java) ->
+           TvSettingsViewModel(router) as T
 
         modelClass.isAssignableFrom(DeviceSearchViewModel::class.java) ->
             DeviceSearchViewModel(nsdHelper, router, database) as T

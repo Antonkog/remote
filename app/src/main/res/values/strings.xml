@@ -116,4 +116,10 @@
     <string name="number_of_videos">%1$s видео</string>
     <string name="empty_directory">Директория пуста</string>
 
+    <string name="sharpness">Четкость</string>
+    <string name="saturation">Насыщенность</string>
+    <string name="contrast">Контрастность</string>
+    <string name="brightness">Яркость</string>
+    <string name="backlight">Подсветка</string>
+
 </resources>

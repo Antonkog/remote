@@ -93,7 +93,7 @@ public class TouchpadFragment extends BaseFragment
         });
 
         binding.back.setOnClickListener(v -> viewModel.sendKeyEvent(KeyEvent.KEYCODE_BACK));
-        binding.menu.setOnClickListener(v -> viewModel.sendKeyEvent(KeyEvent.KEYCODE_BACK));
+        binding.menu.setOnClickListener(v -> viewModel.goToSettings());
         binding.home.setOnTouchListener((view, event) -> {
             switch (event.getAction()) {
                 case ACTION_DOWN:
