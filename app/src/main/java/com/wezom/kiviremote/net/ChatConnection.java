@@ -157,8 +157,8 @@ public class ChatConnection {
                     showKeyboard,
                     hideKeyboard,
                     volume,
-                    TextUtils.equals(serverEvent.getEvent(), DISCONNECT)));
-
+                    TextUtils.equals(serverEvent.getEvent(), DISCONNECT),
+                    serverEvent.getAspectMessage()));
         } else Timber.d("Server event is null");
     }
 
@@ -378,6 +378,8 @@ public class ChatConnection {
                             .subscribe());
 
                     sendMessage(new SocketConnectionModel().setAction(Action.REQUEST_APPS));
+                    sendMessage(new SocketConnectionModel().setAction(Action.REQUEST_ASPECT));
+
                 } catch (UnknownHostException e) {
                     Timber.d("Initializing socket failed, UHE", e);
                 } catch (IOException e) {

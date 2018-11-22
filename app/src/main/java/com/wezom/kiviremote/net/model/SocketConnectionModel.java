@@ -32,6 +32,9 @@ public class SocketConnectionModel {
         return action;
     }
 
+    @SerializedName("aspectMessage")
+    private AspectMessage aspectMessage;
+
     public SocketConnectionModel setAction(Action action) {
         this.action = action.name();
         return this;
@@ -48,4 +51,9 @@ public class SocketConnectionModel {
     public void setPackageName(String packageName) {
         this.packageName = packageName;
     }
+
+    public void setAspectMessage(AspectMessage aspectMessage) {
+        this.aspectMessage = aspectMessage;
+    }
+
 }

@@ -11,6 +11,7 @@ import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.boolean
 import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.net.ChatConnection
+import com.wezom.kiviremote.net.model.AspectMessage
 import com.wezom.kiviremote.net.model.ConnectionMessage
 import com.wezom.kiviremote.net.model.SocketConnectionModel
 import com.wezom.kiviremote.nsd.NsdServiceModel
@@ -20,6 +21,7 @@ import com.wezom.kiviremote.persistence.model.ServerApp
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadButtonClickEvent
+import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.upnp.UPnPManager
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -49,6 +51,12 @@ class HomeActivityViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(onNext = {
                 launch(CommonPool) {
+                    it.aspectMessage?.let {
+                        Timber.e("got aspect2: " + it.toString() )
+                        RxBus.publish(ServerAspectEvent::class)
+                        AspectHolder.message = it
+                    }
+
                     it.appList?.let {
                         database.serverAppDao().run {
                             removeAll()
@@ -62,7 +70,6 @@ class HomeActivityViewModel(
                         }
                     }
                 }
-
                 if (it.isShowKeyboard) {
                     RxBus.publish(ShowKeyboardEvent())
                 }
@@ -146,6 +153,12 @@ class HomeActivityViewModel(
                    sendNameChanged(it.name)
                 }, onError = Timber::e)
 
+        disposables += RxBus.listen(NewAspectEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    sendAspectChanged(it.message)
+                }, onError = Timber::e)
+
         disposables += RxBus.listen(LaunchAppEvent::class.java)
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(onNext = {
@@ -162,6 +175,12 @@ class HomeActivityViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(onNext = {
             }, onError = Timber::e)
+
+        disposables += RxBus.listen(SendTextEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    sendText(it.text)
+                },onError = Timber::e)
     }
 
     val showSettingsDialog = MutableLiveData<Boolean>()
@@ -274,6 +293,12 @@ class HomeActivityViewModel(
         })
     }
 
+
+    private fun sendAspectChanged(msg: AspectMessage) {
+        serverConnection?.sendMessage(SocketConnectionModel().apply {
+            setAspectMessage(msg)
+        })
+    }
 
     private fun sendAction(action: Action) {
         serverConnection?.sendMessage(SocketConnectionModel().apply {

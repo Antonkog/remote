@@ -19,7 +19,9 @@ public class ConnectionMessage {
     private int volume;
     private boolean disconnect;
 
-    public ConnectionMessage(String message, boolean isSetKeyboard, List<ServerAppInfo> appList, boolean showKeyboard, boolean hideKeyboard, int volume, boolean disconnect) {
+    private AspectMessage aspectMessage;
+
+    public ConnectionMessage(String message, boolean isSetKeyboard, List<ServerAppInfo> appList, boolean showKeyboard, boolean hideKeyboard, int volume, boolean disconnect, AspectMessage aspectMessage) {
         this.message = message;
         this.isSetKeyboard = isSetKeyboard;
         this.appList = appList;
@@ -27,6 +29,7 @@ public class ConnectionMessage {
         this.hideKeyboard = hideKeyboard;
         this.volume = volume;
         this.disconnect = disconnect;
+        this.aspectMessage = aspectMessage;
     }
 
     public String getMessage() {
@@ -63,5 +66,9 @@ public class ConnectionMessage {
 
     public boolean isDisconnect() {
         return disconnect;
+    }
+
+    public AspectMessage getAspectMessage() {
+        return aspectMessage;
     }
 }

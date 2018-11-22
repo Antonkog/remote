@@ -17,6 +17,22 @@
             android:layout_height="match_parent">
 
 
+            <SeekBar
+                android:id="@+id/seek_sharpness"
+                android:layout_width="160dp"
+                android:layout_height="wrap_content"
+                android:layout_row="4"
+                android:layout_column="1"
+                android:max="100" />
+
+            <TextView
+                android:id="@+id/txt_sharpness"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_row="4"
+                android:layout_column="0"
+                android:text="@string/sharpness" />
+
             <TextView
                 android:id="@+id/txt_contrast"
                 android:layout_width="wrap_content"
