@@ -121,4 +121,11 @@
     <string name="contrast">Контрастність</string>
     <string name="brightness">Яскравість</string>
     <string name="backlight">Підсвічування</string>
+    <string name="r_16x9">16x9</string>
+    <string name="r_4x3">4x3</string>
+    <string name="hdr">HDR</string>
+    <string name="color_g">Зелен хячсм</string>
+    <string name="ratio">Співвідношення</string>
+    <string name="channel">Канал</string>
+    <string name="optimization">Почати оптимізацію</string>
 </resources>

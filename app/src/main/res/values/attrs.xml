@@ -23,4 +23,9 @@
     <attr name="progress" format="integer" />
   </declare-styleable>
 
+  <declare-styleable name="HorizontalSwitchView">
+    <attr name="name" format="string" />
+    <attr name="variant" format="string" />
+  </declare-styleable>
+
 </resources>

@@ -53,6 +53,36 @@
                 app:text="@string/backlight" />
 
 
+
+            <com.wezom.kiviremote.views.HorizontalSwitchView
+                android:id="@+id/hdr"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:name="@string/hdr"
+                app:variant="@string/auto"
+                />
+
+
+            <com.wezom.kiviremote.views.HorizontalSwitchView
+                android:id="@+id/temperature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:name="@string/temperature_des"
+                app:variant="@string/nature"
+                />
+
+
+
+            <com.wezom.kiviremote.views.HorizontalSwitchView
+                android:id="@+id/radio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:name="@string/ratio"
+                app:variant="@string/r_16x9"
+                />
+
+
+
         </LinearLayout>
 
 

@@ -36,15 +36,4 @@ class TextSeekBarView : LinearLayout   {
     }
 
 
-//
-//    override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec)
-//        if (atrs.hasValue(R.styleable.TextSeekBarView_text)) {
-//            var txt = atrs.getString(
-//                    R.styleable.TextSeekBarView_text)
-//
-//
-//            textView.setText(txt)
-//        }
-//    }
 }

@@ -15,11 +15,13 @@ import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.presentation.home.tvsettings.TvSettingsViewModel
+import com.wezom.kiviremote.views.HorizontalSwitchView
 import timber.log.Timber
 import javax.inject.Inject
 
 
-class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
+class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, HorizontalSwitchView.OnSwitchListener {
+
 
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
@@ -42,6 +44,19 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
         binding.sharpness.seekBar.setOnSeekBarChangeListener(this)
         binding.contrast.seekBar.setOnSeekBarChangeListener(this)
         binding.brightness.seekBar.setOnSeekBarChangeListener(this)
+
+        binding.hdr.setOnSwitchListener(this)
+        binding.temperature.setOnSwitchListener(this)
+        binding.radio.setOnSwitchListener(this)
+
+        binding.hdr.setVariants(hashMapOf(
+                resources.getString(R.string.off) to 1,
+                resources.getString(R.string.auto) to 2,
+                resources.getString(R.string.low) to 3,
+                resources.getString(R.string.middle) to 4,
+                resources.getString(R.string.high) to 5
+        )
+        )
         return binding.root
     }
 
@@ -74,6 +89,9 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
         }
     }
 
+    override fun onSwitch(currentEntry: Map.Entry<String, Any>?) {
+
+    }
 
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
     }
