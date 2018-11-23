@@ -30,6 +30,7 @@
     <dimen name="ok_btn_size">76dp</dimen>
     <dimen name="round_button">54dp</dimen>
     <dimen name="dpad_full_size">180dp</dimen>
+    <dimen name="thumb_25">25dp</dimen>
 
     <dimen name="top_bottom_arrow_width">160dp</dimen>
     <dimen name="top_bottom_arrow_height">60dp</dimen>

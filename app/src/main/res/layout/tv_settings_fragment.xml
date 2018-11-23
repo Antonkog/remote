@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/tv_settings_container"
@@ -11,98 +10,50 @@
         android:lineSpacingMultiplier="2"
         android:orientation="vertical">
 
-        <GridLayout
-            android:id="@+id/content"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="#f2f2f2"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
 
-            <SeekBar
-                android:id="@+id/seek_sharpness"
-                android:layout_width="160dp"
+            <com.wezom.kiviremote.views.TextSeekBarView
+                android:id="@+id/brightness"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_row="4"
-                android:layout_column="1"
-                android:max="100" />
+                app:text="@string/brightness" />
 
-            <TextView
-                android:id="@+id/txt_sharpness"
-                android:layout_width="wrap_content"
+            <com.wezom.kiviremote.views.TextSeekBarView
+                android:id="@+id/contrast"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_row="4"
-                android:layout_column="0"
-                android:text="@string/sharpness" />
+                app:text="@string/contrast" />
 
-            <TextView
-                android:id="@+id/txt_contrast"
-                android:layout_width="wrap_content"
+
+            <com.wezom.kiviremote.views.TextSeekBarView
+                android:id="@+id/saturation"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_row="0"
-                android:layout_column="0"
-                android:text="@string/contrast" />
+                app:text="@string/saturation" />
 
-            <SeekBar
-                android:id="@+id/seek_contrast"
-                style="@style/Widget.AppCompat.SeekBar.Discrete"
-                android:layout_width="160dp"
+            <com.wezom.kiviremote.views.TextSeekBarView
+                android:id="@+id/sharpness"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_row="0"
-                android:layout_column="1"
-                android:max="100" />
+                app:text="@string/sharpness" />
 
-
-            <TextView
-                android:id="@+id/txt_bright"
-                android:layout_width="wrap_content"
+            <com.wezom.kiviremote.views.TextSeekBarView
+                android:id="@+id/backlight"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_row="1"
-                android:layout_column="0"
-                android:text="@string/brightness" />
-
-            <SeekBar
-                android:id="@+id/seek_brightness"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:layout_row="1"
-                android:layout_column="1"
-                android:max="100" />
+                app:text="@string/backlight" />
 
 
-            <TextView
-                android:id="@+id/txt_backlight"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_row="2"
-                android:layout_column="0"
-                android:text="@string/backlight" />
-
-            <SeekBar
-                android:id="@+id/seek_backlight"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:layout_row="2"
-                android:layout_column="1"
-                android:max="100" />
-
-
-            <TextView
-                android:id="@+id/txt_saturation"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_row="3"
-                android:layout_column="0"
-                android:text="@string/saturation" />
-
-            <SeekBar
-                android:id="@+id/seek_saturation"
-                android:layout_width="160dp"
-                android:layout_height="wrap_content"
-                android:layout_row="3"
-                android:layout_column="1"
-                android:max="100" />
-
-
-        </GridLayout>
+        </LinearLayout>
 
 
     </android.support.constraint.ConstraintLayout>

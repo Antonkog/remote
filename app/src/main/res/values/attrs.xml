@@ -16,4 +16,11 @@
   <declare-styleable name="KiviDPadView">
     <attr name="arrowSize" format="dimension"/>
   </declare-styleable>
+
+
+  <declare-styleable name="TextSeekBarView">
+    <attr name="text" format="string" />
+    <attr name="progress" format="integer" />
+  </declare-styleable>
+
 </resources>

@@ -27,6 +27,7 @@
     <dimen name="font_size_34">30sp</dimen>
     <dimen name="ok_btn_size">70dp</dimen>
     <dimen name="round_button">50dp</dimen>
+    <dimen name="thumb_25">25dp</dimen>
 
     <dimen name="controllers_height">155dp</dimen>
     <dimen name="joystick_size">190dp</dimen>

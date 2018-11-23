@@ -37,10 +37,11 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = TvSettingsFragmentBinding.inflate(inflater, container!!, false)
-        binding.seekBrightness.setOnSeekBarChangeListener(this)
-        binding.seekBacklight.setOnSeekBarChangeListener(this)
-        binding.seekSaturation.setOnSeekBarChangeListener(this)
-        binding.seekContrast.setOnSeekBarChangeListener(this)
+        binding.backlight.seekBar.setOnSeekBarChangeListener(this)
+        binding.saturation.seekBar.setOnSeekBarChangeListener(this)
+        binding.sharpness.seekBar.setOnSeekBarChangeListener(this)
+        binding.contrast.seekBar.setOnSeekBarChangeListener(this)
+        binding.brightness.seekBar.setOnSeekBarChangeListener(this)
         return binding.root
     }
 
@@ -63,11 +64,11 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
             for ((key, value) in message.settings) {
                 println("$key = $value")
                 when (key) {
-                    AspectMessage.ASPECT_VALUE.BRIGHTNESS.name -> binding.seekBrightness.progress = value
-                    AspectMessage.ASPECT_VALUE.CONTRAST.name -> binding.seekContrast.progress = value
-                    AspectMessage.ASPECT_VALUE.BACKLIGHT.name -> binding.seekBacklight.progress = value
-                    AspectMessage.ASPECT_VALUE.SATURATION.name -> binding.seekSaturation.progress = value
-                    AspectMessage.ASPECT_VALUE.SHARPNESS.name -> binding.seekSharpness.progress = value
+                    AspectMessage.ASPECT_VALUE.BRIGHTNESS.name -> binding.brightness.seekBar.progress = value
+                    AspectMessage.ASPECT_VALUE.CONTRAST.name -> binding.contrast.seekBar.progress = value
+                    AspectMessage.ASPECT_VALUE.BACKLIGHT.name -> binding.saturation.seekBar.progress = value
+                    AspectMessage.ASPECT_VALUE.SATURATION.name -> binding.sharpness.seekBar.progress = value
+                    AspectMessage.ASPECT_VALUE.SHARPNESS.name -> binding.backlight.seekBar.progress = value
                 }
             }
         }
@@ -83,13 +84,12 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener {
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
         seekBar?.id.let {
             viewModel?.let {
-                val msg = AspectMessage.AspectMsgBuilder(AspectMessage.ASPECT_VALUE.BRIGHTNESS, binding.seekBrightness.progress)
-                        .addValue(AspectMessage.ASPECT_VALUE.BACKLIGHT, binding.seekBacklight.progress)
-                        .addValue(AspectMessage.ASPECT_VALUE.CONTRAST, binding.seekContrast.progress)
-                        .addValue(AspectMessage.ASPECT_VALUE.SATURATION, binding.seekSaturation.progress)
-                        .addValue(AspectMessage.ASPECT_VALUE.SHARPNESS, binding.seekSharpness.progress)
+                val msg = AspectMessage.AspectMsgBuilder(AspectMessage.ASPECT_VALUE.BRIGHTNESS, binding.brightness.seekBar.progress)
+                        .addValue(AspectMessage.ASPECT_VALUE.BACKLIGHT, binding.backlight.seekBar.progress)
+                        .addValue(AspectMessage.ASPECT_VALUE.CONTRAST, binding.contrast.seekBar.progress)
+                        .addValue(AspectMessage.ASPECT_VALUE.SATURATION, binding.saturation.seekBar.progress)
+                        .addValue(AspectMessage.ASPECT_VALUE.SHARPNESS, binding.sharpness.seekBar.progress)
                         .buildAspect()
-
                 AspectHolder.message = msg
                 it.sendAspectChangeEvent(msg);
             }

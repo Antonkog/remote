@@ -2,7 +2,7 @@
 <resources>
     <color name="colorPrimary">#0041AC</color>
     <color name="colorPrimaryDark">#002F7E</color>
-    <color name="colorAccent">#0F59D4</color>
+    <color name="colorAccent">#0f5ad3</color>
 
     <color name="colorBlack">#000000</color>
     <color name="darkGray">#353535</color>
@@ -40,6 +40,9 @@
     <color name="playing_now">#B1B4B9</color>
     <color name="preview_title">#5D5F62</color>
     <color name="inactive_progress">#e2e2e2</color>
+
+    <color name="inactive_twenty">#37e2e2e2</color>
+    <color name="progress">@color/colorAccent</color>
 
     <color name="image_counter">#B6BAC1</color>
 
