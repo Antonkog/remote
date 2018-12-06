@@ -11,10 +11,11 @@ import timber.log.Timber
 import java.util.*
 
 
-class HorizontalSwitchView : LinearLayout {
-    lateinit var name: TextView
-    lateinit var variant: TextView
-    lateinit var arrow: ImageView
+class AspectHeaderView : LinearLayout {
+    lateinit var header: TextView
+    lateinit var row: TextView
+    lateinit var arrowl: ImageView
+    lateinit var arrowr: ImageView
 
     private var listener: OnSwitchListener? = null
     private var varargs: LinkedList<String> = LinkedList()
@@ -32,28 +33,29 @@ class HorizontalSwitchView : LinearLayout {
 
 
     private fun init(attrs: AttributeSet?, defStyle: Int) {
-        inflate(context, R.layout.view_horizontal_switch, this)
-        name = findViewById(R.id.name)
-        variant = findViewById(R.id.variant)
-        arrow = findViewById(R.id.arrow)
+        inflate(context, R.layout.aspect_header, this)
+        header = findViewById(R.id.header)
+        row = findViewById(R.id.row)
+        arrowl = findViewById(R.id.arrow_l)
+        arrowr = findViewById(R.id.arrow_r)
 
         val attributes = context.obtainStyledAttributes(
-                attrs, R.styleable.HorizontalSwitchView, defStyle, 0)
+                attrs, R.styleable.AspectHeaderView, defStyle, 0)
 
         try {
-            name.text = attributes.getString(R.styleable.HorizontalSwitchView_name)
-            variant.text = attributes.getString(R.styleable.HorizontalSwitchView_variant)
-            Timber.i("attrs ${name.text} ${variant.text}")
-            arrow.setOnClickListener { click -> doOnclick() }
-            variant.setOnClickListener { click -> doOnclick() }
+            header.text = attributes.getString(R.styleable.HorizontalSwitchView_name)
+            row.text = attributes.getString(R.styleable.HorizontalSwitchView_variant)
+            Timber.i("attrs ${header.text} ${row.text}")
+            arrowl.setOnClickListener { click -> doOnLeftclick() }
+            arrowr.setOnClickListener { click -> doOnRightclick() }
         } finally {
             attributes.recycle()
         }
     }
 
-    private fun doOnclick() {
-        var position = varargs.indexOf(variant.text)
-        Timber.i(" position of " + variant.text + " pos =" + position)
+    private fun doOnRightclick() {
+        var position = varargs.indexOf(row.text)
+        Timber.i(" position of " + row.text + " pos =" + position)
         when (position) {
             -1 -> return
             varargs.size - 1 -> position = 0
@@ -62,9 +64,23 @@ class HorizontalSwitchView : LinearLayout {
                 position++
             }
         }
-        variant.text = varargs[position]
+        row.text = varargs[position]
+        listener?.onSwitch(varargs[position])    }
+
+    private fun doOnLeftclick() {
+        var position = varargs.indexOf(row.text)
+        Timber.i(" position of " + row.text + " pos =" + position)
+        when (position) {
+            -1 -> return
+            0 -> position = varargs.size - 1
+            else -> {
+                position--
+            }
+        }
+        row.text = varargs[position]
         listener?.onSwitch(varargs[position])
     }
+
 
     fun setOnSwitchListener(l: OnSwitchListener) {
         listener = l

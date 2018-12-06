@@ -159,6 +159,7 @@
     <string name="game">Game</string>
     <string name="support">Support 24/7</string>
     <string name="cooler">Cold2</string>
-    <string name="warmer">Warm2</string>
+    <string name="warmer">Warm 2</string>
+    <string name="video_mode">Mode</string>
 
 </resources>

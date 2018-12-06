@@ -142,6 +142,7 @@
     <string name="brightness">Яркость</string>
     <string name="backlight">Подсветка</string>
     <string name="mode_desc">Режим изображения (только для видео)</string>
+    <string name="video_mode">Режим изображения</string>
     <string name="ratio_desc">Соотношение сторон (только для видео)</string>
     <string name="timer_off">Таймер выключен</string>
     <string name="off">Выкл</string>

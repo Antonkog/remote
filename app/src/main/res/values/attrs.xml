@@ -28,4 +28,11 @@
     <attr name="variant" format="string" />
   </declare-styleable>
 
+
+  <declare-styleable name="AspectHeaderView">
+    <attr name="header" format="string" />
+    <attr name="row" format="string" />
+  </declare-styleable>
+
+
 </resources>

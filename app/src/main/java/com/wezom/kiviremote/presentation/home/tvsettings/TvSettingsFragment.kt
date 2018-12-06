@@ -15,12 +15,18 @@ import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.presentation.home.tvsettings.TvSettingsViewModel
+import com.wezom.kiviremote.presentation.home.tvsettings.driver_set.HDRValues
+import com.wezom.kiviremote.presentation.home.tvsettings.driver_set.PictureMode
+import com.wezom.kiviremote.presentation.home.tvsettings.driver_set.Ratio
+import com.wezom.kiviremote.presentation.home.tvsettings.driver_set.TemperatureValues
+import com.wezom.kiviremote.views.AspectHeaderView
 import com.wezom.kiviremote.views.HorizontalSwitchView
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
 
-class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, HorizontalSwitchView.OnSwitchListener {
+class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, HorizontalSwitchView.OnSwitchListener, AspectHeaderView.OnSwitchListener {
 
 
     @Inject
@@ -47,16 +53,52 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
 
         binding.hdr.setOnSwitchListener(this)
         binding.temperature.setOnSwitchListener(this)
-        binding.radio.setOnSwitchListener(this)
+        binding.ratio.setOnSwitchListener(this)
+        binding.aspectHeader.setOnSwitchListener(this)
 
-        binding.hdr.setVariants(hashMapOf(
-                resources.getString(R.string.off) to 1,
-                resources.getString(R.string.auto) to 2,
-                resources.getString(R.string.low) to 3,
-                resources.getString(R.string.middle) to 4,
-                resources.getString(R.string.high) to 5
+        binding.hdr.setVariants(
+                LinkedList(listOf(
+                        resources.getString(HDRValues.HDR_OPEN_LEVEL_AUTO.stringResourceID),
+                        resources.getString(HDRValues.HDR_OPEN_LEVEL_LOW.stringResourceID),
+                        resources.getString(HDRValues.HDR_OPEN_LEVEL_MIDDLE.stringResourceID),
+                        resources.getString(HDRValues.HDR_OPEN_LEVEL_HIGH.stringResourceID),
+                        resources.getString(HDRValues.HDR_OPEN_LEVEL_OFF.stringResourceID)).distinct()))
+
+
+        binding.temperature.setVariants(
+                LinkedList(listOf(
+                        resources.getString(TemperatureValues.COLOR_TEMP_COOL.stringResourceID),
+                        resources.getString(TemperatureValues.COLOR_TEMP_COOLER.stringResourceID),
+                        resources.getString(TemperatureValues.COLOR_TEMP_NATURE.stringResourceID),
+                        resources.getString(TemperatureValues.COLOR_TEMP_WARM.stringResourceID),
+                        resources.getString(TemperatureValues.COLOR_TEMP_WARMER.stringResourceID)).distinct())
         )
+
+        binding.ratio.setVariants(
+                LinkedList(listOf(resources.getString(Ratio.VIDEO_ARC_AUTO.string),
+                        resources.getString(Ratio.VIDEO_ARC_16x9.string),
+                        resources.getString(Ratio.VIDEO_ARC_4x3.string),
+                        resources.getString(Ratio.VIDEO_ARC_DEFAULT.string)
+
+                ).distinct())
         )
+
+        binding.aspectHeader.setVariants(
+                LinkedList(listOf(
+                        resources.getString(R.string.auto),
+                        resources.getString(R.string.user),
+                        resources.getString(R.string.soft),
+                        resources.getString(R.string.economy),
+                        resources.getString(R.string.normal),
+                        resources.getString(R.string.movie),
+                        resources.getString(R.string.sport),
+                        resources.getString(R.string.game),
+                        resources.getString(R.string.vivid)
+
+                ).distinct())
+        )
+
+
         return binding.root
     }
 
@@ -84,12 +126,54 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                     AspectMessage.ASPECT_VALUE.BACKLIGHT.name -> binding.saturation.seekBar.progress = value
                     AspectMessage.ASPECT_VALUE.SATURATION.name -> binding.sharpness.seekBar.progress = value
                     AspectMessage.ASPECT_VALUE.SHARPNESS.name -> binding.backlight.seekBar.progress = value
+
+
+                    AspectMessage.ASPECT_VALUE.HDR.name -> {
+                        var hdr = HDRValues.getByID(value)?.stringResourceID
+                        if (hdr != null) binding.hdr.variant.text = resources.getString(hdr)
+
+                    }
+
+                    AspectMessage.ASPECT_VALUE.TEMPERATURE.name -> {
+                        var temperature = TemperatureValues.getByID(value)?.stringResourceID
+                        if (temperature != null) binding.temperature.name.text = resources.getString(temperature)
+                    }
+
+                    AspectMessage.ASPECT_VALUE.VIDEOARCTYPE.name -> {
+                        var ratio = Ratio.getByID(value)?.string
+                        if (ratio != null) binding.ratio.name.text = resources.getString(ratio)
+                    }
                 }
             }
         }
     }
 
-    override fun onSwitch(currentEntry: Map.Entry<String, Any>?) {
+    override fun onSwitch(s: String) {
+
+        viewModel?.let {
+            val builder = AspectMessage.AspectMsgBuilder()
+
+            if (HDRValues.getIdByString(binding.hdr.variant.text, context) != -1) {
+                builder.addValue(AspectMessage.ASPECT_VALUE.HDR, HDRValues.getIdByString(binding.hdr.variant.text, context))
+            }
+
+            if (TemperatureValues.getIdByString(binding.temperature.variant.text, context) != -1) {
+                builder.addValue(AspectMessage.ASPECT_VALUE.TEMPERATURE, TemperatureValues.getIdByString(binding.temperature.variant.text, context))
+            }
+
+            if (Ratio.getIdByString(binding.ratio.variant.text, context) != -1) {
+                builder.addValue(AspectMessage.ASPECT_VALUE.VIDEOARCTYPE, Ratio.getIdByString(binding.ratio.variant.text, context))
+            }
+
+            if (PictureMode.getIdByString(binding.aspectHeader.row.text, context) != -1) {
+                builder.addValue(AspectMessage.ASPECT_VALUE.PICTUREMODE, PictureMode.getIdByString(binding.aspectHeader.row.text, context))
+            }
+
+            val msg = builder.buildAspect()
+            it.sendAspectChangeEvent(msg)
+            Timber.i(builder.buildAspect().toString())
+
+        }
 
     }
 
@@ -102,14 +186,13 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
         seekBar?.id.let {
             viewModel?.let {
-                val msg = AspectMessage.AspectMsgBuilder(AspectMessage.ASPECT_VALUE.BRIGHTNESS, binding.brightness.seekBar.progress)
+                val builder = AspectMessage.AspectMsgBuilder(AspectMessage.ASPECT_VALUE.BRIGHTNESS, binding.brightness.seekBar.progress)
                         .addValue(AspectMessage.ASPECT_VALUE.BACKLIGHT, binding.backlight.seekBar.progress)
                         .addValue(AspectMessage.ASPECT_VALUE.CONTRAST, binding.contrast.seekBar.progress)
                         .addValue(AspectMessage.ASPECT_VALUE.SATURATION, binding.saturation.seekBar.progress)
                         .addValue(AspectMessage.ASPECT_VALUE.SHARPNESS, binding.sharpness.seekBar.progress)
-                        .buildAspect()
-                AspectHolder.message = msg
-                it.sendAspectChangeEvent(msg);
+
+                it.sendAspectChangeEvent(builder.buildAspect())
             }
         }
     }

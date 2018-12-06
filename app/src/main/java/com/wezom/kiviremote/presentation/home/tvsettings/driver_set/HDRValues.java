@@ -1,9 +1,11 @@
-package com.wezom.kiviremote.presentation.home.tvsettings;
+package com.wezom.kiviremote.presentation.home.tvsettings.driver_set;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 
 import com.wezom.kiviremote.R;
+import com.wezom.kiviremote.presentation.home.tvsettings.TextTypedValues;
 
 
 public enum HDRValues implements TextTypedValues {
@@ -29,6 +31,15 @@ public enum HDRValues implements TextTypedValues {
         }
         return null;
     }
+
+    public static int getIdByString(CharSequence name, Context context){
+        for(HDRValues item :values()){
+            if(name.equals(context.getResources().getString(item.stringRes)))
+                return item.id;
+        }
+        return -1;
+    }
+
     @Override
     public int getStringResourceID() {
         return stringRes;
