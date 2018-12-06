@@ -30,13 +30,15 @@ public enum TemperatureValues implements TextTypedValues {
     }
 
 
-    public static int getIdByString(CharSequence name, Context context){
+    @Nullable
+    public static int getIdByResID(int stringId) {
         for (TemperatureValues item : values()) {
-            if(name.equals(context.getResources().getString(item.stringRes)))
+            if (stringId == item.stringRes)
                 return item.id;
         }
         return -1;
     }
+
     TemperatureValues(int id, int stringRes) {
         this.id = id;
         this.stringRes = stringRes;

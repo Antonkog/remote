@@ -23,18 +23,21 @@ public enum HDRValues implements TextTypedValues {
         this.id = id;
         this.stringRes = stringRes;
     }
+
     @Nullable
-    public static HDRValues getByID(int id){
-        for(HDRValues item :values()){
-            if(id == item.id)
+    public static HDRValues getByID(int id) {
+        for (HDRValues item : values()) {
+            if (id == item.id)
                 return item;
         }
         return null;
     }
 
-    public static int getIdByString(CharSequence name, Context context){
-        for(HDRValues item :values()){
-            if(name.equals(context.getResources().getString(item.stringRes)))
+
+    @Nullable
+    public static int getIdByResID(int stringId) {
+        for (HDRValues item : values()) {
+            if (stringId == item.stringRes)
                 return item.id;
         }
         return -1;

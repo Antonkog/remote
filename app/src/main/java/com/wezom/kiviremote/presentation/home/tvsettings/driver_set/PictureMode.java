@@ -62,9 +62,10 @@ public enum PictureMode {
     }
 
 
-    public static int getIdByString(CharSequence name, Context context){
+    @Nullable
+    public static int getIdByResID(int stringId) {
         for (PictureMode item : values()) {
-            if(name.equals(context.getResources().getString(item.string)))
+            if (stringId == item.string)
                 return item.id;
         }
         return -1;

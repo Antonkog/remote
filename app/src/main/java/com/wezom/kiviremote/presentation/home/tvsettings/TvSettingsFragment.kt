@@ -56,46 +56,43 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         binding.ratio.setOnSwitchListener(this)
         binding.aspectHeader.setOnSwitchListener(this)
 
-        binding.hdr.setVariants(
-                LinkedList(listOf(
-                        resources.getString(HDRValues.HDR_OPEN_LEVEL_AUTO.stringResourceID),
-                        resources.getString(HDRValues.HDR_OPEN_LEVEL_LOW.stringResourceID),
-                        resources.getString(HDRValues.HDR_OPEN_LEVEL_MIDDLE.stringResourceID),
-                        resources.getString(HDRValues.HDR_OPEN_LEVEL_HIGH.stringResourceID),
-                        resources.getString(HDRValues.HDR_OPEN_LEVEL_OFF.stringResourceID)).distinct()))
+        binding.hdr.setVariants(AspectMessage.ASPECT_VALUE.HDR,
+                listOf(
+                        HDRValues.HDR_OPEN_LEVEL_AUTO.stringResourceID,
+                        HDRValues.HDR_OPEN_LEVEL_LOW.stringResourceID,
+                        HDRValues.HDR_OPEN_LEVEL_MIDDLE.stringResourceID,
+                        HDRValues.HDR_OPEN_LEVEL_HIGH.stringResourceID,
+                        HDRValues.HDR_OPEN_LEVEL_OFF.stringResourceID))
 
-
-        binding.temperature.setVariants(
-                LinkedList(listOf(
-                        resources.getString(TemperatureValues.COLOR_TEMP_COOL.stringResourceID),
-                        resources.getString(TemperatureValues.COLOR_TEMP_COOLER.stringResourceID),
-                        resources.getString(TemperatureValues.COLOR_TEMP_NATURE.stringResourceID),
-                        resources.getString(TemperatureValues.COLOR_TEMP_WARM.stringResourceID),
-                        resources.getString(TemperatureValues.COLOR_TEMP_WARMER.stringResourceID)).distinct())
+        binding.temperature.setVariants( AspectMessage.ASPECT_VALUE.TEMPERATURE,
+                listOf(TemperatureValues.COLOR_TEMP_COOL.stringResourceID,
+                        TemperatureValues.COLOR_TEMP_COOLER.stringResourceID,
+                        TemperatureValues.COLOR_TEMP_NATURE.stringResourceID,
+                        TemperatureValues.COLOR_TEMP_WARM.stringResourceID,
+                        TemperatureValues.COLOR_TEMP_WARMER.stringResourceID)
         )
 
-        binding.ratio.setVariants(
-                LinkedList(listOf(resources.getString(Ratio.VIDEO_ARC_AUTO.string),
-                        resources.getString(Ratio.VIDEO_ARC_16x9.string),
-                        resources.getString(Ratio.VIDEO_ARC_4x3.string),
-                        resources.getString(Ratio.VIDEO_ARC_DEFAULT.string)
-
-                ).distinct())
+        binding.ratio.setVariants(AspectMessage.ASPECT_VALUE.VIDEOARCTYPE,
+                listOf(Ratio.VIDEO_ARC_AUTO.string,
+                        Ratio.VIDEO_ARC_16x9.string,
+                        Ratio.VIDEO_ARC_4x3.string,
+                        Ratio.VIDEO_ARC_DEFAULT.string
+                )
         )
 
-        binding.aspectHeader.setVariants(
-                LinkedList(listOf(
-                        resources.getString(R.string.auto),
-                        resources.getString(R.string.user),
-                        resources.getString(R.string.soft),
-                        resources.getString(R.string.economy),
-                        resources.getString(R.string.normal),
-                        resources.getString(R.string.movie),
-                        resources.getString(R.string.sport),
-                        resources.getString(R.string.game),
-                        resources.getString(R.string.vivid)
+        binding.aspectHeader.setVariants(AspectMessage.ASPECT_VALUE.PICTUREMODE,
+                listOf(
+                        R.string.auto,
+                        R.string.user,
+                        R.string.soft,
+                        R.string.economy,
+                        R.string.normal,
+                        R.string.movie,
+                        R.string.sport,
+                        R.string.game,
+                        R.string.vivid
 
-                ).distinct())
+                )
         )
 
 
@@ -136,45 +133,46 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
 
                     AspectMessage.ASPECT_VALUE.TEMPERATURE.name -> {
                         var temperature = TemperatureValues.getByID(value)?.stringResourceID
-                        if (temperature != null) binding.temperature.name.text = resources.getString(temperature)
+                        if (temperature != null) binding.temperature.variant.text = resources.getString(temperature)
                     }
 
                     AspectMessage.ASPECT_VALUE.VIDEOARCTYPE.name -> {
                         var ratio = Ratio.getByID(value)?.string
-                        if (ratio != null) binding.ratio.name.text = resources.getString(ratio)
+                        if (ratio != null) binding.ratio.variant.text = resources.getString(ratio)
                     }
                 }
             }
         }
     }
 
-    override fun onSwitch(s: String) {
-
+    override fun onSwitch(mode: AspectMessage.ASPECT_VALUE?, resId: Int) {
         viewModel?.let {
             val builder = AspectMessage.AspectMsgBuilder()
 
-            if (HDRValues.getIdByString(binding.hdr.variant.text, context) != -1) {
-                builder.addValue(AspectMessage.ASPECT_VALUE.HDR, HDRValues.getIdByString(binding.hdr.variant.text, context))
+            if (resId != null) {
+                when (mode) {
+                    AspectMessage.ASPECT_VALUE.HDR -> builder.addValue(mode, HDRValues.getIdByResID(resId))
+                    AspectMessage.ASPECT_VALUE.TEMPERATURE -> builder.addValue(mode, TemperatureValues.getIdByResID(resId))
+                    AspectMessage.ASPECT_VALUE.VIDEOARCTYPE -> builder.addValue(mode, Ratio.getIdByResID(resId))
+                    AspectMessage.ASPECT_VALUE.PICTUREMODE -> builder.addValue(mode, PictureMode.getIdByResID(resId))
+                    else ->  Timber.e(" AspectMessage.ASPECT_VALUE not set")
+
+                }
+
+
+
+
+
+            } else {
+                Timber.e(" error in aspect view implementation or value not set")
             }
 
-            if (TemperatureValues.getIdByString(binding.temperature.variant.text, context) != -1) {
-                builder.addValue(AspectMessage.ASPECT_VALUE.TEMPERATURE, TemperatureValues.getIdByString(binding.temperature.variant.text, context))
-            }
-
-            if (Ratio.getIdByString(binding.ratio.variant.text, context) != -1) {
-                builder.addValue(AspectMessage.ASPECT_VALUE.VIDEOARCTYPE, Ratio.getIdByString(binding.ratio.variant.text, context))
-            }
-
-            if (PictureMode.getIdByString(binding.aspectHeader.row.text, context) != -1) {
-                builder.addValue(AspectMessage.ASPECT_VALUE.PICTUREMODE, PictureMode.getIdByString(binding.aspectHeader.row.text, context))
-            }
 
             val msg = builder.buildAspect()
             it.sendAspectChangeEvent(msg)
             Timber.i(builder.buildAspect().toString())
 
         }
-
     }
 
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {

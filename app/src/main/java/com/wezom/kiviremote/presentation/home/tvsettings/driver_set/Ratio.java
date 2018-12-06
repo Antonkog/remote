@@ -28,6 +28,7 @@ public enum Ratio {
     public int getString() {
         return string;
     }
+
     @Nullable
     public static Ratio getByID(int id) {
         for (Ratio port : values()) {
@@ -39,10 +40,10 @@ public enum Ratio {
     }
 
 
-
-    public static int getIdByString(CharSequence name, Context context){
+    @Nullable
+    public static int getIdByResID(int stringId) {
         for (Ratio item : values()) {
-            if(name.equals(context.getResources().getString(item.string)))
+            if (stringId == item.string)
                 return item.id;
         }
         return -1;
