@@ -17,6 +17,7 @@ import com.wezom.kiviremote.presentation.home.directories.DirectoriesViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryViewModel
 import com.wezom.kiviremote.presentation.home.main.MainFragmentViewModel
 import com.wezom.kiviremote.presentation.home.media.MediaViewModel
+import com.wezom.kiviremote.presentation.home.ports.PortsViewModel
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceViewModel
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesViewModel
 import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlViewModel
@@ -73,6 +74,10 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
 
         modelClass.isAssignableFrom(DirectoriesViewModel::class.java) ->
             DirectoriesViewModel(router, uPnPManager) as T
+
+        modelClass.isAssignableFrom(PortsViewModel::class.java) ->
+            PortsViewModel(router) as T
+
 
         else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.canonicalName}")
     }

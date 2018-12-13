@@ -86,6 +86,24 @@
             app:layout_constraintRight_toLeftOf="@+id/menu"
             app:srcCompat="@drawable/selector_home_btn" />
 
+
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/input"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/large"
+            android:background="@drawable/button_selector"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="false"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.503"
+            app:layout_constraintLeft_toRightOf="@+id/back"
+            app:layout_constraintRight_toLeftOf="@+id/menu"
+            app:srcCompat="@drawable/selector_input_btn" />
+
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/menu"
             android:layout_width="wrap_content"

@@ -19,6 +19,7 @@ import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchFragment;
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesFragment;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
 import com.wezom.kiviremote.presentation.home.main.MainFragment;
+import com.wezom.kiviremote.presentation.home.ports.PortsFragment;
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.TvSettingsFragment;
@@ -66,6 +67,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                             return new DirectoriesFragment();
                         case Screens.TV_SETTINGS_FRAGMENT:
                             return new TvSettingsFragment();
+                        case Screens.PORTS_FRAGMENT:
+                            return new PortsFragment();
                         default:
                             throw new IllegalStateException("Unknown screen");
                     }
