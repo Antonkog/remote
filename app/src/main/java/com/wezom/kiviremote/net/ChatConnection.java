@@ -27,6 +27,7 @@ import com.wezom.kiviremote.bus.ReconnectEvent;
 import com.wezom.kiviremote.common.Action;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.gson.ListAdapter;
+import com.wezom.kiviremote.net.model.AspectAvailable;
 import com.wezom.kiviremote.net.model.ConnectionMessage;
 import com.wezom.kiviremote.net.model.OpenSettings;
 import com.wezom.kiviremote.net.model.ServerEvent;
@@ -119,10 +120,10 @@ public class ChatConnection {
     }
 
     private void updateMessages(String msg) {
-        if (msg.length() > 150)
-            Timber.d("Updating message: " + msg.substring(0, 50));
-        else
-            Timber.d("Updating message: " + msg);
+//        if (msg.length() > 150)
+//            Timber.d("Updating message: " + msg.substring(0, 50));
+//        else
+        Timber.d("Updating message: " + msg);
 
 
         ServerEvent serverEvent = gson.fromJson(msg, ServerEvent.class);
@@ -151,14 +152,21 @@ public class ChatConnection {
                         return;
                 }
 
+
+            if ( serverEvent.getAspectMessage() != null && serverEvent.getAvailableAspectValues() != null) {
+                Timber.e("got aspect" + serverEvent.getAspectMessage().toString() + serverEvent.getAvailableAspectValues());
+
+                AspectAvailable aspectAvailable =     gson.fromJson(serverEvent.getAvailableAspectValues(), AspectAvailable.class);
+
+                Timber.e(aspectAvailable.toString());
+            } else
             RxBus.INSTANCE.publish(new ConnectionMessage(msg,
                     !keyboardNotSet,
                     serverEvent.getApps(),
                     showKeyboard,
                     hideKeyboard,
                     volume,
-                    TextUtils.equals(serverEvent.getEvent(), DISCONNECT),
-                    serverEvent.getAspectMessage()));
+                    TextUtils.equals(serverEvent.getEvent(), DISCONNECT)));
         } else Timber.d("Server event is null");
     }
 

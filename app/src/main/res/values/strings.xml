@@ -161,4 +161,23 @@
     <string name="sport">Спорт</string>
     <string name="game">Игра</string>
     <string name="support">Поддержка 24/7</string>
+
+
+    <string name="wifi">Wi-Fi</string>
+    <string name="video_sound">Видео и Звук</string>
+    <string name="info">Про устройство</string>
+    <string name="vga">VGA</string>
+    <string name="atv">АТВ</string>
+    <string name="hdmi">HDMI 1</string>
+    <string name="hdmi2">HDMI 2</string>
+    <string name="hdmi3">HDMI 3</string>
+    <string name="hdmi4">HDMI 4</string>
+    <string name="dtv">Телевидение</string>
+    <string name="dvi">DVI</string>
+    <string name="av">AV</string>
+    <string name="to_usb">USB</string>
+    <string name="ypbpr">Компонент</string>
+    <string name="dvbc">DVB-C</string>
+    <string name="dvbs">DVB-S</string>
+
 </resources>

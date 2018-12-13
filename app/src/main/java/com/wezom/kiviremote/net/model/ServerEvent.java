@@ -15,6 +15,7 @@ public class ServerEvent {
     private List<ServerAppInfo> apps;
     private int volume;
     private AspectMessage aspectMessage;
+    private String availableAspectValues;
 
     public String getEvent() {
         return event;
@@ -32,4 +33,7 @@ public class ServerEvent {
         return aspectMessage;
     }
 
+    public String getAvailableAspectValues() {
+        return availableAspectValues;
+    }
 }

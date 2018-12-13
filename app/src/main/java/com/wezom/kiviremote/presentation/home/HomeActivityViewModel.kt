@@ -21,7 +21,6 @@ import com.wezom.kiviremote.persistence.model.ServerApp
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadButtonClickEvent
-import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.upnp.UPnPManager
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -51,12 +50,6 @@ class HomeActivityViewModel(
             .observeOn(AndroidSchedulers.mainThread())
             .subscribeBy(onNext = {
                 launch(CommonPool) {
-                    it.aspectMessage?.let {
-                        Timber.e("got aspect2: " + it.toString() )
-                        RxBus.publish(ServerAspectEvent::class)
-                        AspectHolder.message = it
-                    }
-
                     it.appList?.let {
                         database.serverAppDao().run {
                             removeAll()
