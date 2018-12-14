@@ -23,8 +23,8 @@ class TouchpadViewModel (private val router: Router) : BaseViewModel() {
         RxBus.publish(TouchpadButtonClickEvent(x, y, buttonType))
     }
 
-    fun sendScrollEvent(y: Double) {
-        RxBus.publish(SendScrollEvent(y))
+    fun sendScrollEvent(scrollTopToBottom: Boolean, y: Double) {
+        RxBus.publish(SendScrollEvent(scrollTopToBottom, y))
     }
 
     fun sendKeyEvent(keyEvent: Int) {

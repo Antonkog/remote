@@ -1,4 +1,4 @@
 package com.wezom.kiviremote.bus
 
 
-data class SendScrollEvent(val y: Double)
+data class SendScrollEvent(val scrollTopToBottom: Boolean, val y: Double)

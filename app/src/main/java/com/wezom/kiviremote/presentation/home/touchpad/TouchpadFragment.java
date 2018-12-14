@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.view.GestureDetectorCompat;
+import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,15 +15,12 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 
 import com.wezom.kiviremote.common.PreferencesManager;
-import com.wezom.kiviremote.common.extensions.NumUtils;
 import com.wezom.kiviremote.databinding.TouchPadFragmentBinding;
 import com.wezom.kiviremote.interfaces.OnTouchPadMessageListener;
 import com.wezom.kiviremote.presentation.base.BaseFragment;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
 
 import javax.inject.Inject;
-
-import timber.log.Timber;
 
 import static android.view.MotionEvent.ACTION_DOWN;
 import static android.view.MotionEvent.ACTION_MOVE;
@@ -44,8 +43,9 @@ public class TouchpadFragment extends BaseFragment
 
     private TouchPadFragmentBinding binding;
 
-    private int y1;
-
+    private GestureDetectorCompat gestureDetector;
+    private final int SWIPE_MIN_DISTANCE = 120;
+    private final int SWIPE_THRESHOLD_VELOCITY = 200;
     private long homeClickTime;
     private final Handler handler = new Handler();
     private final Runnable launchQuickApps = () -> viewModel.launchQuickApps();
@@ -124,38 +124,34 @@ public class TouchpadFragment extends BaseFragment
             return true;
         });
 
+        gestureDetector = new GestureDetectorCompat(getContext(), new MyGestureListener());
         binding.scroll.setOnTouchListener((view, event) -> {
-            switch (event.getAction()) {
-                case MotionEvent.ACTION_DOWN:
-                    Timber.d("TOUCH_SCROLL_DOWN y : " + event.getY());
-                    y1 = NumUtils.getToDp((int) event.getY());
-                    break;
-
-                case MotionEvent.ACTION_MOVE:
-                    Timber.d("TOUCH_SCROLL_MOVE y : " + event.getY());
-
-                    int y2 = NumUtils.getToDp((int) event.getY());
-                    int dy = y2 - y1;
-
-                    y1 = y2;
-
-                    viewModel.sendScrollEvent(dy);
-                    break;
-
-                case MotionEvent.ACTION_UP:
-                    view.performClick();
-                    break;
-
-                case MotionEvent.ACTION_CANCEL:
-                    Timber.d("Action was CANCEL");
-                    break;
-
-                case MotionEvent.ACTION_OUTSIDE:
-                    Timber.d("Movement occurred outside bounds of current screen element");
-                    break;
-            }
+            gestureDetector.onTouchEvent(event);
             return true;
         });
+    }
+
+
+    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
+        private static final String DEBUG_TAG = "Gestures";
+
+        @Override
+        public boolean onDown(MotionEvent event) {
+            return true;
+        }
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2,
+                               float velocityX, float velocityY) {
+            if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+                viewModel.sendScrollEvent(true, Math.abs(e1.getY() - e2.getY()));
+                return false; // Bottom to top
+            } else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
+                viewModel.sendScrollEvent(false, Math.abs(e1.getY() - e2.getY()));
+                return false; // Top to bottom
+            }
+            return true;
+        }
     }
 
     @Override
