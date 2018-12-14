@@ -1,6 +1,7 @@
 package com.wezom.kiviremote.presentation.home.remotecontrol
 
 import android.arch.lifecycle.MutableLiveData
+import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.NewVolumeEvent
 import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.bus.SendKeyEvent
@@ -8,10 +9,11 @@ import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import io.reactivex.rxkotlin.subscribeBy
+import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
 
-class RemoteControlViewModel : BaseViewModel() {
+class RemoteControlViewModel (private val router: Router): BaseViewModel() {
     init {
         disposables += RxBus.listen(NewVolumeEvent::class.java).subscribeBy(
                 onNext = {
@@ -32,6 +34,8 @@ class RemoteControlViewModel : BaseViewModel() {
     fun sendHomeDown() = RxBus.publish(SendActionEvent(Action.HOME_DOWN))
 
     fun sendHomeUp() = RxBus.publish(SendActionEvent(Action.HOME_UP))
+
+    fun goToAspect() = router.navigateTo(Screens.TV_SETTINGS_FRAGMENT)
 
     fun launchQuickApps() = RxBus.publish(SendActionEvent(Action.LAUNCH_QUICK_APPS))
 }

@@ -161,5 +161,6 @@
     <string name="cooler">Cold2</string>
     <string name="warmer">Warm 2</string>
     <string name="video_mode">Mode</string>
+    <string name="image_setting">IMAGE\nSETTINGS</string>
 
 </resources>

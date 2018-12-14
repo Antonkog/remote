@@ -169,16 +169,15 @@
             app:srcCompat="@drawable/selector_home_btn" />
 
 
-
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="22dp"
             android:background="@drawable/button_selector"
             android:clickable="true"
             android:focusable="true"
             android:scaleType="centerInside"
-            android:layout_marginBottom="22dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/menu"
             app:layout_constraintHorizontal_bias="0.5"
@@ -202,5 +201,39 @@
             app:layout_constraintStart_toEndOf="@+id/input"
             app:srcCompat="@drawable/selector_menu_btn" />
 
+        <Button
+            android:id="@+id/button_aspect"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:text="@string/image_setting"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/font_size_14"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@+id/dpad_top"
+            app:layout_constraintEnd_toStartOf="@+id/channels"
+            app:layout_constraintStart_toEndOf="@+id/volume"
+            app:layout_constraintTop_toBottomOf="@+id/mute" />
+
+
+        <!--<android.support.v7.widget.AppCompatButtont
+            android:id="@+id/button_aspect"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="16dp"
+            android:background="@drawable/ic_bg_horizontal"
+            android:gravity="center"
+            android:padding="@dimen/font_size_14"
+            android:text="@string/image_setting"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/font_size_14"
+            android:textStyle="normal"
+            app:layout_constraintBottom_toTopOf="@+id/dpad_top"
+            app:layout_constraintEnd_toStartOf="@+id/channels"
+            app:layout_constraintStart_toEndOf="@+id/volume"
+            app:layout_constraintTop_toBottomOf="@+id/switch_off" />-->
     </android.support.constraint.ConstraintLayout>
 </layout>

@@ -108,6 +108,7 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
 
         binding.menu.setOnClickListener(v -> viewModel.sendButtonClick(KeyEvent.KEYCODE_MENU));
         binding.back.setOnClickListener(v -> viewModel.sendButtonClick(KeyEvent.KEYCODE_BACK));
+        binding.buttonAspect.setOnClickListener(v -> viewModel.goToAspect());
         binding.home.setOnTouchListener((view, event) -> {
             switch (event.getAction()) {
                 case ACTION_DOWN:

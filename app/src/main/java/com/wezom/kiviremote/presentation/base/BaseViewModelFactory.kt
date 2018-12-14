@@ -49,7 +49,7 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
             MainFragmentViewModel(router, uPnPManager) as T
 
         modelClass.isAssignableFrom(RemoteControlViewModel::class.java) ->
-            RemoteControlViewModel() as T
+            RemoteControlViewModel(router) as T
 
         modelClass.isAssignableFrom(TouchpadViewModel::class.java) ->
             TouchpadViewModel(router) as T
