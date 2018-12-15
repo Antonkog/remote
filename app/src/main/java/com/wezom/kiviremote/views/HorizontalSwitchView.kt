@@ -1,8 +1,6 @@
 package com.wezom.kiviremote.views
 
 import android.content.Context
-import android.content.res.Resources
-import android.support.annotation.IntegerRes
 import android.util.AttributeSet
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -68,7 +66,7 @@ class HorizontalSwitchView : LinearLayout {
                 position++
             }
         }
-        variant.text =  resources.getString(varargs[position].toInt())
+        variant.text =  resources.getString(varargs[position])
         variant.tag = varargs[position]
         listener?.onSwitch(aspectValueType,  varargs[position])
     }
@@ -82,6 +80,7 @@ class HorizontalSwitchView : LinearLayout {
         aspectValueType = mode
         variant.text =  resources.getString(varargs[0])
         variant.tag = varargs[0]
+        this.invalidate()
     }
 
     interface OnSwitchListener {

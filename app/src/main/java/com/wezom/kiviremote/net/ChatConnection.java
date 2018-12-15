@@ -27,11 +27,11 @@ import com.wezom.kiviremote.bus.ReconnectEvent;
 import com.wezom.kiviremote.common.Action;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.gson.ListAdapter;
-import com.wezom.kiviremote.net.model.AspectAvailable;
 import com.wezom.kiviremote.net.model.ConnectionMessage;
 import com.wezom.kiviremote.net.model.OpenSettings;
 import com.wezom.kiviremote.net.model.ServerEvent;
 import com.wezom.kiviremote.net.model.SocketConnectionModel;
+import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -153,12 +153,11 @@ public class ChatConnection {
                 }
 
 
-            if ( serverEvent.getAspectMessage() != null && serverEvent.getAvailableAspectValues() != null) {
+            if (serverEvent.getAspectMessage() != null && serverEvent.getAvailableAspectValues() != null) {
                 Timber.e("got aspect" + serverEvent.getAspectMessage().toString() + serverEvent.getAvailableAspectValues());
-
-                AspectAvailable aspectAvailable =     gson.fromJson(serverEvent.getAvailableAspectValues(), AspectAvailable.class);
-
-                Timber.e(aspectAvailable.toString());
+                AspectHolder.INSTANCE.setAvailableSettings(serverEvent.getAvailableAspectValues());
+                AspectHolder.INSTANCE.setMessage(serverEvent.getAspectMessage());
+                RxBus.INSTANCE.publish(AspectHolder.INSTANCE);
             } else
             RxBus.INSTANCE.publish(new ConnectionMessage(msg,
                     !keyboardNotSet,

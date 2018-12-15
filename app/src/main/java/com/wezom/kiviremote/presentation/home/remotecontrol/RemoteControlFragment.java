@@ -18,6 +18,7 @@ import com.wezom.kiviremote.databinding.RemoteControlFragmentBinding;
 import com.wezom.kiviremote.interfaces.RockersButtonClickListener;
 import com.wezom.kiviremote.presentation.base.BaseFragment;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
+import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder;
 import com.wezom.kiviremote.views.KiviDPadView;
 
 import java.util.concurrent.TimeUnit;
@@ -67,6 +68,10 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
         }
     };
 
+    private Observer<Boolean> showAspectObserver = show -> {
+        if (show != null) setAspectButton(show);
+    };
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,6 +85,7 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
         viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(RemoteControlViewModel.class);
         init();
         viewModel.getMuteStatus().observe(this, muteObserver);
+        viewModel.getAspectSeen().observe(this, showAspectObserver);
     }
 
     @Override
@@ -97,6 +103,8 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
         binding.dpadTop.setOnTouchListener(getGenericTouchListener(KiviDPadView.SectorLocation.TOP, KeyEvent.KEYCODE_DPAD_UP));
 
         setMute(PreferencesManager.INSTANCE.getMuteStatus());
+        setAspectButton(AspectHolder.INSTANCE.getAvailableSettings() != null && AspectHolder.INSTANCE.getMessage() != null);
+
 
         binding.mute.setOnClickListener(v -> {
             viewModel.sendButtonClick(KeyEvent.KEYCODE_VOLUME_MUTE);
@@ -183,7 +191,13 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
         }
     }
 
-    public void toggleMute() {
+    private void setAspectButton(boolean visible) {
+        if (binding.buttonAspect != null) {
+            binding.buttonAspect.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+        }
+    }
+
+    private void toggleMute() {
         if (isMute) {
             isMute = false;
             binding.mute.setImageDrawable(getResources().getDrawable(R.drawable.selector_mute_btn));

@@ -209,6 +209,7 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:background="@drawable/oval_button"
             android:text="@string/image_setting"
             android:textColor="@color/colorSecondaryText"
             android:textSize="@dimen/font_size_14"

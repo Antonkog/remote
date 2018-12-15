@@ -1,12 +1,7 @@
 package com.wezom.kiviremote.views
 
 import android.content.Context
-import android.support.v4.view.MotionEventCompat
 import android.util.AttributeSet
-import android.util.Log
-import android.view.GestureDetector
-import android.view.MotionEvent
-import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -109,6 +104,7 @@ class AspectHeaderView : LinearLayout {
         aspectValueType = mode
         row.text =  resources.getString(varargs[0])
         row.tag = varargs[0]
+        this.invalidate()
     }
 
 

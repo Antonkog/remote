@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.SeekBar
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.databinding.TvSettingsFragmentBinding
+import com.wezom.kiviremote.net.model.AspectAvailable
 import com.wezom.kiviremote.net.model.AspectMessage
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
@@ -22,7 +23,6 @@ import com.wezom.kiviremote.presentation.home.tvsettings.driver_set.TemperatureV
 import com.wezom.kiviremote.views.AspectHeaderView
 import com.wezom.kiviremote.views.HorizontalSwitchView
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
 
@@ -46,10 +46,15 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = TvSettingsFragmentBinding.inflate(inflater, container!!, false)
         binding.backlight.seekBar.setOnSeekBarChangeListener(this)
+        binding.backlight.seekBar.tag = AspectMessage.ASPECT_VALUE.BACKLIGHT
         binding.saturation.seekBar.setOnSeekBarChangeListener(this)
+        binding.saturation.seekBar.tag = AspectMessage.ASPECT_VALUE.SATURATION
         binding.sharpness.seekBar.setOnSeekBarChangeListener(this)
+        binding.sharpness.seekBar.tag = AspectMessage.ASPECT_VALUE.SHARPNESS
         binding.contrast.seekBar.setOnSeekBarChangeListener(this)
+        binding.contrast.seekBar.tag = AspectMessage.ASPECT_VALUE.CONTRAST
         binding.brightness.seekBar.setOnSeekBarChangeListener(this)
+        binding.brightness.seekBar.tag = AspectMessage.ASPECT_VALUE.BRIGHTNESS
 
         binding.hdr.setOnSwitchListener(this)
         binding.temperature.setOnSwitchListener(this)
@@ -108,11 +113,36 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
     }
 
     override fun onResume() {
-        syncPicSettings(AspectHolder.message)
+        syncPicSettings(AspectHolder.message, AspectHolder.availableSettings)
         super.onResume()
     }
 
-    private fun syncPicSettings(message: AspectMessage?) {
+    private fun syncPicSettings(message: AspectMessage?, available: AspectAvailable?) {
+       available.let {
+           for(x in it!!.settings){
+               when(x.key){
+                   AspectAvailable.VALUE_TYPE.INPUT_PORT.name -> {
+                       for (i in x.value){
+
+                       }
+
+                   }
+
+                   AspectAvailable.VALUE_TYPE.PICTUREMODE.name-> {
+
+                   }
+
+                   AspectAvailable.VALUE_TYPE.RATIO.name -> {
+
+                   }
+
+                   AspectAvailable.VALUE_TYPE.TEMPERATUREVALUES.name -> {
+
+                   }
+               }
+
+           }
+       }
         Timber.i("got new aspect, sync: " + message?.toString())
         if (message?.settings != null) {
             for ((key, value) in message.settings) {
@@ -155,13 +185,8 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                     AspectMessage.ASPECT_VALUE.TEMPERATURE -> builder.addValue(mode, TemperatureValues.getIdByResID(resId))
                     AspectMessage.ASPECT_VALUE.VIDEOARCTYPE -> builder.addValue(mode, Ratio.getIdByResID(resId))
                     AspectMessage.ASPECT_VALUE.PICTUREMODE -> builder.addValue(mode, PictureMode.getIdByResID(resId))
-                    else ->  Timber.e(" AspectMessage.ASPECT_VALUE not set")
-
+                    else -> Timber.e(" AspectMessage.ASPECT_VALUE not set")
                 }
-
-
-
-
 
             } else {
                 Timber.e(" error in aspect view implementation or value not set")
@@ -184,13 +209,12 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
         seekBar?.id.let {
             viewModel?.let {
-                val builder = AspectMessage.AspectMsgBuilder(AspectMessage.ASPECT_VALUE.BRIGHTNESS, binding.brightness.seekBar.progress)
-                        .addValue(AspectMessage.ASPECT_VALUE.BACKLIGHT, binding.backlight.seekBar.progress)
-                        .addValue(AspectMessage.ASPECT_VALUE.CONTRAST, binding.contrast.seekBar.progress)
-                        .addValue(AspectMessage.ASPECT_VALUE.SATURATION, binding.saturation.seekBar.progress)
-                        .addValue(AspectMessage.ASPECT_VALUE.SHARPNESS, binding.sharpness.seekBar.progress)
-
-                it.sendAspectChangeEvent(builder.buildAspect())
+                if(seekBar!=null && seekBar.tag!=null){
+                    val builder = AspectMessage.AspectMsgBuilder(AspectMessage.ASPECT_VALUE.valueOf(tag!!), seekBar!!.progress)
+                    it.sendAspectChangeEvent(builder.buildAspect())
+                }else{
+                    Timber.e("error in seekbar implementation")
+                }
             }
         }
     }

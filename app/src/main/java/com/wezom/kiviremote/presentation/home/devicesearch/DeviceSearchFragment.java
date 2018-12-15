@@ -24,6 +24,7 @@ import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper;
 import com.wezom.kiviremote.presentation.base.BaseFragment;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
 import com.wezom.kiviremote.presentation.home.HomeActivity;
+import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,6 +112,8 @@ public class DeviceSearchFragment extends BaseFragment {
      * Call this to kill ping interval and reset disconnect status after reconnecting to another device
      */
     private void resetDisconnectStatus() {
+        AspectHolder.INSTANCE.setMessage(null);
+        AspectHolder.INSTANCE.setAvailableSettings(null);
         RxBus.INSTANCE.publish(new ChangeSnackbarStateEvent(true));
         RxBus.INSTANCE.publish(new KillPingEvent());
     }
