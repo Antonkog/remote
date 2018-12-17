@@ -161,7 +161,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         startService(new Intent(this, CleanupService.class));
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeActivityViewModel.class);
         // Entry point
-        viewModel.newRootScreen(Screens.REMOTE_CONTROL_FRAGMENT);
+        viewModel.newRootScreen(Screens.DEVICE_SEARCH_FRAGMENT);
 
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
 

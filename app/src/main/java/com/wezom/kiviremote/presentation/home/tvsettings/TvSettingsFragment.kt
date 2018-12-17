@@ -61,46 +61,6 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         binding.ratio.setOnSwitchListener(this)
         binding.aspectHeader.setOnSwitchListener(this)
 
-        binding.hdr.setVariants(AspectMessage.ASPECT_VALUE.HDR,
-                listOf(
-                        HDRValues.HDR_OPEN_LEVEL_AUTO.stringResourceID,
-                        HDRValues.HDR_OPEN_LEVEL_LOW.stringResourceID,
-                        HDRValues.HDR_OPEN_LEVEL_MIDDLE.stringResourceID,
-                        HDRValues.HDR_OPEN_LEVEL_HIGH.stringResourceID,
-                        HDRValues.HDR_OPEN_LEVEL_OFF.stringResourceID))
-
-        binding.temperature.setVariants( AspectMessage.ASPECT_VALUE.TEMPERATURE,
-                listOf(TemperatureValues.COLOR_TEMP_COOL.stringResourceID,
-                        TemperatureValues.COLOR_TEMP_COOLER.stringResourceID,
-                        TemperatureValues.COLOR_TEMP_NATURE.stringResourceID,
-                        TemperatureValues.COLOR_TEMP_WARM.stringResourceID,
-                        TemperatureValues.COLOR_TEMP_WARMER.stringResourceID)
-        )
-
-        binding.ratio.setVariants(AspectMessage.ASPECT_VALUE.VIDEOARCTYPE,
-                listOf(Ratio.VIDEO_ARC_AUTO.string,
-                        Ratio.VIDEO_ARC_16x9.string,
-                        Ratio.VIDEO_ARC_4x3.string,
-                        Ratio.VIDEO_ARC_DEFAULT.string
-                )
-        )
-
-        binding.aspectHeader.setVariants(AspectMessage.ASPECT_VALUE.PICTUREMODE,
-                listOf(
-                        R.string.auto,
-                        R.string.user,
-                        R.string.soft,
-                        R.string.economy,
-                        R.string.normal,
-                        R.string.movie,
-                        R.string.sport,
-                        R.string.game,
-                        R.string.vivid
-
-                )
-        )
-
-
         return binding.root
     }
 
@@ -118,31 +78,31 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
     }
 
     private fun syncPicSettings(message: AspectMessage?, available: AspectAvailable?) {
-       available.let {
-           for(x in it!!.settings){
-               when(x.key){
-                   AspectAvailable.VALUE_TYPE.INPUT_PORT.name -> {
-                       for (i in x.value){
+        available.let {
+            for (x in it!!.settings) {
+                when (x.key) {
 
-                       }
+                    AspectAvailable.VALUE_TYPE.HDR.name -> {
+                        binding.hdr.setVariants(AspectMessage.ASPECT_VALUE.HDR, HDRValues.getResList(x.value))
+                    }
 
-                   }
+                    AspectAvailable.VALUE_TYPE.PICTUREMODE.name -> {
+                        binding.aspectHeader.setVariants(AspectMessage.ASPECT_VALUE.PICTUREMODE, PictureMode.getResList(x.value))
+                    }
 
-                   AspectAvailable.VALUE_TYPE.PICTUREMODE.name-> {
+                    AspectAvailable.VALUE_TYPE.RATIO.name -> {
+                        binding.ratio.setVariants(AspectMessage.ASPECT_VALUE.VIDEOARCTYPE, Ratio.getResList(x.value))
 
-                   }
+                    }
 
-                   AspectAvailable.VALUE_TYPE.RATIO.name -> {
+                    AspectAvailable.VALUE_TYPE.TEMPERATUREVALUES.name -> {
+                        binding.temperature.setVariants(AspectMessage.ASPECT_VALUE.TEMPERATURE, TemperatureValues.getResList(x.value))
+                    }
+                }
 
-                   }
+            }
+        }
 
-                   AspectAvailable.VALUE_TYPE.TEMPERATUREVALUES.name -> {
-
-                   }
-               }
-
-           }
-       }
         Timber.i("got new aspect, sync: " + message?.toString())
         if (message?.settings != null) {
             for ((key, value) in message.settings) {
@@ -158,7 +118,6 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                     AspectMessage.ASPECT_VALUE.HDR.name -> {
                         var hdr = HDRValues.getByID(value)?.stringResourceID
                         if (hdr != null) binding.hdr.variant.text = resources.getString(hdr)
-
                     }
 
                     AspectMessage.ASPECT_VALUE.TEMPERATURE.name -> {
@@ -167,8 +126,13 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                     }
 
                     AspectMessage.ASPECT_VALUE.VIDEOARCTYPE.name -> {
-                        var ratio = Ratio.getByID(value)?.string
+                        var ratio = Ratio.getByID(value)?.stringResourceID
                         if (ratio != null) binding.ratio.variant.text = resources.getString(ratio)
+                    }
+
+                    AspectMessage.ASPECT_VALUE.PICTUREMODE.name -> {
+                        var pictureMode = PictureMode.getByID(value)?.stringResourceID
+                        if (pictureMode != null) binding.aspectHeader.row.text = resources.getString(pictureMode)
                     }
                 }
             }
@@ -177,7 +141,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
 
     override fun onSwitch(mode: AspectMessage.ASPECT_VALUE?, resId: Int) {
         viewModel?.let {
-            val builder = AspectMessage.AspectMsgBuilder()
+            val builder = AspectMessage.AspectMsgBuilder(AspectHolder.message)
 
             if (resId != null) {
                 when (mode) {
@@ -209,10 +173,11 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
         seekBar?.id.let {
             viewModel?.let {
-                if(seekBar!=null && seekBar.tag!=null){
-                    val builder = AspectMessage.AspectMsgBuilder(AspectMessage.ASPECT_VALUE.valueOf(tag!!), seekBar!!.progress)
+                if (seekBar != null && seekBar.tag != null) {
+                    val builder = AspectMessage.AspectMsgBuilder(AspectHolder.message)
+                            .addValue(AspectMessage.ASPECT_VALUE.valueOf(seekBar.tag.toString()), seekBar!!.progress)
                     it.sendAspectChangeEvent(builder.buildAspect())
-                }else{
+                } else {
                     Timber.e("error in seekbar implementation")
                 }
             }

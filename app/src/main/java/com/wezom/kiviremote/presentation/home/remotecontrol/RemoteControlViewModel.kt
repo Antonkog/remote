@@ -48,5 +48,7 @@ class RemoteControlViewModel (private val router: Router): BaseViewModel() {
 
     fun goToAspect() = router.navigateTo(Screens.TV_SETTINGS_FRAGMENT)
 
+    fun goToInputSettings() = router.navigateTo(Screens.PORTS_FRAGMENT)
+
     fun launchQuickApps() = RxBus.publish(SendActionEvent(Action.LAUNCH_QUICK_APPS))
 }

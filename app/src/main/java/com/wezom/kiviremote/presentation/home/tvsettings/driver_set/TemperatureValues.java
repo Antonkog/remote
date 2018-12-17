@@ -1,11 +1,12 @@
 package com.wezom.kiviremote.presentation.home.tvsettings.driver_set;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.presentation.home.tvsettings.TextTypedValues;
+
+import java.util.LinkedList;
 
 public enum TemperatureValues implements TextTypedValues {
 
@@ -17,8 +18,8 @@ public enum TemperatureValues implements TextTypedValues {
 
 
     @StringRes
-    int stringRes;
-    int id;
+    private int stringRes;
+    private int id;
 
     @Nullable
     public static TemperatureValues getByID(int id) {
@@ -44,10 +45,16 @@ public enum TemperatureValues implements TextTypedValues {
         this.stringRes = stringRes;
     }
 
-    public static TemperatureValues[] getSet() {
-        return new TemperatureValues[]{COLOR_TEMP_NATURE,
-                COLOR_TEMP_WARMER,COLOR_TEMP_WARM,
-                COLOR_TEMP_COOL, COLOR_TEMP_COOLER};
+    public static LinkedList<Integer> getResList(int[] ids) {
+        LinkedList result = new LinkedList();
+        for (int i = 0; i < ids.length; i++) {
+            for (TemperatureValues port : values()) {
+                if (port.id == ids[i]) {
+                    result.add(port.getStringResourceID());
+                }
+            }
+        }
+        return result;
     }
 
     @Override

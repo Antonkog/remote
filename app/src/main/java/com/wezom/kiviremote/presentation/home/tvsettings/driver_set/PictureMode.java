@@ -1,16 +1,17 @@
 package com.wezom.kiviremote.presentation.home.tvsettings.driver_set;
 
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 
 import com.wezom.kiviremote.R;
+import com.wezom.kiviremote.presentation.home.tvsettings.TextTypedValues;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 
 
-public enum PictureMode {
+public enum PictureMode implements TextTypedValues {
 
     PICTURE_MODE_NORMAL(9, R.string.normal),
     PICTURE_MODE_SOFT(2, R.string.soft),
@@ -23,21 +24,14 @@ public enum PictureMode {
     // PICTURE_MODE_ECONOMY(10, R.string.economy);
 
 
-    int id;
-    int string;
+    private int id;
+    private int string;
 
     PictureMode(int id, int string) {
         this.id = id;
         this.string = string;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public int getString() {
-        return string;
-    }
 
     @Nullable
     public static PictureMode getByID(int id) {
@@ -62,6 +56,19 @@ public enum PictureMode {
     }
 
 
+
+    public static LinkedList<Integer> getResList(int[] ids) {
+        LinkedList result = new LinkedList();
+        for (int i = 0; i < ids.length; i++) {
+            for (PictureMode port : values()) {
+                if (port.id == ids[i]) {
+                    result.add(port.getStringResourceID());
+                }
+            }
+        }
+        return result;
+    }
+
     @Nullable
     public static int getIdByResID(int stringId) {
         for (PictureMode item : values()) {
@@ -69,5 +76,15 @@ public enum PictureMode {
                 return item.id;
         }
         return -1;
+    }
+
+    @Override
+    public int getStringResourceID() {
+        return string;
+    }
+
+    @Override
+    public int getID() {
+        return id;
     }
 }

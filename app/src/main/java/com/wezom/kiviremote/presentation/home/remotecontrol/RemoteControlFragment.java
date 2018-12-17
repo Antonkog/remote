@@ -69,7 +69,7 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
     };
 
     private Observer<Boolean> showAspectObserver = show -> {
-        if (show != null) setAspectButton(show);
+        if (show != null) setAspectButtons(show);
     };
 
     @Nullable
@@ -103,7 +103,7 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
         binding.dpadTop.setOnTouchListener(getGenericTouchListener(KiviDPadView.SectorLocation.TOP, KeyEvent.KEYCODE_DPAD_UP));
 
         setMute(PreferencesManager.INSTANCE.getMuteStatus());
-        setAspectButton(AspectHolder.INSTANCE.getAvailableSettings() != null && AspectHolder.INSTANCE.getMessage() != null);
+        setAspectButtons(AspectHolder.INSTANCE.getAvailableSettings() != null && AspectHolder.INSTANCE.getMessage() != null);
 
 
         binding.mute.setOnClickListener(v -> {
@@ -117,6 +117,9 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
         binding.menu.setOnClickListener(v -> viewModel.sendButtonClick(KeyEvent.KEYCODE_MENU));
         binding.back.setOnClickListener(v -> viewModel.sendButtonClick(KeyEvent.KEYCODE_BACK));
         binding.buttonAspect.setOnClickListener(v -> viewModel.goToAspect());
+
+        binding.input.setOnClickListener(view -> viewModel.goToInputSettings());
+
         binding.home.setOnTouchListener((view, event) -> {
             switch (event.getAction()) {
                 case ACTION_DOWN:
@@ -191,10 +194,15 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
         }
     }
 
-    private void setAspectButton(boolean visible) {
+    private void setAspectButtons(boolean visible) {
+        Timber.e(" setting aspect " + visible);
         if (binding.buttonAspect != null) {
             binding.buttonAspect.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         }
+
+//        if(binding.input != null){
+//            binding.input.setVisibility(visible ? View.VISIBLE : View.GONE);
+//        }
     }
 
     private void toggleMute() {

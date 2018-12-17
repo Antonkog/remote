@@ -1,11 +1,12 @@
 package com.wezom.kiviremote.presentation.home.tvsettings.driver_set;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
 
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.presentation.home.tvsettings.TextTypedValues;
+
+import java.util.LinkedList;
 
 
 public enum HDRValues implements TextTypedValues {
@@ -16,8 +17,8 @@ public enum HDRValues implements TextTypedValues {
     HDR_OPEN_LEVEL_HIGH(4, R.string.high);
 
     @StringRes
-    int stringRes;
-    int id;
+    private int stringRes;
+    private int id;
 
     HDRValues(int id, int stringRes) {
         this.id = id;
@@ -52,4 +53,17 @@ public enum HDRValues implements TextTypedValues {
     public int getID() {
         return id;
     }
+
+    public  static LinkedList<Integer> getResList(int[] ids) {
+        LinkedList result = new LinkedList();
+        for (int i = 0; i < ids.length; i++) {
+            for (HDRValues port : values()) {
+                if (port.id == ids[i]) {
+                    result.add(port.getStringResourceID());
+                }
+            }
+        }
+        return result;
+    }
+
 }

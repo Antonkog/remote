@@ -8,6 +8,7 @@ public class AspectAvailable {
         INPUT_PORT,
         RATIO,
         TEMPERATUREVALUES,
+        HDR,
         PICTUREMODE
     }
 
@@ -18,5 +19,9 @@ public class AspectAvailable {
         return "AspectAvailable{" +
                 "settings=\n" + settings.toString() +
                 "\n}";
+    }
+
+    public AspectAvailable(HashMap<String, int[]> settings) {
+        this.settings = settings;
     }
 }

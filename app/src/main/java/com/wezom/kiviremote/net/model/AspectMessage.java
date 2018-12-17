@@ -1,6 +1,8 @@
 package com.wezom.kiviremote.net.model;
 import java.util.HashMap;
 
+import io.reactivex.annotations.Nullable;
+
 public class AspectMessage {
 
     public HashMap<String, Integer> settings;
@@ -19,6 +21,12 @@ public class AspectMessage {
 
         public AspectMsgBuilder() {
             if (this.settings == null) this.settings = new HashMap<>();
+        }
+
+        public AspectMsgBuilder(@Nullable AspectMessage message) {
+            if(message!= null && message.settings!=null)
+            this.settings = message.settings;
+            else this.settings = new HashMap<>();
         }
 
         public AspectMsgBuilder addValue(ASPECT_VALUE valueType, int value) {
