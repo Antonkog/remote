@@ -179,6 +179,6 @@
     <string name="ypbpr">Компонент</string>
     <string name="dvbc">DVB-C</string>
     <string name="dvbs">DVB-S</string>
-    <string name="image_setting">НАЛАШТУВАННЯ\nВІДОБРАЖЕННЯ</string>
+    <string name="image_setting">IMAGE\nSETTINGS</string>
 
 </resources>

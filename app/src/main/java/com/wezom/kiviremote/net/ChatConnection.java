@@ -23,6 +23,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
+import com.wezom.kiviremote.bus.GotAspectEvent;
 import com.wezom.kiviremote.bus.ReconnectEvent;
 import com.wezom.kiviremote.common.Action;
 import com.wezom.kiviremote.common.RxBus;
@@ -120,9 +121,9 @@ public class ChatConnection {
     }
 
     private void updateMessages(String msg) {
-//        if (msg.length() > 150)
-//            Timber.d("Updating message: " + msg.substring(0, 50));
-//        else
+        if (msg.length() > 150)
+            Timber.d("Updating message: " + msg.substring(0, 50));
+        else
         Timber.d("Updating message: " + msg);
 
 
@@ -157,7 +158,7 @@ public class ChatConnection {
                 Timber.e("got aspect" + serverEvent.getAspectMessage().toString() + serverEvent.getAvailableAspectValues());
                 AspectHolder.INSTANCE.setAvailableSettings(serverEvent.getAvailableAspectValues());
                 AspectHolder.INSTANCE.setMessage(serverEvent.getAspectMessage());
-                RxBus.INSTANCE.publish(AspectHolder.INSTANCE);
+                RxBus.INSTANCE.publish(GotAspectEvent.class);
             } else
             RxBus.INSTANCE.publish(new ConnectionMessage(msg,
                     !keyboardNotSet,

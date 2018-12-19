@@ -18,9 +18,8 @@ class TvSettingsViewModel(private val router: Router) : BaseViewModel() {
     val aspectMessage = MutableLiveData<AspectMessage>()
 
     fun sendAspectChangeEvent(msg : AspectMessage){
-       // RxBus.publish()
-        RxBus.publish(NewAspectEvent(msg))
         AspectHolder.message = msg
+        RxBus.publish(NewAspectEvent(msg))
     }
 
 }

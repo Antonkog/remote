@@ -62,10 +62,8 @@ class AspectHeaderView : LinearLayout {
 
     private fun doOnRightclick() {
         var position = varargs.indexOf(row.tag)
-        Timber.i(" position of " + row.text + " pos =" + position)
-//        if(row.tag == null && varargs.isNotEmpty()) position = 0
+        if(position == -1) return
         when (position) {
-            -1 -> return
             varargs.size - 1 -> position = 0
             varargs.size -> position = 0
             else -> {
@@ -79,10 +77,8 @@ class AspectHeaderView : LinearLayout {
 
     private fun doOnLeftClick() {
         var position = varargs.indexOf(row.tag)
-        Timber.i(" position of " + row.text + " pos =" + position)
-//        if(row.tag == null && varargs.isNotEmpty()) position = varargs.size - 1
+        if(position == -1) return
         when (position) {
-            -1 -> return
             0 -> position = varargs.size - 1
             else -> {
                 position--

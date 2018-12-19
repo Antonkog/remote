@@ -1,6 +1,6 @@
 package com.wezom.kiviremote.presentation.home.touchpad
 
-import com.wezom.kiviremote.Screens
+import android.view.KeyEvent
 import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.bus.SendCursorCoordinatesEvent
 import com.wezom.kiviremote.bus.SendKeyEvent
@@ -31,7 +31,7 @@ class TouchpadViewModel (private val router: Router) : BaseViewModel() {
         RxBus.publish(SendKeyEvent(keyEvent))
     }
 
-    fun goToSettings() = router.navigateTo(Screens.TV_SETTINGS_FRAGMENT)
+    fun goToSettings() = RxBus.publish(SendKeyEvent(KeyEvent.KEYCODE_MENU))
 
     fun sendHomeDown() = RxBus.publish(SendActionEvent(Action.HOME_DOWN))
 

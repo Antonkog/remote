@@ -8,7 +8,6 @@ import android.widget.TextView
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.net.model.AspectMessage
 import org.jetbrains.annotations.NotNull
-import timber.log.Timber
 import java.util.*
 
 
@@ -46,7 +45,6 @@ class HorizontalSwitchView : LinearLayout {
         try {
             name.text = attributes.getString(R.styleable.HorizontalSwitchView_name)
             variant.text = attributes.getString(R.styleable.HorizontalSwitchView_variant)
-            Timber.i("attrs ${name.text} ${variant.text}")
             arrow.setOnClickListener { click -> doOnclick() }
             variant.setOnClickListener { click -> doOnclick() }
         } finally {
@@ -56,10 +54,8 @@ class HorizontalSwitchView : LinearLayout {
 
     private fun doOnclick() {
         var position = varargs.indexOf(variant.tag)
-        Timber.i(" position of " + variant.text + " pos =" + position)
-//        if(variant.tag == null && varargs.isNotEmpty()) position = 0
+        if(position == -1) return
         when (position) {
-            -1 -> position = 0
             varargs.size - 1 -> position = 0
             varargs.size -> position = 0
             else -> {

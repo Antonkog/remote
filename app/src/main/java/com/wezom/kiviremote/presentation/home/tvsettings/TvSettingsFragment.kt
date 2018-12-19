@@ -78,8 +78,8 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
     }
 
     private fun syncPicSettings(message: AspectMessage?, available: AspectAvailable?) {
-        available.let {
-            for (x in it!!.settings) {
+        if (available != null)
+            for (x in available?.settings) {
                 when (x.key) {
 
                     AspectAvailable.VALUE_TYPE.HDR.name -> {
@@ -101,11 +101,12 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                 }
 
             }
-        }
+
 
         Timber.i("got new aspect, sync: " + message?.toString())
+
         if (message?.settings != null) {
-            for ((key, value) in message.settings) {
+            for ((key, value) in message?.settings) {
                 println("$key = $value")
                 when (key) {
                     AspectMessage.ASPECT_VALUE.BRIGHTNESS.name -> binding.brightness.seekBar.progress = value

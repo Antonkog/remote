@@ -45,8 +45,8 @@ public class TouchpadFragment extends BaseFragment
 
     private GestureDetectorCompat gestureDetector;
     private final int SWIPE_MIN_DISTANCE = 120;
-    private final int SWIPE_THRESHOLD_VELOCITY = 200;
-    private long homeClickTime;
+    private final int SWIPE_THRESHOLD_VELOCITY = 100;
+    private long  homeClickTime;
     private final Handler handler = new Handler();
     private final Runnable launchQuickApps = () -> viewModel.launchQuickApps();
 
@@ -133,11 +133,18 @@ public class TouchpadFragment extends BaseFragment
 
 
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-        private static final String DEBUG_TAG = "Gestures";
-
         @Override
         public boolean onDown(MotionEvent event) {
             return true;
+        }
+
+        @Override
+        public void onLongPress(MotionEvent event) {
+            if(event.getY() < binding.scroll.getY() + binding.scroll.getHeight()/2){
+                viewModel.sendScrollEvent(true,0);
+            } else {
+                viewModel.sendScrollEvent(false, 0);
+            }
         }
 
         @Override

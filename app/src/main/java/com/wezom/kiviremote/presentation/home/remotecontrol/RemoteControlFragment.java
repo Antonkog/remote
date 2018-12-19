@@ -16,6 +16,8 @@ import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.common.PreferencesManager;
 import com.wezom.kiviremote.databinding.RemoteControlFragmentBinding;
 import com.wezom.kiviremote.interfaces.RockersButtonClickListener;
+import com.wezom.kiviremote.net.model.AspectAvailable;
+import com.wezom.kiviremote.net.model.AspectAvailableMock;
 import com.wezom.kiviremote.presentation.base.BaseFragment;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder;
@@ -103,8 +105,15 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
         binding.dpadTop.setOnTouchListener(getGenericTouchListener(KiviDPadView.SectorLocation.TOP, KeyEvent.KEYCODE_DPAD_UP));
 
         setMute(PreferencesManager.INSTANCE.getMuteStatus());
-        setAspectButtons(AspectHolder.INSTANCE.getAvailableSettings() != null && AspectHolder.INSTANCE.getMessage() != null);
 
+        if (AspectHolder.INSTANCE.getMessage() != null && AspectHolder.INSTANCE.getAvailableSettings() != null) {
+            setAspectButtons(true);
+        } else {
+            //todo: put values in database when got them from tv,  why sometimes can't get aspect?
+            Timber.e(" no Aspect from server");
+            AspectHolder.INSTANCE.setAvailableSettings(new AspectAvailable(AspectAvailableMock.getAllAvailableValues(getContext())));
+            AspectHolder.INSTANCE.setMessage(AspectAvailableMock.getTestMessage());
+        }
 
         binding.mute.setOnClickListener(v -> {
             viewModel.sendButtonClick(KeyEvent.KEYCODE_VOLUME_MUTE);
