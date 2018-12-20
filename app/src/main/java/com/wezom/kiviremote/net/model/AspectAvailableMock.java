@@ -38,19 +38,19 @@ public class AspectAvailableMock {
 
     public static AspectMessage getTestMessage(){
         return new AspectMessage.AspectMsgBuilder()
-                .addValue(AspectMessage.ASPECT_VALUE.BACKLIGHT, 2)
+                .addValue(AspectMessage.ASPECT_VALUE.BACKLIGHT, 50)
                 .addValue(AspectMessage.ASPECT_VALUE.SATURATION, 50)
-                .addValue(AspectMessage.ASPECT_VALUE.SHARPNESS, 42)
-                .addValue(AspectMessage.ASPECT_VALUE.BRIGHTNESS, 52)
-                .addValue(AspectMessage.ASPECT_VALUE.CONTRAST, 52)
+                .addValue(AspectMessage.ASPECT_VALUE.SHARPNESS, 50)
+                .addValue(AspectMessage.ASPECT_VALUE.BRIGHTNESS, 50)
+                .addValue(AspectMessage.ASPECT_VALUE.CONTRAST, 50)
 
-                .addValue(AspectMessage.ASPECT_VALUE.GREEN, 23)
-                .addValue(AspectMessage.ASPECT_VALUE.BLUE, 32)
-                .addValue(AspectMessage.ASPECT_VALUE.RED, 23)
+                .addValue(AspectMessage.ASPECT_VALUE.GREEN, 50)
+                .addValue(AspectMessage.ASPECT_VALUE.BLUE, 50)
+                .addValue(AspectMessage.ASPECT_VALUE.RED, 50)
 
-                .addValue(AspectMessage.ASPECT_VALUE.HDR, 22)
-                .addValue(AspectMessage.ASPECT_VALUE.TEMPERATURE, 62)
-                .addValue(AspectMessage.ASPECT_VALUE.VIDEOARCTYPE, 9)
+                .addValue(AspectMessage.ASPECT_VALUE.HDR, 1)
+                .addValue(AspectMessage.ASPECT_VALUE.TEMPERATURE, 1)
+                .addValue(AspectMessage.ASPECT_VALUE.VIDEOARCTYPE, 1)
                 .buildAspect();
     }
 
@@ -75,10 +75,15 @@ public static HashMap<String, int[]>  getRtkValues(Context context) {
 
     public static HashMap<String, int[]>  getAllAvailableValues(Context context) {
         HashMap<String, int[]> currentSettings = new HashMap<>();
-        int[] picture = {0, 1, 2, 3, 4, 5, 6, 7, 9};
-        int[] ratio = {0, 1, 2, 3, 5, 9, 10};
-        int[] temperatureValues = {1, 2, 3, 4, 5};
-        int[] hdrValues = {0, 1, 2, 3, 4};
+//        int[] picture = {0, 1, 2, 3, 4, 5, 6, 7, 9};
+//        int[] ratio = {0, 1, 2, 3, 5, 9, 10};
+//        int[] temperatureValues = {1, 2, 3, 4, 5};
+//        int[] hdrValues = {0, 1, 2, 3, 4};
+
+        int[] picture = {7};
+        int[] ratio = {1};
+        int[] temperatureValues = {1};
+        int[] hdrValues = {1};
 
         currentSettings.put(VALUE_TYPE.RATIO.name(), ratio);
         currentSettings.put(VALUE_TYPE.TEMPERATUREVALUES.name(), picture);

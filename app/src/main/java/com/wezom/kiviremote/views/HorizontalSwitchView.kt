@@ -2,6 +2,7 @@ package com.wezom.kiviremote.views
 
 import android.content.Context
 import android.util.AttributeSet
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -18,7 +19,7 @@ class HorizontalSwitchView : LinearLayout {
 
     private var listener: OnSwitchListener? = null
     private var varargs: LinkedList<Int> = LinkedList()
-    private var aspectValueType: AspectMessage.ASPECT_VALUE ?  = null
+    private var aspectValueType: AspectMessage.ASPECT_VALUE? = null
 
 
     constructor(context: Context, aspectValueType: AspectMessage.ASPECT_VALUE, listener: OnSwitchListener) : this(context, null) {
@@ -54,7 +55,7 @@ class HorizontalSwitchView : LinearLayout {
 
     private fun doOnclick() {
         var position = varargs.indexOf(variant.tag)
-        if(position == -1) return
+        if (position == -1) return
         when (position) {
             varargs.size - 1 -> position = 0
             varargs.size -> position = 0
@@ -62,9 +63,9 @@ class HorizontalSwitchView : LinearLayout {
                 position++
             }
         }
-        variant.text =  resources.getString(varargs[position])
+        variant.text = resources.getString(varargs[position])
         variant.tag = varargs[position]
-        listener?.onSwitch(aspectValueType,  varargs[position])
+        listener?.onSwitch(aspectValueType, varargs[position])
     }
 
     fun setOnSwitchListener(l: OnSwitchListener) {
@@ -73,14 +74,15 @@ class HorizontalSwitchView : LinearLayout {
 
     fun setVariants(mode: AspectMessage.ASPECT_VALUE, @NotNull vars: List<Int>) {
         varargs = LinkedList(vars.distinct())
+        if (varargs.size == 1) this.visibility = View.GONE
         aspectValueType = mode
-        variant.text =  resources.getString(varargs[0])
+        variant.text = resources.getString(varargs[0])
         variant.tag = varargs[0]
         this.invalidate()
     }
 
     interface OnSwitchListener {
-        fun onSwitch(aspectValueType : AspectMessage.ASPECT_VALUE ? , resId : Int)
+        fun onSwitch(aspectValueType: AspectMessage.ASPECT_VALUE?, resId: Int)
     }
 
 }
