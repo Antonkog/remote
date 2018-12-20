@@ -98,8 +98,14 @@ class AspectHeaderView : LinearLayout {
     fun setVariants( mode: AspectMessage.ASPECT_VALUE, @NotNull vars: List<Int>) {
         varargs = LinkedList(vars.distinct())
         aspectValueType = mode
-        row.text =  resources.getString(varargs[0])
-        row.tag = varargs[0]
+        if (varargs.size > 0) {
+            try {
+                row.text = resources.getString(varargs[0])
+                row.tag = varargs[0]
+            } catch (exception: Exception) {
+                Timber.e(exception)
+            }
+        }
         this.invalidate()
     }
 
