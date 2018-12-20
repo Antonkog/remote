@@ -144,7 +144,8 @@ class MediaFragment : BaseFragment() {
     ) {
         when (requestCode) {
             REQUEST_PERMISSION_CODE -> {
-                if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
+                //https://stackoverflow.com/questions/50770955/in-onrequestpermissionsresult-grantresults-on-some-device-return-empty-when-user
+                if (grantResults.isEmpty() || grantResults[0] == PackageManager.PERMISSION_DENIED) {
                     if (!shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
                         (activity as HomeActivity).showOpenSettingsDialog()
                     }
