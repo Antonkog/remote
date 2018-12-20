@@ -329,44 +329,48 @@ class NotificationService : LifecycleService() {
     }
 
     private fun playNextItem() {
-        uPnPManager.nextItem?.let {
-            uPnPManager.launchItem(it.item, it.position, it.type)
-            when (it.type) {
-                GalleryFragment.MediaType.IMAGE -> loadNotificationPreview(
-                    notificationTarget,
-                    it.uri,
-                    noImagePreviewBitmap
-                )
-                GalleryFragment.MediaType.VIDEO -> loadNotificationPreview(
-                    notificationTarget,
-                    it.uri,
-                    noVideoPreviewBitmap
-                )
-            }
+        if(::notificationTarget.isInitialized) {
+            uPnPManager.nextItem?.let {
+                uPnPManager.launchItem(it.item, it.position, it.type)
+                when (it.type) {
+                    GalleryFragment.MediaType.IMAGE -> loadNotificationPreview(
+                            notificationTarget,
+                            it.uri,
+                            noImagePreviewBitmap
+                    )
+                    GalleryFragment.MediaType.VIDEO -> loadNotificationPreview(
+                            notificationTarget,
+                            it.uri,
+                            noVideoPreviewBitmap
+                    )
+                }
 
-            remoteViews?.setTextViewText(R.id.notification_title, it.title)
-            notificationManager?.notify(NOTIFICATION_ID, notification)
+                remoteViews?.setTextViewText(R.id.notification_title, it.title)
+                notificationManager?.notify(NOTIFICATION_ID, notification)
+            }
         }
     }
 
     private fun playPreviousItem() {
-        uPnPManager.previousItem?.let {
-            uPnPManager.launchItem(it.item, it.position, it.type)
-            when (it.type) {
-                GalleryFragment.MediaType.IMAGE -> loadNotificationPreview(
-                    notificationTarget,
-                    it.uri,
-                    noImagePreviewBitmap
-                )
-                GalleryFragment.MediaType.VIDEO -> loadNotificationPreview(
-                    notificationTarget,
-                    it.uri,
-                    noVideoPreviewBitmap
-                )
-            }
+        if(::notificationTarget.isInitialized) {
+            uPnPManager.previousItem?.let {
+                uPnPManager.launchItem(it.item, it.position, it.type)
+                when (it.type) {
+                    GalleryFragment.MediaType.IMAGE -> loadNotificationPreview(
+                            notificationTarget,
+                            it.uri,
+                            noImagePreviewBitmap
+                    )
+                    GalleryFragment.MediaType.VIDEO -> loadNotificationPreview(
+                            notificationTarget,
+                            it.uri,
+                            noVideoPreviewBitmap
+                    )
+                }
 
-            remoteViews?.setTextViewText(R.id.notification_title, it.title)
-            notificationManager?.notify(NOTIFICATION_ID, notification)
+                remoteViews?.setTextViewText(R.id.notification_title, it.title)
+                notificationManager?.notify(NOTIFICATION_ID, notification)
+            }
         }
     }
 
