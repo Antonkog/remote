@@ -47,13 +47,16 @@ class AppsViewModel(
                     val apps = ArrayList<AppModel>()
                     dbApps.forEach {
                         if (cache.get(it.appName) == null) {
-                            cache.put(
-                                it.appName, BitmapFactory.decodeByteArray(
+                            val bmp = BitmapFactory.decodeByteArray(
                                     it.appIcon,
                                     0,
                                     it.appIcon.size
-                                )
                             )
+                            val appName = it.appName;
+                            bmp?.let {
+                                cache.put(appName, bmp)
+                            }
+
                         }
                         apps.add(AppModel(it.appName, it.packageName))
                     }
