@@ -58,7 +58,15 @@ public class CDevice implements IUpnpDevice {
 
     @Override
     public boolean equals(IUpnpDevice otherDevice) {
-        return device.getIdentity().getUdn().equals(otherDevice.getDevice().getIdentity().getUdn());
+        if (getDevice() == null ||
+                getDevice().getIdentity() == null ||
+                getDevice().getIdentity().getUdn() == null ||
+                otherDevice == null ||
+                otherDevice.getDevice() == null ||
+                otherDevice.getDevice().getIdentity() == null ||
+                otherDevice.getDevice().getIdentity().getUdn() == null)
+            return false;
+        return getDevice().getIdentity().getUdn().equals(otherDevice.getDevice().getIdentity().getUdn());
     }
 
     @Override
