@@ -158,7 +158,7 @@ public class ChatConnection {
                 Timber.e("got aspect" + serverEvent.getAspectMessage().toString() + serverEvent.getAvailableAspectValues());
                 AspectHolder.INSTANCE.setAvailableSettings(serverEvent.getAvailableAspectValues());
                 AspectHolder.INSTANCE.setMessage(serverEvent.getAspectMessage());
-                RxBus.INSTANCE.publish(GotAspectEvent.class);
+                RxBus.INSTANCE.publish(new GotAspectEvent(serverEvent.getAspectMessage(), serverEvent.getAvailableAspectValues()));
             } else
             RxBus.INSTANCE.publish(new ConnectionMessage(msg,
                     !keyboardNotSet,

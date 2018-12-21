@@ -13,7 +13,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wezom.kiviremote.R;
+import com.wezom.kiviremote.bus.RequestAspectEvent;
 import com.wezom.kiviremote.common.PreferencesManager;
+import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.databinding.RemoteControlFragmentBinding;
 import com.wezom.kiviremote.interfaces.RockersButtonClickListener;
 import com.wezom.kiviremote.presentation.base.BaseFragment;
@@ -107,8 +109,8 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
         if (AspectHolder.INSTANCE.getMessage() != null && AspectHolder.INSTANCE.getAvailableSettings() != null) {
             setAspectButtons(true);
         } else {
-            //todo: put values in database when got them from tv,  why sometimes can't get aspect?
             Timber.e(" no Aspect from server");
+            RxBus.INSTANCE.publish(new RequestAspectEvent());
         }
 
         binding.mute.setOnClickListener(v -> {

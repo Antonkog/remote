@@ -115,6 +115,13 @@ class HomeActivityViewModel(
                 sendKey(it.keyEvent)
             }, onError = Timber::e)
 
+        disposables += RxBus.listen(RequestAspectEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    Timber.i("requesting aspect via RequestAspectEvent")
+                    sendAction(Action.REQUEST_ASPECT)
+                }, onError = Timber::e)
+
         disposables += RxBus.listen(SendScrollEvent::class.java)
             .observeOn(AndroidSchedulers.mainThread()).debounce(5, TimeUnit.MILLISECONDS)
             .subscribeBy(onNext = {
