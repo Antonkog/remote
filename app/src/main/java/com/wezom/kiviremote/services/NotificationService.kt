@@ -309,7 +309,7 @@ class NotificationService : LifecycleService() {
             .load(url)
             .into(object : SimpleTarget<Bitmap>(120, 120) {
                 override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>) {
-                    notificationTarget.onResourceReady(resource, transition)
+                    notificationTarget.onResourceReady(resource?: image , transition)
                 }
 
                 override fun onLoadFailed(errorDrawable: Drawable?) {
