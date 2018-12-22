@@ -158,7 +158,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         super.onCreate(savedInstanceState);
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
-        startService(new Intent(this, CleanupService.class));
+        startCleanupService();
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeActivityViewModel.class);
         // Entry point
         viewModel.newRootScreen(Screens.DEVICE_SEARCH_FRAGMENT);
@@ -169,6 +169,14 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         initUpnpRequirements();
         setupViews();
         setupObservers();
+    }
+
+    private void startCleanupService(){
+        try {
+            startService(new Intent(this, CleanupService.class));
+        } catch (IllegalStateException e) {
+            Timber.e("cant start CleanupService in background " + e.getMessage());
+        }
     }
 
     private void setupViews() {
