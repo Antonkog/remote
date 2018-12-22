@@ -75,11 +75,14 @@ class UPnPManager @Inject constructor(
     data class SlideshowProgress(val pauseState: Boolean, val progress: Int, val terminate: Boolean)
     data class SlidingContentModel(
         val item: IDIDLItem,
-        val title: String,
+        val _title: String,
         val uri: String,
         val position: Int,
         val type: MediaType
-    )
+    ) {
+        val title
+        get() = _title ?: "Title"
+    }
 
     data class RendererModel(
         val durationRemaining: String?,
