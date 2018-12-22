@@ -147,8 +147,10 @@ class RecentDevicesAdapter(private val context: Context,
     }
 
     fun discardChanges() {
-        devices = ArrayList(initialList)
-        notifyDataSetChanged()
+        if(::initialList.isInitialized) {
+            devices = ArrayList(initialList)
+            notifyDataSetChanged()
+        }
     }
 
     fun setNewDevices(devices: List<RecentDevice>) {
