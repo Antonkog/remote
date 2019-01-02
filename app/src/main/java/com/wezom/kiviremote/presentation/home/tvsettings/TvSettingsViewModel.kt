@@ -1,25 +1,27 @@
 package com.wezom.kiviremote.presentation.home.tvsettings
 
-import android.arch.lifecycle.MutableLiveData
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.NewAspectEvent
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.net.model.AspectMessage
 import com.wezom.kiviremote.presentation.base.BaseViewModel
+import com.wezom.kiviremote.presentation.base.TvKeysViewModel
 import ru.terrakok.cicerone.Router
+import timber.log.Timber
 
 
-class TvSettingsViewModel(private val router: Router) : BaseViewModel() {
+class TvSettingsViewModel(private val router: Router) : BaseViewModel(), TvKeysViewModel {
 
-    fun navigateToHome() = router.backTo(Screens.DEVICE_SEARCH_FRAGMENT)
+    fun sendAspectSingleChangeEvent(valueType: AspectMessage.ASPECT_VALUE, value: Int) {
+        val builder = AspectMessage.AspectMsgBuilder()
+        builder.addValue(valueType, value)
+        RxBus.publish(NewAspectEvent(builder.buildAspect()))
+        Timber.e("sending aspect 3: " +builder.buildAspect().settings.toString())
 
-    fun navigateBack() = router.exit()
-
-    val aspectMessage = MutableLiveData<AspectMessage>()
-
-    fun sendAspectChangeEvent(msg : AspectMessage){
-        AspectHolder.message = msg
-        RxBus.publish(NewAspectEvent(msg))
     }
+
+    fun goToInputSettings() = router.navigateTo(Screens.PORTS_FRAGMENT)
+
+    fun goBack() = router.exit()
 
 }

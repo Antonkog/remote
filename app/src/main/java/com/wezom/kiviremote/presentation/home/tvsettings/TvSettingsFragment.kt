@@ -11,8 +11,8 @@ import com.wezom.kiviremote.R
 import com.wezom.kiviremote.databinding.TvSettingsFragmentBinding
 import com.wezom.kiviremote.net.model.AspectAvailable
 import com.wezom.kiviremote.net.model.AspectMessage
-import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
+import com.wezom.kiviremote.presentation.base.TvKeysFragment
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.presentation.home.tvsettings.TvSettingsViewModel
@@ -26,7 +26,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, HorizontalSwitchView.OnSwitchListener, AspectHeaderView.OnSwitchListener {
+class TvSettingsFragment : TvKeysFragment(), SeekBar.OnSeekBarChangeListener, HorizontalSwitchView.OnSwitchListener, AspectHeaderView.OnSwitchListener {
 
 
     @Inject
@@ -69,7 +69,13 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvSettingsViewModel::class.java)
         setupConstraintMagic()
+        setTvButtons(viewModel, binding.menu, binding.back, binding.home)
+        binding.input.setOnClickListener { _ -> viewModel.goToInputSettings() }
         (activity as HomeActivity).hideSlidingPanel()
+    }
+
+    fun onBackPressed() {
+        viewModel.goBack()
     }
 
     override fun onResume() {
@@ -111,9 +117,9 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                 when (key) {
                     AspectMessage.ASPECT_VALUE.BRIGHTNESS.name -> binding.brightness.seekBar.progress = value
                     AspectMessage.ASPECT_VALUE.CONTRAST.name -> binding.contrast.seekBar.progress = value
-                    AspectMessage.ASPECT_VALUE.BACKLIGHT.name -> binding.saturation.seekBar.progress = value
-                    AspectMessage.ASPECT_VALUE.SATURATION.name -> binding.sharpness.seekBar.progress = value
-                    AspectMessage.ASPECT_VALUE.SHARPNESS.name -> binding.backlight.seekBar.progress = value
+                    AspectMessage.ASPECT_VALUE.BACKLIGHT.name -> binding.backlight.seekBar.progress = value
+                    AspectMessage.ASPECT_VALUE.SATURATION.name -> binding.saturation.seekBar.progress = value
+                    AspectMessage.ASPECT_VALUE.SHARPNESS.name -> binding.sharpness.seekBar.progress = value
 
 
                     AspectMessage.ASPECT_VALUE.HDR.name -> {
@@ -142,26 +148,24 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
 
     override fun onSwitch(mode: AspectMessage.ASPECT_VALUE?, resId: Int) {
         viewModel?.let {
-            val builder = AspectMessage.AspectMsgBuilder(AspectHolder.message)
+            var progress = -1;
 
-            if (resId != null) {
+            if (resId != null && mode!= null) {
                 when (mode) {
-                    AspectMessage.ASPECT_VALUE.HDR -> builder.addValue(mode, HDRValues.getIdByResID(resId))
-                    AspectMessage.ASPECT_VALUE.TEMPERATURE -> builder.addValue(mode, TemperatureValues.getIdByResID(resId))
-                    AspectMessage.ASPECT_VALUE.VIDEOARCTYPE -> builder.addValue(mode, Ratio.getIdByResID(resId))
-                    AspectMessage.ASPECT_VALUE.PICTUREMODE -> builder.addValue(mode, PictureMode.getIdByResID(resId))
+                    AspectMessage.ASPECT_VALUE.HDR -> progress = HDRValues.getIdByResID(resId)
+                    AspectMessage.ASPECT_VALUE.TEMPERATURE -> progress = TemperatureValues.getIdByResID(resId)
+                    AspectMessage.ASPECT_VALUE.VIDEOARCTYPE -> progress = Ratio.getIdByResID(resId)
+                    AspectMessage.ASPECT_VALUE.PICTUREMODE -> progress = PictureMode.getIdByResID(resId)
                     else -> Timber.e(" AspectMessage.ASPECT_VALUE not set")
                 }
-
+                if (progress != -1) {
+                    it.sendAspectSingleChangeEvent(mode, progress);
+                } else {
+                    Timber.e(" error in aspect view resId == null or mode == null" )
+                }
             } else {
-                Timber.e(" error in aspect view implementation or value not set")
+                Timber.e(" error in aspect view implementation or value not set 2")
             }
-
-
-            val msg = builder.buildAspect()
-            it.sendAspectChangeEvent(msg)
-            Timber.i(builder.buildAspect().toString())
-
         }
     }
 
@@ -175,9 +179,11 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         seekBar?.id.let {
             viewModel?.let {
                 if (seekBar != null && seekBar.tag != null) {
-                    val builder = AspectMessage.AspectMsgBuilder(AspectHolder.message)
-                            .addValue(AspectMessage.ASPECT_VALUE.valueOf(seekBar.tag.toString()), seekBar!!.progress)
-                    it.sendAspectChangeEvent(builder.buildAspect())
+                    try {
+                         it.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.valueOf(seekBar.tag.toString()), seekBar?.progress)
+                    } catch (e: IllegalArgumentException) {
+                        Timber.e("Error in aspect values parsing : onStopTrackingTouch", e)
+                    }
                 } else {
                     Timber.e("error in seekbar implementation")
                 }

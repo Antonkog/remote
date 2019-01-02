@@ -12,7 +12,9 @@ public class Constants {
     public static final int INITIAL_DELAY = 500;
     public static final int DPAD_EVENT_FREQUENCY = 200;
     public static final int VOLUME_EVENT_FREQUENCY = 75;
+    public static final long TOUCH_EVENT_FREQUENCY = 10 ; //  < 1sec / 25 frames (<40)
     public static final int HOME_KEY_DELAY = 320;
+    public static final int NO_VALUE = -1;
 
     public static final int NOTIFICATION_ID = 212121;
     public static final String UNIDENTIFIED = "unidentified";

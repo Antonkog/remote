@@ -92,7 +92,7 @@ class HomeActivityViewModel(
             }, onError = Timber::e)
 
         disposables += RxBus.listen(SendCursorCoordinatesEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread()).debounce(5, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread()).debounce(TOUCH_EVENT_FREQUENCY, TimeUnit.MILLISECONDS)
             .subscribeBy(onNext = {
                 sendTouchpadAction(it.x, it.y, Action.motion)
             }, onError = Timber::e)
@@ -123,7 +123,7 @@ class HomeActivityViewModel(
                 }, onError = Timber::e)
 
         disposables += RxBus.listen(SendScrollEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread()).debounce(5, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread()).debounce(TOUCH_EVENT_FREQUENCY, TimeUnit.MILLISECONDS)
             .subscribeBy(onNext = {
                 serverConnection?.sendMessage(SocketConnectionModel().apply {
                     setMotion(ArrayList<Double>().apply {
@@ -158,6 +158,7 @@ class HomeActivityViewModel(
         disposables += RxBus.listen(NewAspectEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
+                    Timber.e("sending aspect2 : " +it.message.toString())
                     sendAspectChanged(it.message)
                 }, onError = Timber::e)
 
@@ -299,6 +300,7 @@ class HomeActivityViewModel(
     private fun sendAspectChanged(msg: AspectMessage) {
         serverConnection?.sendMessage(SocketConnectionModel().apply {
             setAspectMessage(msg)
+            Timber.e("sending aspect : 1 " +msg.settings.toString())
         })
     }
 

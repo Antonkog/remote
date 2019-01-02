@@ -60,62 +60,69 @@
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/back"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/large"
+            android:layout_marginStart="22dp"
+            android:layout_marginBottom="22dp"
             android:background="@drawable/button_selector"
             android:clickable="true"
-            android:padding="@dimen/mid"
+            android:focusable="true"
             android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="@+id/home"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/home"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/home"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
             app:srcCompat="@drawable/selector_back_btn" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/home"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/large"
             android:background="@drawable/button_selector"
             android:clickable="true"
+            android:focusable="true"
+            android:layout_marginBottom="22dp"
+            android:focusableInTouchMode="false"
             android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/input"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintLeft_toRightOf="@+id/back"
-            app:layout_constraintRight_toLeftOf="@+id/menu"
+            app:layout_constraintStart_toEndOf="@+id/back"
             app:srcCompat="@drawable/selector_home_btn" />
-
 
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/input"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/large"
+            android:layout_marginBottom="22dp"
             android:background="@drawable/button_selector"
             android:clickable="true"
-            android:visibility="gone"
             android:focusable="true"
-            android:focusableInTouchMode="false"
             android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintHorizontal_bias="0.503"
-            app:layout_constraintLeft_toRightOf="@+id/back"
-            app:layout_constraintRight_toLeftOf="@+id/menu"
+            app:layout_constraintEnd_toStartOf="@+id/menu"
+            app:layout_constraintHorizontal_bias="0.5"
+            android:visibility="visible"
+            app:layout_constraintStart_toEndOf="@+id/home"
             app:srcCompat="@drawable/selector_input_btn" />
+
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/large"
+            android:layout_marginEnd="22dp"
+            android:layout_marginBottom="22dp"
             android:background="@drawable/button_selector"
             android:clickable="true"
+            android:focusable="true"
             android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="@+id/home"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/home"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/input"
             app:srcCompat="@drawable/selector_menu_btn" />
+
     </android.support.constraint.ConstraintLayout>
 </layout>

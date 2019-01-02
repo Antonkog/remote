@@ -162,5 +162,16 @@
     <string name="warmer">Warm 2</string>
     <string name="video_mode">Mode</string>
     <string name="image_setting">IMAGE\nSETTINGS</string>
+    <string name="ports">Inputs</string>
+    <string name="dtv">TV</string>
+    <string name="dvi">DVI</string>
+    <string name="av">AV</string>
+    <string name="input_placeholder">Input0</string>
+    <string name="to_usb">USB</string>
+    <string name="ypbpr">Компонент</string>
+    <string name="dvbc">DVB-C</string>
+    <string name="dvbs">DVB-S</string>
+    <string name="info">About device</string>
+    <string name="video_sound">Video and Audio</string>
 
 </resources>

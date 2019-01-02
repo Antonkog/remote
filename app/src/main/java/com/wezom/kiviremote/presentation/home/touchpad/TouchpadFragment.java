@@ -1,5 +1,6 @@
 package com.wezom.kiviremote.presentation.home.touchpad;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,7 +8,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.view.GestureDetectorCompat;
 import android.view.GestureDetector;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,21 +17,17 @@ import android.widget.SeekBar;
 import com.wezom.kiviremote.common.PreferencesManager;
 import com.wezom.kiviremote.databinding.TouchPadFragmentBinding;
 import com.wezom.kiviremote.interfaces.OnTouchPadMessageListener;
-import com.wezom.kiviremote.presentation.base.BaseFragment;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
+import com.wezom.kiviremote.presentation.base.TvKeysFragment;
+import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder;
 
 import javax.inject.Inject;
-
-import static android.view.MotionEvent.ACTION_DOWN;
-import static android.view.MotionEvent.ACTION_MOVE;
-import static android.view.MotionEvent.ACTION_UP;
-import static com.wezom.kiviremote.common.Constants.HOME_KEY_DELAY;
 
 
 /**
  * Created by andre on 09.06.2017.
  */
-public class TouchpadFragment extends BaseFragment
+public class TouchpadFragment extends TvKeysFragment
         implements OnTouchPadMessageListener<TouchpadMotionModel, TouchpadButtonClickEvent> {
 
     public static final int POSITION = 1;
@@ -46,9 +42,21 @@ public class TouchpadFragment extends BaseFragment
     private GestureDetectorCompat gestureDetector;
     private final int SWIPE_MIN_DISTANCE = 120;
     private final int SWIPE_THRESHOLD_VELOCITY = 100;
-    private long  homeClickTime;
+    private long homeClickTime;
     private final Handler handler = new Handler();
     private final Runnable launchQuickApps = () -> viewModel.launchQuickApps();
+
+    private Observer<Boolean> showAspectObserver = show -> {
+        if (show != null) setImputButton(show);
+    };
+
+    private void setImputButton(Boolean show) {
+        if (show) {
+            binding.input.setVisibility(View.VISIBLE);
+        } else {
+            binding.input.setVisibility(View.GONE);
+        }
+    }
 
     @Nullable
     @Override
@@ -72,6 +80,9 @@ public class TouchpadFragment extends BaseFragment
     private void init() {
         binding.touchpad.setListener(this);
         int cursorSpeedMultiplier = PreferencesManager.INSTANCE.getCursorSpeed();
+
+        setImputButton(AspectHolder.INSTANCE.getMessage() != null && AspectHolder.INSTANCE.getAvailableSettings() != null);
+        viewModel.getAspectSeen().observe(this, showAspectObserver);
         binding.touchpad.setSpeedMultiplier(cursorSpeedMultiplier);
         binding.seekbar.setProgress(cursorSpeedMultiplier);
         binding.seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -92,37 +103,8 @@ public class TouchpadFragment extends BaseFragment
             }
         });
 
-        binding.back.setOnClickListener(v -> viewModel.sendKeyEvent(KeyEvent.KEYCODE_BACK));
-        binding.menu.setOnClickListener(v -> viewModel.goToSettings());
-        binding.home.setOnTouchListener((view, event) -> {
-            switch (event.getAction()) {
-                case ACTION_DOWN:
-                    view.setPressed(true);
-                    viewModel.sendHomeDown();
-                    homeClickTime = System.currentTimeMillis();
-                    handler.postDelayed(launchQuickApps, 340);
-                    break;
-
-                case ACTION_MOVE:
-                    view.setPressed(true);
-                    break;
-
-                case ACTION_UP:
-                    view.performClick();
-                    view.setPressed(false);
-                    if (System.currentTimeMillis() - homeClickTime < HOME_KEY_DELAY) {
-                        viewModel.sendHomeUp();
-                        handler.removeCallbacks(launchQuickApps);
-                    }
-                    break;
-
-                default:
-                    view.setPressed(false);
-                    break;
-            }
-
-            return true;
-        });
+        binding.input.setOnClickListener(view -> viewModel.goToInputSettings());
+        setTvButtons(viewModel, binding.menu, binding.back, binding.home);
 
         gestureDetector = new GestureDetectorCompat(getContext(), new MyGestureListener());
         binding.scroll.setOnTouchListener((view, event) -> {
@@ -130,7 +112,6 @@ public class TouchpadFragment extends BaseFragment
             return true;
         });
     }
-
 
     class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
@@ -140,8 +121,8 @@ public class TouchpadFragment extends BaseFragment
 
         @Override
         public void onLongPress(MotionEvent event) {
-            if(event.getY() < binding.scroll.getY() + binding.scroll.getHeight()/2){
-                viewModel.sendScrollEvent(true,0);
+            if (event.getY() < binding.scroll.getY() + binding.scroll.getHeight() / 2) {
+                viewModel.sendScrollEvent(true, 0);
             } else {
                 viewModel.sendScrollEvent(false, 0);
             }

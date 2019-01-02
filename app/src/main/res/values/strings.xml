@@ -165,6 +165,7 @@
 
     <string name="wifi">Wi-Fi</string>
     <string name="video_sound">Видео и Звук</string>
+    <string name="ports">Выходы</string>
     <string name="info">Про устройство</string>
     <string name="vga">VGA</string>
     <string name="atv">АТВ</string>
@@ -175,6 +176,7 @@
     <string name="dtv">Телевидение</string>
     <string name="dvi">DVI</string>
     <string name="av">AV</string>
+    <string name="input_placeholder">Input0</string>
     <string name="to_usb">USB</string>
     <string name="ypbpr">Компонент</string>
     <string name="dvbc">DVB-C</string>

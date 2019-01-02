@@ -3,7 +3,6 @@ package com.wezom.kiviremote.presentation.home.remotecontrol;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.KeyEvent;
@@ -18,8 +17,8 @@ import com.wezom.kiviremote.common.PreferencesManager;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.databinding.RemoteControlFragmentBinding;
 import com.wezom.kiviremote.interfaces.RockersButtonClickListener;
-import com.wezom.kiviremote.presentation.base.BaseFragment;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
+import com.wezom.kiviremote.presentation.base.TvKeysFragment;
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder;
 import com.wezom.kiviremote.views.KiviDPadView;
 
@@ -32,17 +31,14 @@ import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 import static android.view.MotionEvent.ACTION_DOWN;
-import static android.view.MotionEvent.ACTION_MOVE;
-import static android.view.MotionEvent.ACTION_UP;
 import static com.wezom.kiviremote.common.Constants.DPAD_EVENT_FREQUENCY;
-import static com.wezom.kiviremote.common.Constants.HOME_KEY_DELAY;
 import static com.wezom.kiviremote.common.Constants.INITIAL_DELAY;
 
 /**
  * Created by andre on 29.05.2017.
  */
 
-public class RemoteControlFragment extends BaseFragment implements RockersButtonClickListener<Integer> {
+public class RemoteControlFragment extends TvKeysFragment implements RockersButtonClickListener<Integer> {
     public static final int POSITION = 0;
 
     @Inject
@@ -55,11 +51,6 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
     private boolean isMute = false;
 
     private Disposable continuousClicks;
-
-    private long homeClickTime;
-
-    private final Handler handler = new Handler();
-    private final Runnable launchQuickApps = () -> viewModel.launchQuickApps();
 
     private final Observer<Boolean> muteObserver = status -> {
         if (status != null) {
@@ -114,49 +105,20 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
         }
 
         binding.mute.setOnClickListener(v -> {
-            viewModel.sendButtonClick(KeyEvent.KEYCODE_VOLUME_MUTE);
+            viewModel.sendKeyEvent(KeyEvent.KEYCODE_VOLUME_MUTE);
             toggleMute();
         });
 
-        binding.dpadOk.setOnClickListener(v -> viewModel.sendButtonClick(KeyEvent.KEYCODE_DPAD_CENTER));
+        binding.dpadOk.setOnClickListener(v -> viewModel.sendKeyEvent(KeyEvent.KEYCODE_DPAD_CENTER));
         binding.switchOff.setOnClickListener(v -> viewModel.switchOff());
 
-        binding.menu.setOnClickListener(v -> viewModel.sendButtonClick(KeyEvent.KEYCODE_MENU));
-        binding.back.setOnClickListener(v -> viewModel.sendButtonClick(KeyEvent.KEYCODE_BACK));
         binding.buttonAspect.setOnClickListener(v -> viewModel.goToAspect());
 
-        binding.input.setOnClickListener(view -> viewModel.goToInputSettings());
+        setTvButtons(viewModel, binding.menu, binding.back, binding.home);
+        binding.input.setOnClickListener(click -> viewModel.goToInputSettings());
 
-        binding.home.setOnTouchListener((view, event) -> {
-            switch (event.getAction()) {
-                case ACTION_DOWN:
-                    view.setPressed(true);
-                    viewModel.sendHomeDown();
-                    homeClickTime = System.currentTimeMillis();
-                    handler.postDelayed(launchQuickApps, 340);
-                    break;
-
-                case ACTION_MOVE:
-                    view.setPressed(true);
-                    break;
-
-                case ACTION_UP:
-                    view.performClick();
-                    view.setPressed(false);
-                    if (System.currentTimeMillis() - homeClickTime < HOME_KEY_DELAY) {
-                        viewModel.sendHomeUp();
-                        handler.removeCallbacks(launchQuickApps);
-                    }
-                    break;
-
-                default:
-                    view.setPressed(false);
-                    break;
-            }
-
-            return true;
-        });
     }
+
 
     @Override
     public void injectDependencies() {
@@ -170,7 +132,7 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
                     binding.dpadView.onSectorSelected(secOr, true);
                     binding.dpadView.onArrowPressed(secOr);
                 }
-                viewModel.sendButtonClick(keyEvent);
+                viewModel.sendKeyEvent(keyEvent);
                 RemoteControlFragment.this.disposeOfContinuousClick();
                 continuousClicks = RemoteControlFragment.this.getContinuousClickObservable(keyEvent);
 
@@ -188,7 +150,7 @@ public class RemoteControlFragment extends BaseFragment implements RockersButton
 
     @Override
     public void onButtonClick(Integer buttonType) {
-        viewModel.sendButtonClick(buttonType);
+        viewModel.sendKeyEvent(buttonType);
     }
 
     public void setMute(boolean isMute) {

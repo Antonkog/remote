@@ -1,5 +1,7 @@
 package com.wezom.kiviremote.net.model;
 
+import org.jetbrains.annotations.Nullable;
+
 import java.util.HashMap;
 
 public class AspectAvailable {
@@ -13,6 +15,17 @@ public class AspectAvailable {
     }
 
     public HashMap<String, int[]> settings;
+
+    private int[] getSettings(VALUE_TYPE value_type) {
+        if(settings!= null && !settings.isEmpty())
+        return settings.get(value_type.name());
+        return null;
+    }
+
+    @Nullable
+    public  int[] getPorsSettings() {
+       return getSettings(AspectAvailable.VALUE_TYPE.INPUT_PORT);
+    }
 
     @Override
     public String toString() {
