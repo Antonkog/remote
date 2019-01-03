@@ -1,18 +1,20 @@
 package com.wezom.kiviremote.presentation.home.recentdevices
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.constraint.ConstraintSet
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
-import com.wezom.kiviremote.R
+import com.wezom.kiviremote.bus.GotAspectEvent
+import com.wezom.kiviremote.bus.RequestAspectEvent
+import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.databinding.TvSettingsFragmentBinding
 import com.wezom.kiviremote.net.model.AspectAvailable
 import com.wezom.kiviremote.net.model.AspectMessage
+import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
-import com.wezom.kiviremote.presentation.base.TvKeysFragment
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.presentation.home.tvsettings.TvSettingsViewModel
@@ -26,9 +28,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class TvSettingsFragment : TvKeysFragment(), SeekBar.OnSeekBarChangeListener, HorizontalSwitchView.OnSwitchListener, AspectHeaderView.OnSwitchListener {
-
-
+class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, HorizontalSwitchView.OnSwitchListener, AspectHeaderView.OnSwitchListener {
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
 
@@ -36,12 +36,13 @@ class TvSettingsFragment : TvKeysFragment(), SeekBar.OnSeekBarChangeListener, Ho
 
     private lateinit var binding: TvSettingsFragmentBinding
 
-    private val mainConstraintSet = ConstraintSet()
-
-    private val mainEditConstraintSet = ConstraintSet()
-
     override fun injectDependencies() = fragmentComponent.inject(this)
 
+
+    private val aspectObserver = Observer<GotAspectEvent?> {
+        Timber.i("set aspect from observable")
+        syncPicSettings(it?.msg, it?.available)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = TvSettingsFragmentBinding.inflate(inflater, container!!, false)
@@ -68,18 +69,31 @@ class TvSettingsFragment : TvKeysFragment(), SeekBar.OnSeekBarChangeListener, Ho
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvSettingsViewModel::class.java)
-        setupConstraintMagic()
-        setTvButtons(viewModel, binding.menu, binding.back, binding.home)
-        binding.input.setOnClickListener { _ -> viewModel.goToInputSettings() }
-        (activity as HomeActivity).hideSlidingPanel()
-    }
 
-    fun onBackPressed() {
-        viewModel.goBack()
+        viewModel.aspectChange.observe(this, aspectObserver)
+
+        binding.tvSettingsToolbar.setNavigationOnClickListener { go ->
+            viewModel.goBack()
+            Timber.i("on toolbar click - g0 back")
+        }
+
+        (activity as HomeActivity).run {
+            setSupportActionBar(binding.tvSettingsToolbar)
+            supportActionBar?.run {
+                setDisplayShowTitleEnabled(false)
+                setDisplayHomeAsUpEnabled(true)
+                setDisplayHomeAsUpEnabled(true)
+            }
+        }
     }
 
     override fun onResume() {
-        syncPicSettings(AspectHolder.message, AspectHolder.availableSettings)
+        if (AspectHolder.message != null && AspectHolder.availableSettings != null) {
+            syncPicSettings(AspectHolder.message, AspectHolder.availableSettings)
+        } else {
+            Timber.i(" requesting aspect")
+            RxBus.publish(RequestAspectEvent())
+        }
         super.onResume()
     }
 
@@ -150,7 +164,7 @@ class TvSettingsFragment : TvKeysFragment(), SeekBar.OnSeekBarChangeListener, Ho
         viewModel?.let {
             var progress = -1;
 
-            if (resId != null && mode!= null) {
+            if (resId != null && mode != null) {
                 when (mode) {
                     AspectMessage.ASPECT_VALUE.HDR -> progress = HDRValues.getIdByResID(resId)
                     AspectMessage.ASPECT_VALUE.TEMPERATURE -> progress = TemperatureValues.getIdByResID(resId)
@@ -161,7 +175,7 @@ class TvSettingsFragment : TvKeysFragment(), SeekBar.OnSeekBarChangeListener, Ho
                 if (progress != -1) {
                     it.sendAspectSingleChangeEvent(mode, progress);
                 } else {
-                    Timber.e(" error in aspect view resId == null or mode == null" )
+                    Timber.e(" error in aspect view resId == null or mode == null")
                 }
             } else {
                 Timber.e(" error in aspect view implementation or value not set 2")
@@ -180,7 +194,7 @@ class TvSettingsFragment : TvKeysFragment(), SeekBar.OnSeekBarChangeListener, Ho
             viewModel?.let {
                 if (seekBar != null && seekBar.tag != null) {
                     try {
-                         it.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.valueOf(seekBar.tag.toString()), seekBar?.progress)
+                        it.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.valueOf(seekBar.tag.toString()), seekBar?.progress)
                     } catch (e: IllegalArgumentException) {
                         Timber.e("Error in aspect values parsing : onStopTrackingTouch", e)
                     }
@@ -189,11 +203,5 @@ class TvSettingsFragment : TvKeysFragment(), SeekBar.OnSeekBarChangeListener, Ho
                 }
             }
         }
-    }
-
-
-    private fun setupConstraintMagic() {
-        mainConstraintSet.clone(binding.tvSettingsContainer)
-        mainEditConstraintSet.clone(activity, R.layout.tv_settings_fragment)
     }
 }

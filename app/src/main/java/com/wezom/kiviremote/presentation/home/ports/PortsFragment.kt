@@ -7,18 +7,20 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.wezom.kiviremote.bus.RequestAspectEvent
 import com.wezom.kiviremote.common.Constants
+import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.databinding.PortsFragmentBinding
 import com.wezom.kiviremote.net.model.AspectMessage
+import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
-import com.wezom.kiviremote.presentation.base.TvKeysFragment
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.upnp.org.droidupnp.view.Port
 import timber.log.Timber
 import javax.inject.Inject
 
-class PortsFragment : TvKeysFragment() {
+class PortsFragment : BaseFragment() {
 
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
@@ -31,13 +33,23 @@ class PortsFragment : TvKeysFragment() {
         PortsAdapter(object : PortsAdapter.CheckListener {
             override fun onPortChecked(position: Int) {
                 setPort(position)
-                refreshData()
+                RxBus.publish(RequestAspectEvent())
             }
         })
     }
 
-
     override fun injectDependencies() = fragmentComponent.inject(this)
+
+
+    override fun onResume() {
+        if (AspectHolder.message != null && AspectHolder.availableSettings != null) {
+            refreshData()
+        } else {
+            Timber.i(" requesting aspect")
+            RxBus.publish(RequestAspectEvent())
+        }
+        super.onResume()
+    }
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -54,13 +66,14 @@ class PortsFragment : TvKeysFragment() {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PortsViewModel::class.java)
 
+        binding.portsFragmentToolbar.setNavigationOnClickListener { go ->
+            viewModel.goBack()
+            Timber.i("on toolbar click - g0 back")
+        }
+
         initPortsContainer()
 
-        viewModel.ports.observe(this, showAspectObserver)
-
-        refreshData()
-
-        setTvButtons(viewModel, binding.menu, binding.back, binding.home)
+        viewModel.ports.observe(this, showPortsObserver)
 
         (activity as HomeActivity).run {
             setSupportActionBar(binding.portsFragmentToolbar)
@@ -80,22 +93,20 @@ class PortsFragment : TvKeysFragment() {
         }
     }
 
-    private val showAspectObserver = Observer<List<Port>> {
+    private val showPortsObserver = Observer<List<Port>> {
         it?.let { refreshData() }
     }
 
     private fun refreshData() {
-//        Timber.e(" ports ${AspectHolder.availableSettings?.porsSettings?.size} ${AspectHolder.message.toString()}" )
-        AspectHolder.availableSettings?.porsSettings.let {
+        Timber.e(" ports ${AspectHolder.availableSettings?.porsSettings?.size} ${AspectHolder.message.toString()}")
+        AspectHolder.availableSettings?.porsSettings?.let {
             portsAdapter.setData(InputSourceHelper.getPortsList(it, AspectHolder.message?.currentPort
                     ?: Constants.NO_VALUE))
         }
     }
 
     private fun setPort(portId: Int) {
-        Timber.e(" setPort:  $portId  " )
+        Timber.e(" setPort:  $portId  ")
         viewModel.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.INPUT_PORT, portId) // sendAspectChangeEvent(msg)
     }
-
-
 }

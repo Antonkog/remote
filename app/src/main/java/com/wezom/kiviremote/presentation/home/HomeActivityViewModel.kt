@@ -21,6 +21,7 @@ import com.wezom.kiviremote.persistence.model.ServerApp
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadButtonClickEvent
+import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.upnp.UPnPManager
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -215,6 +216,7 @@ class HomeActivityViewModel(
 
     private fun initConnection(nsdModel: NsdServiceModel, firstConnection: Boolean) {
         killPing()
+        AspectHolder.clean()
         serverConnection = ChatConnection()
         connect(nsdModel)
     }

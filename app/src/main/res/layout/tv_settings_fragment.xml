@@ -6,35 +6,65 @@
         android:id="@+id/tv_settings_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animateLayoutChanges="true"
-        android:lineSpacingMultiplier="2"
+        android:background="@color/gradient_start"
         android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tv_settings_toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="61dp"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolbarTheme"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="center"
+            android:ellipsize="marquee"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="@string/picture_mode"
+            android:textColor="@color/colorSecondaryText"
+            android:textSize="@dimen/font_size_14"
+            app:layout_constraintBottom_toBottomOf="@+id/tv_settings_toolbar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/tv_settings_toolbar" />
+
+        <include
+            android:id="@+id/divider"
+            layout="@layout/view_separator_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="1px"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_settings_toolbar" />
+
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#f2f2f2"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toBottomOf="@id/tv_settings_toolbar">
 
 
             <com.wezom.kiviremote.views.AspectHeaderView
                 android:id="@+id/aspect_header"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginLeft="20dp"
-                android:layout_marginRight="20dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="10dp"
                 app:header="@string/mode"
-                app:row="@string/user"
-                />
-
-
-
+                app:row="@string/user" />
 
 
             <com.wezom.kiviremote.views.TextSeekBarView
@@ -69,14 +99,12 @@
                 app:text="@string/backlight" />
 
 
-
             <com.wezom.kiviremote.views.HorizontalSwitchView
                 android:id="@+id/hdr"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:name="@string/hdr"
-                app:variant="@string/auto"
-                />
+                app:variant="@string/auto" />
 
 
             <com.wezom.kiviremote.views.HorizontalSwitchView
@@ -84,9 +112,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:name="@string/temperature_des"
-                app:variant="@string/nature"
-                />
-
+                app:variant="@string/nature" />
 
 
             <com.wezom.kiviremote.views.HorizontalSwitchView
@@ -94,81 +120,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:name="@string/ratio"
-                app:variant="@string/r_16x9"
-                />
-
+                app:variant="@string/r_16x9" />
 
 
         </LinearLayout>
-
-
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/home"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/selector_back_btn" />
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_marginBottom="22dp"
-            android:focusableInTouchMode="false"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/input"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/back"
-            app:srcCompat="@drawable/selector_home_btn" />
-
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/menu"
-            app:layout_constraintHorizontal_bias="0.5"
-            android:visibility="visible"
-            app:layout_constraintStart_toEndOf="@+id/home"
-            app:srcCompat="@drawable/selector_input_btn" />
-
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="22dp"
-            android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/input"
-            app:srcCompat="@drawable/selector_menu_btn" />
-
 
 
     </android.support.constraint.ConstraintLayout>

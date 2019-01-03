@@ -142,7 +142,7 @@
     <string name="brightness">Яркость</string>
     <string name="backlight">Подсветка</string>
     <string name="mode_desc">Режим изображения (только для видео)</string>
-    <string name="video_mode">Режим изображения</string>
+    <string name="picture_mode">Режим изображения</string>
     <string name="ratio_desc">Соотношение сторон (только для видео)</string>
     <string name="timer_off">Таймер выключен</string>
     <string name="off">Выкл</string>
@@ -165,7 +165,7 @@
 
     <string name="wifi">Wi-Fi</string>
     <string name="video_sound">Видео и Звук</string>
-    <string name="ports">Выходы</string>
+    <string name="ports">Входы</string>
     <string name="info">Про устройство</string>
     <string name="vga">VGA</string>
     <string name="atv">АТВ</string>

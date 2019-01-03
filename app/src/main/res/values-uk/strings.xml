@@ -130,7 +130,7 @@
     <string name="optimization">Почати оптимізацію</string>
     <string name="sleep">Вимкнути</string>
     <string name="mode">Режим</string>
-    <string name="video_mode">Режим зображення</string>
+    <string name="picture_mode">Режим зображення</string>
     <string name="cooler">Холодний 2</string>
     <string name="warmer">Теплий 2</string>
     <string name="auto">Авто</string>
@@ -172,5 +172,5 @@
     <string name="info">Про пристрій</string>
     <string name="video_sound">Відео та Звук</string>
     <string name="mode_desc">Режим зображення</string>
-    <string name="ports">Виходи</string>
+    <string name="ports">Входи</string>
 </resources>

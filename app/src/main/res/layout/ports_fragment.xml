@@ -4,6 +4,7 @@
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
+        android:background="@color/gradient_start"
         android:layout_height="match_parent"
         android:orientation="vertical">
 
@@ -11,13 +12,14 @@
             android:id="@+id/ports_fragment_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            android:minHeight="?attr/actionBarSize"
+            android:theme="@style/ToolbarTheme"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
-            android:id="@+id/recent_device_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -50,72 +52,20 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider" />
 
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/back"
+        <ProgressBar
+            android:id="@+id/ports_refresh_fragment"
+            style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
-            android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/home"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/selector_back_btn" />
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:focusableInTouchMode="false"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/input"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/back"
-            app:srcCompat="@drawable/selector_home_btn" />
-
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerInside"
+            android:layout_gravity="center"
+            android:layout_marginBottom="@dimen/xx_large"
             android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/menu"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/home"
-            app:srcCompat="@drawable/selector_input_btn" />
-
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="22dp"
-            android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/input"
-            app:srcCompat="@drawable/selector_menu_btn" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
 
     </android.support.constraint.ConstraintLayout>
 </layout>

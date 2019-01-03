@@ -181,7 +181,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/menu"
             app:layout_constraintHorizontal_bias="0.5"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/home"
             app:srcCompat="@drawable/selector_input_btn" />
 

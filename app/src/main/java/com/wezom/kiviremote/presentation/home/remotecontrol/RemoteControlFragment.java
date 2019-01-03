@@ -62,6 +62,7 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
     };
 
     private Observer<Boolean> showAspectObserver = show -> {
+        Timber.i("set aspect from observable");
         if (show != null) setAspectButtons(show);
     };
 
@@ -168,10 +169,9 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
         if (binding.buttonAspect != null) {
             binding.buttonAspect.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         }
-
-//        if(binding.input != null){
-//            binding.input.setVisibility(visible ? View.VISIBLE : View.GONE);
-//        }
+        if (binding.input != null) {
+            binding.input.setVisibility(visible ? View.VISIBLE : View.GONE);
+        }
     }
 
     private void toggleMute() {

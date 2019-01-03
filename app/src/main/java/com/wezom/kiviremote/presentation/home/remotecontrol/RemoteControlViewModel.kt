@@ -44,7 +44,7 @@ class RemoteControlViewModel(private val router: Router) : BaseViewModel(), TvKe
 
     fun switchOff() = RxBus.publish(SendActionEvent(Action.SWITCH_OFF))
 
-    fun goToAspect() = router.replaceScreen(Screens.TV_SETTINGS_FRAGMENT)
+    fun goToAspect() = router.navigateTo(Screens.TV_SETTINGS_FRAGMENT)
 
     fun goToInputSettings( ) = router.navigateTo(Screens.PORTS_FRAGMENT)
 
