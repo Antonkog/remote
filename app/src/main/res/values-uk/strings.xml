@@ -12,7 +12,6 @@
 
     <!--CLIENT SIDE strings-->
     <string name="type_command">Type Command&#8230;</string>
-    <string name="send.text">Send text</string>
     <string name="connect">Connect</string>
     <string name="server_ip" formatted="false">Server at IP: %s, port: %s</string>
     <string name="connect_to_lan" formatted="false">Підключено до мережі: "%s"</string>
@@ -173,4 +172,7 @@
     <string name="video_sound">Відео та Звук</string>
     <string name="mode_desc">Режим зображення</string>
     <string name="ports">Входи</string>
+    <string name="video">Відео</string>
+    <string name="audio">Аудіо</string>
+    <string name="photo">Фото</string>
 </resources>

@@ -12,7 +12,6 @@
 
     <!--CLIENT SIDE strings-->
     <string name="type_command">Type Command&#8230;</string>
-    <string name="send.text">Send text</string>
     <string name="connect">Connect</string>
     <string name="server_ip" formatted="false">Server at IP: %s, port: %s</string>
     <string name="connect_to_lan" formatted="false">Connected to network: "%s"</string>
@@ -37,7 +36,7 @@
     <string name="k.channel.up">channel_up</string>
     <string name="k.channel.down">channel_down</string>
     <string name="k.enter">Enter</string>
-    <string name="discovery_connect">Подключиться</string>
+    <string name="discovery_connect">Connect</string>
     <string name="no.contentDirectoryDevice.found">No devices found\nPlease make sure your smartphone and TV are connected to the same WiFi network.</string>
     <string name="discovery.in.progress">Searching for available devices</string>
     <string name="search_again">Repeat search</string>
@@ -57,7 +56,6 @@
     <string name="current_device">Installed on %1$s</string>
     <string name="placeholder">placeholdeefwefewfwefwefewfewfwefr</string>
 
-    <string name="devices_list_of_connections">Connection list</string>
     <string name="devices_list_edit">Edit list</string>
 
     <string name="connected">Connected</string>
@@ -168,10 +166,14 @@
     <string name="av">AV</string>
     <string name="input_placeholder">Input0</string>
     <string name="to_usb">USB</string>
-    <string name="ypbpr">Компонент</string>
+    <string name="ypbpr">Component</string>
     <string name="dvbc">DVB-C</string>
     <string name="dvbs">DVB-S</string>
     <string name="info">About device</string>
     <string name="video_sound">Video and Audio</string>
+    <string name="devices_list_of_connections">Device list</string>
+    <string name="video">Video</string>
+    <string name="audio">Audio</string>
+    <string name="photo">Photo</string>
 
 </resources>

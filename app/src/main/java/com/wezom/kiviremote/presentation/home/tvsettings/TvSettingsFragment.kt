@@ -8,8 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import com.wezom.kiviremote.bus.GotAspectEvent
-import com.wezom.kiviremote.bus.RequestAspectEvent
-import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.databinding.TvSettingsFragmentBinding
 import com.wezom.kiviremote.net.model.AspectAvailable
 import com.wezom.kiviremote.net.model.AspectMessage
@@ -72,13 +70,8 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
 
         viewModel.aspectChange.observe(this, aspectObserver)
 
-        binding.tvSettingsToolbar.setNavigationOnClickListener { go ->
-            viewModel.goBack()
-            Timber.i("on toolbar click - g0 back")
-        }
-
         (activity as HomeActivity).run {
-            setSupportActionBar(binding.tvSettingsToolbar)
+            setSupportActionBar(binding.toolbar)
             supportActionBar?.run {
                 setDisplayShowTitleEnabled(false)
                 setDisplayHomeAsUpEnabled(true)
@@ -92,7 +85,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
             syncPicSettings(AspectHolder.message, AspectHolder.availableSettings)
         } else {
             Timber.i(" requesting aspect")
-            RxBus.publish(RequestAspectEvent())
+            viewModel.requestAspect()
         }
         super.onResume()
     }

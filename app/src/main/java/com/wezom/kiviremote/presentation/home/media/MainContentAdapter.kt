@@ -38,11 +38,11 @@ class MainContentAdapter(
         allowClicks = true
 
         val item = entry.didlObject
-        title.text = entry.title
+
         when (entry.title) {
-            VIDEO -> icon.setImageResource(R.drawable.ic_videos)
-            IMAGE -> icon.setImageResource(R.drawable.ic_images)
-            AUDIO -> icon.setImageResource(R.drawable.ic_audio)
+            VIDEO -> {title.text = context.getString(R.string.video) ; icon.setImageResource(R.drawable.ic_videos)}
+            IMAGE -> {title.text = context.getString(R.string.photo) ; icon.setImageResource(R.drawable.ic_images)}
+            AUDIO -> {title.text = context.getString(R.string.audio); icon.setImageResource(R.drawable.ic_audio)}
         }
 
         view.setOnClickListener {

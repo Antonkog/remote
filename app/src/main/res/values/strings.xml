@@ -12,7 +12,6 @@
 
     <!--CLIENT SIDE strings-->
     <string name="type_command">Type Command&#8230;</string>
-    <string name="send.text">Send text</string>
     <string name="connect">Connect</string>
     <string name="server_ip" formatted="false">Server at IP: %s, port: %s</string>
     <string name="connect_to_lan" formatted="false">Подключено к сети: "%s"</string>
@@ -165,7 +164,9 @@
 
     <string name="wifi">Wi-Fi</string>
     <string name="video_sound">Видео и Звук</string>
-    <string name="ports">Входы</string>
+    <string name="video">Видео</string>
+    <string name="audio">Аудио</string>
+    <string name="photo">Фото</string>
     <string name="info">Про устройство</string>
     <string name="vga">VGA</string>
     <string name="atv">АТВ</string>

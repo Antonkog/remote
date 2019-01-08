@@ -1,9 +1,9 @@
 package com.wezom.kiviremote.presentation.home.ports
 
 import android.arch.lifecycle.MutableLiveData
-import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.GotAspectEvent
 import com.wezom.kiviremote.bus.NewAspectEvent
+import com.wezom.kiviremote.bus.RequestAspectEvent
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.net.model.AspectMessage
 import com.wezom.kiviremote.presentation.base.BaseViewModel
@@ -22,7 +22,7 @@ class PortsViewModel(private val router: Router) : BaseViewModel() {
         disposables += RxBus.listen(GotAspectEvent::class.java).observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = {
-                            ports.value = InputSourceHelper.getPortsList(it?.available?.porsSettings, it?.msg?.currentPort?: 1)
+                            ports.value = InputSourceHelper.getPortsList(it?.available?.portsSettings, it?.msg?.currentPort?: 1).distinct()
                         }, onError = Timber::e
                 )
     }
@@ -33,6 +33,5 @@ class PortsViewModel(private val router: Router) : BaseViewModel() {
         RxBus.publish(NewAspectEvent(builder.buildAspect()))
     }
 
-    fun goBack() = router.backTo(Screens.REMOTE_CONTROL_FRAGMENT)
-
+    fun requestAspect() =  RxBus.publish(RequestAspectEvent())
 }

@@ -12,9 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wezom.kiviremote.R;
-import com.wezom.kiviremote.bus.RequestAspectEvent;
 import com.wezom.kiviremote.common.PreferencesManager;
-import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.databinding.RemoteControlFragmentBinding;
 import com.wezom.kiviremote.interfaces.RockersButtonClickListener;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
@@ -101,8 +99,7 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
         if (AspectHolder.INSTANCE.getMessage() != null && AspectHolder.INSTANCE.getAvailableSettings() != null) {
             setAspectButtons(true);
         } else {
-            Timber.e(" no Aspect from server");
-            RxBus.INSTANCE.publish(new RequestAspectEvent());
+            viewModel.requestAspect();
         }
 
         binding.mute.setOnClickListener(v -> {
@@ -165,7 +162,6 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
     }
 
     private void setAspectButtons(boolean visible) {
-        Timber.e(" setting aspect " + visible);
         if (binding.buttonAspect != null) {
             binding.buttonAspect.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         }

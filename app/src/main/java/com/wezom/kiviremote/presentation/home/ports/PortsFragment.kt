@@ -7,9 +7,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.wezom.kiviremote.bus.RequestAspectEvent
 import com.wezom.kiviremote.common.Constants
-import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.databinding.PortsFragmentBinding
 import com.wezom.kiviremote.net.model.AspectMessage
 import com.wezom.kiviremote.presentation.base.BaseFragment
@@ -17,7 +15,6 @@ import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.upnp.org.droidupnp.view.Port
-import timber.log.Timber
 import javax.inject.Inject
 
 class PortsFragment : BaseFragment() {
@@ -33,7 +30,7 @@ class PortsFragment : BaseFragment() {
         PortsAdapter(object : PortsAdapter.CheckListener {
             override fun onPortChecked(position: Int) {
                 setPort(position)
-                RxBus.publish(RequestAspectEvent())
+                viewModel.requestAspect()
             }
         })
     }
@@ -45,8 +42,7 @@ class PortsFragment : BaseFragment() {
         if (AspectHolder.message != null && AspectHolder.availableSettings != null) {
             refreshData()
         } else {
-            Timber.i(" requesting aspect")
-            RxBus.publish(RequestAspectEvent())
+            viewModel.requestAspect()
         }
         super.onResume()
     }
@@ -66,23 +62,18 @@ class PortsFragment : BaseFragment() {
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PortsViewModel::class.java)
 
-        binding.portsFragmentToolbar.setNavigationOnClickListener { go ->
-            viewModel.goBack()
-            Timber.i("on toolbar click - g0 back")
-        }
-
-        initPortsContainer()
-
-        viewModel.ports.observe(this, showPortsObserver)
-
         (activity as HomeActivity).run {
-            setSupportActionBar(binding.portsFragmentToolbar)
+            setSupportActionBar(binding.toolbar)
             supportActionBar?.run {
                 setDisplayShowTitleEnabled(false)
                 setDisplayHomeAsUpEnabled(true)
                 setDisplayHomeAsUpEnabled(true)
             }
         }
+
+        initPortsContainer()
+
+        viewModel.ports.observe(this, showPortsObserver)
     }
 
     private fun initPortsContainer() {
@@ -94,19 +85,22 @@ class PortsFragment : BaseFragment() {
     }
 
     private val showPortsObserver = Observer<List<Port>> {
-        it?.let { refreshData() }
+        it?.let {
+            binding.portsRefreshBar.visibility = View.GONE
+            portsAdapter.setData(it)
+        }
     }
 
     private fun refreshData() {
-        Timber.e(" ports ${AspectHolder.availableSettings?.porsSettings?.size} ${AspectHolder.message.toString()}")
-        AspectHolder.availableSettings?.porsSettings?.let {
+        binding.portsRefreshBar.visibility = View.GONE
+        AspectHolder.availableSettings?.portsSettings?.let {
             portsAdapter.setData(InputSourceHelper.getPortsList(it, AspectHolder.message?.currentPort
-                    ?: Constants.NO_VALUE))
+                    ?: Constants.NO_VALUE).distinct())
         }
     }
 
     private fun setPort(portId: Int) {
-        Timber.e(" setPort:  $portId  ")
-        viewModel.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.INPUT_PORT, portId) // sendAspectChangeEvent(msg)
+        binding.portsRefreshBar.visibility = View.VISIBLE
+        viewModel.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.INPUT_PORT, portId)
     }
 }

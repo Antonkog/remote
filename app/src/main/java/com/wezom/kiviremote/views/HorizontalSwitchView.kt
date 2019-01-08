@@ -9,7 +9,6 @@ import android.widget.TextView
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.net.model.AspectMessage
 import org.jetbrains.annotations.NotNull
-import timber.log.Timber
 import java.util.*
 
 
@@ -75,14 +74,16 @@ class HorizontalSwitchView : LinearLayout {
 
     fun setVariants(mode: AspectMessage.ASPECT_VALUE, @NotNull vars: List<Int>) {
         varargs = LinkedList(vars.distinct())
-        if (varargs.size == 1) this.visibility = View.GONE
         aspectValueType = mode
         if (varargs.size > 0) {
-            try {
+            if (varargs.size == 1) this.visibility = View.GONE
+            var position = varargs.indexOf(variant.tag)
+            if (position == -1) {
                 variant.text = resources.getString(varargs[0])
                 variant.tag = varargs[0]
-            } catch (exception: Exception) {
-                Timber.e(exception)
+            } else {
+                variant.text = resources.getString(varargs[position])
+                variant.tag = varargs[position]
             }
         }
         this.invalidate()

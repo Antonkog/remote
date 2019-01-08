@@ -22,7 +22,6 @@ class TouchpadViewModel (private val router: Router) : BaseViewModel(), TvKeysVi
     init {
         disposables += RxBus.listen(GotAspectEvent::class.java).subscribeBy(
                 onNext = {
-                    Timber.e("got aspect2: " + AspectHolder.availableSettings.toString() + AspectHolder.message.toString())
                     if (AspectHolder.availableSettings != null && AspectHolder.message != null) {
                         aspectSeen.postValue(true)
                     } else {

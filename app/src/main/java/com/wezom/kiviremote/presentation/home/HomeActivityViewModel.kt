@@ -159,7 +159,6 @@ class HomeActivityViewModel(
         disposables += RxBus.listen(NewAspectEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
-                    Timber.e("sending aspect2 : " +it.message.toString())
                     sendAspectChanged(it.message)
                 }, onError = Timber::e)
 
@@ -302,7 +301,6 @@ class HomeActivityViewModel(
     private fun sendAspectChanged(msg: AspectMessage) {
         serverConnection?.sendMessage(SocketConnectionModel().apply {
             setAspectMessage(msg)
-            Timber.e("sending aspect : 1 " +msg.settings.toString())
         })
     }
 

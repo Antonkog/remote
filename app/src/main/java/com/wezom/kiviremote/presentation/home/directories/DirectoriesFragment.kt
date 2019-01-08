@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.Constants.*
 import com.wezom.kiviremote.common.extensions.toPx
 import com.wezom.kiviremote.databinding.DirectoriesFragmentBinding
@@ -66,9 +67,9 @@ class DirectoriesFragment : BaseFragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         binding = DirectoriesFragmentBinding.inflate(inflater, container!!, false)
         return binding.root
@@ -89,7 +90,11 @@ class DirectoriesFragment : BaseFragment() {
         viewModel =
                 ViewModelProviders.of(this, viewModelFactory).get(DirectoriesViewModel::class.java)
         viewModel.uPnPManager.currentDirType?.let {
-            binding.title.text = it
+            when (it) {
+                VIDEO -> binding.title.text = view.context.getString(R.string.video)
+                IMAGE -> binding.title.text = view.context.getString(R.string.photo)
+                AUDIO -> binding.title.text = view.context.getString(R.string.audio)
+            }
             adapter = DirectoriesAdapter(it, ::navigateToDirectory)
         }
 
