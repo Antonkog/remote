@@ -155,7 +155,6 @@ public class ChatConnection {
 
 
             if (serverEvent.getAspectMessage() != null && serverEvent.getAvailableAspectValues() != null) {
-                Timber.e("got aspect" + serverEvent.getAspectMessage().toString() + serverEvent.getAvailableAspectValues());
                 AspectHolder.INSTANCE.setAvailableSettings(serverEvent.getAvailableAspectValues());
                 AspectHolder.INSTANCE.setMessage(serverEvent.getAspectMessage());
                 RxBus.INSTANCE.publish(new GotAspectEvent(serverEvent.getAspectMessage(), serverEvent.getAvailableAspectValues()));
@@ -386,7 +385,6 @@ public class ChatConnection {
                             .subscribe());
 
                     sendMessage(new SocketConnectionModel().setAction(Action.REQUEST_APPS));
-                    sendMessage(new SocketConnectionModel().setAction(Action.REQUEST_ASPECT));
 
                 } catch (UnknownHostException e) {
                     Timber.d("Initializing socket failed, UHE", e);

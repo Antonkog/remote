@@ -62,7 +62,7 @@ class AspectHeaderView : LinearLayout {
 
     private fun doOnRightclick() {
         var position = varargs.indexOf(row.tag)
-        if(position == -1) return
+        if (position == -1) return
         when (position) {
             varargs.size - 1 -> position = 0
             varargs.size -> position = 0
@@ -77,7 +77,7 @@ class AspectHeaderView : LinearLayout {
 
     private fun doOnLeftClick() {
         var position = varargs.indexOf(row.tag)
-        if(position == -1) return
+        if (position == -1) return
         when (position) {
             0 -> position = varargs.size - 1
             else -> {
@@ -95,18 +95,20 @@ class AspectHeaderView : LinearLayout {
     }
 
 
-    fun setVariants( mode: AspectMessage.ASPECT_VALUE, @NotNull vars: List<Int>) {
+    fun setVariants(mode: AspectMessage.ASPECT_VALUE, @NotNull vars: List<Int>) {
         varargs = LinkedList(vars.distinct())
         aspectValueType = mode
+
         if (varargs.size > 0) {
-            try {
+            var position = varargs.indexOf(row.tag)
+            if (position == -1) {
                 row.text = resources.getString(varargs[0])
                 row.tag = varargs[0]
-            } catch (exception: Exception) {
-                Timber.e(exception)
+            } else {
+                row.text = resources.getString(varargs[position])
+                row.tag = varargs[position]
             }
         }
-        this.invalidate()
     }
 
 

@@ -1,18 +1,35 @@
 package com.wezom.kiviremote.presentation.home.touchpad
 
-import android.view.KeyEvent
-import com.wezom.kiviremote.bus.SendActionEvent
+import android.arch.lifecycle.MutableLiveData
+import com.wezom.kiviremote.Screens
+import com.wezom.kiviremote.bus.GotAspectEvent
 import com.wezom.kiviremote.bus.SendCursorCoordinatesEvent
-import com.wezom.kiviremote.bus.SendKeyEvent
 import com.wezom.kiviremote.bus.SendScrollEvent
 import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.presentation.base.BaseViewModel
+import com.wezom.kiviremote.presentation.base.TvKeysViewModel
+import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
+import io.reactivex.rxkotlin.subscribeBy
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
 
-class TouchpadViewModel (private val router: Router) : BaseViewModel() {
+class TouchpadViewModel (private val router: Router) : BaseViewModel(), TvKeysViewModel {
+
+    val aspectSeen = MutableLiveData<Boolean?>()
+
+    init {
+        disposables += RxBus.listen(GotAspectEvent::class.java).subscribeBy(
+                onNext = {
+                    if (AspectHolder.availableSettings != null && AspectHolder.message != null) {
+                        aspectSeen.postValue(true)
+                    } else {
+                        aspectSeen.postValue(false)
+                    }
+                }, onError = Timber::e
+        )
+    }
 
     fun sendMotionMessage(x: Double, y: Double) {
         RxBus.publish(SendCursorCoordinatesEvent(x, y))
@@ -23,19 +40,10 @@ class TouchpadViewModel (private val router: Router) : BaseViewModel() {
         RxBus.publish(TouchpadButtonClickEvent(x, y, buttonType))
     }
 
-    fun sendScrollEvent(scrollTopToBottom: Boolean, y: Double) {
-        RxBus.publish(SendScrollEvent(scrollTopToBottom, y))
+    fun sendScrollEvent(action: Action, y: Double) {
+        RxBus.publish(SendScrollEvent(action, y))
     }
 
-    fun sendKeyEvent(keyEvent: Int) {
-        RxBus.publish(SendKeyEvent(keyEvent))
-    }
+    fun goToInputSettings() = router.navigateTo(Screens.PORTS_FRAGMENT)
 
-    fun goToSettings() = RxBus.publish(SendKeyEvent(KeyEvent.KEYCODE_MENU))
-
-    fun sendHomeDown() = RxBus.publish(SendActionEvent(Action.HOME_DOWN))
-
-    fun sendHomeUp() = RxBus.publish(SendActionEvent(Action.HOME_UP))
-
-    fun launchQuickApps() = RxBus.publish(SendActionEvent(Action.LAUNCH_QUICK_APPS))
 }

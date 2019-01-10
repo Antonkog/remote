@@ -12,7 +12,6 @@
 
     <!--CLIENT SIDE strings-->
     <string name="type_command">Type Command&#8230;</string>
-    <string name="send.text">Send text</string>
     <string name="connect">Connect</string>
     <string name="server_ip" formatted="false">Server at IP: %s, port: %s</string>
     <string name="connect_to_lan" formatted="false">Подключено к сети: "%s"</string>
@@ -142,7 +141,7 @@
     <string name="brightness">Яркость</string>
     <string name="backlight">Подсветка</string>
     <string name="mode_desc">Режим изображения (только для видео)</string>
-    <string name="video_mode">Режим изображения</string>
+    <string name="picture_mode">Режим изображения</string>
     <string name="ratio_desc">Соотношение сторон (только для видео)</string>
     <string name="timer_off">Таймер выключен</string>
     <string name="off">Выкл</string>
@@ -165,6 +164,9 @@
 
     <string name="wifi">Wi-Fi</string>
     <string name="video_sound">Видео и Звук</string>
+    <string name="video">Видео</string>
+    <string name="audio">Аудио</string>
+    <string name="photo">Фото</string>
     <string name="info">Про устройство</string>
     <string name="vga">VGA</string>
     <string name="atv">АТВ</string>
@@ -175,6 +177,7 @@
     <string name="dtv">Телевидение</string>
     <string name="dvi">DVI</string>
     <string name="av">AV</string>
+    <string name="input_placeholder">Input0</string>
     <string name="to_usb">USB</string>
     <string name="ypbpr">Компонент</string>
     <string name="dvbc">DVB-C</string>

@@ -1,7 +1,6 @@
 package com.wezom.kiviremote.net.model;
-import java.util.HashMap;
 
-import io.reactivex.annotations.Nullable;
+import java.util.HashMap;
 
 public class AspectMessage {
 
@@ -11,22 +10,14 @@ public class AspectMessage {
         this.settings = builder.settings;
     }
 
+    public AspectMessage() {
+    }
+
     public static class AspectMsgBuilder {
         public HashMap<String, Integer> settings;
 
-        public AspectMsgBuilder(ASPECT_VALUE valueType, int value) {
-            if (this.settings == null) this.settings = new HashMap<>();
-            this.settings.put(valueType.name(), value);
-        }
-
         public AspectMsgBuilder() {
             if (this.settings == null) this.settings = new HashMap<>();
-        }
-
-        public AspectMsgBuilder(@Nullable AspectMessage message) {
-            if(message!= null && message.settings!=null)
-            this.settings = message.settings;
-            else this.settings = new HashMap<>();
         }
 
         public AspectMsgBuilder addValue(ASPECT_VALUE valueType, int value) {
@@ -52,7 +43,9 @@ public class AspectMessage {
         BLUE,
         RED,
         CONTRAST,
-        VIDEOARCTYPE
+        VIDEOARCTYPE,
+        INPUT_PORT,
+        SERVER_VERSION_CODE
     }
 
     @Override
@@ -60,5 +53,9 @@ public class AspectMessage {
         return "AspectMessage{" +
                 "settings=" + settings.toString() +
                 '}';
+    }
+
+    public Integer getCurrentPort() {
+        return settings.get(ASPECT_VALUE.INPUT_PORT.name());
     }
 }

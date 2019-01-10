@@ -12,7 +12,6 @@
 
     <!--CLIENT SIDE strings-->
     <string name="type_command">Type Command&#8230;</string>
-    <string name="send.text">Send text</string>
     <string name="connect">Connect</string>
     <string name="server_ip" formatted="false">Server at IP: %s, port: %s</string>
     <string name="connect_to_lan" formatted="false">Підключено до мережі: "%s"</string>
@@ -130,7 +129,7 @@
     <string name="optimization">Почати оптимізацію</string>
     <string name="sleep">Вимкнути</string>
     <string name="mode">Режим</string>
-    <string name="video_mode">Режим зображення</string>
+    <string name="picture_mode">Режим зображення</string>
     <string name="cooler">Холодний 2</string>
     <string name="warmer">Теплий 2</string>
     <string name="auto">Авто</string>
@@ -161,4 +160,19 @@
     <string name="soft">Мякий</string>
     <string name="normal">Нормальний</string>
     <string name="image_setting">IMAGE\nSETTINGS</string>
+    <string name="input_placeholder">Input0</string>
+    <string name="to_usb">USB</string>
+    <string name="ypbpr">Компонент</string>
+    <string name="dvbc">DVB-C</string>
+    <string name="dvbs">DVB-S</string>
+    <string name="av">AV</string>
+    <string name="dvi">DVI</string>
+    <string name="dtv">Телебачення</string>
+    <string name="info">Про пристрій</string>
+    <string name="video_sound">Відео та Звук</string>
+    <string name="mode_desc">Режим зображення</string>
+    <string name="ports">Входи</string>
+    <string name="video">Відео</string>
+    <string name="audio">Аудіо</string>
+    <string name="photo">Фото</string>
 </resources>

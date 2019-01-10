@@ -21,6 +21,7 @@ import com.wezom.kiviremote.persistence.model.ServerApp
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadButtonClickEvent
+import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.upnp.UPnPManager
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -92,7 +93,7 @@ class HomeActivityViewModel(
             }, onError = Timber::e)
 
         disposables += RxBus.listen(SendCursorCoordinatesEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread()).debounce(5, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread()).debounce(TOUCH_EVENT_FREQUENCY, TimeUnit.MILLISECONDS)
             .subscribeBy(onNext = {
                 sendTouchpadAction(it.x, it.y, Action.motion)
             }, onError = Timber::e)
@@ -123,16 +124,14 @@ class HomeActivityViewModel(
                 }, onError = Timber::e)
 
         disposables += RxBus.listen(SendScrollEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread()).debounce(5, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread()).debounce(SCROLL_EVENT_FREQUENCY, TimeUnit.MILLISECONDS)
             .subscribeBy(onNext = {
                 serverConnection?.sendMessage(SocketConnectionModel().apply {
                     setMotion(ArrayList<Double>().apply {
                         add(0.0)
                         add(it.y)
                     })
-                    if(it.scrollTopToBottom)
-                    setAction(Action.SCROLL_TOP_TO_BOTTOM)
-                    else  setAction(Action.SCROLL_BOTTOM_TO_TOP)
+                    setAction(it.action)
                 })
             }, onError = Timber::e)
 
@@ -214,6 +213,7 @@ class HomeActivityViewModel(
 
     private fun initConnection(nsdModel: NsdServiceModel, firstConnection: Boolean) {
         killPing()
+        AspectHolder.clean()
         serverConnection = ChatConnection()
         connect(nsdModel)
     }
