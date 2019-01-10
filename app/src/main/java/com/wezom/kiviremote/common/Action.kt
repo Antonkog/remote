@@ -8,6 +8,7 @@ enum class Action {
     LAUNCH_APP,
     PING,
     SWITCH_OFF,
+    SCROLL,//old
     SCROLL_TOP_TO_BOTTOM,
     SCROLL_BOTTOM_TO_TOP,
     HOME_DOWN,

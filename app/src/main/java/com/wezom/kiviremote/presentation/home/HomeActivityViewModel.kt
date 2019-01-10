@@ -124,16 +124,14 @@ class HomeActivityViewModel(
                 }, onError = Timber::e)
 
         disposables += RxBus.listen(SendScrollEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread()).debounce(TOUCH_EVENT_FREQUENCY, TimeUnit.MILLISECONDS)
+            .observeOn(AndroidSchedulers.mainThread()).debounce(SCROLL_EVENT_FREQUENCY, TimeUnit.MILLISECONDS)
             .subscribeBy(onNext = {
                 serverConnection?.sendMessage(SocketConnectionModel().apply {
                     setMotion(ArrayList<Double>().apply {
                         add(0.0)
                         add(it.y)
                     })
-                    if(it.scrollTopToBottom)
-                    setAction(Action.SCROLL_TOP_TO_BOTTOM)
-                    else  setAction(Action.SCROLL_BOTTOM_TO_TOP)
+                    setAction(it.action)
                 })
             }, onError = Timber::e)
 

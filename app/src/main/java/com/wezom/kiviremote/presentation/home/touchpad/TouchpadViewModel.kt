@@ -40,8 +40,8 @@ class TouchpadViewModel (private val router: Router) : BaseViewModel(), TvKeysVi
         RxBus.publish(TouchpadButtonClickEvent(x, y, buttonType))
     }
 
-    fun sendScrollEvent(scrollTopToBottom: Boolean, y: Double) {
-        RxBus.publish(SendScrollEvent(scrollTopToBottom, y))
+    fun sendScrollEvent(action: Action, y: Double) {
+        RxBus.publish(SendScrollEvent(action, y))
     }
 
     fun goToInputSettings() = router.navigateTo(Screens.PORTS_FRAGMENT)

@@ -3,18 +3,18 @@ package com.wezom.kiviremote.presentation.home.touchpad;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.view.GestureDetectorCompat;
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 
+import com.wezom.kiviremote.common.Action;
+import com.wezom.kiviremote.common.Constants;
 import com.wezom.kiviremote.common.PreferencesManager;
+import com.wezom.kiviremote.common.extensions.NumUtils;
 import com.wezom.kiviremote.databinding.TouchPadFragmentBinding;
 import com.wezom.kiviremote.interfaces.OnTouchPadMessageListener;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
@@ -22,6 +22,8 @@ import com.wezom.kiviremote.presentation.base.TvKeysFragment;
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder;
 
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 
 /**
@@ -39,18 +41,13 @@ public class TouchpadFragment extends TvKeysFragment
 
     private TouchPadFragmentBinding binding;
 
-    private GestureDetectorCompat gestureDetector;
-    private final int SWIPE_MIN_DISTANCE = 120;
-    private final int SWIPE_THRESHOLD_VELOCITY = 100;
-    private long homeClickTime;
-    private final Handler handler = new Handler();
-    private final Runnable launchQuickApps = () -> viewModel.launchQuickApps();
-
+    private int y1;
+    private long scrollTime = System.currentTimeMillis();
     private Observer<Boolean> showAspectObserver = show -> {
-        if (show != null) setImputButton(show);
+        if (show != null) setInputButton(show);
     };
 
-    private void setImputButton(Boolean show) {
+    private void setInputButton(Boolean show) {
         if (show) {
             binding.input.setVisibility(View.VISIBLE);
         } else {
@@ -81,9 +78,10 @@ public class TouchpadFragment extends TvKeysFragment
         binding.touchpad.setListener(this);
         int cursorSpeedMultiplier = PreferencesManager.INSTANCE.getCursorSpeed();
 
-        setImputButton(AspectHolder.INSTANCE.getMessage() != null && AspectHolder.INSTANCE.getAvailableSettings() != null);
+        setInputButton(AspectHolder.INSTANCE.getMessage() != null && AspectHolder.INSTANCE.getAvailableSettings() != null);
         viewModel.getAspectSeen().observe(this, showAspectObserver);
         binding.touchpad.setSpeedMultiplier(cursorSpeedMultiplier);
+        setScroll();
         binding.seekbar.setProgress(cursorSpeedMultiplier);
         binding.seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
@@ -105,41 +103,41 @@ public class TouchpadFragment extends TvKeysFragment
 
         binding.input.setOnClickListener(view -> viewModel.goToInputSettings());
         setTvButtons(viewModel, binding.menu, binding.back, binding.home);
-
-        gestureDetector = new GestureDetectorCompat(getContext(), new MyGestureListener());
-        binding.scroll.setOnTouchListener((view, event) -> {
-            gestureDetector.onTouchEvent(event);
-            return true;
-        });
     }
 
-    class MyGestureListener extends GestureDetector.SimpleOnGestureListener {
-        @Override
-        public boolean onDown(MotionEvent event) {
-            return true;
-        }
+    private void setScroll() {
+        binding.scroll.setOnTouchListener((view, event) -> {
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    Timber.d("TOUCH_SCROLL_DOWN y : " + event.getY());
+                    y1 = NumUtils.getToDp((int) event.getY());
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    Timber.d("TOUCH_SCROLL_MOVE y : " + event.getY());
+                    if (System.currentTimeMillis() - scrollTime > Constants.SCROLL_EVENT_FREQUENCY) {
+                        scrollTime = System.currentTimeMillis();
+                        int y2 = NumUtils.getToDp((int) event.getY());
+                        int dy = y2 - y1;
+                        y1 = y2;
+                        if(dy!=0){
+                            Timber.d("sendScrollEvent dy : " + dy);
+                            viewModel.sendScrollEvent(Action.SCROLL, dy);
+                        }
+                    }
+                    break;
+                case MotionEvent.ACTION_UP:
+                    view.performClick();
+                    break;
 
-        @Override
-        public void onLongPress(MotionEvent event) {
-            if (event.getY() < binding.scroll.getY() + binding.scroll.getHeight() / 2) {
-                viewModel.sendScrollEvent(true, 0);
-            } else {
-                viewModel.sendScrollEvent(false, 0);
-            }
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2,
-                               float velocityX, float velocityY) {
-            if (e1.getY() - e2.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
-                viewModel.sendScrollEvent(true, Math.abs(e1.getY() - e2.getY()));
-                return false; // Bottom to top
-            } else if (e2.getY() - e1.getY() > SWIPE_MIN_DISTANCE && Math.abs(velocityY) > SWIPE_THRESHOLD_VELOCITY) {
-                viewModel.sendScrollEvent(false, Math.abs(e1.getY() - e2.getY()));
-                return false; // Top to bottom
+                case MotionEvent.ACTION_CANCEL:
+                    Timber.d("Action was CANCEL");
+                    break;
+                case MotionEvent.ACTION_OUTSIDE:
+                    Timber.d("Movement occurred outside bounds of current screen element");
+                    break;
             }
             return true;
-        }
+        });
     }
 
     @Override
