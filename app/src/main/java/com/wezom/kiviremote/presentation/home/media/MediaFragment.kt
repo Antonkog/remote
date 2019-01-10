@@ -149,7 +149,7 @@ class MediaFragment : BaseFragment() {
                     if (!shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE)) {
                         (activity as HomeActivity).showOpenSettingsDialog()
                     }
-                } else {
+                } else if (::requestPermissionCallback.isInitialized){
                     requestPermissionCallback()
                 }
             }
