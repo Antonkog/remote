@@ -7,7 +7,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import android.widget.Toast
+import com.wezom.kiviremote.R
 import com.wezom.kiviremote.bus.GotAspectEvent
+import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.databinding.TvSettingsFragmentBinding
 import com.wezom.kiviremote.net.model.AspectAvailable
 import com.wezom.kiviremote.net.model.AspectMessage
@@ -16,10 +19,7 @@ import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.presentation.home.tvsettings.TvSettingsViewModel
-import com.wezom.kiviremote.presentation.home.tvsettings.driver_set.HDRValues
-import com.wezom.kiviremote.presentation.home.tvsettings.driver_set.PictureMode
-import com.wezom.kiviremote.presentation.home.tvsettings.driver_set.Ratio
-import com.wezom.kiviremote.presentation.home.tvsettings.driver_set.TemperatureValues
+import com.wezom.kiviremote.presentation.home.tvsettings.driver_set.*
 import com.wezom.kiviremote.views.AspectHeaderView
 import com.wezom.kiviremote.views.HorizontalSwitchView
 import timber.log.Timber
@@ -27,19 +27,21 @@ import javax.inject.Inject
 
 
 class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, HorizontalSwitchView.OnSwitchListener, AspectHeaderView.OnSwitchListener {
+
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
 
     private lateinit var viewModel: TvSettingsViewModel
 
     private lateinit var binding: TvSettingsFragmentBinding
+    private var sekBarEnabled = false;
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
 
     private val aspectObserver = Observer<GotAspectEvent?> {
         Timber.i("set aspect from observable")
-        syncPicSettings(it?.msg, it?.available)
+        syncPicSettings(it)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -55,14 +57,18 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         binding.brightness.seekBar.setOnSeekBarChangeListener(this)
         binding.brightness.seekBar.tag = AspectMessage.ASPECT_VALUE.BRIGHTNESS
 
-        binding.hdr.setOnSwitchListener(this)
+        binding.seekBars.setOnClickListener { _ ->
+            if (!sekBarEnabled)
+                Toast.makeText(context, resources.getString(R.string.toastPic), Toast.LENGTH_SHORT).show()
+        }
+
+        binding.hdr.visibility = View.GONE // not available with current hardware
         binding.temperature.setOnSwitchListener(this)
         binding.ratio.setOnSwitchListener(this)
         binding.aspectHeader.setOnSwitchListener(this)
 
         return binding.root
     }
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -82,7 +88,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
 
     override fun onResume() {
         if (AspectHolder.message != null && AspectHolder.availableSettings != null) {
-            syncPicSettings(AspectHolder.message, AspectHolder.availableSettings)
+            syncPicSettings(GotAspectEvent(AspectHolder.message!!, AspectHolder.availableSettings!!))
         } else {
             Timber.i(" requesting aspect")
             viewModel.requestAspect()
@@ -90,24 +96,31 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         super.onResume()
     }
 
-    private fun syncPicSettings(message: AspectMessage?, available: AspectAvailable?) {
-        if (available != null)
-            for (x in available?.settings) {
+    private fun syncPicSettings(gotAspectEvent: GotAspectEvent?) {
+        var manufacture = gotAspectEvent?.getManufacture() ?: Constants.NO_VALUE
+        val settings = gotAspectEvent?.available?.settings
+        if (settings != null)
+            for (x in settings) {
                 when (x.key) {
-
                     AspectAvailable.VALUE_TYPE.HDR.name -> {
                         binding.hdr.setVariants(AspectMessage.ASPECT_VALUE.HDR, HDRValues.getResList(x.value))
                     }
-
                     AspectAvailable.VALUE_TYPE.PICTUREMODE.name -> {
-                        binding.aspectHeader.setVariants(AspectMessage.ASPECT_VALUE.PICTUREMODE, PictureMode.getResList(x.value))
+                        when (manufacture) {
+                            Constants.SERV_MSTAR ->
+                                binding.aspectHeader.setVariants(AspectMessage.ASPECT_VALUE.PICTUREMODE, PictureMode.getResList(x.value))
+                            Constants.SERV_REALTEK ->
+                                binding.aspectHeader.setVariants(AspectMessage.ASPECT_VALUE.PICTUREMODE, PictureModeRealtek.getResList(x.value))
+                        }
                     }
-
                     AspectAvailable.VALUE_TYPE.RATIO.name -> {
-                        binding.ratio.setVariants(AspectMessage.ASPECT_VALUE.VIDEOARCTYPE, Ratio.getResList(x.value))
-
+                        when (manufacture) {
+                            Constants.SERV_MSTAR ->
+                                binding.ratio.setVariants(AspectMessage.ASPECT_VALUE.VIDEOARCTYPE, Ratio.getResList(x.value))
+                            Constants.SERV_REALTEK ->
+                                binding.ratio.setVariants(AspectMessage.ASPECT_VALUE.VIDEOARCTYPE, RatioRealtek.getResList(x.value))
+                        }
                     }
-
                     AspectAvailable.VALUE_TYPE.TEMPERATUREVALUES.name -> {
                         binding.temperature.setVariants(AspectMessage.ASPECT_VALUE.TEMPERATURE, TemperatureValues.getResList(x.value))
                     }
@@ -115,42 +128,64 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
 
             }
 
-
-        Timber.i("got new aspect, sync: " + message?.toString())
-
-        if (message?.settings != null) {
-            for ((key, value) in message?.settings) {
-                println("$key = $value")
+        val picset = gotAspectEvent?.msg?.settings
+        if (picset != null) {
+            for ((key, value) in picset) {
                 when (key) {
                     AspectMessage.ASPECT_VALUE.BRIGHTNESS.name -> binding.brightness.seekBar.progress = value
                     AspectMessage.ASPECT_VALUE.CONTRAST.name -> binding.contrast.seekBar.progress = value
                     AspectMessage.ASPECT_VALUE.BACKLIGHT.name -> binding.backlight.seekBar.progress = value
                     AspectMessage.ASPECT_VALUE.SATURATION.name -> binding.saturation.seekBar.progress = value
                     AspectMessage.ASPECT_VALUE.SHARPNESS.name -> binding.sharpness.seekBar.progress = value
-
-
-                    AspectMessage.ASPECT_VALUE.HDR.name -> {
-                        var hdr = HDRValues.getByID(value)?.stringResourceID
-                        if (hdr != null) binding.hdr.variant.text = resources.getString(hdr)
-                    }
-
+                    // no HDR !!! cant get cant set on tv
                     AspectMessage.ASPECT_VALUE.TEMPERATURE.name -> {
                         var temperature = TemperatureValues.getByID(value)?.stringResourceID
                         if (temperature != null) binding.temperature.variant.text = resources.getString(temperature)
                     }
 
                     AspectMessage.ASPECT_VALUE.VIDEOARCTYPE.name -> {
-                        var ratio = Ratio.getByID(value)?.stringResourceID
-                        if (ratio != null) binding.ratio.variant.text = resources.getString(ratio)
+                        when (manufacture) {
+                            Constants.SERV_MSTAR -> {
+                                var ratio = Ratio.getByID(value)?.stringResourceID
+                                if (ratio != null) binding.ratio.variant.text = resources.getString(ratio)
+                            }
+                            Constants.SERV_REALTEK -> {
+                                var ratio = RatioRealtek.getByID(value)?.stringResourceID
+                                if (ratio != null) binding.ratio.variant.text = resources.getString(ratio)
+                            }
+                        }
                     }
 
                     AspectMessage.ASPECT_VALUE.PICTUREMODE.name -> {
-                        var pictureMode = PictureMode.getByID(value)?.stringResourceID
-                        if (pictureMode != null) binding.aspectHeader.row.text = resources.getString(pictureMode)
+                        when (manufacture) {
+                            Constants.SERV_MSTAR -> {
+                                var pictureMode = PictureMode.getByID(value)?.stringResourceID
+                                if (pictureMode != null) {
+                                    binding.aspectHeader.row.text = resources.getString(pictureMode)
+                                    enableSeekBars(PictureMode.PICTURE_MODE_USER == PictureMode.getByID(value))
+                                }
+                            }
+                            Constants.SERV_REALTEK -> {
+                                var pictureMode = PictureModeRealtek.getByID(value)?.stringResourceID
+                                if (pictureMode != null) {
+                                    binding.aspectHeader.row.text = resources.getString(pictureMode)
+                                    enableSeekBars(PictureMode.PICTURE_MODE_USER == PictureMode.getByID(value))
+                                }
+                            }
+                        }
                     }
                 }
             }
         }
+    }
+
+    fun enableSeekBars(enabled: Boolean) {
+        sekBarEnabled = enabled
+        binding.backlight.seekBar.isEnabled = enabled
+        binding.saturation.seekBar.isEnabled = enabled
+        binding.sharpness.seekBar.isEnabled = enabled
+        binding.contrast.seekBar.isEnabled = enabled
+        binding.brightness.seekBar.isEnabled = enabled
     }
 
     override fun onSwitch(mode: AspectMessage.ASPECT_VALUE?, resId: Int) {

@@ -1,5 +1,7 @@
 package com.wezom.kiviremote.net.model;
 
+import com.wezom.kiviremote.common.Constants;
+
 import java.util.HashMap;
 
 public class AspectMessage {
@@ -45,7 +47,8 @@ public class AspectMessage {
         CONTRAST,
         VIDEOARCTYPE,
         INPUT_PORT,
-        SERVER_VERSION_CODE
+        SERVER_VERSION_CODE,
+        MANUFACTURE
     }
 
     @Override
@@ -54,6 +57,22 @@ public class AspectMessage {
                 "settings=" + settings.toString() +
                 '}';
     }
+
+    public int getManufacture() {
+        if (settings != null && settings.get(ASPECT_VALUE.MANUFACTURE.name()) != null) {
+            return settings.get(ASPECT_VALUE.MANUFACTURE.name());
+        }
+        return Constants.NO_VALUE;
+    }
+
+    public int getServerVersionCode() {
+        if (settings != null && settings.get(ASPECT_VALUE.SERVER_VERSION_CODE.name()) != null) {
+            return settings.get(ASPECT_VALUE.SERVER_VERSION_CODE.name());
+        } else {
+            return Constants.NO_VALUE;
+        }
+    }
+
 
     public Integer getCurrentPort() {
         return settings.get(ASPECT_VALUE.INPUT_PORT.name());

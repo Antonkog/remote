@@ -7,10 +7,10 @@ import com.wezom.kiviremote.bus.NewVolumeEvent
 import com.wezom.kiviremote.bus.RequestAspectEvent
 import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.common.Action
+import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.base.TvKeysViewModel
-import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import io.reactivex.rxkotlin.subscribeBy
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
@@ -30,14 +30,11 @@ class RemoteControlViewModel(private val router: Router) : BaseViewModel(), TvKe
 
         disposables += RxBus.listen(GotAspectEvent::class.java).subscribeBy(
                 onNext = {
-                    if (AspectHolder.availableSettings != null && AspectHolder.message != null) {
-                        aspectSeen.postValue(true)
-                    } else {
-                        aspectSeen.postValue(false)
-                    }
+                    aspectSeen.postValue((it.getManufacture() == Constants.SERV_REALTEK) || it.getManufacture() == Constants.SERV_MSTAR)
                 }, onError = Timber::e
         )
     }
+
 
     val muteStatus = MutableLiveData<Boolean?>()
     val aspectSeen = MutableLiveData<Boolean?>()
@@ -46,8 +43,8 @@ class RemoteControlViewModel(private val router: Router) : BaseViewModel(), TvKe
 
     fun goToAspect() = router.navigateTo(Screens.TV_SETTINGS_FRAGMENT)
 
-    fun requestAspect() =  RxBus.publish(RequestAspectEvent())
+    fun requestAspect() = RxBus.publish(RequestAspectEvent())
 
-    fun goToInputSettings( ) = router.navigateTo(Screens.PORTS_FRAGMENT)
+    fun goToInputSettings() = router.navigateTo(Screens.PORTS_FRAGMENT)
 
 }

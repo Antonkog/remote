@@ -1,5 +1,7 @@
 package com.wezom.kiviremote.net.model;
 
+import com.wezom.kiviremote.common.Constants;
+
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
@@ -49,6 +51,17 @@ public class AspectAvailable {
             }
         }
         return asp.toString();
+    }
+
+    public int getManufacture(int serverVerisonCode) {
+        if(serverVerisonCode == Constants.VER_ASPECT_XVIII){//todo: that is valid for server version = 18
+            if (settings != null && getSettings(VALUE_TYPE.PICTUREMODE) != null) {
+                if(getSettings(VALUE_TYPE.PICTUREMODE).length == 8) return 1;
+                else if (getSettings(VALUE_TYPE.PICTUREMODE).length == 5) return 0;
+                else return Constants.NO_VALUE;
+            }
+        }
+        return Constants.NO_VALUE;
     }
 
     public AspectAvailable(HashMap<String, int[]> settings) {

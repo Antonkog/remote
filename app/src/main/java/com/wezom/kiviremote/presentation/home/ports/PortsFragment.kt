@@ -3,11 +3,13 @@ package com.wezom.kiviremote.presentation.home.ports
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wezom.kiviremote.common.Constants
+import com.wezom.kiviremote.common.Constants.ASPECT_GET_TRY
 import com.wezom.kiviremote.databinding.PortsFragmentBinding
 import com.wezom.kiviremote.net.model.AspectMessage
 import com.wezom.kiviremote.presentation.base.BaseFragment
@@ -24,12 +26,13 @@ class PortsFragment : BaseFragment() {
 
     private lateinit var viewModel: PortsViewModel
     private lateinit var binding: PortsFragmentBinding
-
-
+    private var lastPortId = InputSourceHelper.INPUT_PORT.INPUT_SOURCE_NONE.id
+    private var aspectTryCounter = ASPECT_GET_TRY
     private val portsAdapter: PortsAdapter by lazy {
         PortsAdapter(object : PortsAdapter.CheckListener {
-            override fun onPortChecked(position: Int) {
-                setPort(position)
+            override fun onPortChecked(id: Int) {
+                lastPortId = id
+                setPort(id)
                 viewModel.requestAspect()
             }
         })
@@ -39,6 +42,7 @@ class PortsFragment : BaseFragment() {
 
 
     override fun onResume() {
+        aspectTryCounter = ASPECT_GET_TRY
         if (AspectHolder.message != null && AspectHolder.availableSettings != null) {
             refreshData()
         } else {
@@ -86,8 +90,17 @@ class PortsFragment : BaseFragment() {
 
     private val showPortsObserver = Observer<List<Port>> {
         it?.let {
-            binding.portsRefreshBar.visibility = View.GONE
-            portsAdapter.setData(it)
+            for (port in it) {
+                if (port.active) {
+                    if (port.portNum == lastPortId || aspectTryCounter == 0) {
+                        binding.portsRefreshBar.visibility = View.GONE
+                        portsAdapter.setData(it)
+                    } else {
+                        Handler().postDelayed({ viewModel.requestAspect() }, 1000)
+                        aspectTryCounter--
+                    }
+                }
+            }
         }
     }
 

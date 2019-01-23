@@ -66,6 +66,14 @@
                 app:row="@string/user" />
 
 
+        <LinearLayout
+            android:id="@+id/seekBars"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+
+
             <com.wezom.kiviremote.views.TextSeekBarView
                 android:id="@+id/brightness"
                 android:layout_width="match_parent"
@@ -96,6 +104,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:text="@string/backlight" />
+
+
+        </LinearLayout>
+
 
 
             <com.wezom.kiviremote.views.HorizontalSwitchView
