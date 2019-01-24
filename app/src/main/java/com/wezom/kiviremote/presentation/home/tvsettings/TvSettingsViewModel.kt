@@ -21,9 +21,9 @@ class TvSettingsViewModel(private val router: Router) : BaseViewModel() {
         if(valueType == AspectMessage.ASPECT_VALUE.PICTUREMODE) requestAspect()
     }
 
-    fun requestAspect() =  RxBus.publish(RequestAspectEvent())
+    fun goBack () = router.exit()
 
-    fun goBack() = router.exit()
+    fun requestAspect() =  RxBus.publish(RequestAspectEvent())
 
     val aspectChange = MutableLiveData<GotAspectEvent?>()
 

@@ -53,15 +53,13 @@ public class AspectAvailable {
         return asp.toString();
     }
 
-    public int getManufacture(int serverVerisonCode) {
-        if(serverVerisonCode == Constants.VER_ASPECT_XVIII){//todo: that is valid for server version = 18
-            if (settings != null && getSettings(VALUE_TYPE.PICTUREMODE) != null) {
-                if(getSettings(VALUE_TYPE.PICTUREMODE).length == 8) return 1;
-                else if (getSettings(VALUE_TYPE.PICTUREMODE).length == 5) return 0;
-                else return Constants.NO_VALUE;
-            }
+    public int getManufacture( Integer serverVerisonCode) {
+        int serv = Constants.NO_VALUE;
+        if(serverVerisonCode != null && serverVerisonCode == Constants.VER_ASPECT_XVIII &&  settings != null && getSettings(VALUE_TYPE.PICTUREMODE) != null){//todo: that is valid for server version = 18
+                if(getSettings(VALUE_TYPE.PICTUREMODE).length == 9) serv = Constants.SERV_REALTEK;
+                else if (getSettings(VALUE_TYPE.PICTUREMODE).length == 5) serv = Constants.SERV_MSTAR;
         }
-        return Constants.NO_VALUE;
+        return serv;
     }
 
     public AspectAvailable(HashMap<String, int[]> settings) {

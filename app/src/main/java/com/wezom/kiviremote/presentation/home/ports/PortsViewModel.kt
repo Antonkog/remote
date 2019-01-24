@@ -7,7 +7,6 @@ import com.wezom.kiviremote.bus.RequestAspectEvent
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.net.model.AspectMessage
 import com.wezom.kiviremote.presentation.base.BaseViewModel
-import com.wezom.kiviremote.upnp.org.droidupnp.view.Port
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import ru.terrakok.cicerone.Router
@@ -16,13 +15,13 @@ import timber.log.Timber
 
 class PortsViewModel(private val router: Router) : BaseViewModel() {
 
-    val ports = MutableLiveData<List<Port>>()
+    val aspectEvent = MutableLiveData<GotAspectEvent>()
 
     init {
         disposables += RxBus.listen(GotAspectEvent::class.java).observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = {
-                            ports.value = InputSourceHelper.getPortsList(it?.available?.portsSettings, it?.msg?.currentPort?: 1).distinct()
+                            aspectEvent.postValue(it)
                         }, onError = Timber::e
                 )
     }
@@ -33,5 +32,5 @@ class PortsViewModel(private val router: Router) : BaseViewModel() {
         RxBus.publish(NewAspectEvent(builder.buildAspect()))
     }
 
-    fun requestAspect() =  RxBus.publish(RequestAspectEvent())
+    fun requestAspect() = RxBus.publish(RequestAspectEvent())
 }

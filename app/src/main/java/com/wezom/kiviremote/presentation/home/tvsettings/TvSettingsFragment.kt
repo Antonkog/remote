@@ -35,6 +35,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
 
     private lateinit var binding: TvSettingsFragmentBinding
     private var sekBarEnabled = false;
+    private var manufacture = Constants.NO_VALUE;
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
@@ -97,7 +98,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
     }
 
     private fun syncPicSettings(gotAspectEvent: GotAspectEvent?) {
-        var manufacture = gotAspectEvent?.getManufacture() ?: Constants.NO_VALUE
+        manufacture = gotAspectEvent?.getManufacture() ?: Constants.NO_VALUE
         val settings = gotAspectEvent?.available?.settings
         if (settings != null)
             for (x in settings) {
@@ -169,7 +170,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                                 var pictureMode = PictureModeRealtek.getByID(value)?.stringResourceID
                                 if (pictureMode != null) {
                                     binding.aspectHeader.row.text = resources.getString(pictureMode)
-                                    enableSeekBars(PictureMode.PICTURE_MODE_USER == PictureMode.getByID(value))
+                                    enableSeekBars(PictureModeRealtek.PICTURE_MODE_USER == PictureModeRealtek.getByID(value))
                                 }
                             }
                         }
@@ -193,17 +194,32 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
             var progress = -1;
 
             if (resId != null && mode != null) {
-                when (mode) {
-                    AspectMessage.ASPECT_VALUE.HDR -> progress = HDRValues.getIdByResID(resId)
-                    AspectMessage.ASPECT_VALUE.TEMPERATURE -> progress = TemperatureValues.getIdByResID(resId)
-                    AspectMessage.ASPECT_VALUE.VIDEOARCTYPE -> progress = Ratio.getIdByResID(resId)
-                    AspectMessage.ASPECT_VALUE.PICTUREMODE -> progress = PictureMode.getIdByResID(resId)
-                    else -> Timber.e(" AspectMessage.ASPECT_VALUE not set")
+                when (manufacture) {
+                    Constants.SERV_MSTAR -> {
+                        when (mode) {
+                            AspectMessage.ASPECT_VALUE.HDR -> progress = HDRValues.getIdByResID(resId)
+                            AspectMessage.ASPECT_VALUE.TEMPERATURE -> progress = TemperatureValues.getIdByResID(resId)
+                            AspectMessage.ASPECT_VALUE.VIDEOARCTYPE -> progress = Ratio.getIdByResID(resId)
+                            AspectMessage.ASPECT_VALUE.PICTUREMODE -> progress = PictureMode.getIdByResID(resId)
+                            else -> Timber.e(" AspectMessage.ASPECT_VALUE not set")
+                        }
+                    }
+
+                    Constants.SERV_REALTEK -> {
+                        when (mode) {
+                            AspectMessage.ASPECT_VALUE.HDR -> progress = HDRValues.getIdByResID(resId)
+                            AspectMessage.ASPECT_VALUE.TEMPERATURE -> progress = TemperatureValues.getIdByResID(resId)
+                            AspectMessage.ASPECT_VALUE.VIDEOARCTYPE -> progress = RatioRealtek.getIdByResID(resId)
+                            AspectMessage.ASPECT_VALUE.PICTUREMODE -> progress = PictureModeRealtek.getIdByResID(resId)
+                            else -> Timber.e(" AspectMessage.ASPECT_VALUE not set")
+                        }
+                    }
+                    else -> viewModel.goBack()
                 }
                 if (progress != -1) {
                     it.sendAspectSingleChangeEvent(mode, progress);
                 } else {
-                    Timber.e(" error in aspect view resId == null or mode == null")
+                    Timber.e(" tr mode == null")
                 }
             } else {
                 Timber.e(" error in aspect view implementation or value not set 2")

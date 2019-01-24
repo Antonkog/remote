@@ -21,8 +21,8 @@ android {
         applicationId "com.wezom.kiviremote"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
-        versionCode 22
-        versionName "1.1.15"
+        versionCode 53
+        versionName "1.1.16"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true

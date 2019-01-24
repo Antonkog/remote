@@ -80,7 +80,8 @@ public class InputSourceHelper {
         INPUT_SOURCE_NUM(44, "num", R.string.input_placeholder, R.drawable.ic_av, 10),
         INPUT_SOURCE_NONE(44, "none", R.string.input_placeholder, R.drawable.ic_av, 10),
         INPUT_SOURCE_DVBS(46, "dvbs", R.string.dvbs, R.drawable.ic_dvb_s, 20, "com.realtek.dtv/.tvinput.DTVTvInputService/HW33685506"),
-        INPUT_SOURCE_DVBC(47, "dvbс", R.string.dvbc, R.drawable.ic_dvb_c, 20, "com.realtek.dtv/.tvinput.DTVTvInputService/HW33685504");
+        INPUT_SOURCE_DVBC(47, "dvbс", R.string.dvbc, R.drawable.ic_dvb_c, 20, "com.realtek.dtv/.tvinput.DTVTvInputService/HW33685504"),
+        INPUT_SOURCE_NONE_REALTEK(48, "noneRtk", R.string.input_placeholder, R.drawable.ic_av, 10);
 
         private int id;
         private String baseName;
@@ -94,7 +95,7 @@ public class InputSourceHelper {
         boolean isConnected;
 
         INPUT_PORT(int id, String baseName, @StringRes int visibleName, @DrawableRes int res, int weight, String realtekID, String realtekID2841) {
-            this(id, baseName, visibleName, res, weight, realtekID);
+            this(id, baseName, visibleName, res, weight, realtekID2841);
             this.realtekID2841 = realtekID2841;
         }
 

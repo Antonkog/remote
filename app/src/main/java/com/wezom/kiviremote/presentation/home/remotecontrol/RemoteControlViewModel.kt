@@ -30,7 +30,14 @@ class RemoteControlViewModel(private val router: Router) : BaseViewModel(), TvKe
 
         disposables += RxBus.listen(GotAspectEvent::class.java).subscribeBy(
                 onNext = {
-                    aspectSeen.postValue((it.getManufacture() == Constants.SERV_REALTEK) || it.getManufacture() == Constants.SERV_MSTAR)
+                    when (it.getManufacture()){
+                        Constants.SERV_REALTEK -> aspectSeen.postValue(true)
+                        Constants.SERV_MSTAR -> aspectSeen.postValue(true)
+                        Constants.NO_VALUE ->{
+                            Timber.e("aspect - wrong manuacture")
+                            aspectSeen.postValue(false)
+                        }
+                    }
                 }, onError = Timber::e
         )
     }

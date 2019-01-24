@@ -31,6 +31,8 @@ import timber.log.Timber;
 import static android.view.MotionEvent.ACTION_DOWN;
 import static com.wezom.kiviremote.common.Constants.DPAD_EVENT_FREQUENCY;
 import static com.wezom.kiviremote.common.Constants.INITIAL_DELAY;
+import static com.wezom.kiviremote.common.Constants.SERV_MSTAR;
+import static com.wezom.kiviremote.common.Constants.SERV_REALTEK;
 
 /**
  * Created by andre on 29.05.2017.
@@ -96,9 +98,18 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
 
         setMute(PreferencesManager.INSTANCE.getMuteStatus());
 
-        if (AspectHolder.INSTANCE.getMessage() != null && AspectHolder.INSTANCE.getAvailableSettings() != null) {
-            setAspectButtons(true);
-        } else {
+        if (AspectHolder.INSTANCE.getMessage() != null && AspectHolder.INSTANCE.getAvailableSettings() != null){
+            switch (AspectHolder.INSTANCE.getManufacture()) {
+                case SERV_REALTEK:
+                    setAspectButtons(true);
+                    break;
+                case SERV_MSTAR:
+                    setAspectButtons(true);
+                    break;
+                default:
+                    viewModel.requestAspect();
+            }
+        }else {
             viewModel.requestAspect();
         }
 
