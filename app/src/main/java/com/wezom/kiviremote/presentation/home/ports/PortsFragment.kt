@@ -106,6 +106,7 @@ class PortsFragment : BaseFragment() {
                 ports = InputSourceHelper.getPortsList(it.available?.portsSettings, lastPortId).distinct() // setting when responce, but ports are different
             }
             else -> {
+                binding.portsRefreshBar.visibility = View.GONE
                 Timber.i("got aspect wrong server")
             }
         }

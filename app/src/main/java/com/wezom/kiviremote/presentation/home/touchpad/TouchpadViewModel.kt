@@ -9,7 +9,6 @@ import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.base.TvKeysViewModel
-import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import io.reactivex.rxkotlin.subscribeBy
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
@@ -17,16 +16,12 @@ import timber.log.Timber
 
 class TouchpadViewModel (private val router: Router) : BaseViewModel(), TvKeysViewModel {
 
-    val aspectSeen = MutableLiveData<Boolean?>()
+    val aspectSeen = MutableLiveData<GotAspectEvent>()
 
     init {
         disposables += RxBus.listen(GotAspectEvent::class.java).subscribeBy(
                 onNext = {
-                    if (AspectHolder.availableSettings != null && AspectHolder.message != null) {
-                        aspectSeen.postValue(true)
-                    } else {
-                        aspectSeen.postValue(false)
-                    }
+                    aspectSeen.postValue(it)
                 }, onError = Timber::e
         )
     }

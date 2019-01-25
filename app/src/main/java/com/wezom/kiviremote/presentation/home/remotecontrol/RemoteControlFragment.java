@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wezom.kiviremote.R;
+import com.wezom.kiviremote.bus.GotAspectEvent;
 import com.wezom.kiviremote.common.PreferencesManager;
 import com.wezom.kiviremote.databinding.RemoteControlFragmentBinding;
 import com.wezom.kiviremote.interfaces.RockersButtonClickListener;
@@ -31,8 +32,6 @@ import timber.log.Timber;
 import static android.view.MotionEvent.ACTION_DOWN;
 import static com.wezom.kiviremote.common.Constants.DPAD_EVENT_FREQUENCY;
 import static com.wezom.kiviremote.common.Constants.INITIAL_DELAY;
-import static com.wezom.kiviremote.common.Constants.SERV_MSTAR;
-import static com.wezom.kiviremote.common.Constants.SERV_REALTEK;
 
 /**
  * Created by andre on 29.05.2017.
@@ -61,9 +60,10 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
         }
     };
 
-    private Observer<Boolean> showAspectObserver = show -> {
+    private Observer<GotAspectEvent> showAspectObserver = show -> {
         Timber.i("set aspect from observable");
-        if (show != null) setAspectButtons(show);
+        setInputButton(show.hasManufacture());
+        setAspectButton(show.hasAspectSettings());
     };
 
     @Nullable
@@ -97,21 +97,10 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
         binding.dpadTop.setOnTouchListener(getGenericTouchListener(KiviDPadView.SectorLocation.TOP, KeyEvent.KEYCODE_DPAD_UP));
 
         setMute(PreferencesManager.INSTANCE.getMuteStatus());
+        setInputButton(AspectHolder.INSTANCE.hasManufacture());
+        setAspectButton(AspectHolder.INSTANCE.hasAspectSettings());
 
-        if (AspectHolder.INSTANCE.getMessage() != null && AspectHolder.INSTANCE.getAvailableSettings() != null){
-            switch (AspectHolder.INSTANCE.getManufacture()) {
-                case SERV_REALTEK:
-                    setAspectButtons(true);
-                    break;
-                case SERV_MSTAR:
-                    setAspectButtons(true);
-                    break;
-                default:
-                    viewModel.requestAspect();
-            }
-        }else {
-            viewModel.requestAspect();
-        }
+        if (!AspectHolder.INSTANCE.hasManufacture() || !AspectHolder.INSTANCE.hasAspectSettings()) viewModel.requestAspect();
 
         binding.mute.setOnClickListener(v -> {
             viewModel.sendKeyEvent(KeyEvent.KEYCODE_VOLUME_MUTE);
@@ -172,14 +161,18 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
         }
     }
 
-    private void setAspectButtons(boolean visible) {
+    private void setAspectButton(boolean visible) {
         if (binding.buttonAspect != null) {
             binding.buttonAspect.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
         }
+    }
+
+    private void setInputButton(boolean visible) {
         if (binding.input != null) {
             binding.input.setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
+
 
     private void toggleMute() {
         if (isMute) {

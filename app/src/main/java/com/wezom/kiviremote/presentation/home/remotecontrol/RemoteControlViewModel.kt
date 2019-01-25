@@ -7,7 +7,6 @@ import com.wezom.kiviremote.bus.NewVolumeEvent
 import com.wezom.kiviremote.bus.RequestAspectEvent
 import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.common.Action
-import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.base.TvKeysViewModel
@@ -30,21 +29,14 @@ class RemoteControlViewModel(private val router: Router) : BaseViewModel(), TvKe
 
         disposables += RxBus.listen(GotAspectEvent::class.java).subscribeBy(
                 onNext = {
-                    when (it.getManufacture()){
-                        Constants.SERV_REALTEK -> aspectSeen.postValue(true)
-                        Constants.SERV_MSTAR -> aspectSeen.postValue(true)
-                        Constants.NO_VALUE ->{
-                            Timber.e("aspect - wrong manuacture")
-                            aspectSeen.postValue(false)
-                        }
-                    }
+                    aspectSeen.postValue(it)
                 }, onError = Timber::e
         )
     }
 
 
     val muteStatus = MutableLiveData<Boolean?>()
-    val aspectSeen = MutableLiveData<Boolean?>()
+    val aspectSeen = MutableLiveData<GotAspectEvent>()
 
     fun switchOff() = RxBus.publish(SendActionEvent(Action.SWITCH_OFF))
 

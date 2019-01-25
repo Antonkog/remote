@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 
+import com.wezom.kiviremote.bus.GotAspectEvent;
 import com.wezom.kiviremote.common.Action;
 import com.wezom.kiviremote.common.Constants;
 import com.wezom.kiviremote.common.PreferencesManager;
@@ -43,16 +44,11 @@ public class TouchpadFragment extends TvKeysFragment
 
     private int y1;
     private long scrollTime = System.currentTimeMillis();
-    private Observer<Boolean> showAspectObserver = show -> {
-        if (show != null) setInputButton(show);
-    };
+
+    private Observer<GotAspectEvent> showAspectObserver = show -> setInputButton(show.hasManufacture());
 
     private void setInputButton(Boolean show) {
-        if (show) {
-            binding.input.setVisibility(View.VISIBLE);
-        } else {
-            binding.input.setVisibility(View.GONE);
-        }
+        binding.input.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Nullable
@@ -78,7 +74,8 @@ public class TouchpadFragment extends TvKeysFragment
         binding.touchpad.setListener(this);
         int cursorSpeedMultiplier = PreferencesManager.INSTANCE.getCursorSpeed();
 
-        setInputButton(AspectHolder.INSTANCE.getMessage() != null && AspectHolder.INSTANCE.getAvailableSettings() != null);
+        setInputButton(AspectHolder.INSTANCE.hasManufacture());
+
         viewModel.getAspectSeen().observe(this, showAspectObserver);
         binding.touchpad.setSpeedMultiplier(cursorSpeedMultiplier);
         setScroll();
@@ -119,7 +116,7 @@ public class TouchpadFragment extends TvKeysFragment
                         int y2 = NumUtils.getToDp((int) event.getY());
                         int dy = y2 - y1;
                         y1 = y2;
-                        if(dy!=0){
+                        if (dy != 0) {
                             Timber.d("sendScrollEvent dy : " + dy);
                             viewModel.sendScrollEvent(Action.SCROLL, dy);
                         }
