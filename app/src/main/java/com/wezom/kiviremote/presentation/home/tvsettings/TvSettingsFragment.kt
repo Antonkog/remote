@@ -63,7 +63,6 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                 Toast.makeText(context, resources.getString(R.string.toastPic), Toast.LENGTH_SHORT).show()
         }
 
-        binding.hdr.visibility = View.GONE // not available with current hardware
         binding.temperature.setOnSwitchListener(this)
         binding.ratio.setOnSwitchListener(this)
         binding.aspectHeader.setOnSwitchListener(this)
@@ -103,9 +102,6 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         if (settings != null)
             for (x in settings) {
                 when (x.key) {
-                    AspectAvailable.VALUE_TYPE.HDR.name -> {
-                        binding.hdr.setVariants(AspectMessage.ASPECT_VALUE.HDR, HDRValues.getResList(x.value))
-                    }
                     AspectAvailable.VALUE_TYPE.PICTUREMODE.name -> {
                         when (manufacture) {
                             Constants.SERV_MSTAR ->
@@ -126,7 +122,6 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                         binding.temperature.setVariants(AspectMessage.ASPECT_VALUE.TEMPERATURE, TemperatureValues.getResList(x.value))
                     }
                 }
-
             }
 
         val picset = gotAspectEvent?.msg?.settings
@@ -138,7 +133,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                     AspectMessage.ASPECT_VALUE.BACKLIGHT.name -> binding.backlight.seekBar.progress = value
                     AspectMessage.ASPECT_VALUE.SATURATION.name -> binding.saturation.seekBar.progress = value
                     AspectMessage.ASPECT_VALUE.SHARPNESS.name -> binding.sharpness.seekBar.progress = value
-                    // no HDR !!! cant get cant set on tv
+                    // no HDR !!! cant get cant set on tv not available with current hardware
                     AspectMessage.ASPECT_VALUE.TEMPERATURE.name -> {
                         var temperature = TemperatureValues.getByID(value)?.stringResourceID
                         if (temperature != null) binding.temperature.variant.text = resources.getString(temperature)
@@ -197,7 +192,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                 when (manufacture) {
                     Constants.SERV_MSTAR -> {
                         when (mode) {
-                            AspectMessage.ASPECT_VALUE.HDR -> progress = HDRValues.getIdByResID(resId)
+//                            AspectMessage.ASPECT_VALUE.HDR -> progress = HDRValues.getIdByResID(resId) // not available with current hardware
                             AspectMessage.ASPECT_VALUE.TEMPERATURE -> progress = TemperatureValues.getIdByResID(resId)
                             AspectMessage.ASPECT_VALUE.VIDEOARCTYPE -> progress = Ratio.getIdByResID(resId)
                             AspectMessage.ASPECT_VALUE.PICTUREMODE -> progress = PictureMode.getIdByResID(resId)
@@ -207,7 +202,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
 
                     Constants.SERV_REALTEK -> {
                         when (mode) {
-                            AspectMessage.ASPECT_VALUE.HDR -> progress = HDRValues.getIdByResID(resId)
+//                            AspectMessage.ASPECT_VALUE.HDR -> progress = HDRValues.getIdByResID(resId) // not available with current hardware
                             AspectMessage.ASPECT_VALUE.TEMPERATURE -> progress = TemperatureValues.getIdByResID(resId)
                             AspectMessage.ASPECT_VALUE.VIDEOARCTYPE -> progress = RatioRealtek.getIdByResID(resId)
                             AspectMessage.ASPECT_VALUE.PICTUREMODE -> progress = PictureModeRealtek.getIdByResID(resId)
@@ -216,7 +211,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                     }
                     else -> viewModel.goBack()
                 }
-                if (progress != -1) {
+                if (progress != Constants.NO_VALUE) {
                     it.sendAspectSingleChangeEvent(mode, progress);
                 } else {
                     Timber.e(" tr mode == null")

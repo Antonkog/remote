@@ -17,7 +17,6 @@ import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
-import com.wezom.kiviremote.upnp.org.droidupnp.view.Port
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -97,19 +96,7 @@ class PortsFragment : BaseFragment() {
     }
 
     private val showPortsObserver = Observer<GotAspectEvent> {
-        var ports: List<Port>? = null
-        when (it?.getManufacture()) {
-            Constants.SERV_MSTAR -> {
-                ports = InputSourceHelper.getPortsList(it.available?.portsSettings, it.msg?.currentPort ?: 1).distinct()
-            }
-            Constants.SERV_REALTEK -> {
-                ports = InputSourceHelper.getPortsList(it.available?.portsSettings, lastPortId).distinct() // setting when responce, but ports are different
-            }
-            else -> {
-                binding.portsRefreshBar.visibility = View.GONE
-                Timber.i("got aspect wrong server")
-            }
-        }
+        var ports = InputSourceHelper.getPortsList(it?.available?.portsSettings, it?.msg?.currentPort ?: 1).distinct()
         if (ports != null)
             for (port in ports) {
                 if (port.active) {
@@ -122,6 +109,10 @@ class PortsFragment : BaseFragment() {
                     }
                 }
             }
+        else {
+            binding.portsRefreshBar.visibility = View.GONE
+            Timber.i("got aspect wrong server")
+        }
     }
 
     private fun setPort(portId: Int) {

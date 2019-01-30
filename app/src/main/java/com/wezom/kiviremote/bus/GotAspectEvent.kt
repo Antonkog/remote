@@ -16,11 +16,17 @@ data class GotAspectEvent(val msg: AspectMessage, val available: AspectAvailable
     fun hasAspectSettings(): Boolean {
         return msg!=null && available!=null && msg.settings!=null && available.settings!=null
     }
-    fun hasManufacture(): Boolean {
-        return when (getManufacture()) {
-            Constants.SERV_REALTEK -> true
+
+    fun hasInputs():Boolean{
+        when (getManufacture()) {
+            Constants.SERV_REALTEK -> {
+                if(msg.serverVersionCode <= Constants.VER_ASPECT_XVIII){
+                    return false
+                }
+                return true
+            }
             Constants.SERV_MSTAR -> true
-            else -> false
         }
+        return false
     }
 }

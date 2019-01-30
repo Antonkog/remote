@@ -62,7 +62,7 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
 
     private Observer<GotAspectEvent> showAspectObserver = show -> {
         Timber.i("set aspect from observable");
-        setInputButton(show.hasManufacture());
+        setInputButton(show.hasInputs());
         setAspectButton(show.hasAspectSettings());
     };
 

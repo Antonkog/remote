@@ -18,9 +18,11 @@ object AspectHolder {
     }
 
     fun getManufacture(): Int {
-        if (availableSettings != null && message != null) {
-            var isRealtek = message?.manufacture ?: Constants.NO_VALUE
-            if (isRealtek == Constants.NO_VALUE) isRealtek = availableSettings!!.getManufacture(message?.serverVersionCode)
+        val settingsAvailable = availableSettings;
+        val tempMsg = message
+        if (settingsAvailable != null && tempMsg != null) {
+            var isRealtek = tempMsg.manufacture
+            if (isRealtek == Constants.NO_VALUE) isRealtek = settingsAvailable.getManufacture(tempMsg.serverVersionCode)
             return isRealtek
         }
         return Constants.NO_VALUE

@@ -45,7 +45,7 @@ public class TouchpadFragment extends TvKeysFragment
     private int y1;
     private long scrollTime = System.currentTimeMillis();
 
-    private Observer<GotAspectEvent> showAspectObserver = show -> setInputButton(show.hasManufacture());
+    private Observer<GotAspectEvent> showAspectObserver = show -> setInputButton(show.hasInputs());
 
     private void setInputButton(Boolean show) {
         binding.input.setVisibility(show ? View.VISIBLE : View.GONE);
