@@ -46,8 +46,8 @@ class PortView : LinearLayout {
             header.text = attributes.getString(R.styleable.HorizontalSwitchView_name)
             row.text = attributes.getString(R.styleable.HorizontalSwitchView_variant)
             Timber.i("attrs ${header.text} ${row.text}")
-            arrowl.setOnClickListener { click -> doOnclick() }
-            arrowr.setOnClickListener { click -> doOnclick() }
+            arrowl.setOnClickListener { _-> doOnclick() }
+            arrowr.setOnClickListener { _-> doOnclick() }
         } finally {
             attributes.recycle()
         }

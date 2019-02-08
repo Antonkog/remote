@@ -3,56 +3,69 @@ package com.wezom.kiviremote.presentation.home.ports
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wezom.kiviremote.bus.GotAspectEvent
+import com.wezom.kiviremote.bus.SendActionEvent
+import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.Constants.ASPECT_GET_TRY
+import com.wezom.kiviremote.common.RxBus
+import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.databinding.PortsFragmentBinding
 import com.wezom.kiviremote.net.model.AspectMessage
-import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
+import com.wezom.kiviremote.presentation.base.TvKeysFragment
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
-import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
 
-class PortsFragment : BaseFragment() {
+class PortsFragment : TvKeysFragment() {
 
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
 
     private lateinit var viewModel: PortsViewModel
     private lateinit var binding: PortsFragmentBinding
-    private var lastPortId = InputSourceHelper.INPUT_PORT.INPUT_SOURCE_NONE.id
+    private var lastPortId = Constants.INPUT_HOME_ID
     private var aspectTryCounter = ASPECT_GET_TRY
     private val portsAdapter: PortsAdapter by lazy {
+
         PortsAdapter(object : PortsAdapter.CheckListener {
             override fun onPortChecked(id: Int) {
+                aspectTryCounter = ASPECT_GET_TRY
                 lastPortId = id
-                setPort(id)
-                viewModel.requestAspect()
+                if (id == Constants.INPUT_HOME_ID) {
+                    setPort(id)
+                    RxBus.publish(SendActionEvent(Action.HOME_DOWN))
+                    RxBus.publish(SendActionEvent(Action.HOME_UP))
+                    fragmentManager?.popBackStack()
+                } else {
+                    if (AspectHolder?.message?.serverVersionCode ?: 0 < Constants.VER_ASPECT_XIX) {
+                        setPort(id)
+                    } else {
+                        setPortServerCheck(id)
+                    }
+                }
             }
         })
+    }
+
+    private fun setPortServerCheck(id: Int) {
+        binding.portsRefreshBar.visibility = View.VISIBLE
+        viewModel.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.INPUT_PORT, id)
+        viewModel.requestAspect()
     }
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
 
     override fun onResume() {
-        aspectTryCounter = ASPECT_GET_TRY
-        if (AspectHolder.message != null && AspectHolder.availableSettings != null) {
-            binding.portsRefreshBar.visibility = View.GONE
-            AspectHolder?.availableSettings?.portsSettings.let {
-                portsAdapter.setData(InputSourceHelper.getPortsList(it, AspectHolder.message?.currentPort
-                        ?: Constants.NO_VALUE).distinct())
-            }
-//            showPortsObserver.onChanged(GotAspectEvent(AspectHolder.message!!, AspectHolder.availableSettings!!))
-        } else {
-            viewModel.requestAspect()
+        AspectHolder.getPortsList()?.let {
+            portsAdapter.setData(it)
         }
         super.onResume()
     }
@@ -96,28 +109,29 @@ class PortsFragment : BaseFragment() {
     }
 
     private val showPortsObserver = Observer<GotAspectEvent> {
-        var ports = InputSourceHelper.getPortsList(it?.available?.portsSettings, it?.msg?.currentPort ?: 1).distinct()
-        if (ports != null)
+        var ports = it?.getPortsList() ?: LinkedList()
+        if (!ports.isEmpty()) {
             for (port in ports) {
                 if (port.active) {
                     if (port.portNum == lastPortId || aspectTryCounter == 0) {
                         binding.portsRefreshBar.visibility = View.GONE
                         portsAdapter.setData(ports)
                     } else {
-                        Handler().postDelayed({ viewModel.requestAspect() }, 1000)
+                        Run.after(1000){
+                            viewModel.requestAspect()
+                        }
                         aspectTryCounter--
                     }
                 }
             }
-        else {
-            binding.portsRefreshBar.visibility = View.GONE
-            Timber.i("got aspect wrong server")
+        } else {
+            viewModel.requestAspect()
         }
     }
 
     private fun setPort(portId: Int) {
-        binding.portsRefreshBar.visibility = View.VISIBLE
         viewModel.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.INPUT_PORT, portId)
-        Timber.i("setting port: " + InputSourceHelper.INPUT_PORT.getPortByID(portId))
+        portsAdapter.sePortActivebyId(portId)
     }
+
 }

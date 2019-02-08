@@ -17,10 +17,13 @@ public class Constants {
     public static final int ASPECT_GET_TRY = 3 ; //  < 1sec / 25 frames (<40)
     public static final int HOME_KEY_DELAY = 320;
     public static final int NO_VALUE = -1;
-    public static final int VER_ASPECT_XVIII = 18;
+    public static final int VER_ASPECT_XVIII = 18; // AspectAvailable introduced  - inputs button, aspect settings
+    public static final int VER_ASPECT_XIX = 19; // Deiver values instead of AspectAvailable
 
     public static final int SERV_REALTEK = 1;
     public static final int SERV_MSTAR = 0;
+    public static final String INPUT_PORT = "INPUT_PORT";
+    public static final int INPUT_HOME_ID = -11;
 
     public static final int NOTIFICATION_ID = 212121;
     public static final String UNIDENTIFIED = "unidentified";

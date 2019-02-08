@@ -45,7 +45,7 @@ public class TouchpadFragment extends TvKeysFragment
     private int y1;
     private long scrollTime = System.currentTimeMillis();
 
-    private Observer<GotAspectEvent> showAspectObserver = show -> setInputButton(show.hasInputs());
+    private Observer<GotAspectEvent> showAspectObserver = show -> setInputButton(!show.getPortsList().isEmpty());
 
     private void setInputButton(Boolean show) {
         binding.input.setVisibility(show ? View.VISIBLE : View.GONE);
@@ -74,7 +74,7 @@ public class TouchpadFragment extends TvKeysFragment
         binding.touchpad.setListener(this);
         int cursorSpeedMultiplier = PreferencesManager.INSTANCE.getCursorSpeed();
 
-        setInputButton(AspectHolder.INSTANCE.hasManufacture());
+        setInputButton(!AspectHolder.INSTANCE.getPortsList().isEmpty());
 
         viewModel.getAspectSeen().observe(this, showAspectObserver);
         binding.touchpad.setSpeedMultiplier(cursorSpeedMultiplier);

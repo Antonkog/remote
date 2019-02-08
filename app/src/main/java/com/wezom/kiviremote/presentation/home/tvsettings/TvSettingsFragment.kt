@@ -88,7 +88,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
 
     override fun onResume() {
         if (AspectHolder.message != null && AspectHolder.availableSettings != null) {
-            syncPicSettings(GotAspectEvent(AspectHolder.message!!, AspectHolder.availableSettings!!))
+            syncPicSettings(GotAspectEvent(AspectHolder.message, AspectHolder.availableSettings, null))
         } else {
             Timber.i(" requesting aspect")
             viewModel.requestAspect()
@@ -97,7 +97,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
     }
 
     private fun syncPicSettings(gotAspectEvent: GotAspectEvent?) {
-        manufacture = gotAspectEvent?.getManufacture() ?: Constants.NO_VALUE
+        manufacture = gotAspectEvent?.getManufacture() ?: Constants.NO_VALUE //workaround for server verstion <=18 todo: use driverValues
         val settings = gotAspectEvent?.available?.settings
         if (settings != null)
             for (x in settings) {
@@ -188,7 +188,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         viewModel?.let {
             var progress = -1;
 
-            if (resId != null && mode != null) {
+            if (mode != null) {
                 when (manufacture) {
                     Constants.SERV_MSTAR -> {
                         when (mode) {
@@ -233,7 +233,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
             viewModel?.let {
                 if (seekBar != null && seekBar.tag != null) {
                     try {
-                        it.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.valueOf(seekBar.tag.toString()), seekBar?.progress)
+                        it.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.valueOf(seekBar.tag.toString()), seekBar.progress)
                     } catch (e: IllegalArgumentException) {
                         Timber.e("Error in aspect values parsing : onStopTrackingTouch", e)
                     }

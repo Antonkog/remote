@@ -62,8 +62,12 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
 
     private Observer<GotAspectEvent> showAspectObserver = show -> {
         Timber.i("set aspect from observable");
-        setInputButton(show.hasInputs());
         setAspectButton(show.hasAspectSettings());
+    };
+
+    private Observer<GotAspectEvent> showInputsObserver = show -> {
+        Timber.i("set imputs from observable, ports size: " + show.getPortsList().size());
+        setInputButton(!show.getPortsList().isEmpty());
     };
 
     @Nullable
@@ -80,6 +84,7 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
         init();
         viewModel.getMuteStatus().observe(this, muteObserver);
         viewModel.getAspectSeen().observe(this, showAspectObserver);
+        viewModel.getImputSeen().observe(this, showInputsObserver);
     }
 
     @Override
@@ -97,10 +102,13 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
         binding.dpadTop.setOnTouchListener(getGenericTouchListener(KiviDPadView.SectorLocation.TOP, KeyEvent.KEYCODE_DPAD_UP));
 
         setMute(PreferencesManager.INSTANCE.getMuteStatus());
-        setInputButton(AspectHolder.INSTANCE.hasManufacture());
-        setAspectButton(AspectHolder.INSTANCE.hasAspectSettings());
 
-        if (!AspectHolder.INSTANCE.hasManufacture() || !AspectHolder.INSTANCE.hasAspectSettings()) viewModel.requestAspect();
+        if(!AspectHolder.INSTANCE.hasAspectSettings())
+            viewModel.requestAspect();
+        else {
+            setInputButton(!AspectHolder.INSTANCE.getPortsList().isEmpty());
+            setAspectButton(AspectHolder.INSTANCE.hasAspectSettings());
+        }
 
         binding.mute.setOnClickListener(v -> {
             viewModel.sendKeyEvent(KeyEvent.KEYCODE_VOLUME_MUTE);
@@ -109,12 +117,10 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
 
         binding.dpadOk.setOnClickListener(v -> viewModel.sendKeyEvent(KeyEvent.KEYCODE_DPAD_CENTER));
         binding.switchOff.setOnClickListener(v -> viewModel.switchOff());
-
         binding.buttonAspect.setOnClickListener(v -> viewModel.goToAspect());
-
-        setTvButtons(viewModel, binding.menu, binding.back, binding.home);
         binding.input.setOnClickListener(click -> viewModel.goToInputSettings());
 
+        setTvButtons(viewModel, binding.menu, binding.back, binding.home);
     }
 
 

@@ -46,8 +46,8 @@ class HorizontalSwitchView : LinearLayout {
         try {
             name.text = attributes.getString(R.styleable.HorizontalSwitchView_name)
             variant.text = attributes.getString(R.styleable.HorizontalSwitchView_variant)
-            arrow.setOnClickListener { click -> doOnclick() }
-            variant.setOnClickListener { click -> doOnclick() }
+            arrow.setOnClickListener { _-> doOnclick() }
+            variant.setOnClickListener { _-> doOnclick() }
         } finally {
             attributes.recycle()
         }

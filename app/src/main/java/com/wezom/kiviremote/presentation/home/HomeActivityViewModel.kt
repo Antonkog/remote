@@ -6,8 +6,10 @@ import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.Screens.DEVICE_SEARCH_FRAGMENT
 import com.wezom.kiviremote.bus.*
 import com.wezom.kiviremote.common.Action
+import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.Constants.*
 import com.wezom.kiviremote.common.RxBus
+import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.common.extensions.boolean
 import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.net.ChatConnection
@@ -40,118 +42,138 @@ import kotlin.collections.ArrayList
 
 
 class HomeActivityViewModel(
-    private val database: AppDatabase,
-    private val navigatorHolder: NavigatorHolder,
-    private val router: Router,
-    private val uPnPManager: UPnPManager, preferences: SharedPreferences
+        private val database: AppDatabase,
+        private val navigatorHolder: NavigatorHolder,
+        private val router: Router,
+        private val uPnPManager: UPnPManager, preferences: SharedPreferences
 ) : BaseViewModel() {
 
     init {
         disposables += RxBus.listen(ConnectionMessage::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onNext = {
-                launch(CommonPool) {
-                    it.appList?.let {
-                        database.serverAppDao().run {
-                            removeAll()
-                            insertAll(it.mapTo(ArrayList(), {
-                                ServerApp().apply {
-                                    appName = it.applicationName
-                                    packageName = it.packageName
-                                    appIcon = it.appIcon
-                                }
-                            }))
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    launch(CommonPool) {
+                        it.appList?.let {
+                            database.serverAppDao().run {
+                                removeAll()
+                                insertAll(it.mapTo(ArrayList(), {
+                                    ServerApp().apply {
+                                        appName = it.applicationName
+                                        packageName = it.packageName
+                                        appIcon = it.appIcon
+                                    }
+                                }))
+                            }
                         }
+
                     }
-                }
-                if (it.isShowKeyboard) {
-                    RxBus.publish(ShowKeyboardEvent())
-                }
+                    if (it.aspectMessage != null && it.available != null) {
+                        AspectHolder.setAspectValues(it.aspectMessage, it.available, it.initialMessage)
 
-                if (it.isHideKeyboard) {
-                    RxBus.publish(HideKeyboardEvent())
-                }
+                        // no massage recieved in this session, check AspectHolder/set/clean.
+                        if (AspectHolder.initialMsg == null)
+                        if (AspectHolder?.message?.serverVersionCode ?: 0 >= Constants.VER_ASPECT_XIX){
+                            Run.after(1000) {
+                                RxBus.publish(RequestInitialEvent())
+                            }
+                        }
+                        RxBus.publish(GotAspectEvent(it.aspectMessage, it.available, it.initialMessage
+                                ?: AspectHolder.initialMsg))
+                    }
 
-                if (!it.isSetKeyboard) {
-                    showSettingsDialog.postValue(true)
-                }
+                    if (it.isShowKeyboard) {
+                        RxBus.publish(ShowKeyboardEvent())
+                    }
 
-                if (it.isDisconnect) {
-                    disconnect()
-                }
+                    if (it.isHideKeyboard) {
+                        RxBus.publish(HideKeyboardEvent())
+                    }
 
-                if (it.volume != -1) {
-                    RxBus.publish(NewVolumeEvent(it.volume))
-                    muteStatus = it.volume <= 0
-                }
-            }, onError = Timber::e)
+                    if (!it.isSetKeyboard) {
+                        showSettingsDialog.postValue(true)
+                    }
+
+                    if (it.isDisconnect) {
+                        disconnect()
+                    }
+
+                    if (it.volume != -1) {
+                        RxBus.publish(NewVolumeEvent(it.volume))
+                        muteStatus = it.volume <= 0
+                    }
+                }, onError = Timber::e)
 
         disposables += RxBus.listen(TriggerRebirthEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onNext = {
-                triggerRebirth.postValue(true)
-            }, onError = Timber::e)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    triggerRebirth.postValue(true)
+                }, onError = Timber::e)
 
         disposables += RxBus.listen(SendCursorCoordinatesEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread()).debounce(TOUCH_EVENT_FREQUENCY, TimeUnit.MILLISECONDS)
-            .subscribeBy(onNext = {
-                sendTouchpadAction(it.x, it.y, Action.motion)
-            }, onError = Timber::e)
+                .observeOn(AndroidSchedulers.mainThread()).debounce(TOUCH_EVENT_FREQUENCY, TimeUnit.MILLISECONDS)
+                .subscribeBy(onNext = {
+                    sendTouchpadAction(it.x, it.y, Action.motion)
+                }, onError = Timber::e)
 
         disposables += RxBus.listen(TouchpadButtonClickEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onNext = {
-                sendTouchpadAction(it.x, it.y, it.action)
-            }, onError = Timber::e)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    sendTouchpadAction(it.x, it.y, it.action)
+                }, onError = Timber::e)
 
         disposables += RxBus.listen(SendTextEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onNext = {
-                sendText(it.text)
-            }, onError = Timber::e)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    sendText(it.text)
+                }, onError = Timber::e)
 
         disposables += RxBus.listen(SendKeyEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onNext = {
-                sendKey(it.keyEvent)
-            }, onError = Timber::e)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    sendKey(it.keyEvent)
+                }, onError = Timber::e)
 
         disposables += RxBus.listen(RequestAspectEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
-                    Timber.i("requesting aspect via RequestAspectEvent")
                     sendAction(Action.REQUEST_ASPECT)
                 }, onError = Timber::e)
 
+        disposables += RxBus.listen(RequestInitialEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    sendAction(Action.REQUEST_INITIAL)
+                }, onError = Timber::e)
+
         disposables += RxBus.listen(SendScrollEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread()).debounce(SCROLL_EVENT_FREQUENCY, TimeUnit.MILLISECONDS)
-            .subscribeBy(onNext = {
-                serverConnection?.sendMessage(SocketConnectionModel().apply {
-                    setMotion(ArrayList<Double>().apply {
-                        add(0.0)
-                        add(it.y)
+                .observeOn(AndroidSchedulers.mainThread()).debounce(SCROLL_EVENT_FREQUENCY, TimeUnit.MILLISECONDS)
+                .subscribeBy(onNext = {
+                    serverConnection?.sendMessage(SocketConnectionModel().apply {
+                        setMotion(ArrayList<Double>().apply {
+                            add(0.0)
+                            add(it.y)
+                        })
+                        setAction(it.action)
                     })
-                    setAction(it.action)
-                })
-            }, onError = Timber::e)
+                }, onError = Timber::e)
 
         disposables += RxBus.listen(ConnectEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onNext = {
-                initConnection(it.model, true)
-            }, onError = Timber::e)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    initConnection(it.model, true)
+                }, onError = Timber::e)
 
         disposables += RxBus.listen(ReconnectEvent::class.java)
-            .subscribeBy(onNext = { currentModel?.let { reconnect() } }, onError = Timber::e)
+                .subscribeBy(onNext = { currentModel?.let { reconnect() } }, onError = Timber::e)
 
         disposables += RxBus.listen(KillPingEvent::class.java)
-            .subscribeBy(onNext = {
-                killPing()
-            }, onError = Timber::e)
+                .subscribeBy(onNext = {
+                    killPing()
+                }, onError = Timber::e)
 
         disposables += RxBus.listen(NewNameEvent::class.java)
                 .subscribeBy(onNext = {
-                   sendNameChanged(it.name)
+                    sendNameChanged(it.name)
                 }, onError = Timber::e)
 
         disposables += RxBus.listen(NewAspectEvent::class.java)
@@ -161,27 +183,27 @@ class HomeActivityViewModel(
                 }, onError = Timber::e)
 
         disposables += RxBus.listen(LaunchAppEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onNext = {
-                launchApp(it.packageName)
-            }, onError = Timber::e)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    launchApp(it.packageName)
+                }, onError = Timber::e)
 
         disposables += RxBus.listen(SendActionEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onNext = {
-                sendAction(it.action)
-            }, onError = Timber::e)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    sendAction(it.action)
+                }, onError = Timber::e)
 
         disposables += RxBus.listen(DisconnectEvent::class.java)
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onNext = {
-            }, onError = Timber::e)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                }, onError = Timber::e)
 
         disposables += RxBus.listen(SendTextEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
                     sendText(it.text)
-                },onError = Timber::e)
+                }, onError = Timber::e)
     }
 
     val showSettingsDialog = MutableLiveData<Boolean>()
@@ -190,8 +212,8 @@ class HomeActivityViewModel(
     val triggerRebirth = MutableLiveData<Boolean>()
 
     private var currentConnection: String by preferences.string(
-        UNIDENTIFIED,
-        CURRENT_CONNECTION_KEY
+            UNIDENTIFIED,
+            CURRENT_CONNECTION_KEY
     )
     private var currentConnectionIp: String by preferences.string("", CURRENT_CONNECTION_IP_KEY)
     private var muteStatus: Boolean by preferences.boolean(false, MUTE_STATUS_KEY)
@@ -207,13 +229,12 @@ class HomeActivityViewModel(
     }
 
     data class ProgressModel(
-        val rendererModel: UPnPManager.RendererModel,
-        val currentMediaType: GalleryFragment.MediaType
+            val rendererModel: UPnPManager.RendererModel,
+            val currentMediaType: GalleryFragment.MediaType
     )
 
     private fun initConnection(nsdModel: NsdServiceModel, firstConnection: Boolean) {
         killPing()
-        AspectHolder.clean()
         serverConnection = ChatConnection()
         connect(nsdModel)
     }
@@ -222,11 +243,12 @@ class HomeActivityViewModel(
         serverConnection?.dispose()
     }
 
-    private fun connect(nsdModel: NsdServiceModel) {
+    private fun connect(nsdModel: NsdServiceModel) { //research
         val currentConnectionName = currentConnection
         if (nsdModel.name != currentConnectionName) {
             launch(CommonPool) {
                 database.serverAppDao().removeAll()
+                AspectHolder.clean()
             }
         }
 
@@ -235,16 +257,16 @@ class HomeActivityViewModel(
         currentConnectionIp = nsdModel.host.hostAddress
 
         Completable.timer(500, TimeUnit.MILLISECONDS).subscribeBy(
-            onComplete = {
-                currentModel = nsdModel
-                serverConnection?.run {
-                    connectToServer(nsdModel.host, nsdModel.port)
-                    launch(CommonPool) {
-                        database.recentDeviceDao().insert(RecentDevice(nsdModel.name, null))
+                onComplete = {
+                    currentModel = nsdModel
+                    serverConnection?.run {
+                        connectToServer(nsdModel.host, nsdModel.port)
+                        launch(CommonPool) {
+                            database.recentDeviceDao().insert(RecentDevice(nsdModel.name, null))
+                        }
                     }
-                }
-            },
-            onError = Timber::e
+                },
+                onError = Timber::e
         )
     }
 
@@ -252,20 +274,20 @@ class HomeActivityViewModel(
         Timber.d("Reconnecting")
         reconnectTimer?.takeUnless { it.isDisposed }?.dispose()
         reconnectTimer = Single.timer(1, TimeUnit.SECONDS).subscribeBy(
-            onSuccess = {
-                currentModel?.let { initConnection(it, false) }
-            }, onError = { Timber.e(it, "Couldn't establish connection: ${it.message}") }
+                onSuccess = {
+                    currentModel?.let { initConnection(it, false) }
+                }, onError = { Timber.e(it, "Couldn't establish connection: ${it.message}") }
         )
     }
 
     private fun sendTouchpadAction(x: Double, y: Double, actionType: Action) =
-        serverConnection?.sendMessage(SocketConnectionModel().apply {
-            setAction(actionType)
-            setMotion(ArrayList<Double>().apply {
-                add(x)
-                add(y)
+            serverConnection?.sendMessage(SocketConnectionModel().apply {
+                setAction(actionType)
+                setMotion(ArrayList<Double>().apply {
+                    add(x)
+                    add(y)
+                })
             })
-        })
 
 
     private fun sendText(text: String) {

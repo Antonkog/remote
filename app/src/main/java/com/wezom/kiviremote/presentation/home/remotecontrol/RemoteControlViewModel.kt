@@ -8,6 +8,7 @@ import com.wezom.kiviremote.bus.RequestAspectEvent
 import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.RxBus
+import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.base.TvKeysViewModel
 import io.reactivex.rxkotlin.subscribeBy
@@ -30,6 +31,7 @@ class RemoteControlViewModel(private val router: Router) : BaseViewModel(), TvKe
         disposables += RxBus.listen(GotAspectEvent::class.java).subscribeBy(
                 onNext = {
                     aspectSeen.postValue(it)
+                    imputSeen.postValue(it)
                 }, onError = Timber::e
         )
     }
@@ -37,12 +39,15 @@ class RemoteControlViewModel(private val router: Router) : BaseViewModel(), TvKe
 
     val muteStatus = MutableLiveData<Boolean?>()
     val aspectSeen = MutableLiveData<GotAspectEvent>()
+    val imputSeen = MutableLiveData<GotAspectEvent>()
 
     fun switchOff() = RxBus.publish(SendActionEvent(Action.SWITCH_OFF))
 
     fun goToAspect() = router.navigateTo(Screens.TV_SETTINGS_FRAGMENT)
 
-    fun requestAspect() = RxBus.publish(RequestAspectEvent())
+    fun requestAspect() = Run.after(1000){
+        RxBus.publish(RequestAspectEvent())
+    }
 
     fun goToInputSettings() = router.navigateTo(Screens.PORTS_FRAGMENT)
 

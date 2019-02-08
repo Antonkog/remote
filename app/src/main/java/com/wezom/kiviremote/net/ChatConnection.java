@@ -23,16 +23,16 @@ import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
-import com.wezom.kiviremote.bus.GotAspectEvent;
 import com.wezom.kiviremote.bus.ReconnectEvent;
 import com.wezom.kiviremote.common.Action;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.gson.ListAdapter;
+import com.wezom.kiviremote.net.model.AspectAvailable;
+import com.wezom.kiviremote.net.model.AspectMessage;
 import com.wezom.kiviremote.net.model.ConnectionMessage;
-import com.wezom.kiviremote.net.model.OpenSettings;
+import com.wezom.kiviremote.net.model.InitialMessage;
 import com.wezom.kiviremote.net.model.ServerEvent;
 import com.wezom.kiviremote.net.model.SocketConnectionModel;
-import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -62,6 +62,8 @@ public class ChatConnection {
     private static final String HIDE_KEYBOARD = "HIDE_KEYBOARD";
     private static final String VOLUME = "VOLUME";
     private static final String PONG = "PONG";
+    private static final String INITIAL = "INITIAL";
+    private static final String ASPECT = "ASPECT";
     private static final String DISCONNECT = "DISCONNECT";
 
     private ChatServer mChatServer;
@@ -106,16 +108,6 @@ public class ChatConnection {
         }
     }
 
-    public void openSettings() {
-        if (mChatClient != null) {
-            mChatClient.sendMessage(new OpenSettings(OPEN_SETTINGS));
-        }
-    }
-
-    public int getLocalPort() {
-        return mPort;
-    }
-
     private void setLocalPort(int port) {
         mPort = port;
     }
@@ -124,13 +116,16 @@ public class ChatConnection {
         if (msg.length() > 150)
             Timber.d("Updating message: " + msg.substring(0, 50));
         else
-        Timber.d("Updating message: " + msg);
+            Timber.d("Updating message: " + msg);
 
 
         ServerEvent serverEvent = gson.fromJson(msg, ServerEvent.class);
         boolean keyboardNotSet = false;
         boolean showKeyboard = false;
         boolean hideKeyboard = false;
+        InitialMessage initialMessage = null;
+        AspectAvailable aspectAvailable = null;
+        AspectMessage aspectMessage = null;
         int volume = -1;
 
         if (serverEvent != null) {
@@ -148,20 +143,32 @@ public class ChatConnection {
                     case VOLUME:
                         volume = serverEvent.getVolume();
                         break;
+                    case INITIAL:
+                        initialMessage = serverEvent.getInitialMessage();
+                        aspectAvailable = serverEvent.getAvailableAspectValues();
+                        aspectMessage = serverEvent.getAspectMessage();
+                        Timber.e("12345 got init val : " + serverEvent.getInitialMessage());
+
+                        break;
+                    case ASPECT:
+                        aspectAvailable = serverEvent.getAvailableAspectValues();
+                        aspectMessage = serverEvent.getAspectMessage();
+                        break;
                     default:
                         Timber.d("Unknown event has been received");
                         return;
                 }
+            else if (serverEvent.getAspectMessage() != null && serverEvent.getAvailableAspectValues() != null) { //for 14> server <19  remove later
+                aspectAvailable = serverEvent.getAvailableAspectValues();
+                aspectMessage = serverEvent.getAspectMessage();
+            }
 
-
-            if (serverEvent.getAspectMessage() != null && serverEvent.getAvailableAspectValues() != null) {
-                AspectHolder.INSTANCE.setAvailableSettings(serverEvent.getAvailableAspectValues());
-                AspectHolder.INSTANCE.setMessage(serverEvent.getAspectMessage());
-                RxBus.INSTANCE.publish(new GotAspectEvent(serverEvent.getAspectMessage(), serverEvent.getAvailableAspectValues()));
-            } else
             RxBus.INSTANCE.publish(new ConnectionMessage(msg,
                     !keyboardNotSet,
                     serverEvent.getApps(),
+                    initialMessage,
+                    aspectMessage,
+                    aspectAvailable,
                     showKeyboard,
                     hideKeyboard,
                     volume,
@@ -327,7 +334,7 @@ public class ChatConnection {
 
             if (pingBuffer > 1) {
                 Timber.d("Error threshold has been reached, disposing");
-                RxBus.INSTANCE.publish(new ChangeSnackbarStateEvent(false));
+                RxBus.INSTANCE.publish(new ChangeSnackbarStateEvent(false)); //do research
                 dispose();
             }
         }
@@ -364,7 +371,7 @@ public class ChatConnection {
                     setSocket(new Socket(mAddress, port));
                     Timber.d("Client-side socket initialized.");
 
-                    pingTimer = Observable
+                    pingTimer = Observable //do research
                             .interval(3, TimeUnit.SECONDS)
                             .subscribe(t -> {
                                         Timber.d("Client sent ping");

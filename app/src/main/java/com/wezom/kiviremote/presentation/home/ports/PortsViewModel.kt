@@ -33,4 +33,5 @@ class PortsViewModel(private val router: Router) : BaseViewModel() {
     }
 
     fun requestAspect() = RxBus.publish(RequestAspectEvent())
+
 }

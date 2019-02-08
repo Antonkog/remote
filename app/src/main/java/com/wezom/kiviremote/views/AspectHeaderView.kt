@@ -52,8 +52,8 @@ class AspectHeaderView : LinearLayout {
             header.text = attributes.getString(R.styleable.HorizontalSwitchView_name)
             row.text = attributes.getString(R.styleable.HorizontalSwitchView_variant)
             Timber.i("attrs ${header.text} ${row.text}")
-            arrowl.setOnClickListener { click -> doOnLeftClick() }
-            arrowr.setOnClickListener { click -> doOnRightclick() }
+            arrowl.setOnClickListener { _-> doOnLeftClick() }
+            arrowr.setOnClickListener { _-> doOnRightclick() }
         } finally {
             attributes.recycle()
         }

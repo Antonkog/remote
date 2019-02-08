@@ -14,16 +14,21 @@ public class ConnectionMessage {
     private boolean isSetKeyboard;
     @SerializedName("app_info")
     private List<ServerAppInfo> appList;
+    private InitialMessage initialMessage;
+    private AspectMessage aspectMessage;
+    private AspectAvailable available;
     private boolean showKeyboard;
     private boolean hideKeyboard;
     private int volume;
     private boolean disconnect;
 
-
-    public ConnectionMessage(String message, boolean isSetKeyboard, List<ServerAppInfo> appList, boolean showKeyboard, boolean hideKeyboard, int volume, boolean disconnect) {
+    public ConnectionMessage(String message, boolean isSetKeyboard, List<ServerAppInfo> appList, InitialMessage initialMessage, AspectMessage aspectMessage, AspectAvailable available, boolean showKeyboard, boolean hideKeyboard, int volume, boolean disconnect) {
         this.message = message;
         this.isSetKeyboard = isSetKeyboard;
         this.appList = appList;
+        this.initialMessage = initialMessage;
+        this.aspectMessage = aspectMessage;
+        this.available = available;
         this.showKeyboard = showKeyboard;
         this.hideKeyboard = hideKeyboard;
         this.volume = volume;
@@ -44,6 +49,22 @@ public class ConnectionMessage {
 
     public List<ServerAppInfo> getAppList() {
         return appList;
+    }
+
+    public InitialMessage getInitialMessage() {
+        return initialMessage;
+    }
+
+    public AspectMessage getAspectMessage() {
+        return aspectMessage;
+    }
+
+    public AspectAvailable getAvailable() {
+        return available;
+    }
+
+    public void setAvailable(AspectAvailable available) {
+        this.available = available;
     }
 
     public boolean isShowKeyboard() {

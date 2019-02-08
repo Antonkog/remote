@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.wezom.kiviremote.databinding.PortItemBinding
 import com.wezom.kiviremote.upnp.org.droidupnp.view.Port
+import java.util.*
 
 
 class PortsAdapter(val listener: CheckListener) : RecyclerView.Adapter<PortsAdapter.PortsViewHolder>() {
@@ -57,6 +58,15 @@ class PortsAdapter(val listener: CheckListener) : RecyclerView.Adapter<PortsAdap
         notifyDataSetChanged()
     }
 
+    fun sePortActivebyId(id: Int) {
+        val newPorts = LinkedList<Port>()
+        for (port in ports) {
+            newPorts.add(Port(portName = port.portName, portImageId = port.portImageId, portNum = port.portNum, active = (id == port.portNum)))
+        }
+        ports.clear()
+        ports.addAll(newPorts)
+        notifyDataSetChanged()
+    }
 
     inner class PortsViewHolder(val binding: PortItemBinding) : RecyclerView.ViewHolder(binding.root)
 }

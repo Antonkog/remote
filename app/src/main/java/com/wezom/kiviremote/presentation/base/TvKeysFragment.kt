@@ -15,10 +15,10 @@ abstract class TvKeysFragment : BaseFragment() {
 
         val launchQuickApps = { viewModel.launchQuickApps() }
 
-        menu.setOnClickListener({ v -> viewModel.sendKeyEvent(KeyEvent.KEYCODE_MENU) })
-        back.setOnClickListener({ v -> viewModel.sendKeyEvent(KeyEvent.KEYCODE_BACK) })
+        menu.setOnClickListener { _ -> viewModel.sendKeyEvent(KeyEvent.KEYCODE_MENU) }
+        back.setOnClickListener { _-> viewModel.sendKeyEvent(KeyEvent.KEYCODE_BACK) }
         home.setOnTouchListener { view, event ->
-            when (event.getAction()) {
+            when (event.action) {
                 ACTION_DOWN -> {
                     view.isPressed = true
                     viewModel.sendHomeDown()

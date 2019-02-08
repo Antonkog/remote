@@ -2,9 +2,10 @@ package com.wezom.kiviremote.common
 
 
 enum class Action {
+    REQUEST_INITIAL,
+    REQUEST_VOLUME,
     REQUEST_APPS,
     REQUEST_ASPECT,
-    REQUEST_VOLUME,
     LAUNCH_APP,
     PING,
     SWITCH_OFF,

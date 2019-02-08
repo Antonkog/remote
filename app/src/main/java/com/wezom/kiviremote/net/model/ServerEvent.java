@@ -16,9 +16,14 @@ public class ServerEvent {
     private int volume;
     private AspectMessage aspectMessage;
     private AspectAvailable availableAspectValues;
+    private InitialMessage initialMessage;
 
     public String getEvent() {
         return event;
+    }
+
+    public InitialMessage getInitialMessage() {
+        return initialMessage;
     }
 
     public List<ServerAppInfo> getApps() {
