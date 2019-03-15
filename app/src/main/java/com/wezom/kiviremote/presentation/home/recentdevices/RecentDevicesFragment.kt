@@ -102,11 +102,11 @@ class RecentDevicesFragment : BaseFragment() {
                 }
 
                 override fun onScrolledDown() {
-                    binding.devicesShadow.visibility = View.VISIBLE
+                    binding.devicesShadow?.visibility = View.VISIBLE
                 }
 
                 override fun onScrolledToTop() {
-                    binding.devicesShadow.visibility = View.GONE
+                    binding.devicesShadow?.visibility = View.GONE
                 }
 
                 override fun onScrolledToBottom() {

@@ -19,8 +19,6 @@
 
 package com.wezom.kiviremote.upnp.org.droidupnp.model.cling.didl;
 
-import com.wezom.kiviremote.R;
-
 import org.fourthline.cling.support.model.Res;
 import org.fourthline.cling.support.model.item.ImageItem;
 
@@ -29,6 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+
+import timber.log.Timber;
 
 public class ClingImageItem extends ClingDIDLItem {
     public ClingImageItem(ImageItem item) {
@@ -57,12 +57,9 @@ public class ClingImageItem extends ClingDIDLItem {
             DateFormat formatOut = DateFormat.getDateTimeInstance();
             return formatOut.format(date);
         } catch (Exception e) {
+            Timber.e(e);
         }
         return "";
     }
 
-    @Override
-    public int getIcon() {
-        return R.drawable.ic_action_picture;
-    }
 }

@@ -93,4 +93,6 @@
     <string name="open">open</string>
     <string name="close">close</string>
     <string name="toastPic">To set picture, choose user mode</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="on">on</string>
 </resources>

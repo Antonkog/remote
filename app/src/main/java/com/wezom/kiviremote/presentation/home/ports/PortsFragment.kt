@@ -3,10 +3,13 @@ package com.wezom.kiviremote.presentation.home.ports
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.wezom.kiviremote.App
+import com.wezom.kiviremote.R
 import com.wezom.kiviremote.bus.GotAspectEvent
 import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.common.Action
@@ -85,6 +88,12 @@ class PortsFragment : TvKeysFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PortsViewModel::class.java)
+
+
+        if (App.isDarkMode())
+            binding.portsContainer.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_gradient_black, null)
+        else
+            binding.portsContainer.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_gradient_white, null)
 
         (activity as HomeActivity).run {
             setSupportActionBar(binding.toolbar)

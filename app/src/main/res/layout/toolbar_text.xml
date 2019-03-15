@@ -3,9 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout
+        android:id="@+id/main_container"
+        android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="?android:attr/actionBarSize"
-        android:background="@color/colorWhite">
+        android:background="@color/trans">
 
         <EditText
             android:id="@+id/main_text"

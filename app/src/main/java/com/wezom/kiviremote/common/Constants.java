@@ -10,6 +10,11 @@ public class Constants {
 
     // All in MS
     public static final int INITIAL_DELAY = 500;
+    public static final int DELAY_COLOR_RESTART = 1000;
+    public static final int CONNECTION_TIMEOUT = 5000;
+    public static final int RECONNECT_TRY = 3;
+    public static final int PING_PERIOD = 3;
+
     public static final int DPAD_EVENT_FREQUENCY = 200;
     public static final int VOLUME_EVENT_FREQUENCY = 75;
     public static final long TOUCH_EVENT_FREQUENCY = 10 ; //  < 1sec / 25 frames (<40)
@@ -20,13 +25,16 @@ public class Constants {
     public static final int VER_ASPECT_XVIII = 18; // AspectAvailable introduced  - inputs button, aspect settings
     public static final int VER_ASPECT_XIX = 19; // Deiver values instead of AspectAvailable
 
+    public static final String BUNDLE_REALUNCH_KEY = "relaunch";
     public static final int SERV_REALTEK = 1;
     public static final int SERV_MSTAR = 0;
     public static final String INPUT_PORT = "INPUT_PORT";
     public static final int INPUT_HOME_ID = -11;
 
     public static final int NOTIFICATION_ID = 212121;
+    public static final int RESTART_APP_PI = 214212;
     public static final String UNIDENTIFIED = "unidentified";
+    public static final String DARK_MODE = "dark_mode";
 
     public static final String IMAGE = "Фото";
     public static final String VIDEO = "Видео";

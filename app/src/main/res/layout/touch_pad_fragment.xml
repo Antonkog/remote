@@ -3,17 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@drawable/bg_remote">
-
-        <include
-            layout="@layout/view_separator_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="match_parent">
 
         <com.wezom.kiviremote.views.TouchpadView
             android:id="@+id/touchpad"
@@ -22,7 +14,6 @@
             android:layout_marginBottom="@dimen/standard"
             android:layout_marginStart="@dimen/standard"
             android:layout_marginTop="@dimen/standard"
-            android:background="@drawable/bg_touchpad_drawable"
             app:layout_constraintBottom_toTopOf="@+id/seekbar"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -37,7 +28,7 @@
             android:layout_marginEnd="@dimen/scroll_margin"
             android:layout_marginStart="@dimen/scroll_margin"
             android:layout_marginTop="@dimen/scroll_margin"
-            android:background="@drawable/bg_scroll"
+            app:srcCompat="@drawable/ic_scroll_gray"
             android:padding="@dimen/scroll_margin"
             app:layout_constraintBottom_toBottomOf="@+id/touchpad"
             app:layout_constraintRight_toRightOf="@+id/touchpad"
@@ -58,29 +49,22 @@
             app:layout_constraintLeft_toLeftOf="@+id/touchpad"
             app:layout_constraintRight_toRightOf="@+id/scroll" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <com.wezom.kiviremote.views.ButtonCustomView
             android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
             android:layout_marginStart="22dp"
             android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/home"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/selector_back_btn" />
+            app:central_dr="@drawable/selector_back_btn" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <com.wezom.kiviremote.views.ButtonCustomView
             android:id="@+id/home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
             android:layout_marginBottom="22dp"
             android:focusableInTouchMode="false"
             android:scaleType="centerInside"
@@ -88,41 +72,33 @@
             app:layout_constraintEnd_toStartOf="@+id/input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/back"
-            app:srcCompat="@drawable/selector_home_btn" />
+            app:central_dr="@drawable/selector_home_btn" />
 
 
-        <android.support.v7.widget.AppCompatImageView
+        <com.wezom.kiviremote.views.ButtonCustomView
             android:id="@+id/input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
             android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/menu"
             app:layout_constraintHorizontal_bias="0.5"
             android:visibility="visible"
             app:layout_constraintStart_toEndOf="@+id/home"
-            app:srcCompat="@drawable/selector_input_btn" />
+            app:central_dr="@drawable/selector_input_btn" />
 
 
-        <android.support.v7.widget.AppCompatImageView
+        <com.wezom.kiviremote.views.ButtonCustomView
             android:id="@+id/menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
             android:layout_marginEnd="22dp"
             android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/input"
-            app:srcCompat="@drawable/selector_menu_btn" />
+            app:central_dr="@drawable/selector_menu_btn" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

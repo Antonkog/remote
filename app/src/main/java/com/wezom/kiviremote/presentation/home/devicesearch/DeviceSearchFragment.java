@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -16,10 +17,12 @@ import android.view.ViewGroup;
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
 import com.wezom.kiviremote.bus.KillPingEvent;
+import com.wezom.kiviremote.common.Constants;
 import com.wezom.kiviremote.common.NetConnectionUtils;
 import com.wezom.kiviremote.common.PreferencesManager;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.databinding.HomeFragmentBinding;
+import com.wezom.kiviremote.nsd.LastNsdHolder;
 import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper;
 import com.wezom.kiviremote.presentation.base.BaseFragment;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
@@ -70,8 +73,23 @@ public class DeviceSearchFragment extends BaseFragment {
             if (devices.size() > 1) {
                 updateDeviceList(devices);
             }
+            tryGoMainScreen(devices);
         }
     };
+
+    private void tryGoMainScreen(Set<NsdServiceInfoWrapper> devices) {
+        if (getActivity().getIntent().getBooleanExtra(Constants.BUNDLE_REALUNCH_KEY, false) == true
+                && LastNsdHolder.INSTANCE.getNsdServiceWrapper() != null
+                && devices.contains(LastNsdHolder.INSTANCE.getNsdServiceWrapper())) {
+            Handler h = new Handler();
+            h.postDelayed(() -> {
+                connect(LastNsdHolder.INSTANCE.getNsdServiceWrapper());
+            }, Constants.DELAY_COLOR_RESTART);
+            Timber.e("App is restarted");
+        } else {
+            Timber.e("App is not restarted");
+        }
+    }
 
     private NsdServiceInfoWrapper currentSingleDevice;
 
@@ -136,8 +154,10 @@ public class DeviceSearchFragment extends BaseFragment {
     }
 
     private void connect(NsdServiceInfoWrapper wrapper) {
-        if (wrapper != null)
+        if (wrapper != null) {
             viewModel.connect(wrapper);
+            LastNsdHolder.INSTANCE.setNsdServiceWrapper(wrapper);
+        }
     }
 
     @Override

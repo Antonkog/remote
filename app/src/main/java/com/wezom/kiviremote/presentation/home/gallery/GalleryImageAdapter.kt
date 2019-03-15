@@ -40,7 +40,7 @@ class GalleryImageAdapter(private val context: Context,
                 if (remoteFileTitle == thumbTitle) {
                     Glide.with(context)
                             .load(it.data)
-                            .apply(RequestOptions().error(R.drawable.bg_placeholder_image))
+                            .apply(RequestOptions().error(R.drawable.placeholder_image))
                             .into(icon)
                     uri = it.data
                     return@forEach

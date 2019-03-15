@@ -174,9 +174,9 @@ class NotificationService : LifecycleService() {
         notificationManager =
                 applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         noImagePreviewBitmap =
-                BitmapFactory.decodeResource(resources, R.drawable.bg_placeholder_image)
+                BitmapFactory.decodeResource(resources, R.drawable.placeholder_image)
         noVideoPreviewBitmap =
-                BitmapFactory.decodeResource(resources, R.drawable.bg_placeholder_video)
+                BitmapFactory.decodeResource(resources, R.drawable.placeholder_video)
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             createNotificationChannel(notificationManager!!)

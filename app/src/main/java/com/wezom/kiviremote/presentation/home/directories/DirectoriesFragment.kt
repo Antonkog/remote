@@ -3,10 +3,12 @@ package com.wezom.kiviremote.presentation.home.directories
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.wezom.kiviremote.App
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.Constants.*
 import com.wezom.kiviremote.common.extensions.toPx
@@ -86,6 +88,11 @@ class DirectoriesFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        if (App.isDarkMode())
+            binding.container.background = ResourcesCompat.getDrawable (resources, R.drawable.shape_gradient_black, null)
+        else
+            binding.container.background = ResourcesCompat.getDrawable (resources, R.drawable.shape_gradient_white, null )
 
         viewModel =
                 ViewModelProviders.of(this, viewModelFactory).get(DirectoriesViewModel::class.java)

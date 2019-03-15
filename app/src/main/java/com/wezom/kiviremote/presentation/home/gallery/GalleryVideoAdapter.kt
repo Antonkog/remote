@@ -48,7 +48,7 @@ class GalleryVideoAdapter(
                 if (remoteFileTitle == thumbTitle) {
                     Glide.with(itemView)
                             .load(it.data)
-                            .apply(RequestOptions().error(R.drawable.bg_placeholder_video))
+                            .apply(RequestOptions().error(R.drawable.placeholder_video))
                             .into(icon)
                     uri = it.data
                 }

@@ -5,12 +5,14 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.bus.GotAspectEvent;
 import com.wezom.kiviremote.common.PreferencesManager;
@@ -94,6 +96,7 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
     }
 
     private void init() {
+        binding.buttonAspect.setBackground(ResourcesCompat.getDrawable(getResources(), (App.isDarkMode() ? R.drawable.ic_aspect_settings_black : R.drawable.ic_aspect_settings), null));
         binding.volume.setClickListener(this);
         binding.channels.setClickListener(this);
         binding.dpadBottom.setOnTouchListener(getGenericTouchListener(KiviDPadView.SectorLocation.BOTTOM, KeyEvent.KEYCODE_DPAD_DOWN));
@@ -103,20 +106,20 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
 
         setMute(PreferencesManager.INSTANCE.getMuteStatus());
 
-        if(!AspectHolder.INSTANCE.hasAspectSettings())
+        if (!AspectHolder.INSTANCE.hasAspectSettings())
             viewModel.requestAspect();
         else {
             setInputButton(!AspectHolder.INSTANCE.getPortsList().isEmpty());
             setAspectButton(AspectHolder.INSTANCE.hasAspectSettings());
         }
 
-        binding.mute.setOnClickListener(v -> {
+        binding.mute.setListener(v -> {
             viewModel.sendKeyEvent(KeyEvent.KEYCODE_VOLUME_MUTE);
             toggleMute();
         });
 
         binding.dpadOk.setOnClickListener(v -> viewModel.sendKeyEvent(KeyEvent.KEYCODE_DPAD_CENTER));
-        binding.switchOff.setOnClickListener(v -> viewModel.switchOff());
+        binding.switchOff.setListener(v -> viewModel.switchOff());
         binding.buttonAspect.setOnClickListener(v -> viewModel.goToAspect());
         binding.input.setOnClickListener(click -> viewModel.goToInputSettings());
 
@@ -159,10 +162,10 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
 
     public void setMute(boolean isMute) {
         if (isMute) {
-            binding.mute.setImageDrawable(getResources().getDrawable(R.drawable.selector_mute_btn_active));
+            binding.mute.setImageResource(R.drawable.ic_mute_active);
             this.isMute = true;
         } else {
-            binding.mute.setImageDrawable(getResources().getDrawable(R.drawable.selector_mute_btn));
+            binding.mute.setImageResource(R.drawable.selector_mute_btn);
             this.isMute = false;
         }
     }
@@ -183,10 +186,10 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
     private void toggleMute() {
         if (isMute) {
             isMute = false;
-            binding.mute.setImageDrawable(getResources().getDrawable(R.drawable.selector_mute_btn));
+            binding.mute.setImageResource(R.drawable.selector_mute_btn);
         } else {
             isMute = true;
-            binding.mute.setImageDrawable(getResources().getDrawable(R.drawable.selector_mute_btn_active));
+            binding.mute.setImageResource(R.drawable.ic_mute_active);
         }
     }
 

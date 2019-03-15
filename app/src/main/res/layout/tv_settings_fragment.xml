@@ -6,7 +6,6 @@
         android:id="@+id/tv_settings_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gradient_start"
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
@@ -34,24 +33,15 @@
             app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
 
-        <View
-            android:id="@+id/divider"
-            android:layout_width="match_parent"
-            android:layout_height="6dp"
-            android:background="@drawable/below_shadow"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/toolbar" />
-
-
         <LinearLayout
+            android:id="@+id/tv_settings_layout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/divider">
+            app:layout_constraintTop_toBottomOf="@id/toolbar">
 
 
             <com.wezom.kiviremote.views.AspectHeaderView
@@ -100,7 +90,7 @@
                 app:text="@string/sharpness" />
 
             <com.wezom.kiviremote.views.TextSeekBarView
-                android:id="@+id/backlight"
+                android:id="@+id/back_light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:text="@string/backlight" />
@@ -123,6 +113,9 @@
                 android:layout_height="wrap_content"
                 app:name="@string/ratio"
                 app:variant="@string/r_16x9" />
+
+
+            <include android:id="@+id/dark_mode" layout="@layout/view_horizontal_switch"/>
 
 
         </LinearLayout>

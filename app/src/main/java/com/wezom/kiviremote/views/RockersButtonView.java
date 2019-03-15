@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
@@ -13,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.databinding.ViewRockersButtonBinding;
 import com.wezom.kiviremote.interfaces.RockersButtonClickListener;
@@ -68,6 +70,7 @@ public class RockersButtonView extends LinearLayout {
 
         final CharSequence description = typedArr.getText(R.styleable.RockersButtonView_rb_textDescription);
 
+        binding.container.setBackground(ResourcesCompat.getDrawable(getResources(),App.isDarkMode() ? R.drawable.bg_rockets_black : R.drawable.bg_rockets, null ));
         binding.topImage.setImageResource(typedArr.getResourceId(R.styleable.RockersButtonView_rb_top_image, 0));
         binding.bottomImage.setImageResource(typedArr.getResourceId(R.styleable.RockersButtonView_rb_bottom_image, 0));
         binding.description.setText(description);

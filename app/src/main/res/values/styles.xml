@@ -1,16 +1,33 @@
 <resources>
 
+
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+
+    </style>
+
+    <style name="Light" parent="AppTheme">
+        <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/colorWhite</item>
         <!--<item name="android:textViewStyle">@style/KiviTextViewStyle</item>-->
         <item name="android:textAppearanceSmall">@style/KiviMainTextAppearance</item>
         <!--<item name="android:windowTranslucentStatus">true</item>-->
         <item name="android:windowActionBarOverlay">true</item>
     </style>
+
+    <style name="Dark" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:windowBackground">@color/btnDark</item>
+        <item name="android:textAppearanceSmall">@style/KiviMainTextAppearance</item>
+        <item name="android:windowActionBarOverlay">true</item>
+    </style>
+
 
     <style name="Theme.Transparent" parent="@android:style/Theme">
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -30,10 +47,10 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorWhite</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="actionMenuTextColor">#1bff3a</item>
-        <item name="colorControlNormal">@color/colorGray2</item>
-        <item name="colorControlActivated">@color/colorGray2</item>
-        <item name="android:textColorPrimary">@color/colorGray2</item>
+        <item name="actionMenuTextColor">@color/royal_blue</item>
+        <item name="colorControlNormal">@color/colorTextPrimary</item>
+        <item name="colorControlActivated">@color/colorTextPrimary</item>
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
         <item name="actionButtonStyle">@style/Widget.AppCompat.ActionButton</item>
         <item name="selectableItemBackground">?android:selectableItemBackground</item>
         <item name="selectableItemBackgroundBorderless">?android:selectableItemBackground</item>
@@ -69,4 +86,12 @@
         <item name="android:textSize">@dimen/font_size_24</item>
         <item name="android:textColor">@drawable/selector_digit_button</item>
     </style>
+
+    <style name="Divider">
+        <item name="android:id">@id/divider</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">2px</item>
+        <item name="android:background">@color/divider</item>
+    </style>
+
 </resources>

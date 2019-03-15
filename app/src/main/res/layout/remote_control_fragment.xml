@@ -4,14 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_remote"
         android:orientation="vertical">
-
-        <include
-            android:id="@+id/include"
-            layout="@layout/view_separator_horizontal" />
 
         <com.wezom.kiviremote.views.KiviDPadView
             android:id="@+id/dpad_view"
@@ -21,7 +17,6 @@
             android:clickable="false"
             android:focusableInTouchMode="false"
             android:scaleType="fitCenter"
-            android:src="@drawable/bg_joystick"
             app:arrowSize="@dimen/dpad_arrow_size"
             app:layout_constraintBottom_toTopOf="@+id/home"
             app:layout_constraintLeft_toLeftOf="parent"
@@ -64,17 +59,20 @@
             app:layout_constraintStart_toEndOf="@+id/dpad_ok"
             app:layout_constraintTop_toTopOf="@+id/dpad_view" />
 
-        <ImageView
+
+        <com.wezom.kiviremote.views.ButtonCustomView
             android:id="@+id/dpad_ok"
             android:layout_width="@dimen/ok_size"
             android:layout_height="@dimen/ok_size"
-            android:background="@drawable/round_ok_button"
             android:contentDescription="@string/ok"
+            android:background="@color/shadow_outline"
+            android:padding="2dp"
+            app:central_dr="@drawable/selector_ok"
             app:layout_constraintBottom_toBottomOf="@id/dpad_view"
             app:layout_constraintLeft_toLeftOf="@id/dpad_view"
             app:layout_constraintRight_toRightOf="@id/dpad_view"
-            app:layout_constraintTop_toTopOf="@id/dpad_view"
-            app:srcCompat="@drawable/ok_button_selector" />
+            app:layout_constraintTop_toTopOf="@id/dpad_view"/>
+
 
         <com.wezom.kiviremote.views.RockersButtonView
             android:id="@+id/volume"
@@ -102,7 +100,7 @@
             app:rb_textDescription="@string/chanels_string"
             app:rb_top_image="@drawable/arrow_up_selector" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <com.wezom.kiviremote.views.ButtonCustomView
             android:id="@+id/switch_off"
             android:layout_width="@dimen/button_size"
             android:layout_height="@dimen/button_size"
@@ -110,97 +108,78 @@
             android:layout_alignParentTop="true"
             android:layout_marginTop="@dimen/mute_margin_top"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/button_selector"
             android:padding="@dimen/mid"
-            android:scaleType="centerInside"
+            android:elevation="@dimen/small"
             app:layout_constraintEnd_toStartOf="@+id/mute"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/volume"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/selector_switch_off" />
+            app:central_dr="@drawable/selector_switch_off" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <com.wezom.kiviremote.views.ButtonCustomView
             android:id="@+id/mute"
             android:layout_width="@dimen/button_size"
             android:layout_height="@dimen/button_size"
             android:layout_below="@+id/switch_off"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/mute_margin_top"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
             android:padding="@dimen/mid"
-            android:scaleType="centerInside"
+            android:elevation="@dimen/small"
             app:layout_constraintEnd_toStartOf="@+id/channels"
             app:layout_constraintStart_toEndOf="@+id/switch_off"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/selector_mute_btn" />
+            app:central_dr="@drawable/selector_mute_btn" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <com.wezom.kiviremote.views.ButtonCustomView
             android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="22dp"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
             android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerInside"
+            android:layout_marginStart="@dimen/mid"
+            app:central_dr="@drawable/selector_back_btn"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/home"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/selector_back_btn" />
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <com.wezom.kiviremote.views.ButtonCustomView
             android:id="@+id/home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
             android:layout_marginBottom="22dp"
-            android:focusableInTouchMode="false"
-            android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/input"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/back"
-            app:srcCompat="@drawable/selector_home_btn" />
+            app:central_dr="@drawable/selector_home_btn" />
 
 
-        <android.support.v7.widget.AppCompatImageView
+        <com.wezom.kiviremote.views.ButtonCustomView
             android:id="@+id/input"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
             android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/menu"
             app:layout_constraintHorizontal_bias="0.5"
             android:visibility="gone"
             app:layout_constraintStart_toEndOf="@+id/home"
-            app:srcCompat="@drawable/selector_input_btn" />
+            app:central_dr="@drawable/selector_input_btn" />
 
 
-        <android.support.v7.widget.AppCompatImageView
+        <com.wezom.kiviremote.views.ButtonCustomView
             android:id="@+id/menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="22dp"
+            android:layout_width="@dimen/button_size"
+            android:layout_height="@dimen/button_size"
             android:layout_marginBottom="22dp"
-            android:background="@drawable/button_selector"
-            android:clickable="true"
-            android:focusable="true"
-            android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginEnd="@dimen/mid"
+
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/input"
-            app:srcCompat="@drawable/selector_menu_btn" />
+            app:central_dr="@drawable/selector_menu_btn" />
 
         <Button
             android:id="@+id/button_aspect"
@@ -211,7 +190,6 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:visibility="gone"
-            android:background="@drawable/ic_aspect_settings"
             android:text="@string/image_setting"
             android:textColor="@color/colorSecondaryText"
             android:textSize="@dimen/font_size_14"

@@ -20,7 +20,6 @@
 package com.wezom.kiviremote.upnp.org.droidupnp.model.upnp.didl;
 
 
-import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.upnp.org.droidupnp.model.upnp.IUpnpDevice;
 import com.wezom.kiviremote.upnp.org.droidupnp.view.DeviceDisplay;
 
@@ -56,10 +55,6 @@ public class DIDLDevice implements IDIDLObject {
         return "";
     }
 
-    @Override
-    public int getIcon() {
-        return R.drawable.ic_action_collection;
-    }
 
     @Override
     public String getParentID() {

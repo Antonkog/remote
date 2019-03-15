@@ -19,8 +19,6 @@
 
 package com.wezom.kiviremote.upnp.org.droidupnp.model.cling.didl;
 
-import com.wezom.kiviremote.R;
-
 import org.fourthline.cling.support.model.Res;
 import org.fourthline.cling.support.model.item.AudioItem;
 import org.fourthline.cling.support.model.item.MusicTrack;
@@ -56,8 +54,4 @@ public class ClingAudioItem extends ClingDIDLItem {
         return "";
     }
 
-    @Override
-    public int getIcon() {
-		return R.drawable.ic_action_headphones;
-    }
 }

@@ -19,7 +19,6 @@
 
 package com.wezom.kiviremote.upnp.org.droidupnp.model.cling.didl;
 
-import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.upnp.org.droidupnp.model.upnp.didl.IDIDLItem;
 
 import org.fourthline.cling.support.model.item.Item;
@@ -30,17 +29,11 @@ public class ClingDIDLItem extends ClingDIDLObject implements IDIDLItem {
         super(item);
     }
 
-    @Override
-    public int getIcon() {
-        return R.drawable.ic_file;
-    }
 
     @Override
     public String getURI() {
-        if (item != null) {
-            if (item.getFirstResource() != null && item.getFirstResource().getValue() != null)
-                return item.getFirstResource().getValue();
-        }
+        if (item != null && item.getFirstResource() != null && item.getFirstResource().getValue() != null)
+            return item.getFirstResource().getValue();
         return null;
     }
 }

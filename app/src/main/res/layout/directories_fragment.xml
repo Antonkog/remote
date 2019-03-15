@@ -27,11 +27,6 @@
                 android:layout_height="match_parent"
                 android:clipToPadding="false" />
 
-            <View
-                android:id="@+id/container_shadow"
-                android:layout_width="match_parent"
-                android:layout_height="6dp"
-                android:background="@drawable/below_shadow" />
         </android.support.design.widget.CoordinatorLayout>
 
         <TextView

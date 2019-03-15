@@ -3,6 +3,7 @@ package com.wezom.kiviremote;
 import android.support.multidex.MultiDexApplication;
 
 import com.crashlytics.android.Crashlytics;
+import com.wezom.kiviremote.common.PreferencesManager;
 import com.wezom.kiviremote.di.components.ApplicationComponent;
 import com.wezom.kiviremote.di.components.DaggerApplicationComponent;
 import com.wezom.kiviremote.di.modules.ApplicationModule;
@@ -37,5 +38,9 @@ public class App extends MultiDexApplication {
                 .applicationModule(new ApplicationModule(this))
                 .ciceroneModule(new CiceroneModule(Cicerone.create()))
                 .build();
+    }
+
+    public static boolean isDarkMode() {
+        return  PreferencesManager.INSTANCE.getDarkMode();
     }
 }

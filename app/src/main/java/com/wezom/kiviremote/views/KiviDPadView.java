@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Pair;
 
+import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
 
 import java.util.HashSet;
@@ -32,6 +33,7 @@ public class KiviDPadView extends android.support.v7.widget.AppCompatImageView {
     private RectF mainRect = new RectF();
 
     private Paint paintMain;
+    private Paint paintShadow;
     private Paint paintArrows;
     private Paint paintArrowClicked;
 
@@ -90,7 +92,8 @@ public class KiviDPadView extends android.support.v7.widget.AppCompatImageView {
         ownPadding = dpToPx(context, 8);
 
         int grayLight = getColorCompat(context, R.color.colorSecondaryText);
-        int colorWhite = getColorCompat(context, R.color.colorWhite);
+        int shadowColor = getColorCompat(context, App.isDarkMode()? R.color.kiviDark : R.color.shadow_outline);
+        int mainPaintColor = getColorCompat(context, App.isDarkMode()? R.color.btnDark : R.color.colorWhite);
 
         arrowWidth = dpToPx(context, 2);
         circleShift = dpToPx(getContext(), 4);
@@ -98,7 +101,7 @@ public class KiviDPadView extends android.support.v7.widget.AppCompatImageView {
 
         paintMain = new Paint(Paint.ANTI_ALIAS_FLAG);
         paintMain.setStyle(Paint.Style.FILL);
-        paintMain.setColor(colorWhite);
+        paintMain.setColor(mainPaintColor);
         paintMain.setShader(null);
 
         paintArrows = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -110,6 +113,13 @@ public class KiviDPadView extends android.support.v7.widget.AppCompatImageView {
         paintArrowClicked.setStrokeWidth(arrowWidth);
         paintArrowClicked.setStyle(Paint.Style.STROKE);
         paintArrowClicked.setColor(getColorCompat(context, R.color.colorAccent));
+
+
+        paintShadow = new Paint(Paint.ANTI_ALIAS_FLAG);
+        paintShadow.setStrokeWidth(arrowWidth);
+        paintShadow.setStyle(Paint.Style.STROKE);
+        paintShadow.setColor(shadowColor);
+
     }
 
     @Override
@@ -142,6 +152,7 @@ public class KiviDPadView extends android.support.v7.widget.AppCompatImageView {
         leftSelector.draw(canvas);
 
         drawMainCircle(canvas);
+        drawShadow(canvas);
         drawImages(canvas);
     }
 
@@ -160,6 +171,19 @@ public class KiviDPadView extends android.support.v7.widget.AppCompatImageView {
 
         canvas.drawCircle(width / 2, height / 2, radius, paintMain);
     }
+
+    private void drawShadow(Canvas canvas) {
+        int width = canvas.getWidth();
+        int height = canvas.getHeight();
+
+        int size = width > height ? height : width;
+
+        float radius = size / 2 - ownPadding + circleShift;
+
+        canvas.drawCircle(width / 2, height / 2, radius, paintShadow);
+    }
+
+
 
     public void onSectorSelected(SectorLocation sector, boolean show) {
         selectorPressedEvent(sector, show);

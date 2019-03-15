@@ -19,7 +19,6 @@
 
 package com.wezom.kiviremote.upnp.org.droidupnp.model.cling.didl;
 
-import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.upnp.org.droidupnp.model.upnp.didl.IDIDLContainer;
 
 import org.fourthline.cling.support.model.container.Container;
@@ -32,11 +31,6 @@ public class ClingDIDLContainer extends ClingDIDLObject implements IDIDLContaine
 
     public String getCount() {
         return "" + getChildCount();
-    }
-
-    @Override
-    public int getIcon() {
-        return R.drawable.ic_action_collection;
     }
 
     @Override

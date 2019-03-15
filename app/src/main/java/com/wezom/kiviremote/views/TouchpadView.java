@@ -57,6 +57,7 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
     }
 
     private void init(Context context) {
+
         this.gestureDetectorCompat = new GestureDetectorCompat(context, this);
 
         this.setOnTouchListener((v, event) -> {
@@ -171,6 +172,8 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
 
             return gestureDetectorCompat.onTouchEvent(event);
         });
+
+
     }
 
     @Override

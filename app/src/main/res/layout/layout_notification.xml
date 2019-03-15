@@ -53,21 +53,21 @@
             android:layout_width="@dimen/notification_panel_icon_size"
             android:layout_height="@dimen/notification_panel_icon_size"
             android:padding="16dp"
-            android:src="@drawable/ic_panel_prev" />
+            app:srcCompat="@drawable/ic_panel_prev" />
 
         <ImageView
             android:id="@+id/notification_play"
             android:layout_width="@dimen/notification_panel_icon_size"
             android:layout_height="@dimen/notification_panel_icon_size"
             android:padding="16dp"
-            android:src="@drawable/ic_panel_play" />
+            app:srcCompat="@drawable/ic_panel_play" />
 
         <ImageView
             android:id="@+id/notification_next"
             android:layout_width="@dimen/notification_panel_icon_size"
             android:layout_height="@dimen/notification_panel_icon_size"
             android:padding="16dp"
-            android:src="@drawable/ic_panel_next" />
+            app:srcCompat="@drawable/ic_panel_next" />
     </LinearLayout>
 
     <ImageView

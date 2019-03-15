@@ -3,14 +3,17 @@ package com.wezom.kiviremote.presentation.home.recentdevices
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
 import android.widget.Toast
+import com.wezom.kiviremote.App
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.bus.GotAspectEvent
 import com.wezom.kiviremote.common.Constants
+import com.wezom.kiviremote.common.restartAppColorScheme
 import com.wezom.kiviremote.databinding.TvSettingsFragmentBinding
 import com.wezom.kiviremote.net.model.AspectAvailable
 import com.wezom.kiviremote.net.model.AspectMessage
@@ -47,8 +50,8 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = TvSettingsFragmentBinding.inflate(inflater, container!!, false)
-        binding.backlight.seekBar.setOnSeekBarChangeListener(this)
-        binding.backlight.seekBar.tag = AspectMessage.ASPECT_VALUE.BACKLIGHT
+        binding.backLight.seekBar.setOnSeekBarChangeListener(this)
+        binding.backLight.seekBar.tag = AspectMessage.ASPECT_VALUE.BACKLIGHT
         binding.saturation.seekBar.setOnSeekBarChangeListener(this)
         binding.saturation.seekBar.tag = AspectMessage.ASPECT_VALUE.SATURATION
         binding.sharpness.seekBar.setOnSeekBarChangeListener(this)
@@ -58,14 +61,16 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         binding.brightness.seekBar.setOnSeekBarChangeListener(this)
         binding.brightness.seekBar.tag = AspectMessage.ASPECT_VALUE.BRIGHTNESS
 
-        binding.seekBars.setOnClickListener { _ ->
-            if (!sekBarEnabled)
-                Toast.makeText(context, resources.getString(R.string.toastPic), Toast.LENGTH_SHORT).show()
+        binding.seekBars.setOnClickListener {
+            if (!sekBarEnabled) Toast.makeText(context, resources.getString(R.string.toastPic), Toast.LENGTH_SHORT).show()
         }
 
         binding.temperature.setOnSwitchListener(this)
         binding.ratio.setOnSwitchListener(this)
         binding.aspectHeader.setOnSwitchListener(this)
+        binding.darkMode?.arrow?.setOnClickListener { restartAppColorScheme(activity)}
+        binding.darkMode?.variant?.text = "${ if(App.isDarkMode())  resources.getString(R.string.on) else  resources.getString(R.string.off)}"
+        binding.darkMode?.name?.text = resources.getString(R.string.dark_mode)
 
         return binding.root
     }
@@ -74,7 +79,19 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(TvSettingsViewModel::class.java)
 
+
+        if (App.isDarkMode())
+            binding.tvSettingsLayout.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_gradient_black, null)
+        else
+            binding.tvSettingsLayout.background = ResourcesCompat.getDrawable(resources, R.drawable.shape_gradient_white, null)
+
         viewModel.aspectChange.observe(this, aspectObserver)
+
+        if (!AspectHolder.hasAspectSettings())
+            viewModel.requestAspect()
+        else {
+            viewModel?.aspectChange.postValue(GotAspectEvent(AspectHolder.message, AspectHolder.availableSettings, AspectHolder.initialMsg))
+        }
 
         (activity as HomeActivity).run {
             setSupportActionBar(binding.toolbar)
@@ -130,7 +147,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                 when (key) {
                     AspectMessage.ASPECT_VALUE.BRIGHTNESS.name -> binding.brightness.seekBar.progress = value
                     AspectMessage.ASPECT_VALUE.CONTRAST.name -> binding.contrast.seekBar.progress = value
-                    AspectMessage.ASPECT_VALUE.BACKLIGHT.name -> binding.backlight.seekBar.progress = value
+                    AspectMessage.ASPECT_VALUE.BACKLIGHT.name -> binding.backLight.seekBar.progress = value
                     AspectMessage.ASPECT_VALUE.SATURATION.name -> binding.saturation.seekBar.progress = value
                     AspectMessage.ASPECT_VALUE.SHARPNESS.name -> binding.sharpness.seekBar.progress = value
                     // no HDR !!! cant get cant set on tv not available with current hardware
@@ -177,7 +194,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
 
     fun enableSeekBars(enabled: Boolean) {
         sekBarEnabled = enabled
-        binding.backlight.seekBar.isEnabled = enabled
+        binding.backLight.seekBar.isEnabled = enabled
         binding.saturation.seekBar.isEnabled = enabled
         binding.sharpness.seekBar.isEnabled = enabled
         binding.contrast.seekBar.isEnabled = enabled

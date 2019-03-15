@@ -3,21 +3,32 @@ package com.wezom.kiviremote.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.wezom.kiviremote.App;
+import com.wezom.kiviremote.R;
+
 public class NoSwipeViewPager extends ViewPager {
 
     private boolean enabled = true;
 
-    public NoSwipeViewPager(Context context) {
-        super(context);
-    }
-
     public NoSwipeViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init(context);
+    }
+
+    public NoSwipeViewPager(Context context) {
+        super(context);
+        init(context);
+    }
+
+    private void init(Context context) {
+        this.setBackground(ResourcesCompat.getDrawable(context.getResources(),
+                App.isDarkMode()? R.drawable.shape_gradient_black : R.drawable.shape_gradient_white, null ));
     }
 
     @Override

@@ -19,8 +19,6 @@
 
 package com.wezom.kiviremote.upnp.org.droidupnp.model.cling.didl;
 
-import com.wezom.kiviremote.R;
-
 import org.fourthline.cling.support.model.Res;
 import org.fourthline.cling.support.model.item.VideoItem;
 
@@ -54,8 +52,4 @@ public class ClingVideoItem extends ClingDIDLItem {
         return "";
     }
 
-    @Override
-    public int getIcon() {
-        return R.drawable.ic_action_video;
-    }
 }

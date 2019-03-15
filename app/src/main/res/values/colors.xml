@@ -1,47 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#0041AC</color>
+    <color name="royal_blue">@color/colorPrimary</color>
+
     <color name="colorPrimaryDark">#002F7E</color>
     <color name="colorAccent">#0f5ad3</color>
 
     <color name="colorBlack">#000000</color>
-    <color name="darkGray">#353535</color>
-    <color name="colorTextInactive">#6e6e6e</color>
-    <color name="colorClicked">#fcfcfc</color>
+    <color name="kiviDark">#232323</color>
+    <color name="btnDark">#0B0B0B</color>
+
     <color name="colorWhite">#ffffff</color>
     <color name="light_red">#fd6666</color>
     <color name="trans">#00FFFFFF</color>
     <color name="colorLightGray">#dadada</color>
-    <color name="colorInactivePrimary">#afcede</color>
-    <color name="colorWhiteSemitransparent">#aaffffff</color>
-    <color name="colorGray2">#8a3e3e3e</color>
 
     <color name="colorTextPrimary">#515254</color>
-    <color name="colorDim">#75181818</color>
     <color name="colorSecondaryText">#94969A</color>
+    <color name="playing_now">@color/colorSecondaryText</color>
+
     <color name="divider">#BDBDBD</color>
 
     <!-- general colors -->
     <color name="gradient_start">#F2F2F2</color>
     <color name="shadow_outline">#E3E3E3</color>
-    <color name="shadow_light">#FFE9E6E6</color>
-    <color name="dim_color">#BF181818</color>
 
-    <color name="royal_blue">@color/colorPrimary</color>
-
-    <color name="whiteHalfTransparent">#66E2E2E2</color>
-
-    <color name="media_items">#5D5F62</color>
-    <color name="playback">#CDD2D9</color>
-
-    <color name="sliding_panel_image_title">#5D5F62</color>
-    <color name="sliding_panel_video_title">#FFFFFF</color>
-
-    <color name="playing_now">#B1B4B9</color>
-    <color name="preview_title">#5D5F62</color>
+    <color name="preview_title">@color/colorSecondaryText</color>
     <color name="inactive_progress">#e2e2e2</color>
+    <color name="playback">@color/colorWhite</color>
 
-    <color name="inactive_twenty">#37e2e2e2</color>
+    <color name="sliding_panel_image_title">@color/colorSecondaryText</color>
+    <color name="sliding_panel_video_title">@color/colorWhite</color>
+    <color name="sliding_panel_video_black">@color/colorBlack</color>
     <color name="progress">@color/colorAccent</color>
 
     <color name="image_counter">#B6BAC1</color>

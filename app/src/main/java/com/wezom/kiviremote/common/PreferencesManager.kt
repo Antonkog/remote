@@ -29,5 +29,9 @@ object PreferencesManager {
 
     fun setSelectedTab(value: Int) = preferences.edit().putInt(TAB_SELECTED_KEY, value).apply()
 
+    fun setDarkMode(value: Boolean) = preferences.edit().putBoolean(Constants.DARK_MODE, value).apply()
+
+    fun getDarkMode(): Boolean = preferences.getBoolean(Constants.DARK_MODE, true)
+
     fun getSelectedTab() = preferences.getInt(TAB_SELECTED_KEY, 0)
 }

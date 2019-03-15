@@ -116,4 +116,6 @@
     <string name="photo">Фото</string>
     <string name="toastPic">Для налаштування оберить режим користувач</string>
     <string name="number_of_videos" translatable="false">%1$s відео</string>
+    <string name="dark_mode">Dark Mode</string>
+    <string name="on">Вкл</string>
 </resources>

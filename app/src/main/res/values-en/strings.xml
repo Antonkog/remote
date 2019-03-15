@@ -91,6 +91,7 @@
     <string name="ratio_desc">Picture Ratio (only for video)</string>
     <string name="timer_off">Timer off</string>
     <string name="off">off</string>
+    <string name="on">on</string>
     <string name="minutes">min</string>
     <string name="hours">h</string>
     <string name="cool">Cold</string>
@@ -117,5 +118,6 @@
     <string name="photo">Photo</string>
     <string name="toastPic">To set picture, choose user mode</string>
     <string name="number_of_videos" translatable="false">%1$s video</string>
+    <string name="dark_mode">Dark Mode</string>
 
 </resources>

@@ -29,6 +29,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.sothree.slidinguppanel.SlidingUpPanelLayout;
+import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.Screens;
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
@@ -121,23 +122,23 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             }
 
             if (state.getTerminate()) {
-                binding.layoutRender.renderPlay.setBackground(getImageDrawable(R.drawable.ic_image_play));
-                binding.layoutRender.renderPanelPlay.setImageDrawable(getImageDrawable(R.drawable.ic_panel_play));
+                binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
+                binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_play);
                 refreshPlayListener(null);
                 return;
             }
 
             if (state.getPauseState()) {
-                binding.layoutRender.renderPlay.setBackground(getImageDrawable(R.drawable.ic_image_play));
-                binding.layoutRender.renderPanelPlay.setImageDrawable(getImageDrawable(R.drawable.ic_panel_play));
+                binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
+                binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_play);
                 refreshPlayListener(v -> {
                     Intent serviceIntent = new Intent(this, NotificationService.class);
                     serviceIntent.setAction(NotificationService.ACTION_SLIDESHOW_START);
                     startService(serviceIntent);
                 });
             } else {
-                binding.layoutRender.renderPlay.setBackground(getImageDrawable(R.drawable.ic_image_pause));
-                binding.layoutRender.renderPanelPlay.setImageDrawable(getImageDrawable(R.drawable.ic_panel_pause));
+                binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_pause);
+                binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_pause);
                 refreshPlayListener(v -> {
                     Intent serviceIntent = new Intent(this, NotificationService.class);
                     serviceIntent.setAction(NotificationService.ACTION_SLIDESHOW_STOP);
@@ -156,6 +157,9 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (App.isDarkMode()) setTheme(R.style.Dark);
+        else setTheme(R.style.Light);
+
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
         startCleanupService();
@@ -171,7 +175,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         setupObservers();
     }
 
-    private void startCleanupService(){
+    private void startCleanupService() {
         try {
             startService(new Intent(this, CleanupService.class));
         } catch (IllegalStateException e) {
@@ -248,8 +252,8 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         viewModel.getSlidingPanelContent().observe(this, slidingContentObserver);
         viewModel.getCurrentContentObservable().observe(this, slidingContentObserver);
         viewModel.getSlideshowStateObservable().observe(this, slideshowProgressObserver);
-        flowDisposable = viewModel.getFlowSubject().subscribe(isInterrupted -> {
-            this.isInterrupted = isInterrupted;
+        flowDisposable = viewModel.getFlowSubject().subscribe(interrupted -> {
+            this.isInterrupted = interrupted;
             if (isInterrupted)
                 hideSlidingPanel();
         }, Timber::e);
@@ -537,26 +541,26 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                 if (mediaType == GalleryFragment.MediaType.VIDEO) {
                     switch (state) {
                         case PLAY:
-                            binding.layoutRender.renderPlay.setBackground(getImageDrawable(R.drawable.ic_video_pause));
-                            binding.layoutRender.renderPanelPlay.setImageDrawable(getImageDrawable(R.drawable.ic_panel_pause));
+                            binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_pause);
+                            binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_pause);
                             refreshPlayListener(v -> viewModel.pausePlayback());
                             break;
 
                         case PAUSE:
-                            binding.layoutRender.renderPlay.setBackground(getImageDrawable(R.drawable.ic_video_play));
-                            binding.layoutRender.renderPanelPlay.setImageDrawable(getImageDrawable(R.drawable.ic_panel_play));
+                            binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
+                            binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_play);
                             refreshPlayListener(v -> viewModel.resumePlayback());
                             break;
 
                         case STOP:
-                            binding.layoutRender.renderPlay.setBackground(getImageDrawable(R.drawable.ic_video_play));
-                            binding.layoutRender.renderPanelPlay.setImageDrawable(getImageDrawable(R.drawable.ic_panel_play));
+                            binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
+                            binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_play);
                             restartPlayDelay();
                             break;
 
                         default:
-                            binding.layoutRender.renderPlay.setBackground(getImageDrawable(R.drawable.ic_video_play));
-                            binding.layoutRender.renderPanelPlay.setImageDrawable(getImageDrawable(R.drawable.ic_panel_play));
+                            binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
+                            binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_play);
                             break;
                     }
                     currentState = state;
@@ -650,10 +654,10 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             switch (type) {
                 case IMAGE:
                     viewModel.removeProgressObserver();
-                    binding.layoutRender.renderPlay.setBackground(getImageDrawable(R.drawable.ic_image_play));
-                    binding.layoutRender.renderPanelPlay.setImageDrawable(getImageDrawable(R.drawable.ic_panel_play));
-                    binding.layoutRender.renderPrevious.setBackground(getImageDrawable(R.drawable.ic_image_prev));
-                    binding.layoutRender.renderNext.setBackground(getImageDrawable(R.drawable.ic_image_next));
+                    binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
+                    binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_play);
+                    binding.layoutRender.renderPrevious.setImageResource(R.drawable.ic_image_prev);
+                    binding.layoutRender.renderNext.setImageResource(R.drawable.ic_image_next);
                     binding.layoutRender.renderProgress.setVisibility(View.INVISIBLE);
                     binding.layoutRender.renderMask.setVisibility(View.INVISIBLE);
                     binding.layoutRender.renderBackgroundPreview.setVisibility(View.INVISIBLE);
@@ -676,15 +680,15 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                             .load(url)
                             .apply(RequestOptions.bitmapTransform(new BlurTransformation(5, 2)))
                             .into(binding.layoutRender.renderBackgroundPreview);
-                    binding.layoutRender.renderPrevious.setBackground(getImageDrawable(R.drawable.ic_video_prev));
-                    binding.layoutRender.renderNext.setBackground(getImageDrawable(R.drawable.ic_video_next));
-                    binding.layoutRender.renderPlay.setBackground(getImageDrawable(R.drawable.ic_video_play));
+                    binding.layoutRender.renderPrevious.setImageResource(R.drawable.ic_image_prev);
+                    binding.layoutRender.renderNext.setImageResource(R.drawable.ic_image_next);
+                    binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
                     binding.layoutRender.renderMask.setVisibility(View.VISIBLE);
                     binding.layoutRender.renderBackgroundPreview.setVisibility(View.VISIBLE);
                     binding.layoutRender.renderProgress.setVisibility(View.VISIBLE);
                     binding.layoutRender.renderElapsed.setVisibility(View.VISIBLE);
                     binding.layoutRender.renderRemaining.setVisibility(View.VISIBLE);
-                    binding.layoutRender.renderTitle.setTextColor(getResources().getColor(R.color.sliding_panel_video_title));
+                    binding.layoutRender.renderTitle.setTextColor(getResources().getColor(App.isDarkMode() ? R.color.sliding_panel_video_title : R.color.sliding_panel_video_black));
                     binding.layoutRender.renderSlideshowProgressBackground.setVisibility(View.INVISIBLE);
                     binding.layoutRender.renderSlideshowProgress.setVisibility(View.INVISIBLE);
                     binding.layoutRender.renderCounter.setTextColor(getResources().getColor(R.color.playing_now));
@@ -723,13 +727,18 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     private void loadPreview(String url, GalleryFragment.MediaType type) {
         switch (type) {
             case IMAGE:
-                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.bg_placeholder_image_shadow)).into(binding.layoutRender.renderPreview);
-                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.bg_placeholder_image)).into(binding.layoutRender.renderPreviewThumbnail);
+                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.placeholder_image)).into(binding.layoutRender.renderPreview);
+                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.placeholder_image)).into(binding.layoutRender.renderPreviewThumbnail);
                 break;
 
             case VIDEO:
-                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.bg_placeholder_video_shadow)).into(binding.layoutRender.renderPreview);
-                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.bg_placeholder_video)).into(binding.layoutRender.renderPreviewThumbnail);
+                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.placeholder_video)).into(binding.layoutRender.renderPreview);
+                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.placeholder_video)).into(binding.layoutRender.renderPreviewThumbnail);
+                break;
+            default:
+                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.placeholder_image)).into(binding.layoutRender.renderPreview);
+                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.placeholder_image)).into(binding.layoutRender.renderPreviewThumbnail);
+                break;
         }
     }
 

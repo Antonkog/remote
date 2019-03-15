@@ -63,11 +63,11 @@ class RecentDevicesAdapter(private val context: Context,
 
             if (device.actualName == currentConnection) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    deviceTvStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_tv_active, null))
-                    deviceOnlineStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_online, null))
+                    deviceTvStatus.setImageResource(R.drawable.ic_devices_tv_active)
+                    deviceOnlineStatus.setImageResource(R.drawable.ic_devices_online)
                 } else {
-                    deviceTvStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_tv_active))
-                    deviceOnlineStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_online))
+                    deviceTvStatus.setImageResource(R.drawable.ic_devices_tv_active)
+                    deviceOnlineStatus.setImageResource(R.drawable.ic_devices_online)
                 }
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
@@ -79,16 +79,16 @@ class RecentDevicesAdapter(private val context: Context,
                 deviceTextStatus.text = context.resources.getString(R.string.connected)
             } else {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    deviceTvStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_tv_inactive, null))
+                    deviceTvStatus.setImageResource(R.drawable.ic_devices_tv_inactive)
                 } else {
-                    deviceTvStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_tv_inactive))
+                    deviceTvStatus.setImageResource(R.drawable.ic_devices_tv_inactive)
                 }
 
                 if (device.isOnline) {
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        deviceOnlineStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_online, null))
+                        deviceOnlineStatus.setImageResource(R.drawable.ic_devices_online)
                     } else {
-                        deviceOnlineStatus.setImageDrawable(resources.getDrawable(R.drawable.ic_devices_online))
+                        deviceOnlineStatus.setImageResource(R.drawable.ic_devices_online)
                     }
 
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {

@@ -31,7 +31,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_delete"
+                app:srcCompat="@drawable/ic_close"
                 android:visibility="gone" />
         </android.support.design.widget.CoordinatorLayout>
 
@@ -42,7 +42,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:src="@drawable/ic_devices_tv_active"
+            app:srcCompat="@drawable/ic_devices_tv_active"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/coordinatorLayout"
             app:layout_constraintTop_toTopOf="parent" />
@@ -87,6 +87,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_arrow_tip" />
+            app:srcCompat="@drawable/js_right"
+            />
     </android.support.constraint.ConstraintLayout>
 </layout>

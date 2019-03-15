@@ -1,6 +1,9 @@
 package com.wezom.kiviremote.presentation.home.media
 
 import android.content.Context
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
+import android.support.v4.content.res.ResourcesCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,9 +18,9 @@ import com.wezom.kiviremote.upnp.org.droidupnp.view.DIDLObjectDisplay
 
 
 class MainContentAdapter(
-    context: Context?,
-    private val inflater: LayoutInflater,
-    private inline val command: (String, String) -> Boolean
+        context: Context?,
+        private val inflater: LayoutInflater,
+        private inline val command: (String, String) -> Boolean
 ) : ArrayAdapter<DIDLObjectDisplay>(context, 0) {
 
     private val layout = R.layout.media_item
@@ -30,26 +33,30 @@ class MainContentAdapter(
         val icon: ImageView = view.findViewById(R.id.media_icon)
         val title: TextView = view.findViewById(R.id.media_title)
         val progress: ProgressBar = view.findViewById(R.id.media_item_progress)
-        val separator: View = view.findViewById(R.id.separator)
 
+        progress.progressDrawable.colorFilter = PorterDuffColorFilter(ResourcesCompat.getColor(progress.resources, R.color.colorAccent, null), PorterDuff.Mode.MULTIPLY)
         progress.visibility = View.INVISIBLE
-        separator.visibility = View.VISIBLE
 
         allowClicks = true
 
         val item = entry.didlObject
 
         when (entry.title) {
-            VIDEO -> {title.text = context.getString(R.string.video) ; icon.setImageResource(R.drawable.ic_videos)}
-            IMAGE -> {title.text = context.getString(R.string.photo) ; icon.setImageResource(R.drawable.ic_images)}
-            AUDIO -> {title.text = context.getString(R.string.audio); icon.setImageResource(R.drawable.ic_audio)}
+            VIDEO -> {
+                title.text = context.getString(R.string.video);   icon.setImageResource(R.drawable.placeholder_video)
+            }
+            IMAGE -> {
+                title.text = context.getString(R.string.photo); icon.setImageResource(R.drawable.placeholder_image)
+            }
+            AUDIO -> {
+                title.text = context.getString(R.string.audio); icon.setImageResource(R.drawable.placeholder_audio)
+            }
         }
 
         view.setOnClickListener {
             if (item !is IDIDLItem && allowClicks) {
                 if (command(item.id, item.title)) {
                     progress.visibility = View.VISIBLE
-                    separator.visibility = View.INVISIBLE
                     allowClicks = false
                 }
             }

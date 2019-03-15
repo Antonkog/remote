@@ -13,8 +13,6 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
-        <include layout="@layout/view_separator_horizontal" />
-
         <TextView
             android:id="@+id/apps_label"
             android:layout_width="match_parent"
@@ -51,7 +49,12 @@
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
+                android:visibility="gone"
                 android:layout_height="match_parent">
+
+                <View
+                    android:id="@+id/apps_shadow"
+                    style="@style/Divider" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/apps_container"
@@ -64,15 +67,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <View
-                    android:id="@+id/apps_shadow"
-                    android:layout_width="match_parent"
-                    android:layout_height="6dp"
-                    android:background="@drawable/below_shadow"
-                    android:visibility="gone"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+
 
                 <ProgressBar
                     android:id="@+id/apps_refresh_progress"

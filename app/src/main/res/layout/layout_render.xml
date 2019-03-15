@@ -29,7 +29,7 @@
             android:id="@+id/render_mask"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/dim_color" />
+            android:background="@color/kiviDark" />
 
         <ImageView
             android:id="@+id/render_preview"
@@ -38,7 +38,6 @@
             android:layout_margin="16dp"
             android:duplicateParentState="false"
             android:scaleType="fitCenter"
-            android:src="@drawable/ic_button_bg"
             app:layout_constraintBottom_toTopOf="@+id/render_play_container"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -48,8 +47,8 @@
             android:id="@+id/render_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="marquee"
             android:gravity="center"
             android:singleLine="true"
@@ -73,7 +72,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_margin="4dp"
-                android:background="@drawable/ic_video_play" />
+                app:srcCompat="@drawable/ic_image_play" />
 
             <ProgressBar
                 android:id="@+id/render_slideshow_progress_background"
@@ -103,7 +102,7 @@
             android:id="@+id/render_previous"
             android:layout_width="@dimen/next_prev_size"
             android:layout_height="@dimen/next_prev_size"
-            android:background="@drawable/ic_video_prev"
+            app:srcCompat="@drawable/ic_image_prev"
             app:layout_constraintBottom_toBottomOf="@+id/render_play_container"
             app:layout_constraintEnd_toStartOf="@+id/render_play_container"
             app:layout_constraintStart_toStartOf="parent"
@@ -113,7 +112,7 @@
             android:id="@+id/render_next"
             android:layout_width="@dimen/next_prev_size"
             android:layout_height="@dimen/next_prev_size"
-            android:background="@drawable/ic_video_next"
+            app:srcCompat="@drawable/ic_image_next"
             app:layout_constraintBottom_toBottomOf="@+id/render_play_container"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/render_play_container"
@@ -125,27 +124,27 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/show_hide_start_end_margin"
             android:layout_marginTop="@dimen/show_hide_top_margin"
-            android:src="@drawable/ic_arrow_show_hide"
             android:visibility="invisible"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/js_top" />
 
         <ImageView
             android:id="@+id/render_show_hide"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/show_hide_start_end_margin"
             android:layout_marginTop="@dimen/show_hide_top_margin"
-            android:src="@drawable/ic_arrow_show_hide"
+            android:layout_marginEnd="@dimen/show_hide_start_end_margin"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/js_top" />
 
         <SeekBar
             android:id="@+id/render_progress"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:progressBackgroundTint="@color/whiteHalfTransparent"
+            android:progressBackgroundTint="@color/colorAccent"
             app:layout_constraintBottom_toTopOf="@+id/render_elapsed"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -155,9 +154,9 @@
             android:id="@+id/render_elapsed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/start_time"
             android:textColor="@color/playback"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -169,9 +168,9 @@
             android:id="@+id/render_remaining"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="16dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
             android:text="@string/start_time"
             android:textColor="@color/playback"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -183,8 +182,8 @@
             android:id="@+id/render_preview_thumbnail"
             android:layout_width="@dimen/preview_thumbnail_size"
             android:layout_height="@dimen/preview_thumbnail_size"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toStartOf="@+id/render_panel_close"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/bg_devices_add" />
@@ -193,8 +192,8 @@
             android:id="@+id/render_preview_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="marquee"
             android:singleLine="true"
             android:text="@string/placeholder"
@@ -207,8 +206,8 @@
             android:id="@+id/render_playing_now"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:ellipsize="marquee"
             android:singleLine="true"
             android:text="@string/playing_now"
@@ -233,48 +232,48 @@
             android:id="@+id/render_panel_previous"
             android:layout_width="@dimen/panel_icon_size"
             android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_panel_prev"
             app:layout_constraintBottom_toBottomOf="@id/render_preview_thumbnail"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/render_preview_thumbnail" />
+            app:layout_constraintTop_toTopOf="@id/render_preview_thumbnail"
+            app:srcCompat="@drawable/ic_panel_prev" />
 
         <ImageButton
             android:id="@+id/render_panel_play"
             android:layout_width="@dimen/panel_icon_size"
             android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_panel_play"
             app:layout_constraintBottom_toBottomOf="@id/render_preview_thumbnail"
             app:layout_constraintStart_toEndOf="@+id/render_panel_previous"
-            app:layout_constraintTop_toTopOf="@id/render_preview_thumbnail" />
+            app:layout_constraintTop_toTopOf="@id/render_preview_thumbnail"
+            app:srcCompat="@drawable/ic_panel_play" />
 
         <ImageButton
             android:id="@+id/render_panel_next"
             android:layout_width="@dimen/panel_icon_size"
             android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@drawable/ic_panel_next"
             app:layout_constraintBottom_toBottomOf="@id/render_preview_thumbnail"
             app:layout_constraintStart_toEndOf="@+id/render_panel_play"
-            app:layout_constraintTop_toTopOf="@id/render_preview_thumbnail" />
+            app:layout_constraintTop_toTopOf="@id/render_preview_thumbnail"
+            app:srcCompat="@drawable/ic_panel_next" />
 
         <ImageButton
             android:id="@+id/render_panel_close"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:paddingEnd="8dp"
             android:paddingTop="4dp"
-            android:src="@drawable/ic_close"
+            android:paddingEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/render_preview_thumbnail" />
+            app:layout_constraintTop_toTopOf="@id/render_preview_thumbnail"
+            app:srcCompat="@drawable/ic_close" />
 
         <View
             android:id="@+id/render_panel_close_click"

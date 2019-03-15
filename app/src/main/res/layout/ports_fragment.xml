@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout>
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gradient_start"
         android:orientation="vertical">
 
         <android.support.v7.widget.Toolbar
@@ -25,14 +23,10 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
-            <View
-                android:id="@+id/container_shadow"
-                android:layout_width="match_parent"
-                android:layout_height="6dp"
-                android:background="@drawable/below_shadow" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/ports_container"
+                android:paddingTop="@dimen/x_large"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false" />

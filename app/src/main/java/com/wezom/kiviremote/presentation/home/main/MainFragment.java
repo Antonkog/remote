@@ -4,12 +4,11 @@ import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintSet;
 import android.support.design.widget.TabLayout;
-import android.support.transition.TransitionManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -18,11 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
 
+import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.bus.HideKeyboardEvent;
 import com.wezom.kiviremote.bus.NavigateToRemoteEvent;
 import com.wezom.kiviremote.bus.ShowKeyboardEvent;
-import com.wezom.kiviremote.common.KiviCache;
 import com.wezom.kiviremote.common.PreferencesManager;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.Utils;
@@ -41,8 +40,7 @@ import timber.log.Timber;
 
 public class MainFragment extends BaseFragment implements BackHandler.OnBackClickListener {
 
-    @Inject
-    KiviCache cache;
+
 
     @Inject
     BaseViewModelFactory viewModelFactory;
@@ -54,9 +52,6 @@ public class MainFragment extends BaseFragment implements BackHandler.OnBackClic
     private boolean isKeyboardShown;
 
     private BackHandler backButtonHandler;
-
-    private ConstraintSet mainConstraintSet;
-    private ConstraintSet mainTextConstraintSet;
 
     private int[] imageResId = {
             R.drawable.tab_remote_active, R.drawable.tab_touchpad, R.drawable.tab_apps, R.drawable.tab_media
@@ -140,9 +135,11 @@ public class MainFragment extends BaseFragment implements BackHandler.OnBackClic
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(MainFragmentViewModel.class);
         viewModel.startUPnPController();
 
+        if (App.isDarkMode()) binding.topContainer.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.shape_gradient_black, null));
+        else binding.topContainer.setBackground(ResourcesCompat.getDrawable(getResources(), R.drawable.shape_gradient_white, null));
+
         initObservers();
         initTabLayout();
-        initConstraintSets();
         initListeners();
     }
 
@@ -184,16 +181,9 @@ public class MainFragment extends BaseFragment implements BackHandler.OnBackClic
         binding.mainViewPager.setCurrentItem(getSelectedTab());
         binding.keyboard.setOnClickListener(v -> showInput());
         binding.devices.setOnClickListener(v -> viewModel.navigateToDevices());
-        binding.toolbar.mainTextHide.setOnClickListener(v -> hideInput());
+        binding.toolbar.mainTextHide.setOnClickListener(v -> hideKeyboard());
     }
 
-    private void initConstraintSets() {
-        mainConstraintSet = new ConstraintSet();
-        mainConstraintSet.clone(binding.mainContainer);
-
-        mainTextConstraintSet = new ConstraintSet();
-        mainTextConstraintSet.clone(getActivity(), R.layout.fragment_main_text);
-    }
 
     private void initTabLayout() {
         MainFragmentPagerAdapter adapter = new MainFragmentPagerAdapter(getChildFragmentManager());
@@ -231,31 +221,21 @@ public class MainFragment extends BaseFragment implements BackHandler.OnBackClic
     }
 
     private void hideInput() {
-        TransitionManager.beginDelayedTransition(binding.mainContainer);
-        ConstraintSet constraint;
-
-        constraint = mainConstraintSet;
-        binding.toolbar.mainText.clearFocus();
         Utils.hideKeyboard(getActivity());
-
-        constraint.applyTo(binding.mainContainer);
-
+        binding.toolbar.mainText.clearFocus();
+        binding.toolbar.mainContainer.setVisibility(View.GONE);
+        binding.topContainer.setVisibility(View.VISIBLE);
+        binding.mainViewPager.setVisibility(View.VISIBLE);
         isKeyboardShown = false;
     }
 
     private void showInput() {
-        TransitionManager.beginDelayedTransition(binding.mainContainer);
-        ConstraintSet constraint;
-
-        constraint = mainTextConstraintSet;
         binding.toolbar.mainText.clearFocus();
-
-        Utils.hideKeyboard(getActivity());
-        constraint.applyTo(binding.mainContainer);
-
+        binding.toolbar.mainContainer.setVisibility(View.VISIBLE);
+        binding.topContainer.setVisibility(View.GONE);
+        binding.mainViewPager.setVisibility(View.GONE);
         binding.toolbar.mainText.requestFocus();
         binding.toolbar.mainText.setText("");
-
         Utils.showKeyboard(getActivity());
         isKeyboardShown = true;
     }
@@ -324,8 +304,8 @@ public class MainFragment extends BaseFragment implements BackHandler.OnBackClic
         REMOTE, TOUCHPAD, APPS, MEDIA
     }
 
-//    private static class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
-    private static class MainFragmentPagerAdapter extends FragmentPagerAdapter{
+    //    private static class MainFragmentPagerAdapter extends FragmentStatePagerAdapter {
+    private static class MainFragmentPagerAdapter extends FragmentPagerAdapter {
 
         static final int PAGE_COUNT = 4;
 

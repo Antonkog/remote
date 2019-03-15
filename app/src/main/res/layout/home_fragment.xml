@@ -16,11 +16,8 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <include
-            android:id="@+id/separator"
-            layout="@layout/view_separator_horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="1px"
+        <View
+            style="@style/Divider"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
@@ -171,7 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_found_tv_1"
+                app:srcCompat="@drawable/ic_tv"
                 tools:ignore="VectorDrawableCompat" />
 
             <TextView
@@ -197,6 +194,9 @@
             tools:visibility="gone">
 
             <ProgressBar
+                android:thumbTint="@color/colorPrimary"
+                android:indeterminateTint="@color/colorPrimary"
+                android:indeterminateTintMode="src_in"
                 android:layout_width="@dimen/x_large"
                 android:layout_height="@dimen/x_large"
                 android:layout_gravity="center"

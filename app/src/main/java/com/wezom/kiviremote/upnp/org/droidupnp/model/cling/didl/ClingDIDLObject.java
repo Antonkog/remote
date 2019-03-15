@@ -58,11 +58,6 @@ public class ClingDIDLObject implements IDIDLObject {
     }
 
     @Override
-    public int getIcon() {
-        return android.R.color.transparent;
-    }
-
-    @Override
     public String getParentID() {
         return item.getParentID();
     }

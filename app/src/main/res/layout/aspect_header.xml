@@ -34,7 +34,7 @@
             android:layout_centerVertical="true"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
-            app:srcCompat="@drawable/ic_arrow_tip" />
+            app:srcCompat="@drawable/js_right" />
 
         <ImageView
             android:id="@+id/arrow_l"
@@ -44,6 +44,6 @@
             android:paddingBottom="10dp"
             android:layout_alignParentStart="true"
             android:layout_centerVertical="true"
-            app:srcCompat="@drawable/ic_arrow_left" />
+            app:srcCompat="@drawable/js_left" />
     </RelativeLayout>
 </layout>

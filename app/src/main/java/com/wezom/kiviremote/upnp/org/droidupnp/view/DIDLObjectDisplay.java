@@ -49,10 +49,6 @@ public class DIDLObjectDisplay {
         return didl.getCount();
     }
 
-    public int getIcon() {
-        return didl.getIcon();
-    }
-
     @Override
     public String toString() {
         if (didl instanceof IDIDLContainer)

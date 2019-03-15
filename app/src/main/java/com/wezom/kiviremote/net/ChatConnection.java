@@ -25,6 +25,7 @@ import com.google.gson.GsonBuilder;
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
 import com.wezom.kiviremote.bus.ReconnectEvent;
 import com.wezom.kiviremote.common.Action;
+import com.wezom.kiviremote.common.Constants;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.gson.ListAdapter;
 import com.wezom.kiviremote.net.model.AspectAvailable;
@@ -297,7 +298,7 @@ public class ChatConnection {
                 previousState = currentState;
             }
 
-            currentState = mAddress.isReachable(5000) ? 1 : 0;
+            currentState = mAddress.isReachable(Constants.CONNECTION_TIMEOUT) ? 1 : 0;
             Timber.d("Is reachable: " + (currentState == 1));
 
             switch (currentState) {
@@ -311,7 +312,8 @@ public class ChatConnection {
                     RxBus.INSTANCE.publish(new ChangeSnackbarStateEvent(true));
                     break;
                 case 0:
-                    RxBus.INSTANCE.publish(new ChangeSnackbarStateEvent(false));
+                    if (previousState == 0)//do research
+                        RxBus.INSTANCE.publish(new ChangeSnackbarStateEvent(false));
                     break;
                 default:
                     break;
@@ -332,7 +334,7 @@ public class ChatConnection {
                 }
             }
 
-            if (pingBuffer > 1) {
+            if (pingBuffer > Constants.RECONNECT_TRY) {
                 Timber.d("Error threshold has been reached, disposing");
                 RxBus.INSTANCE.publish(new ChangeSnackbarStateEvent(false)); //do research
                 dispose();
@@ -372,7 +374,7 @@ public class ChatConnection {
                     Timber.d("Client-side socket initialized.");
 
                     pingTimer = Observable //do research
-                            .interval(3, TimeUnit.SECONDS)
+                            .interval(Constants.PING_PERIOD, TimeUnit.SECONDS)
                             .subscribe(t -> {
                                         Timber.d("Client sent ping");
                                         pingServer();
