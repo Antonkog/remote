@@ -24,7 +24,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
 import com.wezom.kiviremote.bus.ReconnectEvent;
-import com.wezom.kiviremote.common.Action;
+import com.wezom.kiviremote.bus.RequestAppsEvent;
 import com.wezom.kiviremote.common.Constants;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.gson.ListAdapter;
@@ -393,7 +393,7 @@ public class ChatConnection {
                             .observeOn(AndroidSchedulers.mainThread())
                             .subscribe());
 
-                    sendMessage(new SocketConnectionModel().setAction(Action.REQUEST_APPS));
+                    RxBus.INSTANCE.publish(new RequestAppsEvent());
 
                 } catch (UnknownHostException e) {
                     Timber.d("Initializing socket failed, UHE", e);

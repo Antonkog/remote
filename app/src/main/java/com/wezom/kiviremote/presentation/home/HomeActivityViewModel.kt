@@ -145,6 +145,13 @@ class HomeActivityViewModel(
                     sendAction(Action.REQUEST_INITIAL)
                 }, onError = Timber::e)
 
+
+        disposables += RxBus.listen(RequestAppsEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    sendAction(Action.REQUEST_APPS)
+                }, onError = Timber::e)
+
         disposables += RxBus.listen(SendScrollEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread()).debounce(SCROLL_EVENT_FREQUENCY, TimeUnit.MILLISECONDS)
                 .subscribeBy(onNext = {
@@ -236,6 +243,10 @@ class HomeActivityViewModel(
     private fun initConnection(nsdModel: NsdServiceModel, firstConnection: Boolean) {
         killPing()
         serverConnection = ChatConnection()
+        if(firstConnection)
+            Run.after(Constants.DELAY_ASK_APPS){
+                RxBus.publish(RequestAppsEvent())
+            }
         connect(nsdModel)
     }
 
@@ -273,7 +284,7 @@ class HomeActivityViewModel(
     fun reconnect() {
         Timber.d("Reconnecting")
         reconnectTimer?.takeUnless { it.isDisposed }?.dispose()
-        reconnectTimer = Single.timer(1, TimeUnit.SECONDS).subscribeBy(
+        reconnectTimer = Single.timer(Constants.DELAY_RECONNECT, TimeUnit.SECONDS).subscribeBy(
                 onSuccess = {
                     currentModel?.let { initConnection(it, false) }
                 }, onError = { Timber.e(it, "Couldn't establish connection: ${it.message}") }

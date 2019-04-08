@@ -6,7 +6,11 @@ import android.os.Environment
 import android.os.storage.StorageManager
 import android.support.annotation.RequiresApi
 import timber.log.Timber
+import java.io.BufferedWriter
 import java.io.File
+import java.io.FileWriter
+import java.io.IOException
+import java.util.*
 
 @RequiresApi(Build.VERSION_CODES.N)
 fun getRoots(context: Context): List<Pair<String, File>> {
@@ -47,3 +51,28 @@ private val File.extension: String?
 private fun startsWithPath(first: File, second: File): Boolean =
         (first.absolutePath.appendSlash()).startsWith(second.absolutePath.appendSlash())
 
+
+fun getLogFile(): File {
+    return File(Environment.getExternalStorageDirectory().toString() + File.separator + Constants.LOG_FILE_PREFIX + Build.MODEL + Constants.LOG_FILE_EXTENSION)
+}
+
+
+fun appendLog(text: String) {
+    val logFile = getLogFile()
+    try {
+        if (!logFile.exists()) {
+            logFile.createNewFile()
+        }
+
+        val calendar = Calendar.getInstance()
+        calendar.timeInMillis = System.currentTimeMillis()
+
+        val buf = BufferedWriter(FileWriter(logFile, true))
+        buf.append(text + " " + calendar.time.toString())
+        buf.newLine()
+        buf.close()
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+
+}

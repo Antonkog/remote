@@ -6,7 +6,10 @@ buildscript {
             'buildTools'            : '26.0.2',
             'minSdk'                : 19,
             'targetSdk'             : 26,
-
+            'versionMajor'             : 1,
+            'versionMinor'             : 2,
+            'versionPatch'             : 0,
+            //versioning see  https://medium.com/@maxirosson/versioning-android-apps-d6ec171cfd82
             'supportLibrary'        : '27.0.1',
             'architectureComponents': '1.0.0',
             'dagger'                : '2.11',

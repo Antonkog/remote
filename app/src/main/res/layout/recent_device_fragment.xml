@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,7 +11,8 @@
         <android.support.v7.widget.Toolbar
             android:id="@+id/recent_device_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="?attr/actionBarSize"
+            tools:ignore="MissingConstraints" />
 
         <TextView
             android:id="@+id/recent_device_name"
@@ -79,7 +80,7 @@
             android:layout_height="@dimen/edit_icon_size"
             android:layout_marginBottom="2dp"
             android:layout_marginStart="2dp"
-            android:src="@drawable/ic_devices_edit"
+            app:srcCompat="@drawable/ic_devices_edit"
             app:layout_constraintBottom_toBottomOf="@+id/recent_device_to_change"
             app:layout_constraintLeft_toRightOf="@+id/recent_device_to_change" />
 

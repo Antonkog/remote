@@ -21,8 +21,8 @@ android {
         applicationId "com.wezom.kiviremote"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
-        versionCode 55
-        versionName "1.1.20"
+        versionCode generateVersionCode()
+        versionName generateVersionName()
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         multiDexEnabled true
@@ -72,6 +72,14 @@ android {
     dataBinding {
         enabled = true
     }
+}
+
+private Integer generateVersionCode() {
+    return versions.minSdk * 10000000 + versions.versionMajor * 10000 + versions.versionMinor * 100 + versions.versionPatch
+}
+
+private String generateVersionName() {
+    return "${versions.versionMajor}.${versions.versionMinor}.${versions.versionPatch}"
 }
 
 dependencies {

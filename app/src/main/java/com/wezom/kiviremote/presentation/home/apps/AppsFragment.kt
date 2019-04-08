@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wezom.kiviremote.R
+import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.KiviCache
 import com.wezom.kiviremote.common.OnVerticalScrollListener
 import com.wezom.kiviremote.common.extensions.toPx
@@ -170,8 +171,7 @@ class AppsFragment : BaseFragment() {
     }
 
     companion object {
-        private const val DELAY: Long = 12000
-
+        private const val DELAY: Long = Constants.DELAY_APPS_GET
         const val POSITION = 2
     }
 }

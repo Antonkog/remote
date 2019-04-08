@@ -7,9 +7,12 @@ import android.graphics.BitmapFactory
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.bus.LaunchAppEvent
 import com.wezom.kiviremote.bus.NavigateToRemoteEvent
-import com.wezom.kiviremote.bus.SendActionEvent
-import com.wezom.kiviremote.common.*
+import com.wezom.kiviremote.bus.RequestAppsEvent
+import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.Constants.CURRENT_CONNECTION_KEY
+import com.wezom.kiviremote.common.KiviCache
+import com.wezom.kiviremote.common.ResourceProvider
+import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.removeMasks
 import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.persistence.AppDatabase
@@ -66,7 +69,7 @@ class AppsViewModel(
             )
     }
 
-    fun requestApps() = RxBus.publish((SendActionEvent(Action.REQUEST_APPS)))
+    fun requestApps() = RxBus.publish(RequestAppsEvent())
 
     fun updateName() {
         disposables += database
