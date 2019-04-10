@@ -83,8 +83,7 @@ public class DeviceSearchFragment extends BaseFragment {
                 && devices.contains(LastNsdHolder.INSTANCE.getNsdServiceWrapper())) {
             Handler h = new Handler();
             h.postDelayed(() -> {
-                connect(LastNsdHolder.INSTANCE.getNsdServiceWrapper());
-            }, Constants.DELAY_COLOR_RESTART);
+                connect(LastNsdHolder.INSTANCE.getNsdServiceWrapper()); }, Constants.DELAY_COLOR_RESTART);
             Timber.e("App is restarted");
         } else {
             Timber.e("App is not restarted");
@@ -155,6 +154,7 @@ public class DeviceSearchFragment extends BaseFragment {
 
     private void connect(NsdServiceInfoWrapper wrapper) {
         if (wrapper != null) {
+            getActivity().getIntent().putExtra(Constants.BUNDLE_REALUNCH_KEY, false);
             viewModel.connect(wrapper);
             LastNsdHolder.INSTANCE.setNsdServiceWrapper(wrapper);
         }

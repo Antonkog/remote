@@ -89,12 +89,6 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
         viewModel.getImputSeen().observe(this, showInputsObserver);
     }
 
-    @Override
-    public void onDestroyView() {
-        viewModel.getMuteStatus().removeObserver(muteObserver);
-        super.onDestroyView();
-    }
-
     private void init() {
         binding.buttonAspect.setBackground(ResourcesCompat.getDrawable(getResources(), (App.isDarkMode() ? R.drawable.ic_aspect_settings_black : R.drawable.ic_aspect_settings), null));
         binding.volume.setClickListener(this);
@@ -103,15 +97,6 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
         binding.dpadLeft.setOnTouchListener(getGenericTouchListener(KiviDPadView.SectorLocation.LEFT, KeyEvent.KEYCODE_DPAD_LEFT));
         binding.dpadRight.setOnTouchListener(getGenericTouchListener(KiviDPadView.SectorLocation.RIGHT, KeyEvent.KEYCODE_DPAD_RIGHT));
         binding.dpadTop.setOnTouchListener(getGenericTouchListener(KiviDPadView.SectorLocation.TOP, KeyEvent.KEYCODE_DPAD_UP));
-
-        setMute(PreferencesManager.INSTANCE.getMuteStatus());
-
-        if (!AspectHolder.INSTANCE.hasAspectSettings())
-            viewModel.requestAspect();
-        else {
-            setInputButton(!AspectHolder.INSTANCE.getPortsList().isEmpty());
-            setAspectButton(AspectHolder.INSTANCE.hasAspectSettings());
-        }
 
         binding.mute.setListener(v -> {
             viewModel.sendKeyEvent(KeyEvent.KEYCODE_VOLUME_MUTE);
@@ -124,8 +109,27 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
         binding.input.setOnClickListener(click -> viewModel.goToInputSettings());
 
         setTvButtons(viewModel, binding.menu, binding.back, binding.home);
+        setMute(PreferencesManager.INSTANCE.getMuteStatus());
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (!AspectHolder.INSTANCE.hasAspectSettings())
+            viewModel.requestAspect();
+        else {
+            setInputButton(!AspectHolder.INSTANCE.getPortsList().isEmpty());
+            setAspectButton(AspectHolder.INSTANCE.hasAspectSettings());
+        }
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        viewModel.getMuteStatus().removeObserver(muteObserver);
+        super.onDestroyView();
+    }
 
     @Override
     public void injectDependencies() {

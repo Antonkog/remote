@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.KiviCache
-import com.wezom.kiviremote.common.OnVerticalScrollListener
 import com.wezom.kiviremote.common.extensions.toPx
 import com.wezom.kiviremote.databinding.AppsFragmentBinding
 import com.wezom.kiviremote.presentation.base.BaseFragment
@@ -132,23 +131,6 @@ class AppsFragment : BaseFragment() {
         binding.appsContainer.run {
             adapter = appsAdapter
             layoutManager = GridLayoutManager(activity, 4)
-            addOnScrollListener(object : OnVerticalScrollListener() {
-                override fun onScrolledUp() {
-                    // NOT IMPLEMENTED
-                }
-
-                override fun onScrolledDown() {
-                    binding.appsShadow.visibility = View.VISIBLE
-                }
-
-                override fun onScrolledToTop() {
-                    binding.appsShadow.visibility = View.GONE
-                }
-
-                override fun onScrolledToBottom() {
-                    // NOT IMPLEMENTED
-                }
-            })
             setHasFixedSize(true)
             setItemViewCacheSize(20)
             isDrawingCacheEnabled = true

@@ -17,11 +17,11 @@
             android:id="@+id/apps_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
             android:text="@string/apps"
-            android:textSize="28sp"
+            android:textSize="@dimen/font_size_14"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -31,6 +31,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:textSize="@dimen/font_size_14"
             android:text="@={viewModel.deviceName}"
             android:textColor="@color/colorSecondaryText"
             app:layout_constraintEnd_toEndOf="@+id/apps_label"
@@ -47,25 +48,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/apps_current_device">
 
+
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
-
-                <View
-                    android:id="@+id/apps_shadow"
-                    style="@style/Divider" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/apps_container"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
-                    android:layout_marginEnd="14dp"
                     android:layout_marginStart="14dp"
+                    android:layout_marginEnd="14dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
 
 
                 <ProgressBar

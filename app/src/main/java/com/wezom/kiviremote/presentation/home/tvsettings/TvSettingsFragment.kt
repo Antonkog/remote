@@ -13,7 +13,6 @@ import com.wezom.kiviremote.App
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.bus.GotAspectEvent
 import com.wezom.kiviremote.common.Constants
-import com.wezom.kiviremote.common.restartAppColorScheme
 import com.wezom.kiviremote.databinding.TvSettingsFragmentBinding
 import com.wezom.kiviremote.net.model.AspectAvailable
 import com.wezom.kiviremote.net.model.AspectMessage
@@ -68,7 +67,8 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         binding.temperature.setOnSwitchListener(this)
         binding.ratio.setOnSwitchListener(this)
         binding.aspectHeader.setOnSwitchListener(this)
-        binding.darkMode?.arrow?.setOnClickListener { restartAppColorScheme(activity)}
+        binding.darkMode?.arrow?.setOnClickListener {
+            viewModel.restartColorScheme(activity)}
         binding.darkMode?.variant?.text = "${ if(App.isDarkMode())  resources.getString(R.string.on) else  resources.getString(R.string.off)}"
         binding.darkMode?.name?.text = resources.getString(R.string.dark_mode)
 

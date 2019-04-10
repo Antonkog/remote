@@ -15,7 +15,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.wezom.kiviremote.R
-import com.wezom.kiviremote.common.OnVerticalScrollListener
 import com.wezom.kiviremote.databinding.RecentDevicesFragmentBinding
 import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
 import com.wezom.kiviremote.persistence.AppDatabase
@@ -94,25 +93,6 @@ class RecentDevicesFragment : BaseFragment() {
                         RecyclerView.SCROLL_STATE_SETTLING -> allowPress = false
                     }
                 }
-            })
-
-            addOnScrollListener(object : OnVerticalScrollListener() {
-                override fun onScrolledUp() {
-                    // do nothing
-                }
-
-                override fun onScrolledDown() {
-                    binding.devicesShadow?.visibility = View.VISIBLE
-                }
-
-                override fun onScrolledToTop() {
-                    binding.devicesShadow?.visibility = View.GONE
-                }
-
-                override fun onScrolledToBottom() {
-                    // do nothing
-                }
-
             })
         }
 

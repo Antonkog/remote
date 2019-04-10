@@ -82,18 +82,24 @@
         app:layout_constraintRight_toLeftOf="@+id/devices_close"
         app:layout_constraintTop_toTopOf="parent" />
 
+
+    <View
+        style="@style/Divider"
+        android:id="@+id/divider"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/devices_edit_title"
+        app:layout_constraintBottom_toTopOf="@id/coordinatorLayout"
+        />
+
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:id="@+id/coordinatorLayout"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/devices_edit_title">
-
-        <View
-            android:id="@+id/recent_devices_shadow"
-            android:visibility="gone"
-            style="@style/Divider"/>
+        app:layout_constraintTop_toBottomOf="@+id/divider">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/devices_container"
