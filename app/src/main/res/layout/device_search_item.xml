@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -11,51 +10,30 @@
             type="com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchAdapter.DeviceSearchModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <LinearLayout
         android:id="@+id/device_search_container"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
-
-        <CheckBox
-            android:id="@+id/checkbox"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_vertical"
-            android:button="@drawable/checkbox_selector"
-            android:checked="@{model.checked}"
-            android:clickable="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="75dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/title"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/checkbox"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/ic_tv_devices" />
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            app:srcCompat="@drawable/ic_tv" />
 
         <TextView
             android:id="@+id/title"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="17dp"
             android:ellipsize="marquee"
             android:padding="@dimen/standard"
             android:singleLine="true"
+            android:text="@{model.name}"
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/font_size_16"
-            app:layout_constraintBottom_toBottomOf="@+id/icon"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/icon"
-            app:layout_constraintTop_toTopOf="@+id/icon"
-            tools:text="@{model.name}" />
-    </android.support.constraint.ConstraintLayout>
+            tools:text="KIVI 32FK42GU" />
+    </LinearLayout>
 </layout>

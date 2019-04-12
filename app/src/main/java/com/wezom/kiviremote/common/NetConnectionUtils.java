@@ -20,7 +20,7 @@ public class NetConnectionUtils {
     public static boolean isConnectedWithWifi(Context context) {
         ConnectivityManager connManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-        return mWifi.isConnected();
+        return mWifi.getTypeName().equals("WIFI");
     }
 
     public static String getCurrentSsid(Context context) {

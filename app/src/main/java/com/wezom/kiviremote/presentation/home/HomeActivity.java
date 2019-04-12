@@ -1,6 +1,7 @@
 package com.wezom.kiviremote.presentation.home;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.arch.lifecycle.MutableLiveData;
@@ -33,7 +34,9 @@ import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.Screens;
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
+import com.wezom.kiviremote.bus.LocationEnabledEvent;
 import com.wezom.kiviremote.bus.NetworkStateEvent;
+import com.wezom.kiviremote.common.GpsUtils;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.Utils;
 import com.wezom.kiviremote.common.extensions.StringUtils;
@@ -173,6 +176,17 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         initUpnpRequirements();
         setupViews();
         setupObservers();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GpsUtils.INSTANCE.getRESULT_CODE()) {
+            if(resultCode == Activity.RESULT_OK){
+                RxBus.INSTANCE.publish(new LocationEnabledEvent(true));
+            } else {
+                RxBus.INSTANCE.publish(new LocationEnabledEvent(false));
+            }
+        }
     }
 
     private void startCleanupService() {

@@ -55,6 +55,7 @@
 
     <string name="current_device">Установленные на %1$s</string>
     <string name="placeholder" translatable="false">placeholdeefwefewfwefwefewfewfwefr</string>
+    <string name="unknown_wifi" translatable="false">unknown</string>
 
     <string name="devices_list_of_connections">Список подключений</string>
     <string name="devices_list_edit">Редактировать список</string>
@@ -202,5 +203,6 @@
     <string name="ports">Входы</string>
     <string name="toastPic">Для настройки изображение выберети пользователький режим</string>
     <string name="on">Вкл</string>
+    <string name="if_you_dont_see_your_device" translatable="false">Если вы не видите ваше устройство в списке,\nто убедитесь в том, что оно находится\nв одной сети с вашим телефоном.</string>
 
 </resources>
