@@ -17,8 +17,6 @@ import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import com.wezom.kiviremote.App
-import com.wezom.kiviremote.common.Constants.BUNDLE_REALUNCH_KEY
 import com.wezom.kiviremote.presentation.splash.SplashActivity
 import io.reactivex.SingleTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -195,26 +193,8 @@ fun triggerRebirth(context: Context) {
     triggerRebirth(context, getRestartIntent(context))
 }
 
-fun restartAppColorScheme(ctx: Activity?) {
-    if (ctx != null) {
-        PreferencesManager.setDarkMode(!App.isDarkMode())
-//        val i = ctx.packageManager.getLaunchIntentForPackage(ctx.packageName)
-//        val pi = PendingIntent.getActivity(ctx, Constants.RESTART_APP_PI, i, PendingIntent.FLAG_CANCEL_CURRENT)
-//        val alarmMgr = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-//        alarmMgr.set(AlarmManager.RTC, System.currentTimeMillis() + 100, pi)
-//        System.exit(0)
-
-        val i = ctx.intent
-        i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-        i.putExtra(BUNDLE_REALUNCH_KEY, true)
-        ctx.finish()
-        ctx.startActivity(i)
-    }
-}
 
 fun restartApp(ctx: Context) {
-
     try {
         val i = ctx.packageManager
                 .getLaunchIntentForPackage(ctx.packageName)

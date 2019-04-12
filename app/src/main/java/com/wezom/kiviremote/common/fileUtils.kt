@@ -58,6 +58,8 @@ fun getLogFile(): File {
 
 
 fun appendLog(text: String) {
+    Timber.i(text)
+    System.out.println(text)
     val logFile = getLogFile()
     try {
         if (!logFile.exists()) {
