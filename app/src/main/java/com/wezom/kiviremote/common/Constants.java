@@ -31,7 +31,6 @@ public class Constants {
     public static final int VER_ASPECT_XVIII = 18; // AspectAvailable introduced  - inputs button, aspect settings
     public static final int VER_ASPECT_XIX = 19; // Deiver values instead of AspectAvailable
 
-    public static final String BUNDLE_REALUNCH_KEY = "relaunch";
     public static final int SERV_REALTEK = 1;
     public static final int SERV_MSTAR = 0;
     public static final String INPUT_PORT = "INPUT_PORT";
@@ -41,6 +40,7 @@ public class Constants {
     public static final int RESTART_APP_PI = 214212;
     public static final String UNIDENTIFIED = "unidentified";
     public static final String DARK_MODE = "dark_mode";
+    public static final String NEED_RECONNECT = "need_reconnect";
 
     public static final String IMAGE = "Фото";
     public static final String VIDEO = "Видео";

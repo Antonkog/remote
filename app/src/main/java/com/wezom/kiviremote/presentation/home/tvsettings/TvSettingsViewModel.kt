@@ -7,7 +7,6 @@ import com.wezom.kiviremote.App
 import com.wezom.kiviremote.bus.GotAspectEvent
 import com.wezom.kiviremote.bus.NewAspectEvent
 import com.wezom.kiviremote.bus.RequestAspectEvent
-import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.PreferencesManager
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.net.model.AspectMessage
@@ -33,10 +32,10 @@ class TvSettingsViewModel(private val router: Router) : BaseViewModel() {
     fun restartColorScheme(ctx: Activity?) {
         if (ctx != null) {
             PreferencesManager.setDarkMode(!App.isDarkMode())
+            PreferencesManager.setReconnectNeed(true)
             val i = ctx.intent
             i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
             i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
-            i.putExtra(Constants.BUNDLE_REALUNCH_KEY, true)
             ctx.finish()
             ctx.startActivity(i)
         }

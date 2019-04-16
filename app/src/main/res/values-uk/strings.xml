@@ -15,8 +15,6 @@
     <string name="discovery_choose_tv">Перелік телевізорів\nв мережі WiFi</string>
 
     <string name="discovery_connect">Підключитися</string>
-    <string name="no.contentDirectoryDevice.found">Пристрої не знайдені\nБудь ласка, переконайтесь, що смартфон та ТВ підключені до однієї WiFi мережі</string>
-    <string name="discovery.in.progress">Йде пошук доступних пристроїв</string>
     <string name="search_again">Повторний пошук</string>
     <string name="search_hint">Введіть запит</string>
 
@@ -45,19 +43,19 @@
 
     <string name="refresh">ОНОВИТИ</string>
 
-    <string name="connectivity_error">Сталася помилка при з'єднанні з ТВ</string>
-    <string name="server_connection_error">Сервер розірвав з'єднання</string>
+    <string name="connectivity_error">Сталася помилка при з\'єднанні з ТВ</string>
+    <string name="server_connection_error">Сервер розірвав з\'єднання</string>
 
     <string name="host_error">Хост не розпізнано додатком</string>
 
-    <string name="device_name_cannot_be_empty">Ім'я пристрою не може бути порожнім</string>
+    <string name="device_name_cannot_be_empty">Ім\'я пристрою не може бути порожнім</string>
 
     <string name="playing_now">Зараз грає</string>
 
     <string name="user_denied_permission">Деякий функціонал програми не буде працювати без дозволу</string>
     <string name="open_settings_dialog">Для продовження необхідно надати дозвіл.\nВідкрити налаштування?</string>
 
-    <string name="connection_is_lost">З'єднання з телевізором перервано</string>
+    <string name="connection_is_lost">З\'єднання з телевізором перервано</string>
 
     <string name="restart_application">перезавантажити?</string>
 
@@ -118,4 +116,6 @@
     <string name="number_of_videos" translatable="false">%1$s відео</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="on">Вкл</string>
+    <string name="no_device_text">Не знайдено\n жодного пристрою.</string>
+    <string name="discovery_in_progress">Йде пошук доступних пристроїв</string>
 </resources>

@@ -15,8 +15,6 @@
     <string name="discovery_choose_tv">List of TVs in WiFi</string>
 
     <string name="discovery_connect">Connect</string>
-    <string name="no.contentDirectoryDevice.found">No devices found\nPlease make sure your smartphone and TV are connected to the same WiFi network.</string>
-    <string name="discovery.in.progress">Searching for available devices</string>
     <string name="search_again">Repeat search</string>
     <string name="search_hint">Type your search</string>
 
@@ -119,5 +117,7 @@
     <string name="toastPic">To set picture, choose user mode</string>
     <string name="number_of_videos" translatable="false">%1$s video</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="no_device_text">Devices not found</string>
+    <string name="discovery_in_progress">Searching for available devices</string>
 
 </resources>

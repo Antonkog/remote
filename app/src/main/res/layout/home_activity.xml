@@ -35,7 +35,7 @@
                 android:id="@+id/disconnect_status_indicator"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/disconnect_status_indicator_height"
-                android:background="@color/light_red"
+                android:background="@color/red"
                 android:visibility="gone" />
         </RelativeLayout>
 

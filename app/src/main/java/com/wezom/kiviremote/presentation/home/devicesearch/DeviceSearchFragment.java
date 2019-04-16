@@ -8,12 +8,14 @@ import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
 import com.wezom.kiviremote.bus.KillPingEvent;
@@ -73,20 +75,18 @@ public class DeviceSearchFragment extends BaseFragment {
             if (devices.size() > 1) {
                 updateDeviceList(devices);
             }
-            tryGoMainScreen(devices);
+            if (PreferencesManager.INSTANCE.isReconnectNeed()) {
+                tryGoMainScreen(devices);
+            }
         }
     };
 
     private void tryGoMainScreen(Set<NsdServiceInfoWrapper> devices) {
-        if (getActivity().getIntent().getBooleanExtra(Constants.BUNDLE_REALUNCH_KEY, false) == true
-                && LastNsdHolder.INSTANCE.getNsdServiceWrapper() != null
+        if (LastNsdHolder.INSTANCE.getNsdServiceWrapper() != null
                 && devices.contains(LastNsdHolder.INSTANCE.getNsdServiceWrapper())) {
             Handler h = new Handler();
-            h.postDelayed(() -> {
-                connect(LastNsdHolder.INSTANCE.getNsdServiceWrapper()); }, Constants.DELAY_COLOR_RESTART);
-            Timber.e("App is restarted");
-        } else {
-            Timber.e("App is not restarted");
+            h.postDelayed(() -> connect(LastNsdHolder.INSTANCE.getNsdServiceWrapper()), Constants.DELAY_COLOR_RESTART);
+            PreferencesManager.INSTANCE.setReconnectNeed(false);
         }
     }
 
@@ -140,9 +140,7 @@ public class DeviceSearchFragment extends BaseFragment {
                     Log.i(this.getClass().getName(), "on Click2");
                 }
         );
-        binding.wifiSettings.setOnClickListener(click -> {
-            startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS));
-        });
+        binding.wifiSettings.setOnClickListener(click -> startActivity(new Intent(Settings.ACTION_WIFI_SETTINGS)));
     }
 
     private void resetMediaPlayback(HomeActivity activity) {
@@ -154,7 +152,6 @@ public class DeviceSearchFragment extends BaseFragment {
 
     private void connect(NsdServiceInfoWrapper wrapper) {
         if (wrapper != null) {
-            getActivity().getIntent().putExtra(Constants.BUNDLE_REALUNCH_KEY, false);
             viewModel.connect(wrapper);
             LastNsdHolder.INSTANCE.setNsdServiceWrapper(wrapper);
         }
@@ -167,7 +164,7 @@ public class DeviceSearchFragment extends BaseFragment {
         showWifiSSID();
         viewModel.updateRecentDevices();
         viewModel.discoverDevices();
-        ((HomeActivity) getActivity()).hideSlidingPanel();
+        if( getActivity()!= null) ((HomeActivity) getActivity()).hideSlidingPanel();
     }
 
     @Override
@@ -210,8 +207,8 @@ public class DeviceSearchFragment extends BaseFragment {
     }
 
     private void showWifiSSID() {
-        String ssid = NetConnectionUtils.getCurrentSsid(getActivity());
-        if (NetConnectionUtils.isConnectedWithWifi(getContext())) {
+        if (getActivity()!= null && getContext()!= null && NetConnectionUtils.isConnectedWithWifi(getContext())) {
+            String ssid = NetConnectionUtils.getCurrentSsid(getActivity());
             binding.wifiIsNotAvailableContainer.setVisibility(View.INVISIBLE);
             binding.wifiIcon.setVisibility(View.VISIBLE);
             binding.wifiNameContainer.setVisibility(View.VISIBLE);
@@ -236,7 +233,8 @@ public class DeviceSearchFragment extends BaseFragment {
 
     private void setMultipleDevices() {
         binding.singleDeviceContainer.setVisibility(View.GONE);
-        binding.noDeviceContainer.setVisibility(View.GONE);
+        binding.placeholder.setVisibility(View.GONE);
+        binding.textPlaceholder.setVisibility(View.GONE);
         binding.devicesContainer.setVisibility(View.VISIBLE);
         binding.singleDeviceConnect.setVisibility(View.INVISIBLE);
         binding.multipleDeviceConnect.setVisibility(View.VISIBLE);
@@ -247,7 +245,10 @@ public class DeviceSearchFragment extends BaseFragment {
     }
 
     private void setNoDeviceViewState() {
-        binding.noDeviceContainer.setVisibility(View.VISIBLE);
+        binding.textPlaceholder.setVisibility(View.VISIBLE);
+        binding.placeholder.setImageDrawable(ResourcesCompat.getDrawable(getResources(),
+                App.isDarkMode() ? R.drawable.ph_no_device_d : R.drawable.ph_no_device, null));
+        binding.placeholder.setVisibility(View.VISIBLE);
         binding.devicesContainer.setVisibility(View.INVISIBLE);
         binding.singleDeviceContainer.setVisibility(View.INVISIBLE);
         binding.singleDeviceConnect.setVisibility(View.GONE);
@@ -259,7 +260,8 @@ public class DeviceSearchFragment extends BaseFragment {
     private void setSingleDeviceViewState(String deviceName) {
         binding.singleDeviceTitle.setText(deviceName);
         binding.singleDeviceContainer.setVisibility(View.VISIBLE);
-        binding.noDeviceContainer.setVisibility(View.GONE);
+        binding.placeholder.setVisibility(View.GONE);
+        binding.textPlaceholder.setVisibility(View.GONE);
         binding.devicesContainer.setVisibility(View.GONE);
         binding.singleDeviceConnect.setVisibility(View.VISIBLE);
         binding.wifiSettings.setVisibility(View.GONE);

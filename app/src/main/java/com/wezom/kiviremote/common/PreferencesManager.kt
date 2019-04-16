@@ -33,5 +33,9 @@ object PreferencesManager {
 
     fun getDarkMode(): Boolean = preferences.getBoolean(Constants.DARK_MODE, true)
 
+    fun isReconnectNeed(): Boolean = preferences.getBoolean(Constants.NEED_RECONNECT, false)
+
+    fun setReconnectNeed(value: Boolean) = preferences.edit().putBoolean(Constants.NEED_RECONNECT, value).apply()
+
     fun getSelectedTab() = preferences.getInt(TAB_SELECTED_KEY, 0)
 }

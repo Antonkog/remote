@@ -19,26 +19,9 @@
     <string name="lorem_ipsum" translatable="false">"Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet</string>
     <string name="discovery_choose_tv">Список телевизоров\nв сети WiFi</string>
 
-    <string name="k.up" translatable="false">UP</string>
-    <string name="k.down" translatable="false">DOWN</string>
-    <string name="k.left" translatable="false">LEFT</string>
-    <string name="k.right" translatable="false">RIGNT</string>
-    <string name="k.ok" translatable="false">OK</string>
-    <string name="k.volume.up" translatable="false">VOL +</string>
-    <string name="k.volume.down" translatable="false">VOL -</string>
-    <string name="k.home" translatable="false">Home</string>
-    <string name="k.back" translatable="false">Back</string>
-    <string name="k.search" translatable="false">Search</string>
-    <string name="k.clear" translatable="false">Clear</string>
-    <string name="k.power" translatable="false">POWER</string>
-    <string name="k.menu" translatable="false">MENU</string>
-    <string name="k.media.menu" translatable="false">MENU_media</string>
-    <string name="k.channel.up" translatable="false">channel_up</string>
-    <string name="k.channel.down" translatable="false">channel_down</string>
-    <string name="k.enter" translatable="false">Enter</string>
     <string name="discovery_connect">Подключиться</string>
-    <string name="no.contentDirectoryDevice.found">Устройства не найдены\nПожалуйста, убедитесь, что смартфон и ТВ подключены к одной WiFi сети</string>
-    <string name="discovery.in.progress">Идет поиск доступных устройств</string>
+    <string name="no_device_text">Не найдено\n ни одного устройства.</string>
+    <string name="discovery_in_progress">Идет поиск доступных устройств</string>
     <string name="search_again">Повторный поиск</string>
     <string name="chanels_string" translatable="false">CH</string>
     <string name="volume_string" translatable="false">VOL</string>

@@ -3,8 +3,6 @@
     <string name="cancel">Болдырмау</string>
     <string name="error">An error occurred, please try again</string>
     <string name="discovery_connect">Қосылыңыз</string>
-    <string name="no.contentDirectoryDevice.found">No devices found</string>
-    <string name="discovery.in.progress">Searching for available devices</string>
     <string name="search_again">Repeat search</string>
     <string name="search_hint">Сұранысты енгізіңіз</string>
     <string name="repeat_search">In the\\&quot;Input Method menu\\&quot; select \\&quot;KIVI Keyboard\\&quot;.</string>
@@ -95,4 +93,6 @@
     <string name="toastPic">To set picture, choose user mode</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="on">on</string>
+    <string name="no_device_text">Devices not found</string>
+    <string name="discovery_in_progress">Searching for available devices</string>
 </resources>

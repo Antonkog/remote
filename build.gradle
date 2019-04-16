@@ -8,7 +8,7 @@ buildscript {
             'targetSdk'             : 26,
             'versionMajor'             : 1,
             'versionMinor'             : 2,
-            'versionPatch'             : 2,
+            'versionPatch'             : 3,
             //versioning see  https://medium.com/@maxirosson/versioning-android-apps-d6ec171cfd82
             'supportLibrary'        : '27.0.1',
             'architectureComponents': '1.0.0',

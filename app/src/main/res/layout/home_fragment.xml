@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -26,11 +26,11 @@
             android:id="@+id/pick_tv_label"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/mid"
-            android:paddingTop="@dimen/mid"
-            android:layout_marginEnd="@dimen/mid"
             android:layout_marginStart="@dimen/mid"
+            android:layout_marginEnd="@dimen/mid"
             android:gravity="center"
+            android:paddingTop="@dimen/mid"
+            android:paddingBottom="@dimen/mid"
             android:text="@string/discovery_choose_tv"
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/font_size_16"
@@ -44,8 +44,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="@+id/wifi_name_container"
             app:layout_constraintLeft_toLeftOf="@+id/pick_tv_label"
             app:layout_constraintTop_toTopOf="@+id/wifi_name_container"
@@ -92,8 +92,8 @@
             android:id="@+id/wifi_is_not_available_container"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
             android:visibility="gone"
             app:layout_constraintEnd_toEndOf="@+id/pick_tv_label"
             app:layout_constraintStart_toStartOf="@+id/wifi_icon"
@@ -105,49 +105,44 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:ellipsize="marquee"
-                android:textColor="@color/light_red"
                 android:singleLine="true"
-                android:text="@string/network_failure_message" />
+                android:text="@string/network_failure_message"
+                android:textColor="@color/red" />
         </FrameLayout>
 
-
-        <!--todo uncomment when functional will be added -->
-        <!--<android.support.v7.widget.AppCompatImageView
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/placeholder"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            app:srcCompat="@drawable/ic_arrow_down"
-            android:layout_gravity="center"
-            />-->
-
-        <LinearLayout
-            android:id="@+id/no_device_container"
-            layout="@layout/holder_no_items"
-            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:orientation="vertical"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/pick_tv_label"
-            tools:visibility="gone">
+            app:layout_constraintBottom_toTopOf="@+id/text_placeholder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/devices_container"
+            app:srcCompat="@drawable/ph_no_device" />
 
-            <android.support.v7.widget.AppCompatImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/ic_not_found" />
+        <TextView
+            android:id="@+id/text_placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/shape_red_rect"
+            android:gravity="center_horizontal"
+            android:padding="16dp"
+            android:text="@string/no_device_text"
+            android:textAppearance="@style/KiviMainTextAppearance"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@+id/single_device_connect"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/placeholder" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/mid"
-                android:gravity="center_horizontal"
-                android:text="@string/no.contentDirectoryDevice.found"
-                android:textAppearance="@style/KiviMainTextAppearance" />
-        </LinearLayout>
 
         <android.support.v7.widget.LinearLayoutCompat
             android:id="@+id/single_device_container"
@@ -194,13 +189,13 @@
             tools:visibility="gone">
 
             <ProgressBar
-                android:thumbTint="@color/colorPrimary"
-                android:indeterminateTint="@color/colorPrimary"
-                android:indeterminateTintMode="src_in"
                 android:layout_width="@dimen/x_large"
                 android:layout_height="@dimen/x_large"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/mid" />
+                android:layout_margin="@dimen/mid"
+                android:indeterminateTint="@color/colorPrimary"
+                android:indeterminateTintMode="src_in"
+                android:thumbTint="@color/colorPrimary" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -208,7 +203,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:padding="@dimen/mid"
-                android:text="@string/discovery.in.progress"
+                android:text="@string/discovery_in_progress"
                 android:textAppearance="@style/KiviMainTextAppearance" />
         </LinearLayout>
 
