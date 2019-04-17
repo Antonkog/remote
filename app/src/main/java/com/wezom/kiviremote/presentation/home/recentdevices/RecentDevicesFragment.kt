@@ -3,12 +3,11 @@ package com.wezom.kiviremote.presentation.home.recentdevices
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.SharedPreferences
+import android.net.nsd.NsdServiceInfo
 import android.os.Bundle
 import android.support.constraint.ConstraintSet
 import android.support.transition.AutoTransition
-import android.support.transition.Scene
 import android.support.transition.Transition
-import android.support.transition.TransitionManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -22,8 +21,9 @@ import com.wezom.kiviremote.persistence.model.RecentDevice
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
+import com.wezom.kiviremote.presentation.home.recentdevices.list.DevicesListAdapter
+import java.util.*
 import javax.inject.Inject
-
 
 class RecentDevicesFragment : BaseFragment() {
 
@@ -56,8 +56,8 @@ class RecentDevicesFragment : BaseFragment() {
         it?.let { onNewDevicesDiscovered(it) }
     }
 
-    private val adapter: RecentDevicesAdapter by lazy {
-        RecentDevicesAdapter(activity!!, database, preferences, viewModel::navigateToRecentDevice)
+    private val adapter: DevicesListAdapter by lazy {
+        DevicesListAdapter(preferences,viewModel::navigateToRecentDevice)
     }
 
     override fun injectDependencies() = fragmentComponent.inject(this)
@@ -72,7 +72,7 @@ class RecentDevicesFragment : BaseFragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecentDevicesViewModel::class.java)
 
         viewModel.run {
-            discoverDevices()
+            requestRecentDevices()
             nsdServices.observe(this@RecentDevicesFragment, nsdServicesObserver)
             recentDevices.observe(this@RecentDevicesFragment, recentDevicesObserver)
         }
@@ -96,7 +96,9 @@ class RecentDevicesFragment : BaseFragment() {
             })
         }
 
-        viewModel.requestRecentDevices()
+        ///viewModel.requestRecentDevices()
+        viewModel.discoverDevices()
+
         setupConstraintMagic()
         (activity as HomeActivity).hideSlidingPanel()
 
@@ -120,19 +122,29 @@ class RecentDevicesFragment : BaseFragment() {
             }
         }
 
-        binding.devicesCancel.setOnClickListener {
-            if (allowPress) {
-                adapter.discardChanges()
-                toggleEdit()
-            }
-        }
+//        binding.devicesCancel.setOnClickListener {
+//            if (allowPress) {
+//                adapter.discardChanges()
+//                toggleEdit()
+//            }
+//        }
+//
+//        binding.devicesConfirm.setOnClickListener {
+//            if (allowPress) {
+//                adapter.confirmDeletion()
+//                toggleEdit()
+//            }
+//        }
 
-        binding.devicesConfirm.setOnClickListener {
-            if (allowPress) {
-                adapter.confirmDeletion()
-                toggleEdit()
-            }
-        }
+        val wrapper = NsdServiceInfoWrapper(NsdServiceInfo(), "LeoTV")
+        val set = HashSet<NsdServiceInfoWrapper>()
+        set.add(wrapper)
+        set.add(wrapper)
+        set.add(wrapper)
+
+        setRecentDevices(listOf(RecentDevice("Huy","Bleat"),RecentDevice("Huy","Bleat")))
+        onNewDevicesDiscovered(set)
+
     }
 
     private fun setupConstraintMagic() {
@@ -173,22 +185,22 @@ class RecentDevicesFragment : BaseFragment() {
             }
         })
 
-        adapter.apply {
-            val constraint: ConstraintSet
-            if (isInEditMode) {
-                constraint = mainConstraintSet
-                allowNavigation = true
-                showDelete()
-            } else {
-                constraint = mainEditConstraintSet
-                allowNavigation = false
-                showDelete()
-            }
-
-            constraint.applyTo(binding.recentDevicesContainer)
-            disableClicks()
-            TransitionManager.go(Scene(binding.recentDevicesContainer), autoTransition)
-        }
+//        adapter.apply {
+//            val constraint: ConstraintSet
+//            if (isInEditMode) {
+//                constraint = mainConstraintSet
+//                allowNavigation = true
+//                showDelete()
+//            } else {
+//                constraint = mainEditConstraintSet
+//                allowNavigation = false
+//                showDelete()
+//            }
+//
+//            constraint.applyTo(binding.recentDevicesContainer)
+//            disableClicks()
+//            TransitionManager.go(Scene(binding.recentDevicesContainer), autoTransition)
+//        }
 
 
         if (!isInEditMode) {
@@ -217,8 +229,11 @@ class RecentDevicesFragment : BaseFragment() {
         binding.devicesClose.isEnabled = true
     }
 
-    private fun setRecentDevices(devices: List<RecentDevice>) = adapter.setNewDevices(devices)
+    private fun setRecentDevices(devices: List<RecentDevice>) {
+        adapter.setRecentDevices(if (devices.size > 5) devices.takeLast(5) else devices)
+    }
 
-    private fun onNewDevicesDiscovered(devicesOnline: Set<NsdServiceInfoWrapper>) =
-            adapter.onDevicesOnlineStatusChange(devicesOnline)
+    private fun onNewDevicesDiscovered(devicesOnline: Set<NsdServiceInfoWrapper>) {
+        adapter.setOnlineDevices(devicesOnline)
+    }
 }

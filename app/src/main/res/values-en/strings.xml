@@ -30,6 +30,7 @@
     <string name="current_device">Installed on %1$s</string>
 
     <string name="devices_list_edit">Edit list</string>
+    <string name="devices_kivi">Devices KIVI</string>
 
     <string name="connected">Connected</string>
     <string name="online">Online</string>

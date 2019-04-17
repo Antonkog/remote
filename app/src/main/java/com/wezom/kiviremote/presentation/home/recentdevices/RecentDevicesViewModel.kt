@@ -26,6 +26,11 @@ class RecentDevicesViewModel(private val router: Router,
 
     fun navigateToRecentDevice(data: RecentDevice) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)
 
+    fun requestLastRecentDevices(count: Int = 5) {
+        disposables += database.recentDeviceDao().getLastAdded(count).backToMain()
+                .subscribe({ result -> recentDevices.postValue(result) }, { t -> Timber.e(t, t.message) })
+    }
+
     fun requestRecentDevices() {
         disposables += database.recentDeviceDao().all.backToMain()
                 .subscribe({ result -> recentDevices.postValue(result) }, { t -> Timber.e(t, t.message) })

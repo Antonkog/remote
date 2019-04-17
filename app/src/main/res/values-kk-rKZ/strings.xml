@@ -14,6 +14,7 @@
     <string name="apps">Applications</string>
     <string name="current_device">Installed on %1$s</string>
     <string name="devices_list_edit">Тізімді өңдеу</string>
+    <string name="devices_kivi">Құрылғылары KIVI</string>
     <string name="connected">Қосылды</string>
     <string name="online">Online</string>
     <string name="offline">Offline</string>
