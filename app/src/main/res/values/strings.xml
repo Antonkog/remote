@@ -60,6 +60,8 @@
     <string name="devices_list_of_connections">Список подключений</string>
     <string name="devices_list_edit">Редактировать список</string>
     <string name="devices_kivi">Устройства KIVI</string>
+    <string name="mine_devices">Мои устройства</string>
+    <string name="other_devices">Другие устройства</string>
 
     <string name="connected">Подключен</string>
     <string name="online">В сети</string>

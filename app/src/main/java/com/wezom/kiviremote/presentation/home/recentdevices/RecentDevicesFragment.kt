@@ -3,7 +3,6 @@ package com.wezom.kiviremote.presentation.home.recentdevices
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.SharedPreferences
-import android.net.nsd.NsdServiceInfo
 import android.os.Bundle
 import android.support.constraint.ConstraintSet
 import android.support.transition.AutoTransition
@@ -22,7 +21,6 @@ import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.recentdevices.list.DevicesListAdapter
-import java.util.*
 import javax.inject.Inject
 
 class RecentDevicesFragment : BaseFragment() {
@@ -135,15 +133,6 @@ class RecentDevicesFragment : BaseFragment() {
 //                toggleEdit()
 //            }
 //        }
-
-        val wrapper = NsdServiceInfoWrapper(NsdServiceInfo(), "LeoTV")
-        val set = HashSet<NsdServiceInfoWrapper>()
-        set.add(wrapper)
-        set.add(wrapper)
-        set.add(wrapper)
-
-        setRecentDevices(listOf(RecentDevice("Huy","Bleat"),RecentDevice("Huy","Bleat")))
-        onNewDevicesDiscovered(set)
 
     }
 

@@ -10,7 +10,7 @@ import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.extensions.removeMasks
 import com.wezom.kiviremote.persistence.model.RecentDevice
 
-class DeviceViewHolder(val view: View, val command: (RecentDevice) -> Unit = {}) : RecyclerView.ViewHolder(view) {
+class DeviceViewHolder(private val view: View, private val command: (RecentDevice) -> Unit = {}) : RecyclerView.ViewHolder(view) {
 
     private val tvName = view.findViewById<TextView>(R.id.device_name)
     private val ivInfo = view.findViewById<ImageView>(R.id.device_info_btn)
@@ -18,16 +18,11 @@ class DeviceViewHolder(val view: View, val command: (RecentDevice) -> Unit = {})
 
     val container: ConstraintLayout = view.findViewById(R.id.device_container)
 
-    fun setRecentDevice(device: RecentDevice, currentConnection: String, isMineDevice: Boolean) {
+    fun setRecentDevice(device: RecentDevice, currentConnection: String, isShowInfoIcon: Boolean) {
         tvName.text = if (device.userDefinedName != null) device.userDefinedName else device.actualName.removeMasks()
-        tvName.setTextColor(ResourcesCompat.getColor(view.context.resources,
-                if (device.actualName == currentConnection || device.isOnline)
-                    R.color.colorTextPrimary else
-                    R.color.colorSecondaryText,
-                null))
-
+        tvName.setTextColor(ResourcesCompat.getColor(view.context.resources, if (device.isOnline) R.color.colorTextPrimary else R.color.colorSecondaryText, null))
+        ivInfo.visibility = if (isShowInfoIcon) View.VISIBLE else View.GONE
         container.setOnClickListener { command(device) }
-        ivInfo.visibility = if (isMineDevice) View.VISIBLE else View.GONE
     }
 
 }

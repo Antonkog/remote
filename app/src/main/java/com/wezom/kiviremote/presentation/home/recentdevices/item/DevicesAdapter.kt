@@ -6,23 +6,13 @@ import android.view.ViewGroup
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.persistence.model.RecentDevice
 
-class DevicesAdapter(private val currentConnection: String, val command: (RecentDevice) -> Unit = {}) : RecyclerView.Adapter<DeviceViewHolder>() {
+class DevicesAdapter(private val currentConnection: String, val command: (RecentDevice) -> Unit = {}, private val isShowInfoIcon: Boolean = true) : RecyclerView.Adapter<DeviceViewHolder>() {
 
-    private var devices = mutableListOf<RecentDevice>()
+    private val devices = mutableListOf<RecentDevice>()
 
     fun swapData(newData: List<RecentDevice>) {
         devices.clear()
         devices.addAll(newData)
-        notifyDataSetChanged()
-    }
-
-    fun addElement(data: RecentDevice) {
-        devices.add(data)
-        notifyItemInserted(devices.size - 1)
-    }
-
-    fun clearData() {
-        devices.clear()
         notifyDataSetChanged()
     }
 
@@ -31,7 +21,7 @@ class DevicesAdapter(private val currentConnection: String, val command: (Recent
     }
 
     override fun onBindViewHolder(holder: DeviceViewHolder, position: Int) {
-        holder.setRecentDevice(devices[position], currentConnection, true)
+        holder.setRecentDevice(devices[position], currentConnection, isShowInfoIcon)
     }
 
     override fun getItemCount(): Int = devices.size

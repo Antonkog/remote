@@ -32,6 +32,8 @@
     <string name="devices_list_of_connections">Список підключень</string>
     <string name="devices_list_edit">Редагувати список</string>
     <string name="devices_kivi">Пристрої KIVI</string>
+    <string name="mine_devices">Мої пристрої</string>
+    <string name="other_devices">Інші пристрої</string>
 
     <string name="connected">Підключений</string>
     <string name="online">В мережі</string>
