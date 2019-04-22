@@ -20,8 +20,12 @@ class DevicesListAdapter(preferences: SharedPreferences, val command: (RecentDev
         private const val TYPE_OTHER = 2
     }
 
+    /* Counter for cleaning device lists, when counter == 2 then clear lists
+       Created for right filtering */
+    private var counter = 0
+
     private var currentConnection by preferences.string(Constants.UNIDENTIFIED, Constants.CURRENT_CONNECTION_KEY)
-    private val deviceChunks: HashMap<Int, MutableList<RecentDevice>> = hashMapOf()
+    private val deviceChunks: HashMap<Int, MutableList<RecentDevice>?> = hashMapOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DevicesListViewHolder {
         return DevicesListViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.devices_list_item, parent, false))
@@ -29,8 +33,24 @@ class DevicesListAdapter(preferences: SharedPreferences, val command: (RecentDev
 
     override fun onBindViewHolder(holder: DevicesListViewHolder, position: Int) {
         when (getItemViewType(position)) {
-            TYPE_RECENT -> { holder.bindData(holder.view.context.getString(R.string.mine_devices).toString(), deviceChunks[TYPE_RECENT]!!, DevicesAdapter(currentConnection, command, true)) }
-            TYPE_ONLINE -> { holder.bindData(holder.view.context.getString(R.string.other_devices).toString(), deviceChunks[TYPE_ONLINE]!!, DevicesAdapter(currentConnection, command, false)) }
+            TYPE_RECENT -> {
+                counter++
+                deviceChunks[TYPE_RECENT]?.let {
+                    holder.bindData(holder.view.context.getString(R.string.mine_devices).toString(), it, DevicesAdapter(currentConnection, command, true))
+                }
+            }
+            TYPE_ONLINE -> {
+                counter++
+                deviceChunks[TYPE_ONLINE]?.let {
+                    holder.bindData(holder.view.context.getString(R.string.other_devices).toString(), it, DevicesAdapter(currentConnection, command, false))
+                }
+            }
+        }
+
+        if (counter == 2) {
+            counter = 0
+            deviceChunks[TYPE_RECENT] = null
+            deviceChunks[TYPE_ONLINE] = null
         }
     }
 
