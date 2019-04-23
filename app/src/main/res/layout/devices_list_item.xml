@@ -6,7 +6,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="26dp"
         android:orientation="vertical">
 
         <TextView
@@ -14,8 +14,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
+            android:layout_marginBottom="8dp"
+            android:fontFamily="sans-serif-medium"
             android:textAllCaps="true"
-            android:textColor="@color/colorBlack"
+            android:textColor="#0F6BFB"
             android:textSize="16sp"
             tools:text="Мои устройства" />
 

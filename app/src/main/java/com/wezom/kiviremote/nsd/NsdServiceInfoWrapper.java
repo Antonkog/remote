@@ -2,11 +2,13 @@ package com.wezom.kiviremote.nsd;
 
 import android.net.nsd.NsdServiceInfo;
 
+import java.io.Serializable;
+
 /**
  * Created by andre on 25.05.2017.
  */
 
-public class NsdServiceInfoWrapper {
+public class NsdServiceInfoWrapper implements Serializable {
     private NsdServiceInfo service;
     private String serviceName;
 

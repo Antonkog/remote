@@ -14,7 +14,6 @@ import com.wezom.kiviremote.di.components.ActivityComponent;
 import com.wezom.kiviremote.di.components.ApplicationComponent;
 import com.wezom.kiviremote.di.modules.ActivityModule;
 import com.wezom.kiviremote.navigation.SupportFragmentNavigator;
-import com.wezom.kiviremote.persistence.model.RecentDevice;
 import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchFragment;
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesFragment;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
@@ -22,6 +21,7 @@ import com.wezom.kiviremote.presentation.home.main.MainFragment;
 import com.wezom.kiviremote.presentation.home.ports.PortsFragment;
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragment;
+import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo;
 import com.wezom.kiviremote.presentation.home.recentdevices.TvSettingsFragment;
 import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlFragment;
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadFragment;
@@ -60,7 +60,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         case Screens.RECENT_DEVICES_FRAGMENT:
                             return new RecentDevicesFragment();
                         case Screens.RECENT_DEVICE_FRAGMENT:
-                            return RecentDeviceFragment.newInstance((RecentDevice) data);
+                            return RecentDeviceFragment.newInstance((TvDeviceInfo) data);
                         case Screens.GALLERY_FRAGMENT:
                             return new GalleryFragment();
                         case Screens.DIRECTORIES_FRAGMENT:

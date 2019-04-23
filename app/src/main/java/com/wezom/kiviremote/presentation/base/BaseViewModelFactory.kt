@@ -43,7 +43,7 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
             HomeActivityViewModel(database, navigatorHolder, router, uPnPManager, preferences) as T
 
         modelClass.isAssignableFrom(RecentDeviceViewModel::class.java) ->
-            RecentDeviceViewModel(database) as T
+            RecentDeviceViewModel(database, router) as T
 
         modelClass.isAssignableFrom(MainFragmentViewModel::class.java) ->
             MainFragmentViewModel(router, uPnPManager) as T

@@ -97,28 +97,16 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <android.support.design.widget.CoordinatorLayout
-            android:id="@+id/coordinatorLayout"
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/devices_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/devices_title">
+            app:layout_constraintTop_toBottomOf="@+id/devices_title"
+            tools:listitem="@layout/devices_list_item" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/devices_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                tools:listitem="@layout/device_item" />
-
-            <ImageView
-                android:id="@+id/devices_home"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center|bottom"
-                app:srcCompat="@drawable/bg_devices_add" />
-        </android.support.design.widget.CoordinatorLayout>
     </android.support.constraint.ConstraintLayout>
 
 </layout>

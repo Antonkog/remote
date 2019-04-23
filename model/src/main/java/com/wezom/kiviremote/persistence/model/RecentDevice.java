@@ -10,8 +10,10 @@ import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import java.io.Serializable;
+
 @Entity(tableName = "recent_devices", indices = {@Index(value = {"actual_name"}, unique = true)})
-public class RecentDevice implements Parcelable, Comparable<RecentDevice> {
+public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Serializable {
 
     public RecentDevice(String actualName, @Nullable String userDefinedName) {
         this.actualName = actualName;
