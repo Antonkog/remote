@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/recent_devices_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:animateLayoutChanges="true">
+
+            <LinearLayout
+                android:id="@+id/top_container"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <com.wezom.kiviremote.views.HorizontalCardsView
+                    android:id="@+id/view_apps"
+                    app:type="@string/apps"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+                <com.wezom.kiviremote.views.HorizontalCardsView
+                    android:id="@+id/view_recs"
+                    app:type="@string/recommendations"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+                <com.wezom.kiviremote.views.HorizontalCardsView
+                    android:id="@+id/view_channels"
+                    app:type="@string/channels"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <com.wezom.kiviremote.views.HorizontalCardsView
+                    android:id="@+id/view_inputs"
+                    app:type="@string/ports"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            </LinearLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

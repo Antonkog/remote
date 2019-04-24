@@ -29,6 +29,9 @@
   </declare-styleable>
 
 
+  <declare-styleable name="HorizontalCardsView">
+    <attr name="type" format="string" />
+  </declare-styleable>
 
   <declare-styleable name="ButtonCustomView">
     <attr name="central_dr" format="reference"/>

@@ -400,4 +400,8 @@ class HomeActivityViewModel(
     fun getFlowSubject() = uPnPManager.flowSubject
 
     fun stopPlayback() = uPnPManager.stop()
+
+    fun goTo(screenKey: String) {
+        router.navigateTo(screenKey);
+    }
 }

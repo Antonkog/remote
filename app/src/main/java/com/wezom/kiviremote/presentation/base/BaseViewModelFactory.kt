@@ -20,6 +20,7 @@ import com.wezom.kiviremote.presentation.home.media.MediaViewModel
 import com.wezom.kiviremote.presentation.home.ports.PortsViewModel
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceViewModel
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesViewModel
+import com.wezom.kiviremote.presentation.home.recommendations.RecommendationsViewModel
 import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlViewModel
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadViewModel
 import com.wezom.kiviremote.presentation.home.tvsettings.TvSettingsViewModel
@@ -51,6 +52,10 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
         modelClass.isAssignableFrom(RemoteControlViewModel::class.java) ->
             RemoteControlViewModel(router) as T
 
+
+        modelClass.isAssignableFrom(RecommendationsViewModel::class.java) ->
+            RecommendationsViewModel(router, database, cache, preferences, uPnPManager) as T
+
         modelClass.isAssignableFrom(TouchpadViewModel::class.java) ->
             TouchpadViewModel(router) as T
 
@@ -66,8 +71,8 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
         modelClass.isAssignableFrom(RecentDevicesViewModel::class.java) ->
             RecentDevicesViewModel(router, database, nsdHelper) as T
 
-       modelClass.isAssignableFrom(TvSettingsViewModel::class.java) ->
-           TvSettingsViewModel(router) as T
+        modelClass.isAssignableFrom(TvSettingsViewModel::class.java) ->
+            TvSettingsViewModel(router) as T
 
         modelClass.isAssignableFrom(DeviceSearchViewModel::class.java) ->
             DeviceSearchViewModel(nsdHelper, router, database) as T

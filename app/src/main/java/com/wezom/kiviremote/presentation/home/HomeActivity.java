@@ -1,6 +1,7 @@
 package com.wezom.kiviremote.presentation.home;
 
 import android.Manifest;
+import android.animation.ValueAnimator;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.arch.lifecycle.MutableLiveData;
@@ -16,15 +17,24 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
+import android.view.animation.DecelerateInterpolator;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -33,7 +43,9 @@ import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.Screens;
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
+import com.wezom.kiviremote.bus.HideKeyboardEvent;
 import com.wezom.kiviremote.bus.NetworkStateEvent;
+import com.wezom.kiviremote.bus.ShowKeyboardEvent;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.Utils;
 import com.wezom.kiviremote.common.extensions.StringUtils;
@@ -73,6 +85,12 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     private final ArrayList<WeakReference<OnBackClickListener>> backClickListeners = new ArrayList<>();
 
     private boolean hasContent = false;
+    // define a variable to track hamburger-arrow state
+    protected boolean isHomeAsUp = false;
+    protected boolean isKeyboardShown = false;
+    protected Toolbar toolbar;
+    protected ActionBarDrawerToggle toggle;
+    private DrawerLayout drawerLayout;
 
     @Inject
     BaseViewModelFactory viewModelFactory;
@@ -175,6 +193,62 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         setupObservers();
     }
 
+
+    // I've implemented it in setContentView(), but you can implement it in onCreate()
+//    @Override
+//    public void setContentView(@LayoutRes int layoutResID) {
+//        super.setContentView(layoutResID);
+
+    private void configureToolbar() {
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
+        drawerLayout.addDrawerListener(toggle);
+        toggle.syncState();
+
+        // overwrite Navigation OnClickListener that is set by ActionBarDrawerToggle
+        toolbar.setNavigationOnClickListener(v -> {
+            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+                drawerLayout.closeDrawer(GravityCompat.START);
+            } else if (isHomeAsUp) {
+                onBackPressed();
+            } else {
+                drawerLayout.openDrawer(GravityCompat.START);
+            }
+        });
+
+
+        binding.search.setOnClickListener(v -> showKeyboard());
+
+        binding.toolbarETxt.mainTextHide.setOnClickListener(v -> hideKeyboard());
+
+    }
+
+
+    // call this method for animation between hamburged and arrow
+    protected void setHomeAsUp(boolean isHomeAsUp) {
+        if (this.isHomeAsUp != isHomeAsUp) {
+            this.isHomeAsUp = isHomeAsUp;
+
+            ValueAnimator anim = isHomeAsUp ? ValueAnimator.ofFloat(0, 1) : ValueAnimator.ofFloat(1, 0);
+            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    float slideOffset = (Float) valueAnimator.getAnimatedValue();
+                    toggle.onDrawerSlide(drawerLayout, slideOffset);
+
+                    binding.mainText.setText("will be on " + (isHomeAsUp ? " left" : "center"));
+                }
+            });
+            anim.setInterpolator(new DecelerateInterpolator());
+            // You can change this duration to more closely match that of the default animation.
+            anim.setDuration(400);
+            anim.start();
+        }
+    }
+
     private void startCleanupService() {
         try {
             startService(new Intent(this, CleanupService.class));
@@ -187,12 +261,11 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         setupSlidingLayout();
         reconnectSnackbar = setupSnackbar();
 
-        if (binding.toolbarLayout != null) {
-            binding.toolbarLayout.toolbar.setPadding(0, Utils.getStatusBarHeight(getResources()), 0, 0);
-        }
+//        binding.toolbar.setPadding(0, Utils.getStatusBarHeight(getResources()), 0, 0);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-
+        configureNavigationDrawer();
+        configureToolbar();
 
         if (binding.layoutRender != null) {
             binding.layoutRender.renderProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -214,6 +287,43 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
             binding.layoutRender.renderPanelCloseClick.setOnClickListener(v -> stopPlayback());
         }
+
+    }
+
+// to call when router need arrow back
+    private void configureNavigationDrawer() {
+        drawerLayout = findViewById(R.id.drawer_layout);
+        NavigationView navView = findViewById(R.id.nav_view);
+        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(MenuItem menuItem) {
+                switch (menuItem.getItemId()) {
+                    case R.id.nav_video:
+                        Toast.makeText(getApplicationContext(), " nav_video ", Toast.LENGTH_LONG).show();
+                        Log.e(this.getClass().getSimpleName(), " nav_video ");
+                        break;
+
+                    case R.id.nav_camera:
+                        Toast.makeText(getApplicationContext(), " nav_camera ", Toast.LENGTH_LONG).show();
+                        Log.e(this.getClass().getSimpleName(), " nav_camera ");
+                        break;
+                }
+                return false;
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int itemId = item.getItemId();
+        switch (itemId) {
+            // Android home
+            case android.R.id.home:
+                drawerLayout.openDrawer(GravityCompat.START);
+                return true;
+            // manage other entries if you have it ...
+        }
+        return true;
     }
 
     private void initUpnpRequirements() {
@@ -263,6 +373,17 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                 Utils.triggerRebirth(this);
             }
         });
+
+
+        RxBus.INSTANCE.listen(ShowKeyboardEvent.class)
+                .subscribe(event -> {
+                    showKeyboard();
+                    hideSlidingPanel();
+                }, Timber::e);
+
+        RxBus.INSTANCE.listen(HideKeyboardEvent.class)
+                .subscribe(event -> hideKeyboard(), Timber::e);
+
 
         RxBus.INSTANCE.listen(NetworkStateEvent.class).subscribe(event -> {
             if (!event.isAvailable() && backStackIsNotEmpty()) {
@@ -320,64 +441,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
     private void setupSlidingLayout() {
-        binding.slidingLayout.addPanelSlideListener(new SlidingUpPanelLayout.PanelSlideListener() {
-            @Override
-            public void onPanelSlide(View panel, float slideOffset) {
-                if (binding.layoutRender != null) {
-                    binding.layoutRender.renderShowHide.setRotation(slideOffset * -180);
-                    binding.layoutRender.renderShowHide.setAlpha(slideOffset);
-                    binding.layoutRender.renderMask.setAlpha(slideOffset);
-                    binding.layoutRender.renderBackgroundPreview.setAlpha(slideOffset);
-                    binding.layoutRender.renderTitle.setAlpha(slideOffset);
-                    binding.layoutRender.renderPreview.setAlpha(slideOffset);
-
-                    float previewOffset = 1 - slideOffset * 5;
-                    previewOffset = previewOffset < 0 ? 0 : previewOffset;
-                    binding.layoutRender.renderPreviewTitle.setAlpha(previewOffset);
-                    binding.layoutRender.renderPreviewThumbnail.setAlpha(previewOffset);
-                    binding.layoutRender.renderPlayingNow.setAlpha(previewOffset);
-                    binding.layoutRender.renderPanelNext.setAlpha(previewOffset);
-                    binding.layoutRender.renderPanelPrevious.setAlpha(previewOffset);
-                    binding.layoutRender.renderPanelPlay.setAlpha(previewOffset);
-                    binding.layoutRender.renderPanelClose.setAlpha(previewOffset);
-                }
-            }
-
-            @Override
-            public void onPanelStateChanged(View panel, SlidingUpPanelLayout.PanelState previousState, SlidingUpPanelLayout.PanelState newState) {
-                Timber.i("onPanelStateChanged " + newState);
-                lastKnownState = newState;
-
-                if (newState == SlidingUpPanelLayout.PanelState.EXPANDED) {
-                    isPanelCollapsed.postValue(true);
-                    if (binding.layoutRender != null) {
-                        binding.layoutRender.renderPanelNext.setClickable(false);
-                        binding.layoutRender.renderPanelPrevious.setClickable(false);
-                        binding.layoutRender.renderPanelPlay.setClickable(false);
-                        binding.layoutRender.renderPanelCloseClick.setClickable(false);
-                    }
-                }
-
-                if (newState == SlidingUpPanelLayout.PanelState.COLLAPSED) {
-                    isPanelCollapsed.postValue(true);
-                    return;
-                }
-
-                if (newState != SlidingUpPanelLayout.PanelState.EXPANDED
-                        && binding.layoutRender != null) {
-                    binding.layoutRender.renderPanelNext.setClickable(true);
-                    binding.layoutRender.renderPanelPrevious.setClickable(true);
-                    binding.layoutRender.renderPanelPlay.setClickable(true);
-                    binding.layoutRender.renderPanelCloseClick.setClickable(true);
-                }
-
-                if (newState == SlidingUpPanelLayout.PanelState.HIDDEN) {
-                    isPanelCollapsed.postValue(false);
-                }
-            }
-        });
-
-        binding.slidingLayout.setFadeOnClickListener(view -> binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED));
         hideSlidingPanel();
     }
 
@@ -414,9 +477,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             bar.setDisplayHomeAsUpEnabled(true);
             bar.setDisplayShowHomeEnabled(true);
         }
-        if (binding.toolbarLayout != null) {
-            binding.toolbarLayout.toolbar.setNavigationOnClickListener(v -> onBackPressed());
-        }
+        binding.toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     public void showSettingsDialog() {
@@ -470,13 +531,13 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if (binding.slidingLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED)
-            binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        else if (!fragmentsBackKeyIntercept())
-            super.onBackPressed();
-    }
+//    @Override
+//    public void onBackPressed() {
+//        if (binding.slidingLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED)
+//            binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+//        else if (!fragmentsBackKeyIntercept())
+//            super.onBackPressed();
+//    }
 
     private boolean fragmentsBackKeyIntercept() {
         boolean isIntercept = false;
@@ -509,13 +570,13 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
     public void hideSlidingPanel() {
-        if (binding.slidingLayout.getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN)
-            binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+//        if (binding.slidingLayout.getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN)
+//            binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
     }
 
     public void expandSlidingPanel() {
-        if (binding.slidingLayout.getPanelState() != SlidingUpPanelLayout.PanelState.EXPANDED)
-            binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+//        if (binding.slidingLayout.getPanelState() != SlidingUpPanelLayout.PanelState.EXPANDED)
+//            binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
     }
 
     public void collapseSlidingPanel() {
@@ -524,9 +585,9 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             return;
         }
 
-        if (hasContent && binding.slidingLayout.getPanelState() != SlidingUpPanelLayout.PanelState.COLLAPSED) {
-            binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-        }
+//        if (hasContent && binding.slidingLayout.getPanelState() != SlidingUpPanelLayout.PanelState.COLLAPSED) {
+//            binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
+//        }
     }
 
     public void setVideoProgress(int progress, IRendererState.State state, String durationElapse, String remainingDuration, GalleryFragment.MediaType mediaType) {
@@ -741,6 +802,36 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                 break;
         }
     }
+
+
+    public void showKeyboard() {
+        if (!isKeyboardShown)
+            showInput(true);
+    }
+
+    public void hideKeyboard() {
+        if (isKeyboardShown)
+            showInput(false);
+    }
+
+    private void showInput(boolean show) {
+        if (show) {
+            binding.toolbarETxt.mainText.clearFocus(); //etxt
+            binding.toolbarETxt.mainContainer.setVisibility(View.VISIBLE);// maint tb
+            binding.toolbarLayout.setVisibility(View.GONE);//other toolbar
+            binding.toolbarETxt.mainText.requestFocus();//etxt
+            binding.toolbarETxt.mainText.setText("");//etxt
+            Utils.showKeyboard(this);
+            isKeyboardShown = true;
+        } else {
+            Utils.hideKeyboard(this);
+            binding.toolbarETxt.mainText.clearFocus(); //etxt
+            binding.toolbarETxt.mainContainer.setVisibility(View.GONE); // maint tb
+            binding.toolbarLayout.setVisibility(View.VISIBLE); //other toolbar
+            isKeyboardShown = false;
+        }
+    }
+
 
     private Drawable getImageDrawable(int id) {
         return getResources().getDrawable(id);

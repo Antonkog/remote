@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_camera"
+            android:icon="@android:drawable/ic_menu_camera"
+            android:title="@string/image_setting" />
+        <item
+            android:id="@+id/nav_audio"
+            android:icon="@android:drawable/presence_audio_online"
+            android:title="@string/audio" />
+        <item
+            android:id="@+id/nav_video"
+            android:icon="@android:drawable/presence_video_online"
+            android:title="@string/video" />
+        <item
+            android:id="@+id/nav_manage"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="@string/photo" />
+    </group>
+</menu>

@@ -52,6 +52,8 @@
     <string name="right_button" translatable="false">Right button</string>
     <string name="input_text_hint">Введите текст</string>
     <string name="apps">Приложения</string>
+    <string name="recommendations">Рекомендации от KIVI</string>
+    <string name="channels">Каналы</string>
 
     <string name="current_device">Установленные на %1$s</string>
     <string name="placeholder" translatable="false">placeholdeefwefewfwefwefewfewfwefr</string>
@@ -81,7 +83,6 @@
     <string name="digit_eight" translatable="false">8</string>
     <string name="digit_nine" translatable="false">9</string>
 
-    <string name="channels" translatable="false">CHANNEL</string>
     <string name="channels_placeholder" translatable="false">000</string>
     <string name="refresh">ОБНОВИТЬ</string>
 
@@ -202,5 +203,7 @@
     <string name="ports">Входы</string>
     <string name="toastPic">Для настройки изображение выберети пользователький режим</string>
     <string name="on">Вкл</string>
+    <string name="drawer_close" translatable="false">close menu</string>
+    <string name="drawer_open" translatable="false">open menu</string>
 
 </resources>

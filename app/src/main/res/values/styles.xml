@@ -5,16 +5,14 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-
+        <item name="android:textAppearanceSmall">@style/KiviMainTextAppearance</item>
     </style>
 
     <style name="Light" parent="AppTheme">
         <!-- Customize your theme here. -->
         <item name="android:windowBackground">@color/colorWhite</item>
         <!--<item name="android:textViewStyle">@style/KiviTextViewStyle</item>-->
-        <item name="android:textAppearanceSmall">@style/KiviMainTextAppearance</item>
         <!--<item name="android:windowTranslucentStatus">true</item>-->
-        <item name="android:windowActionBarOverlay">true</item>
     </style>
 
     <style name="Dark" parent="ThemeOverlay.AppCompat.Dark">
@@ -25,7 +23,6 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:windowBackground">@color/btnDark</item>
         <item name="android:textAppearanceSmall">@style/KiviMainTextAppearance</item>
-        <item name="android:windowActionBarOverlay">true</item>
     </style>
 
 
@@ -62,11 +59,6 @@
         <item name="android:textSize">@dimen/font_size_15</item>
     </style>
 
-    <style name="KiviTextViewStyle" parent="@android:style/Widget.TextView">
-        <item name="android:textColor">@color/colorPrimaryDark</item>
-        <item name="android:textSize">@dimen/font_size_15</item>
-    </style>
-
     <style name="DiscoveryCheckBoxTheme" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <!--<item name="colorButtonNormal">@color/teal_blue</item>-->
         <item name="colorControlHighlight">@color/colorSecondaryText</item>
@@ -92,6 +84,13 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">1px</item>
         <item name="android:background">@color/divider</item>
+    </style>
+
+
+
+    <style name="RecsText" >
+        <item name="android:textSize">@dimen/font_size_20</item>
+        <item name="android:textColor">@color/colorWhite</item>
     </style>
 
 </resources>

@@ -23,6 +23,7 @@ import com.wezom.kiviremote.presentation.home.ports.PortsFragment;
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.TvSettingsFragment;
+import com.wezom.kiviremote.presentation.home.recommendations.RecommendationsFragment;
 import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlFragment;
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadFragment;
 
@@ -53,6 +54,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                             return new DeviceSearchFragment();
                         case Screens.REMOTE_CONTROL_FRAGMENT:
                             return new RemoteControlFragment();
+                        case Screens.RECCOMENDATIONS_FRAGMENT:
+                            return new RecommendationsFragment();
                         case Screens.TOUCH_PAD_FRAGMENT:
                             return new TouchpadFragment();
                         case Screens.MAIN_FRAGMENT:

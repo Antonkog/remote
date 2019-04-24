@@ -119,5 +119,7 @@
     <string name="toastPic">To set picture, choose user mode</string>
     <string name="number_of_videos" translatable="false">%1$s video</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="recommendations">Recommendations from KIVI</string>
+    <string name="channels">Chanels</string>
 
 </resources>

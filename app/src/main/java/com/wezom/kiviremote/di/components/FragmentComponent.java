@@ -12,6 +12,7 @@ import com.wezom.kiviremote.presentation.home.ports.PortsFragment;
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.TvSettingsFragment;
+import com.wezom.kiviremote.presentation.home.recommendations.RecommendationsFragment;
 import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlFragment;
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadFragment;
 
@@ -42,6 +43,8 @@ public interface FragmentComponent {
     void inject(GalleryFragment galleryFragment);
 
     void inject(DirectoriesFragment directoriesFragment);
+
+    void inject(RecommendationsFragment recommendationsFragment);
 
     void inject(PortsFragment portsFragment);
 }

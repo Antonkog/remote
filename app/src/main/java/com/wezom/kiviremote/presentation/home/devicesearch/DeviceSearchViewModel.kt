@@ -183,16 +183,19 @@ class DeviceSearchViewModel(
             }
         }
     }
+    /***
+    todo: temp recheck if NsdServiceModel need to be passed
+    NsdServiceModel(
+    service.host,
+    service.port, service.serviceName
+    )
 
+     */
     private fun navigateToMainScreen(service: NsdServiceInfo) {
         if (service.host != null) {
             nsdHelper.stopDiscovery()
-            router.navigateTo(
-                    Screens.MAIN_FRAGMENT, NsdServiceModel(
-                    service.host,
-                    service.port, service.serviceName
-            )
-            )
+            router.navigateTo(Screens.RECCOMENDATIONS_FRAGMENT)
+
         }
     }
 }
