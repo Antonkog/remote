@@ -38,19 +38,19 @@ class PortsFragment : TvKeysFragment() {
     private val portsAdapter: PortsAdapter by lazy {
 
         PortsAdapter(object : PortsAdapter.CheckListener {
-            override fun onPortChecked(id: Int) {
+            override fun onPortChecked(portId: Int) {
                 aspectTryCounter = ASPECT_GET_TRY
-                lastPortId = id
-                if (id == Constants.INPUT_HOME_ID) {
-                    setPort(id)
+                lastPortId = portId
+                if (lastPortId == Constants.INPUT_HOME_ID) {
+                    setPort(lastPortId)
                     RxBus.publish(SendActionEvent(Action.HOME_DOWN))
                     RxBus.publish(SendActionEvent(Action.HOME_UP))
                     fragmentManager?.popBackStack()
                 } else {
                     if (AspectHolder?.message?.serverVersionCode ?: 0 < Constants.VER_ASPECT_XIX) {
-                        setPort(id)
+                        setPort(lastPortId)
                     } else {
-                        setPortServerCheck(id)
+                        setPortServerCheck(lastPortId)
                     }
                 }
             }
@@ -67,7 +67,7 @@ class PortsFragment : TvKeysFragment() {
 
 
     override fun onResume() {
-        AspectHolder.getPortsList()?.let {
+        AspectHolder.getPortsList().let {
             portsAdapter.setData(it)
         }
         super.onResume()

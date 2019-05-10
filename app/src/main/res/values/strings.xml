@@ -112,8 +112,8 @@
     <string name="return_to_home_screen">вернуться?</string>
     <string name="folder_name" translatable="false">folder name</string>
     <string name="number_of_items" translatable="false">number of items</string>
-    <string name="number_of_images" translatable="false">%1$s фото</string>
-    <string name="number_of_videos" translatable="false">%1$s видео</string>
+    <string name="number_of_images">%1$s фото</string>
+    <string name="number_of_videos">%1$s видео</string>
     <string name="empty_directory">Директория пуста</string>
 
     <string name="dark_mode">Темная тема приложения</string>
@@ -205,5 +205,13 @@
     <string name="on">Вкл</string>
     <string name="drawer_close" translatable="false">close menu</string>
     <string name="drawer_open" translatable="false">open menu</string>
+
+
+    <string name="drawer_devices">Устройства</string>
+    <string name="drawer_subscriptions">Подписки Киви</string>
+    <string name="drawer_settings">Настройки приложения</string>
+    <string name="drawer_support">Поддержка пользователей</string>
+    <string name="drawer_exit">Выйти</string>
+    <string name="drawer_dark_mode">Тёмный режим</string>
 
 </resources>

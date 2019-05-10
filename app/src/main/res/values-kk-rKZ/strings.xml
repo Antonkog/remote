@@ -97,4 +97,13 @@
     <string name="on">on</string>
     <string name="recommendations">Recommendations from KIVI</string>
     <string name="channels">Chanels</string>
+
+    <string name="drawer_devices">Құралдар</string>
+    <string name="drawer_subscriptions">Kiwi жазылымдары</string>
+    <string name="drawer_settings">Қолданба параметрлері</string>
+    <string name="drawer_support">Пайдаланушыны қолдау</string>
+    <string name="drawer_exit">Шығу</string>
+    <string name="drawer_dark_mode">Қараңғы режим</string>
+    <string name="number_of_images">%1$s фото</string>
+    <string name="number_of_videos">%1$s видео</string>
 </resources>

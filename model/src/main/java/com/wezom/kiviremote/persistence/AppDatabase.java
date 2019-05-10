@@ -9,7 +9,7 @@ import com.wezom.kiviremote.persistence.dao.ServerAppsDao;
 import com.wezom.kiviremote.persistence.model.RecentDevice;
 import com.wezom.kiviremote.persistence.model.ServerApp;
 
-@Database(entities = {ServerApp.class, RecentDevice.class}, version = 6)
+@Database(entities = {ServerApp.class, RecentDevice.class}, version = 6, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract ServerAppsDao serverAppDao();

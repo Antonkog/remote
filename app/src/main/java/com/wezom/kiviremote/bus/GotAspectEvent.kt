@@ -12,7 +12,7 @@ data class GotAspectEvent(val msg: AspectMessage?, val available: AspectAvailabl
     fun getManufacture(): Int {
         if (available != null && msg != null) {
             var isRealtek = msg.manufacture
-            if (isRealtek == Constants.NO_VALUE) isRealtek = available.getManufacture(msg?.serverVersionCode)
+            if (isRealtek == Constants.NO_VALUE) isRealtek = available.getManufacture(msg.serverVersionCode)
             return isRealtek;
         }
         return Constants.NO_VALUE

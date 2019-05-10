@@ -120,4 +120,11 @@
     <string name="on">Вкл</string>
     <string name="recommendations">Рекомендації від KIVI</string>
     <string name="channels">Канали</string>
+    <string name="drawer_devices">Пристрої</string>
+    <string name="drawer_subscriptions">Підписка Ківі</string>
+    <string name="drawer_settings">Налаштування програми</string>
+    <string name="drawer_support">Підтримка користувачів</string>
+    <string name="drawer_exit">Вийти</string>
+    <string name="drawer_dark_mode">Темний режим</string>
+
 </resources>

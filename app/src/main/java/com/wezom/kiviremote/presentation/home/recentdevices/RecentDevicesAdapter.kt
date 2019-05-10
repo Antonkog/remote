@@ -3,6 +3,7 @@ package com.wezom.kiviremote.presentation.home.recentdevices
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Build
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -70,11 +71,7 @@ class RecentDevicesAdapter(private val context: Context,
                     deviceOnlineStatus.setImageResource(R.drawable.ic_devices_online)
                 }
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    deviceTextStatus.setTextColor(resources.getColor(R.color.colorPrimary, null))
-                } else {
-                    deviceTextStatus.setTextColor(resources.getColor(R.color.colorPrimary))
-                }
+                deviceTextStatus.setTextColor(ContextCompat.getColor(deviceTextStatus.context, R.color.colorPrimary))
 
                 deviceTextStatus.text = context.resources.getString(R.string.connected)
             } else {
@@ -91,20 +88,11 @@ class RecentDevicesAdapter(private val context: Context,
                         deviceOnlineStatus.setImageResource(R.drawable.ic_devices_online)
                     }
 
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        deviceTextStatus.setTextColor(resources.getColor(R.color.colorPrimary, null))
-                    } else {
-                        deviceTextStatus.setTextColor(resources.getColor(R.color.colorPrimary))
-                    }
+                    deviceTextStatus.setTextColor(ContextCompat.getColor(deviceTextStatus.context, R.color.colorPrimary))
 
                     deviceTextStatus.text = context.resources.getString(R.string.online)
                 } else {
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        deviceTextStatus.setTextColor(resources.getColor(R.color.colorSecondaryText, null))
-                    } else {
-                        deviceTextStatus.setTextColor(resources.getColor(R.color.colorSecondaryText))
-                    }
+                    deviceTextStatus.setTextColor(ContextCompat.getColor(deviceTextStatus.context, R.color.colorSecondaryText))
 
                     deviceTextStatus.text = context.resources.getText(R.string.offline)
                     deviceOnlineStatus.setImageDrawable(null)

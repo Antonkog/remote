@@ -1,5 +1,6 @@
 package com.wezom.kiviremote.common.extensions
 
+import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.ViewGroup
 import com.wezom.kiviremote.R
@@ -16,7 +17,9 @@ fun View.changeBackgroundRecurcevly() {
             this.getChildAt(counter).changeBackgroundRecurcevly()
         }
     else {
-        this.background = this.resources.getDrawable(R.drawable.shape_gradient_black)
+
+        this.background = ContextCompat.getDrawable(context,R.drawable.shape_gradient_black)
+
     }
 
 }

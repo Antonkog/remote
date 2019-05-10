@@ -39,7 +39,7 @@ class PortsAdapter(val listener: CheckListener) : RecyclerView.Adapter<PortsAdap
                 binding.checkPort.isChecked = false
             }
 
-            binding.portLayoutContent.setOnClickListener { view ->
+            binding.portLayoutContent.setOnClickListener { _ ->
                 if (!binding.checkPort.isChecked) {
                     checkListener?.onPortChecked(port.portNum)
                 }
@@ -48,7 +48,7 @@ class PortsAdapter(val listener: CheckListener) : RecyclerView.Adapter<PortsAdap
     }
 
 
-    open interface CheckListener {
+    interface CheckListener {
         fun onPortChecked(portId: Int)
     }
 

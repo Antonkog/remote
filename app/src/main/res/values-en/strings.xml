@@ -122,4 +122,11 @@
     <string name="recommendations">Recommendations from KIVI</string>
     <string name="channels">Chanels</string>
 
+    <string name="drawer_devices">"Devices "</string>
+    <string name="drawer_subscriptions">Kiwi subscriptions</string>
+    <string name="drawer_settings">Application Settings</string>
+    <string name="drawer_support">User Support</string>
+    <string name="drawer_exit">Log out</string>
+    <string name="drawer_dark_mode">Dark mode</string>
+
 </resources>

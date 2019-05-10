@@ -122,15 +122,15 @@ private fun updateRecs(visible: Boolean, recs: List<RecommendItem> ?) {
 //
 //        viewModel?.apps.observe(this@RecommendationsFragment, appsObserver)
 //        viewModel?.aspectEvent.observe(this@RecommendationsFragment, showPortsObserver)
-        viewModel?.recommendations.observe(this@RecommendationsFragment, recommendationsObserver)
+        viewModel.recommendations.observe(this@RecommendationsFragment, recommendationsObserver)
 
         viewModel.observePorts()
 //        if (!AspectHolder.hasAspectSettings() && AspectHolder.initialMsg != null) viewModel?.requestAspect()
 //        else (viewModel?.aspectEvent.postValue(GotAspectEvent(AspectHolder.message, AspectHolder.availableSettings, AspectHolder.initialMsg)))
 
-        viewModel?.requestApps()
-        viewModel?.populateApps()
-        viewModel?.requestAspect()
+        viewModel.requestApps()
+        viewModel.populateApps()
+        viewModel.requestAspect()
     }
 
     override fun injectDependencies() {

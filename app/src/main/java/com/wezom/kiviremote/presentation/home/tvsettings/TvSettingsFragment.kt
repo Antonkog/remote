@@ -36,8 +36,8 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
     private lateinit var viewModel: TvSettingsViewModel
 
     private lateinit var binding: TvSettingsFragmentBinding
-    private var sekBarEnabled = false;
-    private var manufacture = Constants.NO_VALUE;
+    private var sekBarEnabled = false
+    private var manufacture = Constants.NO_VALUE
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
@@ -92,7 +92,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         if (!AspectHolder.hasAspectSettings())
             viewModel.requestAspect()
         else {
-            viewModel?.aspectChange.postValue(GotAspectEvent(AspectHolder.message, AspectHolder.availableSettings, AspectHolder.initialMsg))
+            viewModel.aspectChange.postValue(GotAspectEvent(AspectHolder.message, AspectHolder.availableSettings, AspectHolder.initialMsg))
         }
 
         (activity as HomeActivity).run {
@@ -154,18 +154,18 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                     AspectMessage.ASPECT_VALUE.SHARPNESS.name -> binding.sharpness.seekBar.progress = value
                     // no HDR !!! cant get cant set on tv not available with current hardware
                     AspectMessage.ASPECT_VALUE.TEMPERATURE.name -> {
-                        var temperature = TemperatureValues.getByID(value)?.stringResourceID
+                        val temperature = TemperatureValues.getByID(value)?.stringResourceID
                         if (temperature != null) binding.temperature.variant.text = resources.getString(temperature)
                     }
 
                     AspectMessage.ASPECT_VALUE.VIDEOARCTYPE.name -> {
                         when (manufacture) {
                             Constants.SERV_MSTAR -> {
-                                var ratio = Ratio.getByID(value)?.stringResourceID
+                                val ratio = Ratio.getByID(value)?.stringResourceID
                                 if (ratio != null) binding.ratio.variant.text = resources.getString(ratio)
                             }
                             Constants.SERV_REALTEK -> {
-                                var ratio = RatioRealtek.getByID(value)?.stringResourceID
+                                val ratio = RatioRealtek.getByID(value)?.stringResourceID
                                 if (ratio != null) binding.ratio.variant.text = resources.getString(ratio)
                             }
                         }
@@ -174,14 +174,14 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                     AspectMessage.ASPECT_VALUE.PICTUREMODE.name -> {
                         when (manufacture) {
                             Constants.SERV_MSTAR -> {
-                                var pictureMode = PictureMode.getByID(value)?.stringResourceID
+                                val pictureMode = PictureMode.getByID(value)?.stringResourceID
                                 if (pictureMode != null) {
                                     binding.aspectHeader.row.text = resources.getString(pictureMode)
                                     enableSeekBars(PictureMode.PICTURE_MODE_USER == PictureMode.getByID(value))
                                 }
                             }
                             Constants.SERV_REALTEK -> {
-                                var pictureMode = PictureModeRealtek.getByID(value)?.stringResourceID
+                                val pictureMode = PictureModeRealtek.getByID(value)?.stringResourceID
                                 if (pictureMode != null) {
                                     binding.aspectHeader.row.text = resources.getString(pictureMode)
                                     enableSeekBars(PictureModeRealtek.PICTURE_MODE_USER == PictureModeRealtek.getByID(value))
@@ -203,9 +203,10 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
         binding.brightness.seekBar.isEnabled = enabled
     }
 
+    @Suppress("PARAMETER_NAME_CHANGED_ON_OVERRIDE")
     override fun onSwitch(mode: AspectMessage.ASPECT_VALUE?, resId: Int) {
-        viewModel?.let {
-            var progress = -1;
+        viewModel.let {
+            var progress = -1
 
             if (mode != null) {
                 when (manufacture) {
@@ -231,7 +232,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
                     else -> viewModel.goBack()
                 }
                 if (progress != Constants.NO_VALUE) {
-                    it.sendAspectSingleChangeEvent(mode, progress);
+                    it.sendAspectSingleChangeEvent(mode, progress)
                 } else {
                     Timber.e(" tr mode == null")
                 }
@@ -242,14 +243,16 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
     }
 
     override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+        //do smt
     }
 
     override fun onStartTrackingTouch(seekBar: SeekBar?) {
+        //do smt
     }
 
     override fun onStopTrackingTouch(seekBar: SeekBar?) {
         seekBar?.id.let {
-            viewModel?.let {
+            viewModel.let {
                 if (seekBar != null && seekBar.tag != null) {
                     try {
                         it.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.valueOf(seekBar.tag.toString()), seekBar.progress)

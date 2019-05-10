@@ -7,6 +7,7 @@ import android.app.PendingIntent;
 import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -14,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
@@ -27,7 +29,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -54,6 +55,7 @@ import com.wezom.kiviremote.presentation.base.BaseActivity;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
 import com.wezom.kiviremote.presentation.home.main.BackHandler;
+import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder;
 import com.wezom.kiviremote.receivers.NetworkChangeReceiver;
 import com.wezom.kiviremote.services.CleanupService;
 import com.wezom.kiviremote.services.NotificationService;
@@ -224,6 +226,15 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
         binding.toolbarETxt.mainTextHide.setOnClickListener(v -> hideKeyboard());
 
+        binding.fab.setOnClickListener(view -> viewModel.goTo(Screens.REMOTE_CONTROL_FRAGMENT));
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            binding.fab.setElevation(getResources().getDimension(R.dimen.elevation_small));
+        }
+    }
+
+    @Override
+    public void changeFabVisibility(int visible){
+        this.runOnUiThread(() -> binding.fab.setVisibility(visible));
     }
 
 
@@ -294,22 +305,39 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     private void configureNavigationDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.nav_view);
-        navView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(MenuItem menuItem) {
-                switch (menuItem.getItemId()) {
-                    case R.id.nav_video:
-                        Toast.makeText(getApplicationContext(), " nav_video ", Toast.LENGTH_LONG).show();
-                        Log.e(this.getClass().getSimpleName(), " nav_video ");
-                        break;
+        navView.setNavigationItemSelectedListener(menuItem -> {
+            switch (menuItem.getItemId()) {
+                case R.id.nav_devices:
+                    viewModel.goTo(Screens.DEVICE_SEARCH_FRAGMENT);
+                    break;
 
-                    case R.id.nav_camera:
-                        Toast.makeText(getApplicationContext(), " nav_camera ", Toast.LENGTH_LONG).show();
-                        Log.e(this.getClass().getSimpleName(), " nav_camera ");
-                        break;
-                }
-                return false;
+                case R.id.nav_subscriptions:
+                    viewModel.goTo(Screens.DEVICE_SEARCH_FRAGMENT);
+                    break;
+
+                case R.id.nav_settings:
+                    if(AspectHolder.INSTANCE.hasAspectSettings())
+                    viewModel.goTo(Screens.TV_SETTINGS_FRAGMENT);
+                    break;
+
+                case R.id.nav_support:
+                    String url = "https://kivi.ua/support-center";
+                    Intent i = new Intent(Intent.ACTION_VIEW);
+                    i.setData(Uri.parse(url));
+                    try{
+                        startActivity(i);
+                    }catch (ActivityNotFoundException e){
+                        Timber.e("can't go to support " + e);
+                        Toast.makeText(this, " ActivityNotFoundException" , Toast.LENGTH_LONG).show();
+                    }
+                    break;
+
+                case R.id.nav_exit:
+                    this.finish();
+                    break;
+
             }
+            return false;
         });
     }
 
