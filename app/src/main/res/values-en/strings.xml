@@ -123,4 +123,16 @@
     <string name="number_of_videos" translatable="false">%1$s video</string>
     <string name="dark_mode">Dark Mode</string>
 
+    <string name="subscriptions">Subscriptions</string>
+    <string name="select_the_appropriate_subs">Select the appropriate subscription term\nfor you:</string>
+    <string name="to_pay">To pay:</string>
+    <string name="card_number">Card number</string>
+    <string name="card_validity_period">Card validity period</string>
+    <string name="cvv_code">CVV-code</string>
+    <string name="make_payment">Pay</string>
+
+
+
+
+
 </resources>

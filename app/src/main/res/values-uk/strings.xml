@@ -121,4 +121,17 @@
     <string name="number_of_videos" translatable="false">%1$s відео</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="on">Вкл</string>
+
+    <string name="subscriptions">Передплати</string>
+    <string name="select_the_appropriate_subs">Виберіть відповідний\nдля вас термін передплати:</string>
+    <string name="to_pay">До оплати:</string>
+    <string name="card_number">Номер картки</string>
+    <string name="card_validity_period">Період дії карти</string>
+    <string name="cvv_code">CVV-код</string>
+    <string name="make_payment">Оплатити</string>
+
+
+
+
+
 </resources>

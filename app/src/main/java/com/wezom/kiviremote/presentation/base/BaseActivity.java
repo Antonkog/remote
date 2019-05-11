@@ -24,6 +24,11 @@ import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragmen
 import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo;
 import com.wezom.kiviremote.presentation.home.recentdevices.TvSettingsFragment;
 import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlFragment;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_info.SubsInfoFragment;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_payment.SubsPaymentFragment;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_price_list.PricePerTime;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_price_list.SubsPriceListFragment;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_tariff_plans.SubsTariffPlansFragment;
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadFragment;
 
 import ru.terrakok.cicerone.Navigator;
@@ -69,6 +74,14 @@ public abstract class BaseActivity extends AppCompatActivity {
                             return new TvSettingsFragment();
                         case Screens.PORTS_FRAGMENT:
                             return new PortsFragment();
+                        case Screens.SUBS_PRICE_LIST_FRAGMENT:
+                            return new SubsPriceListFragment();
+                        case Screens.SUBS_INFO_FRAGMENT:
+                            return SubsInfoFragment.newInstance((PricePerTime) data);
+                        case Screens.SUBS_TARIFF_PLANS_FRAGMENT:
+                            return new SubsTariffPlansFragment();
+                        case Screens.SUBS_PAYMENT_FRAGMENT:
+                            return new SubsPaymentFragment();
                         default:
                             throw new IllegalStateException("Unknown screen");
                     }

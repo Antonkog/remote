@@ -208,4 +208,12 @@
     <string name="on">Вкл</string>
     <string name="if_you_dont_see_your_device" translatable="false">Если вы не видите ваше устройство в списке,\nто убедитесь в том, что оно находится\nв одной сети с вашим телефоном.</string>
 
+    <string name="subscriptions">Подписки</string>
+    <string name="select_the_appropriate_subs">Выберите соответствующий\nдля вас срок подписки:</string>
+    <string name="to_pay">К оплате:</string>
+    <string name="card_number">Номер карты</string>
+    <string name="card_validity_period">Период действия карты</string>
+    <string name="cvv_code">CVV-код</string>
+    <string name="make_payment">Оплатить</string>
+
 </resources>

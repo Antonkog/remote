@@ -21,6 +21,10 @@ import com.wezom.kiviremote.presentation.home.ports.PortsViewModel
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceViewModel
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesViewModel
 import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlViewModel
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_info.SubsInfoViewModel
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_payment.SubsPaymentViewModel
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_price_list.SubsPriceListViewModel
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_tariff_plans.SubsTariffPlansViewModel
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadViewModel
 import com.wezom.kiviremote.presentation.home.tvsettings.TvSettingsViewModel
 import com.wezom.kiviremote.upnp.UPnPManager
@@ -78,6 +82,17 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
         modelClass.isAssignableFrom(PortsViewModel::class.java) ->
             PortsViewModel(router) as T
 
+        modelClass.isAssignableFrom(SubsPriceListViewModel::class.java) ->
+            SubsPriceListViewModel(router) as T
+
+        modelClass.isAssignableFrom(SubsInfoViewModel::class.java) ->
+            SubsInfoViewModel(router) as T
+
+        modelClass.isAssignableFrom(SubsTariffPlansViewModel::class.java) ->
+            SubsTariffPlansViewModel(router) as T
+
+        modelClass.isAssignableFrom(SubsPaymentViewModel::class.java) ->
+            SubsPaymentViewModel(router) as T
 
         else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.canonicalName}")
     }
