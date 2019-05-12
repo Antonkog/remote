@@ -3,6 +3,7 @@ package com.wezom.kiviremote.views
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
 import com.wezom.kiviremote.App
@@ -37,12 +38,12 @@ class ButtonCustomView : android.support.v7.widget.AppCompatImageView {
         try {
 
             val strokeWidth = 5
-            var strokeColor = resources.getColor(R.color.shadow_outline)
-            var fillColor = resources.getColor(R.color.colorWhite)
+            var strokeColor = ContextCompat.getColor(context, R.color.shadow_outline)
+            var fillColor =  ContextCompat.getColor(context, R.color.colorWhite)
 
             if (App.isDarkMode()) {
-                strokeColor = resources.getColor(R.color.kiviDark)
-                fillColor = resources.getColor(R.color.btnDark)
+                strokeColor =  ContextCompat.getColor(context, R.color.kiviDark)
+                fillColor =  ContextCompat.getColor(context, R.color.btnDark)
             }
             val gD = GradientDrawable()
             gD.setColor(fillColor)

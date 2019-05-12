@@ -4,6 +4,7 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,12 +22,12 @@ import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.apps.AppModel
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.upnp.org.droidupnp.view.Port
-import com.wezom.kiviremote.views.HorizontalCardsView
 import timber.log.Timber
-import java.util.*
 import javax.inject.Inject
 
-class RecommendationsFragment : BaseFragment(), HorizontalCardsView.OnClickListener {
+
+
+class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalCVListener {
 
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
@@ -43,57 +44,41 @@ class RecommendationsFragment : BaseFragment(), HorizontalCardsView.OnClickListe
     private lateinit var viewModel: RecommendationsViewModel
 
     private lateinit var binding: RecommendationsFragmentBinding
+    private lateinit var adapter: RecommendationsAdapter
 
 
-    private val recommendationsObserver = Observer<List<RecommendItem>> {
-        //        it?.let { recommendAdapter(reccomendations = it) }
+    private val recommendationsObserver = Observer<List<Comparable<RecommendItem>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
-            updateRecs( true, recs = it )
-        } ?: updateRecs(false, recs = null)
-    }
-//
-//    private val appsObserver = Observer<List<AppModel>> {
-//        it?.takeIf { it.isNotEmpty() }?.let {
-//            updateApps(true, it)
-//        } ?: updateApps(false, null)
-//    }
-//
-//    private val showPortsObserver = Observer<GotAspectEvent> {
-//        binding.viewInputs.progressBar.visibility = View.GONE
-//        it?.getPortsList()?.let { updatePorts(it) }
-//    }
-private fun updateRecs(visible: Boolean, recs: List<RecommendItem> ?) {
-    var items = LinkedList<RecommendItem>()
-//    Timber.i("ports can be passed to adapter: " + ports.size)
-//    for (port in ports) {
-//        items.addLast(RecommendItem(HorizontalCardsView.ContentType.TYPE_INPUTS.ordinal, port.portNum, port.portName, "", port.portImageId, ""))
-//    }
-//    binding.viewInputs.setNewItems(items, HorizontalCardsView.ContentType.TYPE_INPUTS)
-}
-    private fun updatePorts(ports: List<Port>) {
-        var items = LinkedList<RecommendItem>()
-        Timber.i("ports can be passed to adapter: " + ports.size)
-        for (port in ports) {
-            items.addLast(RecommendItem(HorizontalCardsView.ContentType.TYPE_INPUTS.ordinal, port.portNum, port.portName, "", port.portImageId, ""))
-        }
-        binding.viewInputs.setNewItems(items, HorizontalCardsView.ContentType.TYPE_INPUTS)
+            adapter.swapData(it)
+        } ?: Timber.e("TYPE_RECOMMENDATIONS empty")
     }
 
-    private fun updateApps(visible: Boolean, apps: List<AppModel>?) {
-        var items = LinkedList<RecommendItem>()
-        Timber.i("apps can be passed to adapter: " + apps?.size)
-        var counter = 0
-        apps?.forEach {
-            Timber.i(it.appName + " can be passed to adapter")
-            items.addLast(RecommendItem(HorizontalCardsView.ContentType.TYPE_APPS.ordinal, counter++, it.appName, it.appPackage, -1, ""))
-        }
-
-        binding.viewApps.setNewItems(items, HorizontalCardsView.ContentType.TYPE_APPS)
+    private val appsObserver = Observer<List<Comparable<AppModel>>> {
+        it?.takeIf { it.isNotEmpty() }?.let {
+            adapter.swapData(it)
+        } ?: Timber.e("TYPE_RECOMMENDATIONS empty")
     }
 
+    private val showPortsObserver = Observer<List<Comparable<Port>>> {
+        it?.takeIf { it.isNotEmpty() }?.let {
+            adapter.swapData(it)
+        } ?: Timber.e("TYPE_INPUTS empty")
+    }
+
+
+    override fun onPortChosen(port: Port, position: Int) {
+        setPort(position)
+    }
+
+    override fun onRecommendationChosen(item: RecommendItem, position: Int) {
+        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    }
+
+    override fun appChosenNeedOpen(appModel: AppModel, positio: Int) {
+            viewModel.launchApp(appModel.appPackage)
+    }
 
     private fun setPortServerCheck(id: Int) {
-        binding.viewRecs.visibility = View.VISIBLE
         viewModel.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.INPUT_PORT, id)
         viewModel.requestAspect()
     }
@@ -101,27 +86,32 @@ private fun updateRecs(visible: Boolean, recs: List<RecommendItem> ?) {
 
     private fun setPort(portId: Int) {
         viewModel.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.INPUT_PORT, portId)
-        binding.viewInputs.sePortActivebyId(portId)
+//        binding.viewInputs.adapter.swapData()
     }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = RecommendationsFragmentBinding.inflate(inflater, container, false)
+
+
+        val layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        adapter = RecommendationsAdapter(this)
+        binding.recycler.layoutManager = layoutManager
+        binding.recycler.adapter = adapter
+
+
         return binding.root
     }
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.viewApps.setAdapter(view.context, cache, HorizontalCardsView.ContentType.TYPE_APPS)
-        binding.viewInputs.setAdapter(view.context, cache, HorizontalCardsView.ContentType.TYPE_INPUTS)
-        binding.viewRecs.setAdapter(view.context, cache, HorizontalCardsView.ContentType.TYPE_RECOMMENDATIONS)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecommendationsViewModel::class.java)
         viewModel.startUPnPController()
-//
-//        viewModel?.apps.observe(this@RecommendationsFragment, appsObserver)
-//        viewModel?.aspectEvent.observe(this@RecommendationsFragment, showPortsObserver)
+
+        viewModel.apps.observe(this@RecommendationsFragment, appsObserver)
+        viewModel.ports.observe(this@RecommendationsFragment, showPortsObserver)
         viewModel.recommendations.observe(this@RecommendationsFragment, recommendationsObserver)
 
         viewModel.observePorts()
@@ -131,16 +121,11 @@ private fun updateRecs(visible: Boolean, recs: List<RecommendItem> ?) {
         viewModel.requestApps()
         viewModel.populateApps()
         viewModel.requestAspect()
+        viewModel.setRecommendData()
     }
 
     override fun injectDependencies() {
         fragmentComponent.inject(this)
-    }
-
-
-    override fun onClick(serverId: Int, type: HorizontalCardsView.ContentType) {
-        Timber.e("click " + serverId + " type " + type.name)
-
     }
 
     fun onPortChecked(id: Int) {

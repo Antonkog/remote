@@ -13,8 +13,9 @@ import com.wezom.kiviremote.net.model.AspectMessage
 import com.wezom.kiviremote.net.model.RecommendItem
 import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.presentation.base.BaseViewModel
+import com.wezom.kiviremote.presentation.home.apps.AppModel
 import com.wezom.kiviremote.upnp.UPnPManager
-import com.wezom.kiviremote.views.HorizontalCardsView
+import com.wezom.kiviremote.upnp.org.droidupnp.view.Port
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -32,9 +33,9 @@ class RecommendationsViewModel(private val router: Router,
     var lastPortId = Constants.INPUT_HOME_ID
 
 
-    val recommendations = MutableLiveData<List<RecommendItem>>()
-//    val apps = MutableLiveData<List<AppModel>>()
-//    val aspectEvent = MutableLiveData<GotAspectEvent>()
+    val recommendations = MutableLiveData<List<Comparable<RecommendItem>>>()
+    val apps = MutableLiveData<List<Comparable<AppModel>>>()
+    val ports = MutableLiveData<List<Comparable<Port>>>()
 
 
     fun populateApps() {
@@ -44,7 +45,7 @@ class RecommendationsViewModel(private val router: Router,
                 .subscribeOn(Schedulers.computation())
                 .subscribeBy(
                         onNext = { dbApps ->
-                            val recommendations = ArrayList<RecommendItem>()
+                            val recommendations = ArrayList<AppModel>()
                             dbApps.forEach {
                                 if (cache.get(it.appName) == null) {
                                     val bmp = BitmapFactory.decodeByteArray(
@@ -57,9 +58,9 @@ class RecommendationsViewModel(private val router: Router,
                                         cache.put(appName, bmp)
                                     }
                                 }
-                                recommendations.add(RecommendItem(HorizontalCardsView.ContentType.TYPE_APPS.ordinal, serverId = it.id, title = it.appName, packageName = it.packageName, imageId = -1, url = ""))
+                                recommendations.add(AppModel(it.appName,it.packageName))
                             }
-                            updateRecommendations(recommendations)
+                            this.apps.postValue(recommendations)
                         },
                         onError = Timber::e
                 )
@@ -68,6 +69,48 @@ class RecommendationsViewModel(private val router: Router,
     fun requestApps() = RxBus.publish(RequestAppsEvent())
 
 
+    fun setRecommendData ()  = {
+        var list = LinkedList<RecommendItem>()
+        list.addLast(
+                RecommendItem(
+                        RecommendationsAdapter.TYPE_RECOMMENDATIONS,
+                        title = "The Godfather",
+                        serverId = 1,
+                        url = "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"
+                )
+        )
+
+        list.addLast(
+                RecommendItem(
+                        RecommendationsAdapter.TYPE_RECOMMENDATIONS,
+                        title = "Disco Godfather",
+                        serverId = 2,
+                        url ="https://m.media-amazon.com/images/M/MV5BMTU5MzAyMTY1Ml5BMl5BanBnXkFtZTgwNzA2MjI4MzE@._V1._CR46,89.5,1255,1862_SX89_AL_.jpg_V1_SX300.jpg"
+                )
+        )
+
+
+
+        list.addLast(
+                RecommendItem(
+                        RecommendationsAdapter.TYPE_RECOMMENDATIONS,
+                        title =  "The Godfather Family: A Look Inside",
+                        serverId = 3,
+                        url =  "https://m.media-amazon.com/images/M/MV5BMTUzOTc0NDAyNF5BMl5BanBnXkFtZTcwNjAwMDEzMQ@@._V1_SX300.jpg"
+                )
+        )
+
+        list.addLast(
+                RecommendItem(
+                       RecommendationsAdapter.TYPE_RECOMMENDATIONS,
+                        title =  "The Godfather Trilogy: 1901-1980",
+                        serverId = 4,
+                        url =  "https://m.media-amazon.com/images/M/MV5BMTY1NzYxNDk0NV5BMl5BanBnXkFtZTYwMjk5MTM5._V1_SX300.jpg"
+                )
+        )
+        this.recommendations.postValue(list)
+    }
+
     fun observePorts() {
         disposables += RxBus.listen(GotAspectEvent::class.java).observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
@@ -75,15 +118,15 @@ class RecommendationsViewModel(private val router: Router,
                             var ports = it?.getPortsList() ?: LinkedList()
                             if (!ports.isEmpty()) {
                                 var containsActive = false
-                                val recommendations = ArrayList<RecommendItem>()
+                                val recommendations = ArrayList<Port>()
 
                                 for (port in ports) {
                                     if (port.active && port.portNum == lastPortId || aspectTryCounter == 0)
                                         containsActive = true
-                                    recommendations.add(RecommendItem(HorizontalCardsView.ContentType.TYPE_INPUTS.ordinal, serverId = port.portNum, title = port.portName, packageName = "", imageId = port.portImageId, url = ""))
+                                    recommendations.add(port)
                                 }
 
-                                if (containsActive) updateRecommendations(recommendations)
+                                if (containsActive) this.ports.postValue(recommendations)
                                 else {
                                     Run.after(1000) {
                                         requestAspect()
@@ -104,11 +147,6 @@ class RecommendationsViewModel(private val router: Router,
     }
 
     fun requestAspect() = RxBus.publish(RequestAspectEvent())
-
-
-    fun updateRecommendations(recs: List<RecommendItem>) {
-        this.recommendations.postValue(recs)
-    }
 
     fun launchApp(name: String) {
         RxBus.publish(LaunchAppEvent(name))

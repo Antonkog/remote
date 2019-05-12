@@ -148,8 +148,6 @@ public class ChatConnection {
                         initialMessage = serverEvent.getInitialMessage();
                         aspectAvailable = serverEvent.getAvailableAspectValues();
                         aspectMessage = serverEvent.getAspectMessage();
-                        Timber.e("12345 got init val : " + serverEvent.getInitialMessage());
-
                         break;
                     case ASPECT:
                         aspectAvailable = serverEvent.getAvailableAspectValues();

@@ -17,7 +17,7 @@ class PortsUtils {
             if (list != null) {//server 19+
                 list.filter {
                     it.enumValueName == Constants.INPUT_PORT
-                }?.forEach {
+                }.forEach {
                     ports.add(Port(it.currentName, InputSourceHelper.INPUT_PORT.getPicById(it.intCondition)
                             , it.intCondition, msg?.currentPort == it.intCondition))
                     if(msg?.currentPort == it.intCondition) constants = true

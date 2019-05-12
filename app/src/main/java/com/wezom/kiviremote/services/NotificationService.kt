@@ -14,6 +14,7 @@ import android.graphics.drawable.Drawable
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.support.v4.app.NotificationCompat
+import android.support.v4.content.ContextCompat
 import android.widget.RemoteViews
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.target.NotificationTarget
@@ -75,7 +76,7 @@ class NotificationService : LifecycleService() {
             .setOngoing(true)
             .setSmallIcon(android.R.color.transparent)
             .setOnlyAlertOnce(true)
-            .setColor(this.resources.getColor(R.color.colorPrimary))
+            .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
             .setContent(remoteViews)
             .setContentIntent(HomeActivity.getDismissIntent(this))
             .setPriority(NotificationCompat.PRIORITY_MIN)
@@ -88,7 +89,7 @@ class NotificationService : LifecycleService() {
                 .setAutoCancel(true)
                 .setSmallIcon(android.R.color.transparent)
                 .setOnlyAlertOnce(true)
-                .setColor(this.resources.getColor(R.color.colorPrimary))
+                .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setContent(remoteViews)
                 .setContentIntent(HomeActivity.getDismissIntent(this))
                 .setDeleteIntent(notificationDismissedPending)

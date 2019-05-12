@@ -559,13 +559,11 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        if (binding.slidingLayout.getPanelState() == SlidingUpPanelLayout.PanelState.EXPANDED)
-//            binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-//        else if (!fragmentsBackKeyIntercept())
-//            super.onBackPressed();
-//    }
+    @Override
+    public void onBackPressed() {
+        changeFabVisibility(View.GONE);
+            super.onBackPressed();
+    }
 
     private boolean fragmentsBackKeyIntercept() {
         boolean isIntercept = false;

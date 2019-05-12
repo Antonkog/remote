@@ -47,7 +47,7 @@ class PortsFragment : TvKeysFragment() {
                     RxBus.publish(SendActionEvent(Action.HOME_UP))
                     fragmentManager?.popBackStack()
                 } else {
-                    if (AspectHolder?.message?.serverVersionCode ?: 0 < Constants.VER_ASPECT_XIX) {
+                    if (AspectHolder.message?.serverVersionCode ?: 0 < Constants.VER_ASPECT_XIX) {
                         setPort(lastPortId)
                     } else {
                         setPortServerCheck(lastPortId)

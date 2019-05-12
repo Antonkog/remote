@@ -72,7 +72,7 @@ class HomeActivityViewModel(
 
                         // no massage recieved in this session, check AspectHolder/set/clean.
                         if (AspectHolder.initialMsg == null)
-                        if (AspectHolder?.message?.serverVersionCode ?: 0 >= Constants.VER_ASPECT_XIX){
+                        if (AspectHolder.message?.serverVersionCode ?: 0 >= Constants.VER_ASPECT_XIX){
                             Run.after(1000) {
                                 RxBus.publish(RequestInitialEvent())
                             }
