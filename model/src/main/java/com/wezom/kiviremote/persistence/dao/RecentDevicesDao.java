@@ -39,6 +39,9 @@ public interface RecentDevicesDao {
     @Query("DELETE FROM recent_devices")
     void removeAll();
 
+    @Query("DELETE FROM recent_devices WHERE actual_name = :name")
+    void removeByName(String name);
+
     @Delete
     void deleteDevices(List<RecentDevice> devices);
 

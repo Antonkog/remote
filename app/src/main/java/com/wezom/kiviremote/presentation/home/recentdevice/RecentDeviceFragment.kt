@@ -1,5 +1,6 @@
 package com.wezom.kiviremote.presentation.home.recentdevice
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -25,10 +26,10 @@ import com.wezom.kiviremote.persistence.model.RecentDevice
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
-import com.wezom.kiviremote.presentation.home.recentdevice.item_info.TvInfoUnit
 import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo
-import com.wezom.kiviremote.presentation.home.recentdevices.item.TvInfoAdapter
-import kotlinx.coroutines.experimental.CommonPool
+import io.reactivex.Completable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.support.v4.toast
@@ -40,11 +41,10 @@ class RecentDeviceFragment : BaseFragment() {
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
 
-    private var viewModel: RecentDeviceViewModel? = null
+    private lateinit var binding: RecentDeviceFragmentBinding
+    lateinit var viewModel: RecentDeviceViewModel
 
     private lateinit var data: TvDeviceInfo
-
-    private lateinit var binding: RecentDeviceFragmentBinding
 
     private lateinit var tvRename: TextView
     private lateinit var switchAutoConnect: Switch
@@ -138,17 +138,17 @@ class RecentDeviceFragment : BaseFragment() {
         }
     }
 
+    @SuppressLint("CheckResult")
     private fun confirmDeletion() {
-        launch(CommonPool) {
-            viewModel?.database?.recentDeviceDao()?.deleteDevices(data.recentDevice)
-
-            launch(UI) {
-                if (data.indexInRecentList == 0)
-                    restartApp(getContext()!!)
-                else
-                    viewModel?.goBack()
-            }
-        }
+        Completable.fromAction { viewModel.database.recentDeviceDao()?.removeByName(data.recentDevice.actualName) }
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe {
+                    if (data.indexInRecentList == 0)
+                        restartApp(context!!)
+                    else
+                        viewModel.goBack()
+                }
     }
 
     private fun renameDevice(newName: String) {
@@ -158,7 +158,7 @@ class RecentDeviceFragment : BaseFragment() {
             val value = RecentDevice(data.recentDevice.id, data.recentDevice.actualName, newName)
             hideKeyboard(activity as Activity)
             launch(UI) {
-                viewModel?.saveChanges(value)
+                viewModel.saveChanges(value)
                 RxBus.publish(NewNameEvent(newName))
                 tvDeviceName.text = "УСТРОЙСТВО ${newName.remove032Space()}"
             }
@@ -177,44 +177,3 @@ class RecentDeviceFragment : BaseFragment() {
     }
 
 }
-
-//    private fun popBackStack() {
-//        toast(R.string.save_success)
-//        fragmentManager?.popBackStack()
-//    }
-
-//    private fun displayUserDefinedName() = model.run {
-//        binding.recentDeviceName.text = userDefinedName
-//        //binding.recentDeviceToChange.text = userDefinedName
-//        //binding.recentDeviceEditText.setText(userDefinedName, TextView.BufferType.EDITABLE)
-//    }
-
-
-//    private fun displayActualName() {
-//        val actualName = model.actualName.removeMasks()
-//
-//        binding.recentDeviceName.text = actualName
-//        //binding.recentDeviceToChange.text = actualName
-//        //binding.recentDeviceEditText.setText(actualName, TextView.BufferType.EDITABLE)
-//    }
-
-//    private fun setupListeners() {
-//        //binding.recentDeviceToChange.setOnClickListener(editNameClickListener)
-//        //binding.recentDeviceEditIcon.setOnClickListener(editNameClickListener)
-//        //binding.recentDeviceEditText.setOnEditorActionListener(editNameEditorListener)
-//        //binding.recentDeviceSave.setOnClickListener(saveButtonClickListener)
-//    }
-//
-//    private fun saveChanges() {
-////        if (binding.recentDeviceEditText.text.toString().isEmpty()) {
-////            toast(R.string.device_name_cannot_be_empty)
-////        } else {
-////            val value = RecentDevice(model.id, model.actualName, binding.recentDeviceEditText.text.toString())
-////            hideKeyboard(activity as Activity)
-////            launch(UI) {
-////                viewModel?.saveChanges(value)
-////                RxBus.publish(NewNameEvent(binding.recentDeviceEditText.text.toString()));
-////            }
-////            popBackStack()
-////        }
-//    }

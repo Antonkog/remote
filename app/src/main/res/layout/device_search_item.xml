@@ -2,19 +2,15 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <data>
-
-        <variable
-            name="model"
-            type="com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchAdapter.DeviceSearchModel" />
-    </data>
-
     <LinearLayout
         android:id="@+id/device_search_container"
         android:layout_width="match_parent"
         android:layout_height="75dp"
+        android:background="?android:attr/selectableItemBackground"
         android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp">
 
         <ImageView
             android:id="@+id/icon"
@@ -30,9 +26,9 @@
             android:ellipsize="marquee"
             android:padding="@dimen/standard"
             android:singleLine="true"
-            android:text="@{model.name}"
             android:textColor="@color/colorTextPrimary"
             android:textSize="@dimen/font_size_16"
             tools:text="KIVI 32FK42GU" />
     </LinearLayout>
+
 </layout>

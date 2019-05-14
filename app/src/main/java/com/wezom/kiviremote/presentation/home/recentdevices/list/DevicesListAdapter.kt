@@ -64,8 +64,11 @@ class DevicesListAdapter(preferences: SharedPreferences, val navigateCommand: (T
     override fun getItemCount(): Int = tvDeviceChunks.size
 
     fun setRecentDevices(recentDevices: List<RecentDevice>) {
-        tvDeviceChunks[TYPE_RECENT] = recentDevices.map { TvDeviceInfo(it, null) }.toMutableList()
-        tvDeviceChunks[TYPE_ONLINE]?.let { sortExistingRecentDevices(it) }
+        tvDeviceChunks[TYPE_RECENT] = recentDevices.map {
+            TvDeviceInfo(RecentDevice(it.actualName, it.userDefinedName), null)
+        }.toMutableList()
+
+        tvDeviceChunks[TYPE_ONLINE]?.let { sortExistingRecentDevices() }
     }
 
     fun setOnlineDevices(onlineDevices: Set<NsdServiceInfoWrapper>) {
@@ -73,10 +76,12 @@ class DevicesListAdapter(preferences: SharedPreferences, val navigateCommand: (T
             TvDeviceInfo(RecentDevice(it.serviceName, null).also { it.isOnline = true }, it)
         }.toMutableList()
 
-        tvDeviceChunks[TYPE_RECENT]?.let { sortExistingRecentDevices(tvDeviceChunks[TYPE_ONLINE]!!) }
+        tvDeviceChunks[TYPE_RECENT]?.let { sortExistingRecentDevices() }
     }
 
-    private fun sortExistingRecentDevices(onlineTvDevices: List<TvDeviceInfo>) {
+    private fun sortExistingRecentDevices() {
+        val onlineTvDevices: List<TvDeviceInfo> = tvDeviceChunks[TYPE_ONLINE]!!.toList()
+
         // Sorting RecentDevices by online state and current connection name
         tvDeviceChunks[TYPE_RECENT]?.forEach {
             it.recentDevice.isOnline = onlineTvDevices.any { pairOnlineDev -> pairOnlineDev.recentDevice.actualName == it.recentDevice.actualName }
