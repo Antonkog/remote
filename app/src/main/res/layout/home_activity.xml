@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:tools="http://schemas.android.com/tools"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:tools="http://schemas.android.com/tools">
 
     <android.support.v4.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -11,19 +10,23 @@
         android:fitsSystemWindows="true"
         tools:openDrawer="start">
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/main_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="?actionBarSize"
                 android:background="@color/colorAccent"
                 android:minHeight="?attr/actionBarSize"
                 android:theme="@style/ToolbarTheme"
-                app:elevation="@dimen/recom_card_elevation">
+                app:elevation="@dimen/recom_card_elevation"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
 
                 <include
@@ -46,6 +49,7 @@
                         android:layout_gravity="center"
                         android:drawableEnd="@drawable/arrow_down_selector"
                         android:gravity="center"
+                        android:paddingEnd="?actionBarSize"
                         android:text="@string/app_name" />
 
 
@@ -58,44 +62,56 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginStart="@dimen/toolbar_mg_search_l"
                         android:layout_marginEnd="@dimen/toolbar_mg_search_padding"
-                        android:paddingLeft="@dimen/toolbar_mg_search_padding"
+                        android:paddingStart="@dimen/toolbar_mg_search_padding"
                         app:srcCompat="@drawable/ic_search" />
 
                 </RelativeLayout>
 
             </android.support.v7.widget.Toolbar>
 
-
             <FrameLayout
                 android:id="@+id/activity_home_container"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
-
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/fab"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end|bottom"
-                    android:visibility="gone"
-                    app:srcCompat="@drawable/ic_remote"
-                    android:layout_margin="16dp" />
-
-
-            </FrameLayout>
+                android:layout_height="0dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
             <View
                 android:id="@+id/disconnect_status_indicator"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/disconnect_status_indicator_height"
+                android:layout_marginBottom="8dp"
                 android:background="@color/light_red"
-                android:visibility="visible" />
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
             <include
                 android:id="@+id/layoutRender"
                 layout="@layout/layout_render"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+            <com.wezom.kiviremote.views.MovableFloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end|bottom"
+                android:layout_margin="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="32dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_remote" />
+
+        </android.support.constraint.ConstraintLayout>
 
 
         <!-- Container for contents of drawer - use NavigationView to make configuration easier -->

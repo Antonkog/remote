@@ -2,11 +2,13 @@ package com.wezom.kiviremote.presentation.home.recommendations
 
 import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
+import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.*
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.KiviCache
+import com.wezom.kiviremote.common.LowCostLRUCache
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.net.model.AspectMessage
@@ -22,6 +24,7 @@ import io.reactivex.schedulers.Schedulers
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
 import java.util.*
+import kotlin.collections.ArrayList
 
 class RecommendationsViewModel(private val router: Router,
                                val database: AppDatabase,
@@ -47,18 +50,21 @@ class RecommendationsViewModel(private val router: Router,
                         onNext = { dbApps ->
                             val recommendations = ArrayList<AppModel>()
                             dbApps.forEach {
-                                if (cache.get(it.appName) == null) {
-                                    val bmp = BitmapFactory.decodeByteArray(
+                                val key = it.appName
+                                if (cache.get(key) == null) {
+                                    BitmapFactory.decodeByteArray(
                                             it.appIcon,
                                             0,
                                             it.appIcon.size
-                                    )
-                                    val appName = it.appName;
-                                    bmp?.let {
-                                        cache.put(appName, bmp)
+                                    ).let {
+                                        LowCostLRUCache<String, Bitmap>().put(key, it)
                                     }
+                                } else {
+                                    LowCostLRUCache<String, Bitmap>().put(key, cache.get(key))
                                 }
-                                recommendations.add(AppModel(it.appName,it.packageName))
+
+                                if (LowCostLRUCache<String, Bitmap>().get(key) != null)
+                                    recommendations.add(AppModel(it.appName, it.packageName))
                             }
                             this.apps.postValue(recommendations)
                         },
@@ -69,8 +75,9 @@ class RecommendationsViewModel(private val router: Router,
     fun requestApps() = RxBus.publish(RequestAppsEvent())
 
 
-    fun setRecommendData ()  = {
-        var list = LinkedList<RecommendItem>()
+    fun setRecommendData(): List<RecommendItem> {
+        val list = LinkedList<RecommendItem>()
+        Timber.d("Populate RecommendItem list")
         list.addLast(
                 RecommendItem(
                         RecommendationsAdapter.TYPE_RECOMMENDATIONS,
@@ -85,7 +92,7 @@ class RecommendationsViewModel(private val router: Router,
                         RecommendationsAdapter.TYPE_RECOMMENDATIONS,
                         title = "Disco Godfather",
                         serverId = 2,
-                        url ="https://m.media-amazon.com/images/M/MV5BMTU5MzAyMTY1Ml5BMl5BanBnXkFtZTgwNzA2MjI4MzE@._V1._CR46,89.5,1255,1862_SX89_AL_.jpg_V1_SX300.jpg"
+                        url = "https://m.media-amazon.com/images/M/MV5BMTU5MzAyMTY1Ml5BMl5BanBnXkFtZTgwNzA2MjI4MzE@._V1._CR46,89.5,1255,1862_SX89_AL_.jpg_V1_SX300.jpg"
                 )
         )
 
@@ -94,28 +101,30 @@ class RecommendationsViewModel(private val router: Router,
         list.addLast(
                 RecommendItem(
                         RecommendationsAdapter.TYPE_RECOMMENDATIONS,
-                        title =  "The Godfather Family: A Look Inside",
+                        title = "The Godfather Family: A Look Inside",
                         serverId = 3,
-                        url =  "https://m.media-amazon.com/images/M/MV5BMTUzOTc0NDAyNF5BMl5BanBnXkFtZTcwNjAwMDEzMQ@@._V1_SX300.jpg"
+                        url = "https://m.media-amazon.com/images/M/MV5BMTUzOTc0NDAyNF5BMl5BanBnXkFtZTcwNjAwMDEzMQ@@._V1_SX300.jpg"
                 )
         )
 
         list.addLast(
                 RecommendItem(
-                       RecommendationsAdapter.TYPE_RECOMMENDATIONS,
-                        title =  "The Godfather Trilogy: 1901-1980",
+                        RecommendationsAdapter.TYPE_RECOMMENDATIONS,
+                        title = "The Godfather Trilogy: 1901-1980",
                         serverId = 4,
-                        url =  "https://m.media-amazon.com/images/M/MV5BMTY1NzYxNDk0NV5BMl5BanBnXkFtZTYwMjk5MTM5._V1_SX300.jpg"
+                        url = "https://m.media-amazon.com/images/M/MV5BMTY1NzYxNDk0NV5BMl5BanBnXkFtZTYwMjk5MTM5._V1_SX300.jpg"
                 )
         )
-        this.recommendations.postValue(list)
+        return list
+
+//            this.recommendations.postValue(list)
     }
 
     fun observePorts() {
         disposables += RxBus.listen(GotAspectEvent::class.java).observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = {
-                            var ports = it?.getPortsList() ?: LinkedList()
+                            val ports = it?.getPortsList() ?: LinkedList()
                             if (!ports.isEmpty()) {
                                 var containsActive = false
                                 val recommendations = ArrayList<Port>()

@@ -170,7 +170,8 @@
     <string name="audio">Аудио</string>
     <string name="photo">Фото</string>
     <string name="info">Про устройство</string>
-§    <string name="vga" translatable="false">VGA</string>
+    §
+    <string name="vga" translatable="false">VGA</string>
     <string name="atv" translatable="false">АТВ</string>
     <string name="hdmi" translatable="false">HDMI 1</string>
     <string name="hdmi2" translatable="false">HDMI 2</string>
@@ -207,11 +208,16 @@
     <string name="drawer_open" translatable="false">open menu</string>
 
 
-    <string name="drawer_devices">Устройства</string>
+    <string name="recom_chennel" translatable="false">Телеканалы</string>
+    <string name="recom_apps" translatable="false">Приложения</string>
+    <string name="recom_inputs" translatable="false">Входы</string>
+    <string name="recom_kivi" translatable="false">Рекомендации от Киви</string>
+
     <string name="drawer_subscriptions">Подписки Киви</string>
     <string name="drawer_settings">Настройки приложения</string>
     <string name="drawer_support">Поддержка пользователей</string>
     <string name="drawer_exit">Выйти</string>
     <string name="drawer_dark_mode">Тёмный режим</string>
+    <string name="drawer_devices">Устройства</string>
 
 </resources>

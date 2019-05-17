@@ -1,27 +1,86 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/recent_devices_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:animateLayoutChanges="true">
 
+        <TextView
+            android:id="@+id/text_subscriptions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/KiviRecommendText"
+            android:text="@string/recom_kivi"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
         <android.support.v7.widget.RecyclerView
-            android:id="@+id/recycler"
+            android:id="@+id/recicler_subscriptions"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/type"
             android:layout_alignParentStart="true"
             android:layout_alignParentBottom="true"
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:visibility="visible"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/text_subscriptions" />
 
 
+        <TextView
+            android:id="@+id/text_apps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/KiviRecommendText"
+            android:text="@string/recom_apps"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recicler_subscriptions" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recicler_apps"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/type"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_apps" />
+
+        <TextView
+            android:id="@+id/text_ports"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/KiviRecommendText"
+            android:text="@string/recom_inputs"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/recicler_apps" />
+
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recicler_ports"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/type"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginTop="8dp"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_ports" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

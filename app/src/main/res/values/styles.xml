@@ -59,6 +59,26 @@
         <item name="android:textSize">@dimen/font_size_15</item>
     </style>
 
+    <style name="KiviMainTextMedium" parent="KiviMainTextAppearance">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">@dimen/font_size_20</item>
+    </style>
+
+
+    <style name="KiviRecommendText" parent="KiviMainTextMedium">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">@dimen/font_size_20</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+
+    <style name="KiviMainTextSmall" parent="KiviMainTextAppearance">
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textSize">9sp</item>
+    </style>
+
     <style name="DiscoveryCheckBoxTheme" parent="Widget.AppCompat.CompoundButton.CheckBox">
         <!--<item name="colorButtonNormal">@color/teal_blue</item>-->
         <item name="colorControlHighlight">@color/colorSecondaryText</item>
@@ -87,8 +107,7 @@
     </style>
 
 
-
-    <style name="RecsText" >
+    <style name="RecsText">
         <item name="android:textSize">@dimen/font_size_20</item>
         <item name="android:textColor">@color/colorWhite</item>
     </style>

@@ -6,9 +6,9 @@ buildscript {
             'buildTools'            : '26.0.2',
             'minSdk'                : 19,
             'targetSdk'             : 26,
-            'versionMajor'             : 1,
-            'versionMinor'             : 2,
-            'versionPatch'             : 2,
+            'versionMajor'          : 2,
+            'versionMinor'          : 0,
+            'versionPatch'          : 0,
             //versioning see  https://medium.com/@maxirosson/versioning-android-apps-d6ec171cfd82
             'supportLibrary'        : '27.0.1',
             'architectureComponents': '1.0.0',
@@ -71,8 +71,8 @@ buildscript {
             'slidingUpPanel'        : "com.sothree.slidinguppanel:library:3.4.0",
             'coroutines'            : "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.19.3",
             'anko'                  : [
-                    'commons': "org.jetbrains.anko:anko-commons:${versions.anko}",
-                    'commonsV4' : "org.jetbrains.anko:anko-support-v4-commons:${versions.anko}"
+                    'commons'  : "org.jetbrains.anko:anko-commons:${versions.anko}",
+                    'commonsV4': "org.jetbrains.anko:anko-support-v4-commons:${versions.anko}"
             ],
             'databinding'           : "com.android.databinding:compiler:3.0.1"
     ]
