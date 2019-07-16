@@ -68,8 +68,8 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
     };
 
     private Observer<GotAspectEvent> showInputsObserver = show -> {
-        Timber.i("set imputs from observable, ports size: " + show.getPortsList().size());
-        setInputButton(!show.getPortsList().isEmpty());
+        Timber.i("set imputs from observable, ports size: " + show.getInputsList().size());
+        setInputButton(!show.getInputsList().isEmpty());
     };
 
     @Nullable
@@ -119,7 +119,7 @@ public class RemoteControlFragment extends TvKeysFragment implements RockersButt
         if (!AspectHolder.INSTANCE.hasAspectSettings())
             viewModel.requestAspect();
         else {
-            setInputButton(!AspectHolder.INSTANCE.getPortsList().isEmpty());
+            setInputButton(!AspectHolder.INSTANCE.getInputsList().isEmpty());
             setAspectButton(AspectHolder.INSTANCE.hasAspectSettings());
         }
     }

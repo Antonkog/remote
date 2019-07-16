@@ -13,15 +13,15 @@ import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.common.extensions.boolean
 import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.net.ChatConnection
-import com.wezom.kiviremote.net.model.AspectMessage
-import com.wezom.kiviremote.net.model.ConnectionMessage
-import com.wezom.kiviremote.net.model.SocketConnectionModel
+import com.wezom.kiviremote.net.model.*
 import com.wezom.kiviremote.nsd.NsdServiceModel
 import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.persistence.model.RecentDevice
 import com.wezom.kiviremote.persistence.model.ServerApp
+import com.wezom.kiviremote.persistence.model.ServerInput
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment
+import com.wezom.kiviremote.presentation.home.ports.InputSourceHelper
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadButtonClickEvent
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.upnp.UPnPManager
@@ -52,31 +52,17 @@ class HomeActivityViewModel(
         disposables += RxBus.listen(ConnectionMessage::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
-                    launch(CommonPool) {
-                        it.appList?.let {
-                            database.serverAppDao().run {
-                                removeAll()
-                                insertAll(it.mapTo(ArrayList(), {
-                                    ServerApp().apply {
-                                        appName = it.applicationName
-                                        packageName = it.packageName
-                                        appIcon = it.appIcon
-                                    }
-                                }))
-                            }
-                        }
 
-                    }
                     if (it.aspectMessage != null && it.available != null) {
                         AspectHolder.setAspectValues(it.aspectMessage, it.available, it.initialMessage)
 
                         // no massage recieved in this session, check AspectHolder/set/clean.
                         if (AspectHolder.initialMsg == null)
-                        if (AspectHolder.message?.serverVersionCode ?: 0 >= Constants.VER_ASPECT_XIX){
-                            Run.after(1000) {
-                                RxBus.publish(RequestInitialEvent())
+                            if (AspectHolder.message?.serverVersionCode ?: 0 >= Constants.VER_ASPECT_XIX) {
+                                Run.after(1000) {
+                                    RxBus.publish(RequestInitialEvent())
+                                }
                             }
-                        }
                         RxBus.publish(GotAspectEvent(it.aspectMessage, it.available, it.initialMessage
                                 ?: AspectHolder.initialMsg))
                     }
@@ -97,9 +83,107 @@ class HomeActivityViewModel(
                         disconnect()
                     }
 
+                    if (it.inputs != null) {
+                        launch(CommonPool) {
+                            it.inputs?.let {
+                                database.serverInputsDao().run {
+                                    removeAll()
+                                    insertAll(it.mapTo(ArrayList(), {
+                                        ServerInput().apply {
+                                            portNum = it.intID
+                                            portName = it.name
+                                            imageUrl = it.imageUrl
+                                            active = it.isActive
+                                            inputIcon = it.inputIcon
+                                            localResource = InputSourceHelper.INPUT_PORT.getPicById(it.intID)
+                                        }
+                                    }))
+                                }
+                            }
+                            Timber.e("12345 got inputs")
+                        }
+                    }
+
+                    if (it.recommendations != null) {
+                        RxBus.publish(GotRecommendationsEvent(it.recommendations))
+                        Timber.e("12345 got recommendations")
+                    }
+
+                    if (it.favourites != null) {
+                        Timber.e("12345 got favourites")
+                    }
+
+                    if (it.channels != null) {
+                        RxBus.publish(GotChannelsEvent(it.channels))
+                        Timber.e("12345 got channels")
+                    }
+
                     if (it.volume != -1) {
                         RxBus.publish(NewVolumeEvent(it.volume))
                         muteStatus = it.volume <= 0
+                    }
+                }, onError = Timber::e)
+
+        disposables += RxBus.listen(GotPreviewsInitialEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    if (it.previewCommonStructures != null) {
+                        Timber.e("12345  got previewCommonStructures ")
+                        launch(CommonPool) {
+                            database.serverAppDao().run {
+                                removeAll()
+                                insertAll(
+                                        it.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.APPLICATION.name }.mapTo(ArrayList(), {
+                                            Timber.e("12345 got app:" + it.id)
+                                            ServerApp().apply {
+                                                appName = it.name
+                                                packageName = it.id
+                                                baseIcon = it.icon
+                                                uri = it.imageUrl
+                                            }
+                                        }
+                                        )
+                                )
+                            }
+                            database.serverInputsDao().run {
+                                removeAll()
+                                insertAll(
+                                        it.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.INPUT.name }.mapTo(ArrayList(), {
+                                            ServerInput().apply {
+                                                portNum = Integer.parseInt(it.id)
+                                                portName = it.name
+                                                imageUrl = it.imageUrl
+                                                active = it.is_active
+                                                inputIcon = it.icon
+                                                localResource = InputSourceHelper.INPUT_PORT.getPicById(portNum)
+                                            }
+                                        }))
+                            }
+                        }
+                    }
+                })
+
+        disposables += RxBus.listen(NewAppListEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    if (it.appInfo != null) {
+                        launch(CommonPool) {
+                            it.appInfo?.let {
+                                database.serverAppDao().run {
+                                    removeAll()
+                                    insertAll(it.mapTo(ArrayList(), {
+                                        ServerApp().apply {
+                                            appName = it.applicationName
+                                            packageName = it.packageName
+                                            appIcon = it.appIcon
+                                            baseIcon = it.baseIcon
+                                        }
+                                    }))
+                                }
+                            }
+                        }
+//                        RxBus.publish(GotAppsEvent(it.appList))
+                        Timber.e("12345 got appList")
                     }
                 }, onError = Timber::e)
 
@@ -112,7 +196,7 @@ class HomeActivityViewModel(
         disposables += RxBus.listen(SendCursorCoordinatesEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread()).debounce(TOUCH_EVENT_FREQUENCY, TimeUnit.MILLISECONDS)
                 .subscribeBy(onNext = {
-                    sendTouchpadAction(it.x, it.y, Action.motion)
+                    sendTouchpadAction(it.x, it.y, Action.MOTION)
                 }, onError = Timber::e)
 
         disposables += RxBus.listen(TouchpadButtonClickEvent::class.java)
@@ -139,10 +223,25 @@ class HomeActivityViewModel(
                     sendAction(Action.REQUEST_ASPECT)
                 }, onError = Timber::e)
 
+        disposables += RxBus.listen(ShowHideAspectEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    sendAction(Action.SHOW_OR_HIDE_ASPECT)
+                }, onError = Timber::e)
+
+
+
         disposables += RxBus.listen(RequestInitialEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
                     sendAction(Action.REQUEST_INITIAL)
+                }, onError = Timber::e)
+
+
+        disposables += RxBus.listen(RequestInitialPreviewEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    sendAction(Action.REQUEST_INITIAL_II)
                 }, onError = Timber::e)
 
 
@@ -195,6 +294,19 @@ class HomeActivityViewModel(
                     launchApp(it.packageName)
                 }, onError = Timber::e)
 
+        disposables += RxBus.listen(LaunchChannelEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    launchChannel(it.channel)
+                }, onError = Timber::e)
+
+        disposables += RxBus.listen(LaunchRecommendationEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    launchRecommendation(it.recommendation)
+                }, onError = Timber::e)
+
+
         disposables += RxBus.listen(SendActionEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
@@ -243,8 +355,8 @@ class HomeActivityViewModel(
     private fun initConnection(nsdModel: NsdServiceModel, firstConnection: Boolean) {
         killPing()
         serverConnection = ChatConnection()
-        if(firstConnection)
-            Run.after(Constants.DELAY_ASK_APPS){
+        if (firstConnection)
+            Run.after(Constants.DELAY_ASK_APPS) {
                 RxBus.publish(RequestAppsEvent())
             }
         connect(nsdModel)
@@ -306,7 +418,7 @@ class HomeActivityViewModel(
             setArgs(ArrayList<String>().apply {
                 add(text)
             })
-            setAction(Action.text)
+            setAction(Action.TEXT)
         })
     }
 
@@ -315,7 +427,7 @@ class HomeActivityViewModel(
             setArgs(ArrayList<String>().apply {
                 add(key.toString())
             })
-            setAction(Action.keyevent)
+            setAction(Action.KEY_EVENT)
         })
     }
 
@@ -333,6 +445,15 @@ class HomeActivityViewModel(
         serverConnection?.sendMessage(SocketConnectionModel().apply {
             setAspectMessage(msg)
         })
+    }
+
+
+    private fun launchChannel(msg: Channel) {
+        serverConnection?.launchChannel(msg)
+    }
+
+    private fun launchRecommendation(msg: Recommendation) {
+        serverConnection?.launchRecommendation(msg)
     }
 
     private fun sendAction(action: Action) {

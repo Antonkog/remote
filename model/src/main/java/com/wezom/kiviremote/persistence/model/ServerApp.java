@@ -19,6 +19,12 @@ public class ServerApp {
     @ColumnInfo(name = "app_icon")
     private byte[] appIcon;
 
+    @ColumnInfo(name = "baseIcon")
+    private String baseIcon;
+
+        @ColumnInfo(name = "uri")
+        private String  uri;
+
     public int getId() {
         return id;
     }
@@ -35,6 +41,14 @@ public class ServerApp {
         this.appName = appName;
     }
 
+    public String getBaseIcon() {
+        return baseIcon;
+    }
+
+    public void setBaseIcon(String baseIcon) {
+        this.baseIcon = baseIcon;
+    }
+
     public String getPackageName() {
         return packageName;
     }
@@ -49,5 +63,13 @@ public class ServerApp {
 
     public void setAppIcon(byte[] appIcon) {
         this.appIcon = appIcon;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
     }
 }

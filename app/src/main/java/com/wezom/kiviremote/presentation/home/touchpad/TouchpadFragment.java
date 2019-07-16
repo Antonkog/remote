@@ -48,7 +48,7 @@ public class TouchpadFragment extends TvKeysFragment
     private int y1;
     private long scrollTime = System.currentTimeMillis();
 
-    private Observer<GotAspectEvent> showAspectObserver = show -> setInputButton(!show.getPortsList().isEmpty());
+    private Observer<GotAspectEvent> showAspectObserver = show -> setInputButton(!show.getInputsList().isEmpty());
 
     private void setInputButton(Boolean show) {
         binding.input.setVisibility(show ? View.VISIBLE : View.GONE);
@@ -103,7 +103,7 @@ public class TouchpadFragment extends TvKeysFragment
 
         binding.input.setOnClickListener(view -> viewModel.goToInputSettings());
 
-        setInputButton(!AspectHolder.INSTANCE.getPortsList().isEmpty());
+        setInputButton(!AspectHolder.INSTANCE.getInputsList().isEmpty());
         setScroll();
         setTvButtons(viewModel, binding.menu, binding.back, binding.home);
     }

@@ -10,11 +10,14 @@ import android.content.Context
 import android.content.Intent
 import android.content.Intent.*
 import android.content.res.Resources
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.MediaStore
 import android.support.v4.content.ContextCompat
+import android.util.Base64
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.wezom.kiviremote.presentation.splash.SplashActivity
@@ -109,6 +112,11 @@ fun hideKeyboard(activity: Activity) {
 fun showKeyboard(activity: Activity) {
     val imm = activity.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
+}
+
+fun decodeFromBase64(bitmapString: String): Bitmap {
+    val byteArray = Base64.decode(bitmapString, Base64.DEFAULT)
+    return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size)
 }
 
 fun dpToPx(context: Context, dps: Int) = Math.round(context.resources.displayMetrics.density * dps)

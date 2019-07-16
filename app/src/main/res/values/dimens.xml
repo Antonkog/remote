@@ -83,7 +83,7 @@
     <dimen name="recent_devices_action_icon_size">56dp</dimen>
     <dimen name="panel_icon_size">38dp</dimen>
 
-<!--recom = recommendations screen-->
+    <!--recom = recommendations screen-->
     <dimen name="recom_app_w">160dp</dimen>
     <dimen name="recom_app_h">90dp</dimen>
 
@@ -93,6 +93,8 @@
     <dimen name="recom_tv">85dp</dimen>
     <dimen name="recom_port">85dp</dimen>
     <dimen name="recom_card_radius">5dp</dimen>
+    <dimen name="recom_card_margin">5dp</dimen>
+
     <dimen name="recom_card_elevation">8dp</dimen>
 
     <!--common margings-->

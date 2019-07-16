@@ -3,10 +3,8 @@ package com.wezom.kiviremote.bus
 
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.extensions.PortsUtils
-import com.wezom.kiviremote.net.model.AspectAvailable
-import com.wezom.kiviremote.net.model.AspectMessage
-import com.wezom.kiviremote.net.model.InitialMessage
-import com.wezom.kiviremote.upnp.org.droidupnp.view.Port
+import com.wezom.kiviremote.net.model.*
+import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 
 data class GotAspectEvent(val msg: AspectMessage?, val available: AspectAvailable?, val initMsg: InitialMessage?) {
     fun getManufacture(): Int {
@@ -22,7 +20,8 @@ data class GotAspectEvent(val msg: AspectMessage?, val available: AspectAvailabl
         return msg?.settings != null && available?.settings != null && !available.settings.isEmpty()
     }
 
-    fun getPortsList(): List<Port> {
-        return PortsUtils.getPortsList(initMsg?.driverValueList, available, msg)
+
+    fun getInputsList(): List<Input> {
+        return PortsUtils.getNewInputsList(AspectHolder.initialMsg?.driverValueList, AspectHolder.availableSettings, AspectHolder.message)
     }
 }

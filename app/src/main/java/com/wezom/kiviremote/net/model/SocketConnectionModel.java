@@ -44,6 +44,13 @@ public class SocketConnectionModel {
         this.args = args;
     }
 
+
+    public SocketConnectionModel setArg(String  arg) {
+        this.args.clear();
+        this.args.add(arg);
+        return this;
+    }
+
     public void setMotion(List<Double> motion) {
         this.motion = motion;
     }

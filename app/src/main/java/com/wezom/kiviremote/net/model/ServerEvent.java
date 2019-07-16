@@ -17,6 +17,12 @@ public class ServerEvent {
     private AspectMessage aspectMessage;
     private AspectAvailable availableAspectValues;
     private InitialMessage initialMessage;
+    private List<PreviewCommonStructure> previewCommonStructures;
+    private List<Recommendation> recommendations;
+    private List<Recommendation> favorites;
+    private List<Channel> channels;
+    private List<Input> inputs;
+
 
     public String getEvent() {
         return event;
@@ -40,5 +46,25 @@ public class ServerEvent {
 
     public AspectAvailable getAvailableAspectValues() {
         return availableAspectValues;
+    }
+
+    public List<Recommendation> getRecommendations() {
+        return recommendations;
+    }
+
+    public List<Recommendation> getFavorites() {
+        return favorites;
+    }
+
+    public List<Channel> getChannels() {
+        return channels;
+    }
+
+    public List<Input> getInputs() {
+        return inputs;
+    }
+
+    public List<PreviewCommonStructure> getPreviewCommonStructures() {
+        return previewCommonStructures;
     }
 }

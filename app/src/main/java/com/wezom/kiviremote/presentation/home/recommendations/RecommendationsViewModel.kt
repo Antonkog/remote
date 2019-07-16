@@ -6,18 +6,13 @@ import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.*
-import com.wezom.kiviremote.common.Constants
-import com.wezom.kiviremote.common.KiviCache
-import com.wezom.kiviremote.common.LowCostLRUCache
-import com.wezom.kiviremote.common.RxBus
+import com.wezom.kiviremote.common.*
 import com.wezom.kiviremote.common.extensions.Run
-import com.wezom.kiviremote.net.model.AspectMessage
-import com.wezom.kiviremote.net.model.RecommendItem
+import com.wezom.kiviremote.net.model.*
 import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.apps.AppModel
 import com.wezom.kiviremote.upnp.UPnPManager
-import com.wezom.kiviremote.upnp.org.droidupnp.view.Port
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -35,10 +30,51 @@ class RecommendationsViewModel(private val router: Router,
     var aspectTryCounter = Constants.ASPECT_GET_TRY
     var lastPortId = Constants.INPUT_HOME_ID
 
+    val recommendations = MutableLiveData<List<Comparable<Recommendation>>>()
+    val apps = MutableLiveData<List<Comparable<ServerAppInfo>>>()
+    val inputs = MutableLiveData<List<Comparable<Input>>>()
+    val channels = MutableLiveData<List<Comparable<Channel>>>()
+    //
+    fun requestApps() = RxBus.publish(SendActionEvent(Action.REQUEST_APPS))
 
-    val recommendations = MutableLiveData<List<Comparable<RecommendItem>>>()
-    val apps = MutableLiveData<List<Comparable<AppModel>>>()
-    val ports = MutableLiveData<List<Comparable<Port>>>()
+    fun requestInputs() = RxBus.publish(SendActionEvent(Action.REQUEST_INPUTS))
+    fun requestRecommendations() = RxBus.publish(SendActionEvent(Action.REQUEST_RECOMMENDATIONS))
+    fun requestChannels() = RxBus.publish(SendActionEvent(Action.REQUEST_CHANNELS))
+    fun requestPreviews() = RxBus.publish(RequestInitialPreviewEvent())
+
+    fun observePreviews() {
+        disposables += RxBus.listen(GotPreviewsInitialEvent::class.java).observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(
+                        onNext = {
+                            Timber.e("12345 got preview " + it.previewCommonStructures?.firstOrNull()?.toString())
+
+                            recommendations.postValue(
+                                    it.previewCommonStructures?.filter { it.type == LauncherBasedData.TYPE.RECOMMENDATION.name }?.mapTo(ArrayList(),
+                                            {
+                                                Recommendation()
+                                                        .addContent(Integer.parseInt(it.id))
+                                                        .addImageUrl(it.imageUrl)
+                                                        .addTitle(it.name)
+                                            }
+                                    )
+                            )
+
+                            channels.postValue(
+                                    it.previewCommonStructures?.filter { it.type == LauncherBasedData.TYPE.CHANNEL.name }?.mapTo(ArrayList(),
+                                            {
+                                                Channel()
+                                                        .addId(it.id)
+                                                        .addIconUrl(it.imageUrl)
+                                                        .addName(it.name)
+                                                        .addActive(it.is_active)
+                                            }
+                                    )
+                            )
+
+
+                        }, onError = Timber::e
+                )
+    }
 
 
     fun populateApps() {
@@ -48,23 +84,36 @@ class RecommendationsViewModel(private val router: Router,
                 .subscribeOn(Schedulers.computation())
                 .subscribeBy(
                         onNext = { dbApps ->
-                            val recommendations = ArrayList<AppModel>()
+                            val recommendations = ArrayList<ServerAppInfo>()
                             dbApps.forEach {
-                                val key = it.appName
+                                Timber.e("12345 got app from db " + it.appName + " package " + it.packageName)
+
+                                val key = it.packageName
                                 if (cache.get(key) == null) {
-                                    BitmapFactory.decodeByteArray(
-                                            it.appIcon,
-                                            0,
-                                            it.appIcon.size
-                                    ).let {
-                                        LowCostLRUCache<String, Bitmap>().put(key, it)
+                                    Timber.e("12345 no app cache" + it.packageName)
+
+                                    if (it.baseIcon != null && it.baseIcon.isNotEmpty()) {
+                                        decodeFromBase64(it.baseIcon).let { bitmap ->
+                                            cache.put(key, bitmap)
+                                        }
+
+                                    } else {
+                                        val bitmap = BitmapFactory.decodeByteArray(
+                                                it.appIcon,
+                                                0,
+                                                it.appIcon.size
+                                        )
+
+                                        if (bitmap != null)
+                                            cache.put(key, bitmap)
                                     }
-                                } else {
-                                    LowCostLRUCache<String, Bitmap>().put(key, cache.get(key))
                                 }
 
-                                if (LowCostLRUCache<String, Bitmap>().get(key) != null)
-                                    recommendations.add(AppModel(it.appName, it.packageName))
+                                if (cache.get(key) != null)
+                                    recommendations.add(ServerAppInfo(it.appName, it.packageName))
+                                else {
+                                    Timber.e("12345 no app cache2" + it.packageName)
+                                }
                             }
                             this.apps.postValue(recommendations)
                         },
@@ -72,82 +121,33 @@ class RecommendationsViewModel(private val router: Router,
                 )
     }
 
-    fun requestApps() = RxBus.publish(RequestAppsEvent())
 
-
-    fun setRecommendData(): List<RecommendItem> {
-        val list = LinkedList<RecommendItem>()
-        Timber.d("Populate RecommendItem list")
-        list.addLast(
-                RecommendItem(
-                        RecommendationsAdapter.TYPE_RECOMMENDATIONS,
-                        title = "The Godfather",
-                        serverId = 1,
-                        url = "https://m.media-amazon.com/images/M/MV5BM2MyNjYxNmUtYTAwNi00MTYxLWJmNWYtYzZlODY3ZTk3OTFlXkEyXkFqcGdeQXVyNzkwMjQ5NzM@._V1_SX300.jpg"
-                )
-        )
-
-        list.addLast(
-                RecommendItem(
-                        RecommendationsAdapter.TYPE_RECOMMENDATIONS,
-                        title = "Disco Godfather",
-                        serverId = 2,
-                        url = "https://m.media-amazon.com/images/M/MV5BMTU5MzAyMTY1Ml5BMl5BanBnXkFtZTgwNzA2MjI4MzE@._V1._CR46,89.5,1255,1862_SX89_AL_.jpg_V1_SX300.jpg"
-                )
-        )
-
-
-
-        list.addLast(
-                RecommendItem(
-                        RecommendationsAdapter.TYPE_RECOMMENDATIONS,
-                        title = "The Godfather Family: A Look Inside",
-                        serverId = 3,
-                        url = "https://m.media-amazon.com/images/M/MV5BMTUzOTc0NDAyNF5BMl5BanBnXkFtZTcwNjAwMDEzMQ@@._V1_SX300.jpg"
-                )
-        )
-
-        list.addLast(
-                RecommendItem(
-                        RecommendationsAdapter.TYPE_RECOMMENDATIONS,
-                        title = "The Godfather Trilogy: 1901-1980",
-                        serverId = 4,
-                        url = "https://m.media-amazon.com/images/M/MV5BMTY1NzYxNDk0NV5BMl5BanBnXkFtZTYwMjk5MTM5._V1_SX300.jpg"
-                )
-        )
-        return list
-
-//            this.recommendations.postValue(list)
-    }
-
-    fun observePorts() {
-        disposables += RxBus.listen(GotAspectEvent::class.java).observeOn(AndroidSchedulers.mainThread())
+    fun populatePorts() {
+        Timber.d("Populate ports list")
+        disposables += database.serverInputsDao()
+                .all
+                .subscribeOn(Schedulers.computation())
                 .subscribeBy(
-                        onNext = {
-                            val ports = it?.getPortsList() ?: LinkedList()
-                            if (!ports.isEmpty()) {
-                                var containsActive = false
-                                val recommendations = ArrayList<Port>()
-
-                                for (port in ports) {
-                                    if (port.active && port.portNum == lastPortId || aspectTryCounter == 0)
-                                        containsActive = true
-                                    recommendations.add(port)
-                                }
-
-                                if (containsActive) this.ports.postValue(recommendations)
-                                else {
-                                    Run.after(1000) {
-                                        requestAspect()
+                        onNext = { inputs ->
+                            val newInputs = ArrayList<Input>()
+                            inputs.forEach {
+                                Timber.e("got input from db " + it.portName + " id = " + it.portNum)
+                                val key = it.portName
+                                if (cache.get(key) == null) {
+                                    decodeFromBase64(it.inputIcon).let { bitmap ->
+                                        cache.put(key, bitmap)
                                     }
-                                    aspectTryCounter--
                                 }
-                            } else {
-                                requestAspect()
+
+                                if (cache.get(key) != null)
+                                    newInputs.add(Input(it))
                             }
-                        }, onError = Timber::e
+                            this.inputs.postValue(newInputs.distinct()) //could n't be same values
+                        },
+                        onError = Timber::e
                 )
     }
+
 
     fun sendAspectSingleChangeEvent(valueType: AspectMessage.ASPECT_VALUE, value: Int) {
         val builder = AspectMessage.AspectMsgBuilder()
@@ -155,7 +155,22 @@ class RecommendationsViewModel(private val router: Router,
         RxBus.publish(NewAspectEvent(builder.buildAspect()))
     }
 
+
+    fun launchChannel(channel: Channel) {
+        RxBus.publish(LaunchChannelEvent(channel))
+    }
+
+
+    fun launchRecommendation(recommendation: Recommendation) {
+        RxBus.publish(LaunchRecommendationEvent(recommendation))
+    }
+
+
     fun requestAspect() = RxBus.publish(RequestAspectEvent())
+
+
+    fun requestAllPreviews() = RxBus.publish(RequestInitialPreviewEvent())
+
 
     fun launchApp(name: String) {
         RxBus.publish(LaunchAppEvent(name))
@@ -164,8 +179,7 @@ class RecommendationsViewModel(private val router: Router,
 
     fun goSearch() = router.navigateTo(Screens.DEVICE_SEARCH_FRAGMENT)
 
-    fun godo(data: RecommendItem) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)
-
+    fun godo(data: Recommendation) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)
 
     fun startUPnPController() = uPnPManager.controller.resume()
 

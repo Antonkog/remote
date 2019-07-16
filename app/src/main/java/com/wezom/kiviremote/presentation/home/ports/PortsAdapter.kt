@@ -4,7 +4,7 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.wezom.kiviremote.databinding.PortItemBinding
-import com.wezom.kiviremote.upnp.org.droidupnp.view.Port
+import com.wezom.kiviremote.net.model.Input
 import java.util.*
 
 
@@ -14,7 +14,7 @@ class PortsAdapter(val listener: CheckListener) : RecyclerView.Adapter<PortsAdap
         var checkListener: CheckListener? = null
     }
 
-    private var ports: MutableList<Port> = mutableListOf()
+    private var inputs: MutableList<Input> = mutableListOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PortsViewHolder {
         val layoutInflater = LayoutInflater.from(parent.context)
@@ -22,18 +22,18 @@ class PortsAdapter(val listener: CheckListener) : RecyclerView.Adapter<PortsAdap
         return PortsViewHolder(binding)
     }
 
-    override fun getItemCount(): Int = ports.size
+    override fun getItemCount(): Int = inputs.size
 
     override fun onBindViewHolder(holder: PortsViewHolder, position: Int) {
-        val port = ports[position]
-        val title = port.portName
+        val input = inputs[position]
+        val title = input.name
         checkListener = listener
 
         holder.run {
             binding.textPort.text = title
-            binding.imagePort.setImageResource(port.portImageId)
+            binding.imagePort.setImageResource(InputSourceHelper.INPUT_PORT.getPicById(input.intID))
 
-            if (port.active) {
+            if (input.isActive) {
                 binding.checkPort.isChecked = true
             } else {
                 binding.checkPort.isChecked = false
@@ -41,7 +41,7 @@ class PortsAdapter(val listener: CheckListener) : RecyclerView.Adapter<PortsAdap
 
             binding.portLayoutContent.setOnClickListener { _ ->
                 if (!binding.checkPort.isChecked) {
-                    checkListener?.onPortChecked(port.portNum)
+                    checkListener?.onPortChecked(input.intID)
                 }
             }
         }
@@ -52,19 +52,19 @@ class PortsAdapter(val listener: CheckListener) : RecyclerView.Adapter<PortsAdap
         fun onPortChecked(portId: Int)
     }
 
-    fun setData(newports: List<Port>) {
-        ports.clear()
-        ports.addAll(newports)
+    fun setData(newports: List<Input>) {
+        inputs.clear()
+        inputs.addAll(newports)
         notifyDataSetChanged()
     }
 
-    fun sePortActivebyId(id: Int) {
-        val newPorts = LinkedList<Port>()
-        for (port in ports) {
-            newPorts.add(Port(portName = port.portName, portImageId = port.portImageId, portNum = port.portNum, active = (id == port.portNum)))
+    fun setInputActiveById(id: Int) {
+        val newInputs = LinkedList<Input>()
+        for (input in inputs) {
+            newInputs.add(input.addActive(id == input.intID))
         }
-        ports.clear()
-        ports.addAll(newPorts)
+        inputs.clear()
+        inputs.addAll(newInputs)
         notifyDataSetChanged()
     }
 

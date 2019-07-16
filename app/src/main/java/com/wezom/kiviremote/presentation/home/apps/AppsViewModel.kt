@@ -25,14 +25,14 @@ import java.util.*
 
 
 class AppsViewModel(
-    val database: AppDatabase,
-    private val cache: KiviCache, preferences: SharedPreferences,
-    private val resourceProvider: ResourceProvider
+        val database: AppDatabase,
+        private val cache: KiviCache, preferences: SharedPreferences,
+        private val resourceProvider: ResourceProvider
 ) : BaseViewModel() {
 
     private var currentConnection by preferences.string(
-        Constants.UNIDENTIFIED,
-        key = CURRENT_CONNECTION_KEY
+            Constants.UNIDENTIFIED,
+            key = CURRENT_CONNECTION_KEY
     )
 
     val apps = MutableLiveData<List<AppModel>>()
@@ -43,50 +43,53 @@ class AppsViewModel(
     fun populateApps() {
         Timber.d("Populate app list")
         disposables += database.serverAppDao()
-            .all
-            .subscribeOn(Schedulers.computation())
-            .subscribeBy(
-                onNext = { dbApps ->
-                    val apps = ArrayList<AppModel>()
-                    dbApps.forEach {
-                        if (cache.get(it.appName) == null) {
-                            val bmp = BitmapFactory.decodeByteArray(
-                                    it.appIcon,
-                                    0,
-                                    it.appIcon.size
-                            )
-                            val appName = it.appName;
-                            bmp?.let {
-                                cache.put(appName, bmp)
-                            }
+                .all
+                .subscribeOn(Schedulers.computation())
+                .subscribeBy(
+                        onNext = { dbApps ->
+                            val apps = ArrayList<AppModel>()
+                            dbApps.forEach {
+                                if (cache.get(it.appName) == null) {
+                                    val bmp = BitmapFactory.decodeByteArray(
+                                            it.appIcon,
+                                            0,
+                                            it.appIcon.size
+                                    )
+                                    val appName = it.appName;
+                                    bmp?.let {
+                                        cache.put(appName, bmp)
+                                    }
 
-                        }
-                        apps.add(AppModel(it.appName, it.packageName))
-                    }
-                    this.apps.postValue(apps)
-                },
-                onError = Timber::e
-            )
+                                }
+
+                                if (cache.get(it.appName) != null) {
+                                    apps.add(AppModel(it.appName, it.packageName))
+                                }
+                            }
+                            this.apps.postValue(apps)
+                        },
+                        onError = Timber::e
+                )
     }
 
     fun requestApps() = RxBus.publish(RequestAppsEvent())
 
     fun updateName() {
         disposables += database
-            .recentDeviceDao()
-            .getDevice(currentConnection)
-            .subscribeOn(Schedulers.io())
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribeBy(onNext = { device ->
-                if (device.userDefinedName != null) {
-                    setCurrentDeviceName(device.userDefinedName)
-                } else {
+                .recentDeviceDao()
+                .getDevice(currentConnection)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = { device ->
+                    if (device.userDefinedName != null) {
+                        setCurrentDeviceName(device.userDefinedName)
+                    } else {
+                        setCurrentDeviceName(currentConnection.removeMasks())
+                    }
+                }, onError = {
+                    Timber.e(it, "Name doesn't exist: ${it.message}")
                     setCurrentDeviceName(currentConnection.removeMasks())
-                }
-            }, onError = {
-                Timber.e(it, "Name doesn't exist: ${it.message}")
-                setCurrentDeviceName(currentConnection.removeMasks())
-            })
+                })
     }
 
     private fun setCurrentDeviceName(value: String) {

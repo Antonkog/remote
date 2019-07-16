@@ -1,37 +1,50 @@
 package com.wezom.kiviremote.common.extensions
 
-import com.wezom.kiviremote.R
+import android.net.Uri
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.net.model.AspectAvailable
 import com.wezom.kiviremote.net.model.AspectMessage
+import com.wezom.kiviremote.net.model.Input
 import com.wezom.kiviremote.presentation.home.ports.InputSourceHelper
 import com.wezom.kiviremote.presentation.home.tvsettings.driver_set.DriverValue
-import com.wezom.kiviremote.upnp.org.droidupnp.view.Port
 import java.util.*
+import android.content.ContentResolver
+import android.content.Context
+
 
 class PortsUtils {
     companion object {
-        fun getPortsList(list: List<DriverValue>?, available: AspectAvailable?, msg: AspectMessage?): List<Port> {
-            val ports = LinkedList<Port>()
-            var constants  = false
-            if (list != null) {//server 19+
+        fun getNewInputsList(list: List<DriverValue>?, available: AspectAvailable?, msg: AspectMessage?): List<Input> {
+            val inputs = LinkedList<Input>()
+            var containsActive  = false
+            if (list != null && list.isNotEmpty()) {//server 19+
                 list.filter {
                     it.enumValueName == Constants.INPUT_PORT
                 }.forEach {
-                    ports.add(Port(it.currentName, InputSourceHelper.INPUT_PORT.getPicById(it.intCondition)
-                            , it.intCondition, msg?.currentPort == it.intCondition))
-                    if(msg?.currentPort == it.intCondition) constants = true
+
+
+                    inputs.add(Input()
+                            .addPortName(it.currentName)
+                            .addPortNum(it.intCondition)
+                            .addActive(msg?.currentPort == it.intCondition))
+
+                    if(msg?.currentPort == it.intCondition) containsActive = true
                 }
-                ports.add(Port("HOME", R.drawable.ic_tv
-                        , Constants.INPUT_HOME_ID, !constants))
+
+                inputs.add(Input()
+                        .addPortName("HOME")
+                        .addPortNum(Constants.INPUT_HOME_ID)
+                        .addActive( !containsActive))
+
             } else {
                 if(msg?.serverVersionCode ?: 20 < Constants.VER_ASPECT_XIX)
-                available?.portsSettings.let {
-                    ports.addAll(InputSourceHelper.getPortsList(it, msg?.currentPort
-                            ?: Constants.NO_VALUE))
-                }
+                    available?.portsSettings.let {
+                        inputs.addAll(InputSourceHelper.getInputsList(it, msg?.currentPort
+                                ?: Constants.NO_VALUE))
+                    }
             }
-            return ports
+            return inputs
         }
+
     }
 }

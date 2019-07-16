@@ -200,7 +200,7 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
         if (Math.abs(xDiff) <= 3 && Math.abs(yDiff) <= 3) {
-            listener.buttonClick(new TouchpadButtonClickEvent(xDiff, yDiff, Action.leftClick));
+            listener.buttonClick(new TouchpadButtonClickEvent(xDiff, yDiff, Action.LEFT_CLICK));
             return true;
         }
         return false;

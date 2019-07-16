@@ -124,6 +124,7 @@ dependencies {
     implementation deps.kotlin
 
     implementation deps.glide.core
+    implementation deps.glide.okhttp3
     kapt deps.glide.compiler
     implementation deps.glide.transformations
 

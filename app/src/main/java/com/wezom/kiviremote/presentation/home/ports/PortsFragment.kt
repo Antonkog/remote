@@ -67,7 +67,7 @@ class PortsFragment : TvKeysFragment() {
 
 
     override fun onResume() {
-        AspectHolder.getPortsList().let {
+        AspectHolder.getInputsList().let {
             portsAdapter.setData(it)
         }
         super.onResume()
@@ -118,13 +118,13 @@ class PortsFragment : TvKeysFragment() {
     }
 
     private val showPortsObserver = Observer<GotAspectEvent> {
-        var ports = it?.getPortsList() ?: LinkedList()
-        if (!ports.isEmpty()) {
-            for (port in ports) {
-                if (port.active) {
-                    if (port.portNum == lastPortId || aspectTryCounter == 0) {
+        var inputPorts = it?.getInputsList() ?: LinkedList()
+        if (!inputPorts.isEmpty()) {
+            for (port in inputPorts) {
+                if (port.isActive) {
+                    if (port.intID == lastPortId || aspectTryCounter == 0) {
                         binding.portsRefreshBar.visibility = View.GONE
-                        portsAdapter.setData(ports)
+                        portsAdapter.setData(inputPorts)
                     } else {
                         Run.after(1000){
                             viewModel.requestAspect()
@@ -140,7 +140,7 @@ class PortsFragment : TvKeysFragment() {
 
     private fun setPort(portId: Int) {
         viewModel.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.INPUT_PORT, portId)
-        portsAdapter.sePortActivebyId(portId)
+        portsAdapter.setInputActiveById(portId)
     }
 
 }

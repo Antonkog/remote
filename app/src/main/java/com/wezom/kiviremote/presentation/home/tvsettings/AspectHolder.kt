@@ -1,10 +1,7 @@
 package com.wezom.kiviremote.presentation.home.tvsettings
 
 import com.wezom.kiviremote.common.extensions.PortsUtils
-import com.wezom.kiviremote.net.model.AspectAvailable
-import com.wezom.kiviremote.net.model.AspectMessage
-import com.wezom.kiviremote.net.model.InitialMessage
-import com.wezom.kiviremote.upnp.org.droidupnp.view.Port
+import com.wezom.kiviremote.net.model.*
 import timber.log.Timber
 
 
@@ -32,7 +29,8 @@ object AspectHolder {
                 ?: true)
     }
 
-    fun getPortsList(): List<Port> {
-        return PortsUtils.getPortsList(initialMsg?.driverValueList, availableSettings, message)
+    fun getInputsList(): List<Input> {
+        return PortsUtils.getNewInputsList(initialMsg?.driverValueList, availableSettings, message)
     }
+
 }

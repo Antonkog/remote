@@ -5,7 +5,7 @@ import android.support.annotation.StringRes;
 
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.common.Constants;
-import com.wezom.kiviremote.upnp.org.droidupnp.view.Port;
+import com.wezom.kiviremote.net.model.Input;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -131,16 +131,21 @@ public class InputSourceHelper {
     }
 
 
-    public static List<Port> getPortsList(int[] portsNumbs, int currentActive) {
-        ArrayList<Port> result = new ArrayList<>();
+    public static List<Input> getInputsList(int[] portsNumbs, int currentActive) {
+        ArrayList<Input> result = new ArrayList<>();
         if (portsNumbs == null) return result;
         for (int i = 0; i < portsNumbs.length; i++) {
-            INPUT_PORT port = INPUT_PORT.getPortByID(portsNumbs[i]);
-            if (port != INPUT_SOURCE_NONE) {
-                result.add(new Port(port.baseName, port.getDrawable(), port.id, currentActive == port.id));
+            INPUT_PORT inputPort = INPUT_PORT.getPortByID(portsNumbs[i]);
+            if (inputPort != INPUT_SOURCE_NONE) {
+                result.add(new Input()
+                        .addPortName(inputPort.baseName)
+                        .addPortNum(inputPort.id)
+                        .addActive(currentActive == inputPort.id)
+                );
             }
         }
 
         return result;
     }
+
 }

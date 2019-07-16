@@ -17,9 +17,7 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.content.ContextCompat
 import android.widget.RemoteViews
 import com.bumptech.glide.Glide
-import com.bumptech.glide.request.target.NotificationTarget
-import com.bumptech.glide.request.target.SimpleTarget
-import com.bumptech.glide.request.transition.Transition
+import com.bumptech.glide.request.target.*
 import com.wezom.kiviremote.App
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.Constants.NOTIFICATION_ID
@@ -69,31 +67,31 @@ class NotificationService : LifecycleService() {
     }
 
     private fun Context.intentWithAction(action: String): Intent =
-        Intent(this, NotificationService::class.java).apply { this.action = action }
+            Intent(this, NotificationService::class.java).apply { this.action = action }
 
     private val ongoingNotification: Notification
         get() = NotificationCompat.Builder(this, CHANNEL_ID)
-            .setOngoing(true)
-            .setSmallIcon(android.R.color.transparent)
-            .setOnlyAlertOnce(true)
-            .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
-            .setContent(remoteViews)
-            .setContentIntent(HomeActivity.getDismissIntent(this))
-            .setPriority(NotificationCompat.PRIORITY_MIN)
-            .setDeleteIntent(notificationDismissedPending)
-            .build()
-
-    private val autoCloseableNotification: Notification
-        get() =
-            NotificationCompat.Builder(this, CHANNEL_ID)
-                .setAutoCancel(true)
+                .setOngoing(true)
                 .setSmallIcon(android.R.color.transparent)
                 .setOnlyAlertOnce(true)
                 .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
                 .setContent(remoteViews)
                 .setContentIntent(HomeActivity.getDismissIntent(this))
+                .setPriority(NotificationCompat.PRIORITY_MIN)
                 .setDeleteIntent(notificationDismissedPending)
-                .setPriority(NotificationCompat.PRIORITY_MIN).build()
+                .build()
+
+    private val autoCloseableNotification: Notification
+        get() =
+            NotificationCompat.Builder(this, CHANNEL_ID)
+                    .setAutoCancel(true)
+                    .setSmallIcon(android.R.color.transparent)
+                    .setOnlyAlertOnce(true)
+                    .setColor(ContextCompat.getColor(this, R.color.colorPrimary))
+                    .setContent(remoteViews)
+                    .setContentIntent(HomeActivity.getDismissIntent(this))
+                    .setDeleteIntent(notificationDismissedPending)
+                    .setPriority(NotificationCompat.PRIORITY_MIN).build()
 
 
     private var remoteViews: RemoteViews? = null
@@ -280,43 +278,36 @@ class NotificationService : LifecycleService() {
         }
 
         notificationTarget = NotificationTarget(
-            this,
-            R.id.notification_thumbnail,
-            remoteViews,
-            notification,
-            NOTIFICATION_ID
+                this,
+                R.id.notification_thumbnail,
+                remoteViews,
+                notification,
+                NOTIFICATION_ID
         )
         when (type) {
             GalleryFragment.MediaType.IMAGE.name -> loadNotificationPreview(
-                notificationTarget,
-                url,
-                noImagePreviewBitmap
+                    notificationTarget,
+                    url,
+                    noImagePreviewBitmap
             )
             GalleryFragment.MediaType.VIDEO.name -> loadNotificationPreview(
-                notificationTarget,
-                url,
-                noVideoPreviewBitmap
+                    notificationTarget,
+                    url,
+                    noVideoPreviewBitmap
             )
         }
     }
 
     private fun loadNotificationPreview(
-        notificationTarget: NotificationTarget,
-        url: String,
-        image: Bitmap
+            notificationTarget: NotificationTarget,
+            url: String,
+            image: Bitmap
     ) {
         Glide.with(this)
-            .asBitmap()
-            .load(url)
-            .into(object : SimpleTarget<Bitmap>(120, 120) {
-                override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>) {
-                    notificationTarget.onResourceReady(resource?: image , transition)
-                }
+                .asBitmap()
+                .load(url)
+                .into(notificationTarget)
 
-                override fun onLoadFailed(errorDrawable: Drawable?) {
-                    notificationTarget.onResourceReady(image, null)
-                }
-            })
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -330,7 +321,7 @@ class NotificationService : LifecycleService() {
     }
 
     private fun playNextItem() {
-        if(::notificationTarget.isInitialized) {
+        if (::notificationTarget.isInitialized) {
             uPnPManager.nextItem?.let {
                 uPnPManager.launchItem(it.item, it.position, it.type)
                 when (it.type) {
@@ -353,7 +344,7 @@ class NotificationService : LifecycleService() {
     }
 
     private fun playPreviousItem() {
-        if(::notificationTarget.isInitialized) {
+        if (::notificationTarget.isInitialized) {
             uPnPManager.previousItem?.let {
                 uPnPManager.launchItem(it.item, it.position, it.type)
                 when (it.type) {
@@ -381,10 +372,10 @@ class NotificationService : LifecycleService() {
 
     companion object {
         const val ACTION_START_FOREGROUND =
-            "com.wezom.kiviremote.services.notification.START_FOREGROUND"
+                "com.wezom.kiviremote.services.notification.START_FOREGROUND"
 
         const val ACTION_STOP_FOREGROUND =
-            "com.wezom.kiviremote.services.notification.STOP_FOREGROUND"
+                "com.wezom.kiviremote.services.notification.STOP_FOREGROUND"
 
         const val ACTION_NEXT = "com.wezom.kiviremote.services.notification.NEXT"
 
@@ -395,10 +386,10 @@ class NotificationService : LifecycleService() {
         const val ACTION_PAUSE = "com.wezom.kiviremote.services.notification.PAUSE"
 
         const val ACTION_SLIDESHOW_START =
-            "com.wezom.kiviremote.services.notification.SLIDESHOW_START"
+                "com.wezom.kiviremote.services.notification.SLIDESHOW_START"
 
         const val ACTION_SLIDESHOW_STOP =
-            "com.wezom.kiviremote.services.notification.SLIDESHOW_PAUSE"
+                "com.wezom.kiviremote.services.notification.SLIDESHOW_PAUSE"
 
         const val ACTION_DISMISSED = "com.wezom.kiviremote.services.notification.DISMISSED"
 

@@ -1,17 +1,20 @@
 package com.wezom.kiviremote.presentation.home.recommendations;
 
-import com.wezom.kiviremote.net.model.RecommendItem;
-import com.wezom.kiviremote.presentation.home.apps.AppModel;
-import com.wezom.kiviremote.upnp.org.droidupnp.view.Port;
+import com.wezom.kiviremote.net.model.Channel;
+import com.wezom.kiviremote.net.model.Input;
+import com.wezom.kiviremote.net.model.Recommendation;
+import com.wezom.kiviremote.net.model.ServerAppInfo;
 
 public class HorizontalCVContract {
 
     public interface HorizontalCVListener {
 
-        void onPortChosen(Port port, int position);
+        void onInputChosen(Input input, int position);
 
-        void onRecommendationChosen(RecommendItem item, int position);
+        void onRecommendationChosen(Recommendation item, int position);
 
-        void appChosenNeedOpen(AppModel appModel, int positio);
+        void onChannelChosen(Channel item, int position);
+
+        void appChosenNeedOpen(ServerAppInfo appModel, int position);
     }
 }
