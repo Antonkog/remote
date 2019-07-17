@@ -356,7 +356,7 @@ class HomeActivityViewModel(
         killPing()
         serverConnection = ChatConnection()
         if (firstConnection)
-            Run.after(Constants.DELAY_ASK_APPS) {
+            Run.after(DELAY_ASK_APPS) {
                 RxBus.publish(RequestAppsEvent())
             }
         connect(nsdModel)
@@ -370,7 +370,6 @@ class HomeActivityViewModel(
         val currentConnectionName = currentConnection
         if (nsdModel.name != currentConnectionName) {
             launch(CommonPool) {
-                database.serverAppDao().removeAll()
                 AspectHolder.clean()
             }
         }
@@ -386,6 +385,7 @@ class HomeActivityViewModel(
                         connectToServer(nsdModel.host, nsdModel.port)
                         launch(CommonPool) {
                             database.recentDeviceDao().insert(RecentDevice(nsdModel.name, null))
+                            RxBus.publish(RequestInitialPreviewEvent())
                         }
                     }
                 },

@@ -131,6 +131,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             inputs.observe(this@RecommendationsFragment, inputPortObserver)
             recommendations.observe(this@RecommendationsFragment, recommendationsObserver)
             channels.observe(this@RecommendationsFragment, channelsObserver)
+//            previewCommonStructure.observe(this@RecommendationsFragment, conmmonStucturesObserver)
 
             populateApps()
             populatePorts()
@@ -162,7 +163,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 }
 
 
-//
+
 //    override fun onResume() {
 //        super.onResume()
 //    }

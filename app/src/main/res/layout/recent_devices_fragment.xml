@@ -93,7 +93,7 @@
         <View
             android:id="@+id/divider"
             style="@style/Divider"
-            app:layout_constraintBottom_toTopOf="@id/coordinatorLayout"
+            app:layout_constraintBottom_toTopOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 

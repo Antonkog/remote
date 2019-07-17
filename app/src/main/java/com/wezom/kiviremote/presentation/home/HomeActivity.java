@@ -319,6 +319,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     private void configureNavigationDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.nav_view);
+//        navView.setPadding(0, Utils.getStatusBarHeight(getResources()), 0, 0);
         navView.setNavigationItemSelectedListener(menuItem -> {
             switch (menuItem.getItemId()) {
                 case R.id.nav_devices:

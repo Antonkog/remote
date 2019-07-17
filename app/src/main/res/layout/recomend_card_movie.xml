@@ -6,7 +6,6 @@
         android:layout_height="@dimen/recom_mov_h"
         android:clickable="true"
         android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginLeft="@dimen/recom_card_margin"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="30dp"

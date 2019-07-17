@@ -31,7 +31,6 @@
             android:textColor="@color/preview_title" />
 
         <TextView
-            android:id="@+id/notification_playing_now"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="marquee"
@@ -71,7 +70,6 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/notification_close"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"

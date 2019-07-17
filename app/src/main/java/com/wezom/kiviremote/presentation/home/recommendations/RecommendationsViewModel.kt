@@ -10,6 +10,7 @@ import com.wezom.kiviremote.common.*
 import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.net.model.*
 import com.wezom.kiviremote.persistence.AppDatabase
+import com.wezom.kiviremote.persistence.model.ServerChannel
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.apps.AppModel
 import com.wezom.kiviremote.upnp.UPnPManager
@@ -30,49 +31,84 @@ class RecommendationsViewModel(private val router: Router,
     var aspectTryCounter = Constants.ASPECT_GET_TRY
     var lastPortId = Constants.INPUT_HOME_ID
 
+    //    val previewCommonStructure = MutableLiveData<List<PreviewCommonStructure>>()
     val recommendations = MutableLiveData<List<Comparable<Recommendation>>>()
     val apps = MutableLiveData<List<Comparable<ServerAppInfo>>>()
     val inputs = MutableLiveData<List<Comparable<Input>>>()
     val channels = MutableLiveData<List<Comparable<Channel>>>()
-    //
-    fun requestApps() = RxBus.publish(SendActionEvent(Action.REQUEST_APPS))
 
+    fun requestApps() = RxBus.publish(SendActionEvent(Action.REQUEST_APPS))
     fun requestInputs() = RxBus.publish(SendActionEvent(Action.REQUEST_INPUTS))
     fun requestRecommendations() = RxBus.publish(SendActionEvent(Action.REQUEST_RECOMMENDATIONS))
     fun requestChannels() = RxBus.publish(SendActionEvent(Action.REQUEST_CHANNELS))
-    fun requestPreviews() = RxBus.publish(RequestInitialPreviewEvent())
+
+
 
     fun observePreviews() {
-        disposables += RxBus.listen(GotPreviewsInitialEvent::class.java).observeOn(AndroidSchedulers.mainThread())
+        disposables += RxBus.listen(GotPreviewsInitialEvent::class.java)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(
                         onNext = {
                             Timber.e("12345 got preview " + it.previewCommonStructures?.firstOrNull()?.toString())
-
-                            recommendations.postValue(
-                                    it.previewCommonStructures?.filter { it.type == LauncherBasedData.TYPE.RECOMMENDATION.name }?.mapTo(ArrayList(),
-                                            {
-                                                Recommendation()
-                                                        .addContent(Integer.parseInt(it.id))
-                                                        .addImageUrl(it.imageUrl)
-                                                        .addTitle(it.name)
-                                            }
-                                    )
-                            )
-
-                            channels.postValue(
-                                    it.previewCommonStructures?.filter { it.type == LauncherBasedData.TYPE.CHANNEL.name }?.mapTo(ArrayList(),
-                                            {
-                                                Channel()
-                                                        .addId(it.id)
-                                                        .addIconUrl(it.imageUrl)
-                                                        .addName(it.name)
-                                                        .addActive(it.is_active)
-                                            }
-                                    )
-                            )
-
-
+                           parsePreviewCommonStructures(it.previewCommonStructures)
                         }, onError = Timber::e
+                )
+    }
+
+    private fun parsePreviewCommonStructures(previewCommonStructures: List<PreviewCommonStructure>){
+        recommendations.postValue(
+                previewCommonStructures?.filter { it.type == LauncherBasedData.TYPE.RECOMMENDATION.name }?.mapTo(ArrayList(),
+                        {
+                            Recommendation()
+                                    .addContent(Integer.parseInt(it.id))
+                                    .addImageUrl(it.imageUrl)
+                                    .addTitle(it.name)
+                        }
+                )
+        )
+
+        channels.postValue(
+                previewCommonStructures?.filter { it.type == LauncherBasedData.TYPE.CHANNEL.name }?.mapTo(ArrayList(),
+                        {
+                            Channel()
+                                    .addId(it.id)
+                                    .addIconUrl(it.imageUrl)
+                                    .addName(it.name)
+                                    .addActive(it.is_active)
+                        }
+                )
+        )
+    }
+//
+//
+    fun populateChannels() {
+        Timber.d("Populate app list")
+        disposables += database.chennelsDao()
+                .all
+                .subscribeOn(Schedulers.computation())
+                .subscribeBy(
+
+                        onNext = {
+
+                        }, onError = {
+
+                }
+                )
+    }
+
+    fun populateRecommendations() {
+        Timber.d("Populate app list")
+        disposables += database.chennelsDao()
+                .all
+                .subscribeOn(Schedulers.computation())
+                .subscribeBy(
+
+                        onNext = {
+
+                        }, onError = {
+
+                }
                 )
     }
 
