@@ -57,9 +57,13 @@
 
     <string name="current_device">Установленные на %1$s</string>
     <string name="placeholder" translatable="false">placeholdeefwefewfwefwefewfewfwefr</string>
+    <string name="unknown_wifi" translatable="false">unknown</string>
 
     <string name="devices_list_of_connections">Список подключений</string>
     <string name="devices_list_edit">Редактировать список</string>
+    <string name="devices_kivi">Устройства KIVI</string>
+    <string name="mine_devices">Мои устройства</string>
+    <string name="other_devices">Другие устройства</string>
 
     <string name="connected">Подключен</string>
     <string name="online">В сети</string>
@@ -83,6 +87,7 @@
     <string name="digit_eight" translatable="false">8</string>
     <string name="digit_nine" translatable="false">9</string>
 
+    <string name="channels" translatable="false">CHANNEL</string>
     <string name="channels_placeholder" translatable="false">000</string>
     <string name="refresh">ОБНОВИТЬ</string>
 
@@ -170,7 +175,7 @@
     <string name="audio">Аудио</string>
     <string name="photo">Фото</string>
     <string name="info">Про устройство</string>
-    §
+
     <string name="vga" translatable="false">VGA</string>
     <string name="atv" translatable="false">АТВ</string>
     <string name="hdmi" translatable="false">HDMI 1</string>
@@ -204,6 +209,15 @@
     <string name="ports">Входы</string>
     <string name="toastPic">Для настройки изображение выберети пользователький режим</string>
     <string name="on">Вкл</string>
+    <string name="if_you_dont_see_your_device" translatable="false">Если вы не видите ваше устройство в списке,\nто убедитесь в том, что оно находится\nв одной сети с вашим телефоном.</string>
+
+    <string name="subscriptions">Подписки</string>
+    <string name="select_the_appropriate_subs">Выберите соответствующий\nдля вас срок подписки:</string>
+    <string name="to_pay">К оплате:</string>
+    <string name="card_number">Номер карты</string>
+    <string name="card_validity_period">Период действия карты</string>
+    <string name="cvv_code">CVV-код</string>
+    <string name="make_payment">Оплатить</string>
     <string name="drawer_close" translatable="false">close menu</string>
     <string name="drawer_open" translatable="false">open menu</string>
 

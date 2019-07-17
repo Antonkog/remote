@@ -14,6 +14,9 @@
     <string name="apps">Applications</string>
     <string name="current_device">Installed on %1$s</string>
     <string name="devices_list_edit">Тізімді өңдеу</string>
+    <string name="devices_kivi">Құрылғылары KIVI</string>
+    <string name="mine_devices">Менің құрылғыларым</string>
+    <string name="other_devices">Басқа құрылғылар</string>
     <string name="connected">Қосылды</string>
     <string name="online">Online</string>
     <string name="offline">Offline</string>
@@ -106,4 +109,19 @@
     <string name="drawer_dark_mode">Қараңғы режим</string>
     <string name="number_of_images">%1$s фото</string>
     <string name="number_of_videos">%1$s видео</string>
+
+    <string name="subscriptions">Жазылымдар</string>
+    <string name="select_the_appropriate_subs">Сізге тиісті жазылу кезеңін\nтаңдаңыз:</string>
+    <string name="to_pay">Төлемге:</string>
+    <string name="card_number">Карта нөмірі</string>
+    <string name="card_validity_period">Картаның әрекет ету мерзімі</string>
+    <string name="cvv_code">CVV-коды</string>
+    <string name="make_payment">Төлеу үшін</string>
+
+
+
+
+
+
+
 </resources>

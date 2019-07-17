@@ -15,7 +15,6 @@ import com.wezom.kiviremote.di.components.ActivityComponent;
 import com.wezom.kiviremote.di.components.ApplicationComponent;
 import com.wezom.kiviremote.di.modules.ActivityModule;
 import com.wezom.kiviremote.navigation.SupportFragmentNavigator;
-import com.wezom.kiviremote.persistence.model.RecentDevice;
 import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchFragment;
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesFragment;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
@@ -23,9 +22,15 @@ import com.wezom.kiviremote.presentation.home.main.MainFragment;
 import com.wezom.kiviremote.presentation.home.ports.PortsFragment;
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragment;
+import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo;
 import com.wezom.kiviremote.presentation.home.recentdevices.TvSettingsFragment;
 import com.wezom.kiviremote.presentation.home.recommendations.RecommendationsFragment;
 import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlFragment;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_info.SubsInfoFragment;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_payment.SubsPaymentFragment;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_price_list.PricePerTime;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_price_list.SubsPriceListFragment;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_tariff_plans.SubsTariffPlansFragment;
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadFragment;
 
 import ru.terrakok.cicerone.Navigator;
@@ -71,7 +76,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         case Screens.RECENT_DEVICES_FRAGMENT:
                             return new RecentDevicesFragment();
                         case Screens.RECENT_DEVICE_FRAGMENT:
-                            return RecentDeviceFragment.newInstance((RecentDevice) data);
+                            return RecentDeviceFragment.newInstance((TvDeviceInfo) data);
                         case Screens.GALLERY_FRAGMENT:
                             return new GalleryFragment();
                         case Screens.DIRECTORIES_FRAGMENT:
@@ -80,6 +85,14 @@ public abstract class BaseActivity extends AppCompatActivity {
                             return new TvSettingsFragment();
                         case Screens.PORTS_FRAGMENT:
                             return new PortsFragment();
+                        case Screens.SUBS_PRICE_LIST_FRAGMENT:
+                            return new SubsPriceListFragment();
+                        case Screens.SUBS_INFO_FRAGMENT:
+                            return SubsInfoFragment.newInstance((PricePerTime) data);
+                        case Screens.SUBS_TARIFF_PLANS_FRAGMENT:
+                            return new SubsTariffPlansFragment();
+                        case Screens.SUBS_PAYMENT_FRAGMENT:
+                            return new SubsPaymentFragment();
                         default:
                             throw new IllegalStateException("Unknown screen");
                     }

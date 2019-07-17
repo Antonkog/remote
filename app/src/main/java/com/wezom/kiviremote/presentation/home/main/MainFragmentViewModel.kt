@@ -25,6 +25,7 @@ class MainFragmentViewModel(private val router: Router, private val uPnPManager:
 
     fun navigateToDevices() {
         router.navigateTo(Screens.RECENT_DEVICES_FRAGMENT)
+//        router.navigateTo(Screens.SUBS_PRICE_LIST_FRAGMENT)
     }
 
     fun sendKeyEvent(keyEvent: Int) {

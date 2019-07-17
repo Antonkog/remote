@@ -31,6 +31,9 @@
 
     <string name="devices_list_of_connections">Список підключень</string>
     <string name="devices_list_edit">Редагувати список</string>
+    <string name="devices_kivi">Пристрої KIVI</string>
+    <string name="mine_devices">Мої пристрої</string>
+    <string name="other_devices">Інші пристрої</string>
 
     <string name="connected">Підключений</string>
     <string name="online">В мережі</string>
@@ -126,5 +129,18 @@
     <string name="drawer_support">Підтримка користувачів</string>
     <string name="drawer_exit">Вийти</string>
     <string name="drawer_dark_mode">Темний режим</string>
+
+
+    <string name="subscriptions">Передплати</string>
+    <string name="select_the_appropriate_subs">Виберіть відповідний\nдля вас термін передплати:</string>
+    <string name="to_pay">До оплати:</string>
+    <string name="card_number">Номер картки</string>
+    <string name="card_validity_period">Період дії карти</string>
+    <string name="cvv_code">CVV-код</string>
+    <string name="make_payment">Оплатити</string>
+
+
+
+
 
 </resources>

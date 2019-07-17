@@ -11,7 +11,6 @@ import com.wezom.kiviremote.persistence.model.RecentDevice;
 import java.util.List;
 
 import io.reactivex.Flowable;
-import io.reactivex.Single;
 
 import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
 import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
@@ -25,6 +24,9 @@ public interface RecentDevicesDao {
     @Query("SELECT * FROM recent_devices WHERE actual_name = :name")
     Flowable<RecentDevice> getDevice(String name);
 
+    @Query("SELECT * FROM recent_devices ORDER BY id DESC LIMIT :limit")
+    Flowable<List<RecentDevice>> getLastAdded(int limit);
+
     @Insert
     void insertAll(List<RecentDevice> devices);
 
@@ -36,6 +38,9 @@ public interface RecentDevicesDao {
 
     @Query("DELETE FROM recent_devices")
     void removeAll();
+
+    @Query("DELETE FROM recent_devices WHERE actual_name = :name")
+    void removeByName(String name);
 
     @Delete
     void deleteDevices(List<RecentDevice> devices);

@@ -2,6 +2,7 @@ package com.wezom.kiviremote.presentation.home;
 
 import android.Manifest;
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.arch.lifecycle.MutableLiveData;
@@ -45,8 +46,10 @@ import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.Screens;
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
 import com.wezom.kiviremote.bus.HideKeyboardEvent;
+import com.wezom.kiviremote.bus.LocationEnabledEvent;
 import com.wezom.kiviremote.bus.NetworkStateEvent;
 import com.wezom.kiviremote.bus.ShowKeyboardEvent;
+import com.wezom.kiviremote.common.GpsUtils;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.Utils;
 import com.wezom.kiviremote.common.extensions.StringUtils;
@@ -257,6 +260,17 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             // You can change this duration to more closely match that of the default animation.
             anim.setDuration(400);
             anim.start();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == GpsUtils.INSTANCE.getRESULT_CODE()) {
+            if(resultCode == Activity.RESULT_OK){
+                RxBus.INSTANCE.publish(new LocationEnabledEvent(true));
+            } else {
+                RxBus.INSTANCE.publish(new LocationEnabledEvent(false));
+            }
         }
     }
 

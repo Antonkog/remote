@@ -30,6 +30,9 @@
     <string name="current_device">Installed on %1$s</string>
 
     <string name="devices_list_edit">Edit list</string>
+    <string name="devices_kivi">Devices KIVI</string>
+    <string name="mine_devices">My devices</string>
+    <string name="other_devices">Other devices</string>
 
     <string name="connected">Connected</string>
     <string name="online">Online</string>
@@ -128,5 +131,17 @@
     <string name="drawer_support">User Support</string>
     <string name="drawer_exit">Log out</string>
     <string name="drawer_dark_mode">Dark mode</string>
+
+    <string name="subscriptions">Subscriptions</string>
+    <string name="select_the_appropriate_subs">Select the appropriate subscription term\nfor you:</string>
+    <string name="to_pay">To pay:</string>
+    <string name="card_number">Card number</string>
+    <string name="card_validity_period">Card validity period</string>
+    <string name="cvv_code">CVV-code</string>
+    <string name="make_payment">Pay</string>
+
+
+
+
 
 </resources>

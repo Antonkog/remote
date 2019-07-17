@@ -14,6 +14,10 @@ import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragmen
 import com.wezom.kiviremote.presentation.home.recentdevices.TvSettingsFragment;
 import com.wezom.kiviremote.presentation.home.recommendations.RecommendationsFragment;
 import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlFragment;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_info.SubsInfoFragment;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_payment.SubsPaymentFragment;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_price_list.SubsPriceListFragment;
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_tariff_plans.SubsTariffPlansFragment;
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadFragment;
 
 import dagger.Subcomponent;
@@ -47,4 +51,12 @@ public interface FragmentComponent {
     void inject(RecommendationsFragment recommendationsFragment);
 
     void inject(PortsFragment portsFragment);
+
+    void inject(SubsPriceListFragment subscriptionPriceListFragment);
+
+    void inject(SubsInfoFragment subsInfoFragment);
+
+    void inject(SubsTariffPlansFragment subsTariffPlansFragment);
+
+    void inject(SubsPaymentFragment subsPaymentFragment);
 }

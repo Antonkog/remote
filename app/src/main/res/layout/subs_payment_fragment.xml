@@ -1,0 +1,325 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#efeff4">
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cardView"
+            android:layout_width="match_parent"
+            android:layout_height="?actionBarSize"
+            android:minHeight="?attr/actionBarSize"
+            app:cardBackgroundColor="#0F6BFB"
+            app:cardCornerRadius="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingStart="16dp">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    app:srcCompat="@drawable/ic_arrow_back" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="32dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="@string/subscriptions"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <TextView
+            android:id="@+id/tv_subs_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="26dp"
+            android:fontFamily="sans-serif"
+            android:text="Покупка подписки «Расширенная» на 3 месяца."
+            android:textColor="@color/colorBlack"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_subs_type">
+
+            <TextView
+                android:id="@+id/tv_payment_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:fontFamily="sans-serif"
+                android:text="@string/to_pay"
+                android:textColor="@color/colorBlack"
+                android:textSize="12sp"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_payment_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif"
+                android:text="99 999 грн."
+                android:textColor="@color/colorBlack"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/cv_card_input"
+            android:layout_width="match_parent"
+            android:layout_height="215dp"
+            android:layout_marginBottom="26dp"
+            android:layout_marginTop="22dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            app:cardCornerRadius="3dp"
+            app:cardElevation="2dp"
+            app:cardUseCompatPadding="true"
+            app:layout_constraintBottom_toTopOf="@+id/cv_make_payment"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingStart="24dp"
+                android:paddingEnd="24dp"
+                android:paddingTop="33dp"
+                android:paddingBottom="32dp">
+
+                <TextView
+                    android:id="@+id/textView2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/card_number"
+                    android:textAllCaps="true"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="10sp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.wezom.kiviremote.presentation.base.view.masked_edit_text.MaskedEditText
+                    android:id="@+id/et_card_number"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="#D8D8D8"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="8dp"
+                    android:inputType="number"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    android:fontFamily="sans-serif"
+                    android:typeface="monospace"
+                    android:textSize="18sp"
+                    android:background="@drawable/edittext_border_color"
+                    android:textAlignment="center"
+                    android:hint="••••••••••••••••"
+                    app:keep_hint="true"
+                    app:mask="* * * *   * * * *   * * * *   * * * *"
+                    app:char_representation="*"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="sans-serif"
+                    android:text="@string/card_validity_period"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="10sp"
+                    android:textAllCaps="true"
+                    android:layout_marginTop="22dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/et_card_number" />
+
+                <RelativeLayout
+                    android:id="@+id/relativeLayout"
+                    android:layout_width="145dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="6dp"
+                    android:background="@drawable/edittext_border_color"
+                    android:paddingTop="6dp"
+                    android:paddingBottom="5dp"
+                    android:paddingStart="2dp"
+                    android:paddingEnd="2dp"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView3">
+
+                    <EditText
+                        android:id="@+id/et_day_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_centerVertical="true"
+                        android:layout_toLeftOf="@+id/divider"
+                        android:background="@color/colorWhite"
+                        android:fontFamily="sans-serif"
+                        android:hint="ЧИСЛО"
+                        android:digits="0123456789"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/colorBlack"
+                        android:textSize="10sp" />
+
+                    <View
+                        android:id="@+id/divider"
+                        android:layout_width="1dp"
+                        android:layout_height="match_parent"
+                        android:layout_centerHorizontal="true"
+                        android:background="#D8D8D8" />
+
+                    <EditText
+                        android:id="@+id/et_month_number"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:background="@color/colorWhite"
+                        android:fontFamily="sans-serif"
+                        android:layout_toRightOf="@+id/divider"
+                        android:hint="МЕСЯЦ"
+                        android:digits="0123456789"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:textAlignment="center"
+                        android:textColor="@color/colorBlack"
+                        android:textColorHint="@color/colorBlack"
+                        android:textSize="10sp" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/textView4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="50dp"
+                    android:fontFamily="sans-serif"
+                    android:textAllCaps="true"
+                    android:text="@string/cvv_code"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="10sp"
+                    app:layout_constraintStart_toEndOf="@+id/relativeLayout"
+                    app:layout_constraintTop_toTopOf="@+id/textView3" />
+
+                <com.wezom.kiviremote.presentation.base.view.masked_edit_text.MaskedEditText
+                    android:id="@+id/et_card_cvv"
+                    android:layout_width="0dp"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="6dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/edittext_border_color"
+                    android:fontFamily="sans-serif"
+                    android:hint="•••"
+                    android:textAlignment="center"
+                    android:inputType="number"
+                    android:textColor="@color/colorBlack"
+                    android:textColorHint="#D8D8D8"
+                    android:textSize="18sp"
+                    android:typeface="monospace"
+                    app:char_representation="*"
+                    app:keep_hint="true"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/textView4"
+                    app:layout_constraintTop_toBottomOf="@+id/textView4"
+                    app:mask="* * *" />
+
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.v7.widget.CardView>
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/cv_make_payment"
+            android:layout_width="240dp"
+            android:layout_height="44dp"
+            android:layout_gravity="center"
+            android:layout_marginBottom="27dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:foreground="?android:attr/selectableItemBackground"
+            app:cardBackgroundColor="#007AFF"
+            app:cardCornerRadius="5dp"
+            app:layout_constraintBottom_toTopOf="@+id/tv_user_rules"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:fontFamily="sans-serif"
+                android:text="@string/make_payment"
+                android:textColor="@color/colorWhite"
+                android:textSize="15sp" />
+
+        </android.support.v7.widget.CardView>
+
+
+        <TextView
+            android:id="@+id/tv_user_rules"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:textAlignment="center"
+            android:textColor="@color/colorBlack"
+            android:fontFamily="sans-serif"
+            android:textSize="12sp"
+            android:layout_marginBottom="16dp"
+            app:layout_constraintBottom_toTopOf="@+id/imageView"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Совершая покупку, вы принимаете
+условия Пользовательского Соглашения.
+С текстом соглашения можно ознакомиться в профиле." />
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_payment_services" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>
