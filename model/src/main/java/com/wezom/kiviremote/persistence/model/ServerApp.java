@@ -6,7 +6,7 @@ import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.PrimaryKey;
 
 @Entity(tableName = "apps")
-public class ServerApp {
+public class  ServerApp {
     @PrimaryKey(autoGenerate = true)
     private int id;
 

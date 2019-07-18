@@ -13,7 +13,7 @@ public class Channel implements LauncherBasedData, Parcelable {
     private String name;
     private String icon_url;
     private Boolean is_active;
-    private int sort;
+    private String sort;
     private String created_at;
     private String edited_at;
     private Boolean has_timeshift;
@@ -40,7 +40,7 @@ public class Channel implements LauncherBasedData, Parcelable {
         return this;
     }
 
-    public Channel addSort(int sort) {
+    public Channel addSort(String sort) {
         this.sort = sort;
         return this;
     }
@@ -101,7 +101,7 @@ public class Channel implements LauncherBasedData, Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.icon_url);
         dest.writeValue(this.is_active);
-        dest.writeInt(this.sort);
+        dest.writeString(this.sort);
         dest.writeString(this.created_at);
         dest.writeString(this.edited_at);
         dest.writeValue(this.has_timeshift);
@@ -116,7 +116,7 @@ public class Channel implements LauncherBasedData, Parcelable {
         this.name = in.readString();
         this.icon_url = in.readString();
         this.is_active = (Boolean) in.readValue(Boolean.class.getClassLoader());
-        this.sort = in.readInt();
+        this.sort = in.readString();
         this.created_at = in.readString();
         this.edited_at = in.readString();
         this.has_timeshift = (Boolean) in.readValue(Boolean.class.getClassLoader());

@@ -49,13 +49,13 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private val channelsObserver = Observer<List<Comparable<Channel>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterChannels.swapData(it)
-        } ?: Timber.e("TYPE_RECOMMENDATIONS empty")
+        } ?: Timber.e("TYPE_Channels empty")
     }
 
     private val appsObserver = Observer<List<Comparable<ServerAppInfo>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterApps.swapData(it)
-        } ?: Timber.e("TYPE_RECOMMENDATIONS empty")
+        } ?: Timber.e("TYPE_APPS empty")
     }
 
     private val inputPortObserver = Observer<List<Comparable<Input>>> {
@@ -77,7 +77,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     }
 
     override fun onRecommendationChosen(item: Recommendation, position: Int) {
-        Toast.makeText(context, "rec chosen " + item.name, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "rec chosen " + item.toString(), Toast.LENGTH_SHORT).show()
         viewModel.launchRecommendation(item)
     }
 
@@ -131,11 +131,11 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             inputs.observe(this@RecommendationsFragment, inputPortObserver)
             recommendations.observe(this@RecommendationsFragment, recommendationsObserver)
             channels.observe(this@RecommendationsFragment, channelsObserver)
-//            previewCommonStructure.observe(this@RecommendationsFragment, conmmonStucturesObserver)
 
             populateApps()
             populatePorts()
-            observePreviews()
+            populateChannels()
+            populateRecommendations()
             requestAllPreviews()
         }
     }

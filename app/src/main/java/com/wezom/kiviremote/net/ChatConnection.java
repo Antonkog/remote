@@ -177,6 +177,8 @@ public class ChatConnection {
             }
 
             if (serverEvent.getPreviewCommonStructures() != null) {
+                Timber.d("12345 getPreviewCommonStructures" + serverEvent.getEvent());
+
                 RxBus.INSTANCE.publish(new GotPreviewsInitialEvent().setPreviewCommonStructures(serverEvent.getPreviewCommonStructures()));
             }
 

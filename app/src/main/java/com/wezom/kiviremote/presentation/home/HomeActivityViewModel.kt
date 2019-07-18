@@ -11,14 +11,13 @@ import com.wezom.kiviremote.common.Constants.*
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.common.extensions.boolean
+import com.wezom.kiviremote.common.extensions.getModelName
 import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.net.ChatConnection
 import com.wezom.kiviremote.net.model.*
 import com.wezom.kiviremote.nsd.NsdServiceModel
 import com.wezom.kiviremote.persistence.AppDatabase
-import com.wezom.kiviremote.persistence.model.RecentDevice
-import com.wezom.kiviremote.persistence.model.ServerApp
-import com.wezom.kiviremote.persistence.model.ServerInput
+import com.wezom.kiviremote.persistence.model.*
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment
 import com.wezom.kiviremote.presentation.home.ports.InputSourceHelper
@@ -36,6 +35,7 @@ import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
+import java.util.HashMap
 import java.util.Observer
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -126,14 +126,14 @@ class HomeActivityViewModel(
 
         disposables += RxBus.listen(GotPreviewsInitialEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(onNext = {
-                    if (it.previewCommonStructures != null) {
+                .subscribeBy(onNext = { initialEvent ->
+                    if (initialEvent.previewCommonStructures != null) {
                         Timber.e("12345  got previewCommonStructures ")
                         launch(CommonPool) {
                             database.serverAppDao().run {
                                 removeAll()
                                 insertAll(
-                                        it.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.APPLICATION.name }.mapTo(ArrayList(), {
+                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.APPLICATION.name }.mapTo(ArrayList(), {
                                             Timber.e("12345 got app:" + it.id)
                                             ServerApp().apply {
                                                 appName = it.name
@@ -148,7 +148,7 @@ class HomeActivityViewModel(
                             database.serverInputsDao().run {
                                 removeAll()
                                 insertAll(
-                                        it.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.INPUT.name }.mapTo(ArrayList(), {
+                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.INPUT.name }.mapTo(ArrayList(), {
                                             ServerInput().apply {
                                                 portNum = Integer.parseInt(it.id)
                                                 portName = it.name
@@ -156,6 +156,38 @@ class HomeActivityViewModel(
                                                 active = it.is_active
                                                 inputIcon = it.icon
                                                 localResource = InputSourceHelper.INPUT_PORT.getPicById(portNum)
+                                            }
+                                        }))
+                            }
+
+                            database.chennelsDao().run {
+                                removeAll()
+                                insertAll(
+                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.CHANNEL.name }.mapTo(ArrayList(), {
+                                            ServerChannel().apply {
+                                                serverId = it.id
+                                                name = it.name
+                                                is_active = it.is_active
+                                                imageUrl = it.imageUrl
+                                                sort = it.additionalData?.entries?.firstOrNull { it1 -> it1.key == "sort" }?.value
+                                                edited_at = it.additionalData?.entries?.firstOrNull { it2 -> it2.key == "edited_at" }?.value
+                                                has_timeshift = it.additionalData?.entries?.firstOrNull { it3 -> it3.key == "has_timeshift" }?.value
+                                            }
+                                        }))
+                            }
+
+                            database.recommendationsDao().run {
+                                removeAll()
+                                insertAll(
+                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.RECOMMENDATION.name }.mapTo(ArrayList(), {
+                                            ServerRecommendation().apply {
+                                                contentID = it.id
+                                                favourite = false
+                                                title = it.name
+                                                imageUrl = it.imageUrl
+                                                kind = it.additionalData?.entries?.firstOrNull { it1 -> it1.key == "kind" }?.value
+                                                monetizationType = it.additionalData?.entries?.firstOrNull { it2 -> it2.key == "monetizationType" }?.value
+                                                imdb = it.additionalData?.entries?.firstOrNull { it3 -> it3.key == "imdb" }?.value
                                             }
                                         }))
                             }
@@ -385,6 +417,8 @@ class HomeActivityViewModel(
                         connectToServer(nsdModel.host, nsdModel.port)
                         launch(CommonPool) {
                             database.recentDeviceDao().insert(RecentDevice(nsdModel.name, null))
+                            database.recommendationsDao().removeAll()
+                            database.chennelsDao().removeAll()
                             RxBus.publish(RequestInitialPreviewEvent())
                         }
                     }

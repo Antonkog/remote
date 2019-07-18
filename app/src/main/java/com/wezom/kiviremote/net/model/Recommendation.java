@@ -7,17 +7,17 @@ import android.support.annotation.NonNull;
 import java.util.HashMap;
 
 public class Recommendation implements LauncherBasedData, Parcelable {
-    int contentID;
+    String contentID;
     private String title;
     private String subTitle;
     private String description;
     private String imageUrl;
     private String uri;
-    private int kind;
-    private float imdb;
+    private String kind;
+    private String imdb;
     private String monetizationType;
 
-    public Recommendation addContent(int contentID) {
+    public Recommendation addContentId(String contentID) {
         this.contentID = contentID;
         return this;
     }
@@ -45,12 +45,12 @@ public class Recommendation implements LauncherBasedData, Parcelable {
         return this;
     }
 
-    public Recommendation addKind(int kind) {
+    public Recommendation addKind(String kind) {
         this.kind = kind;
         return this;
     }
 
-    public Recommendation setImdb(float imdb) {
+    public Recommendation setImdb(String imdb) {
         this.imdb = imdb;
         return this;
     }
@@ -102,14 +102,14 @@ public class Recommendation implements LauncherBasedData, Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.contentID);
+        dest.writeString(this.contentID);
         dest.writeString(this.title);
         dest.writeString(this.subTitle);
         dest.writeString(this.description);
         dest.writeString(this.imageUrl);
         dest.writeString(this.uri);
-        dest.writeInt(this.kind);
-        dest.writeFloat(this.imdb);
+        dest.writeString(this.kind);
+        dest.writeString(this.imdb);
         dest.writeString(this.monetizationType);
     }
 
@@ -117,14 +117,14 @@ public class Recommendation implements LauncherBasedData, Parcelable {
     }
 
     protected Recommendation(Parcel in) {
-        this.contentID = in.readInt();
+        this.contentID = in.readString();
         this.title = in.readString();
         this.subTitle = in.readString();
         this.description = in.readString();
         this.imageUrl = in.readString();
         this.uri = in.readString();
-        this.kind = in.readInt();
-        this.imdb = in.readFloat();
+        this.kind = in.readString();
+        this.imdb = in.readString();
         this.monetizationType = in.readString();
     }
 

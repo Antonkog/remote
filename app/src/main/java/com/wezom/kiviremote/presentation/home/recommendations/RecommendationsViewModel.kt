@@ -31,7 +31,6 @@ class RecommendationsViewModel(private val router: Router,
     var aspectTryCounter = Constants.ASPECT_GET_TRY
     var lastPortId = Constants.INPUT_HOME_ID
 
-    //    val previewCommonStructure = MutableLiveData<List<PreviewCommonStructure>>()
     val recommendations = MutableLiveData<List<Comparable<Recommendation>>>()
     val apps = MutableLiveData<List<Comparable<ServerAppInfo>>>()
     val inputs = MutableLiveData<List<Comparable<Input>>>()
@@ -42,72 +41,53 @@ class RecommendationsViewModel(private val router: Router,
     fun requestRecommendations() = RxBus.publish(SendActionEvent(Action.REQUEST_RECOMMENDATIONS))
     fun requestChannels() = RxBus.publish(SendActionEvent(Action.REQUEST_CHANNELS))
 
-
-
-    fun observePreviews() {
-        disposables += RxBus.listen(GotPreviewsInitialEvent::class.java)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(
-                        onNext = {
-                            Timber.e("12345 got preview " + it.previewCommonStructures?.firstOrNull()?.toString())
-                           parsePreviewCommonStructures(it.previewCommonStructures)
-                        }, onError = Timber::e
-                )
-    }
-
-    private fun parsePreviewCommonStructures(previewCommonStructures: List<PreviewCommonStructure>){
-        recommendations.postValue(
-                previewCommonStructures?.filter { it.type == LauncherBasedData.TYPE.RECOMMENDATION.name }?.mapTo(ArrayList(),
-                        {
-                            Recommendation()
-                                    .addContent(Integer.parseInt(it.id))
-                                    .addImageUrl(it.imageUrl)
-                                    .addTitle(it.name)
-                        }
-                )
-        )
-
-        channels.postValue(
-                previewCommonStructures?.filter { it.type == LauncherBasedData.TYPE.CHANNEL.name }?.mapTo(ArrayList(),
-                        {
-                            Channel()
-                                    .addId(it.id)
-                                    .addIconUrl(it.imageUrl)
-                                    .addName(it.name)
-                                    .addActive(it.is_active)
-                        }
-                )
-        )
-    }
-//
-//
     fun populateChannels() {
-        Timber.d("Populate app list")
+        Timber.d("12345 Populate channels list")
         disposables += database.chennelsDao()
                 .all
                 .subscribeOn(Schedulers.computation())
                 .subscribeBy(
+                        onNext = { dbChannels ->
+                            val channels = ArrayList<Channel>()
+                            dbChannels.forEach {
+                                channels.add(Channel()
+                                        .addId(it.serverId)
+                                        .addActive(it.is_active)
+                                        .addIconUrl(it.imageUrl)
+                                        .addSort(it.sort)
+                                        .addEdited(it.edited_at)
+                                        .addName(it.name)
+                                )
+                            }
 
-                        onNext = {
-
+//                            this.inputs.postValue(newInputs.distinct()) //could n't be same values
+                            this.channels.postValue(channels)
                         }, onError = {
-
                 }
                 )
     }
 
     fun populateRecommendations() {
-        Timber.d("Populate app list")
-        disposables += database.chennelsDao()
+        Timber.d("12345 Populate recommendations list")
+        disposables += database.recommendationsDao()
                 .all
                 .subscribeOn(Schedulers.computation())
                 .subscribeBy(
-
-                        onNext = {
-
+                        onNext = { dbRecs ->
+                            val recommendations = ArrayList<Recommendation>()
+                            dbRecs.forEach {
+                                recommendations.add(Recommendation()
+                                        .addContentId(it.contentID)
+                                        .addImageUrl(it.imageUrl)
+                                        .setImdb(it.imdb)
+                                        .addKind(it.kind)
+                                        .addDiscription(it.description)
+                                        .addTitle(it.title)
+                                        .addSubtitle(it.subTitle)
+                                )
+                            }
+                            this.recommendations.postValue(recommendations)
                         }, onError = {
-
                 }
                 )
     }
