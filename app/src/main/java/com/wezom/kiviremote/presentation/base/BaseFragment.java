@@ -13,6 +13,7 @@ import io.reactivex.disposables.CompositeDisposable;
 public abstract class BaseFragment extends Fragment {
 
     private FragmentComponent fragmentComponent;
+    protected boolean isDeepMenuOpen = false;
 
     protected CompositeDisposable disposables;
 

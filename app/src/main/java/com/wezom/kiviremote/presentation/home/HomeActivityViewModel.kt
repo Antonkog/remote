@@ -417,8 +417,8 @@ class HomeActivityViewModel(
                         connectToServer(nsdModel.host, nsdModel.port)
                         launch(CommonPool) {
                             database.recentDeviceDao().insert(RecentDevice(nsdModel.name, null))
-                            database.recommendationsDao().removeAll()
-                            database.chennelsDao().removeAll()
+                            //database.recommendationsDao().removeAll() todo: revert
+                           // database.chennelsDao().removeAll() todo: revert
                             RxBus.publish(RequestInitialPreviewEvent())
                         }
                     }
@@ -549,6 +549,9 @@ class HomeActivityViewModel(
     fun getVideoContentSize() = uPnPManager.currentVideoContent.size
 
     fun getCurrentContentObservable() = uPnPManager.currentContentState
+
+    fun getCurrentContentName() = currentConnection
+
 
     fun getSlideshowStateObservable() = uPnPManager.slideshowState
 

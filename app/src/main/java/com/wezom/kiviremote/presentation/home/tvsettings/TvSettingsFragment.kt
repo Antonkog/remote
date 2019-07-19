@@ -100,7 +100,7 @@ class TvSettingsFragment : BaseFragment(), SeekBar.OnSeekBarChangeListener, Hori
             supportActionBar?.run {
                 setDisplayShowTitleEnabled(false)
                 setDisplayHomeAsUpEnabled(true)
-                setDisplayHomeAsUpEnabled(true)
+                setDisplayShowHomeEnabled(true)
             }
         }
     }

@@ -223,6 +223,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
+        binding.mainText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_selector, 0);
 
 
         binding.search.setOnClickListener(v -> showKeyboard());
@@ -236,13 +237,13 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
     @Override
-    public void changeFabVisibility(int visible){
+    public void changeFabVisibility(int visible) {
         this.runOnUiThread(() -> binding.fab.setVisibility(visible));
     }
 
 
     // call this method for animation between hamburged and arrow
-    protected void setHomeAsUp(boolean isHomeAsUp) {
+    public void setHomeAsUp(boolean isHomeAsUp) {
         if (this.isHomeAsUp != isHomeAsUp) {
             this.isHomeAsUp = isHomeAsUp;
 
@@ -252,8 +253,11 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
                     float slideOffset = (Float) valueAnimator.getAnimatedValue();
                     toggle.onDrawerSlide(drawerLayout, slideOffset);
+                    if (isHomeAsUp)
+                        binding.mainText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                    else
+                        binding.mainText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_selector, 0);
 
-                    binding.mainText.setText("will be on " + (isHomeAsUp ? " left" : "center"));
                 }
             });
             anim.setInterpolator(new DecelerateInterpolator());
@@ -266,7 +270,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == GpsUtils.INSTANCE.getRESULT_CODE()) {
-            if(resultCode == Activity.RESULT_OK){
+            if (resultCode == Activity.RESULT_OK) {
                 RxBus.INSTANCE.publish(new LocationEnabledEvent(true));
             } else {
                 RxBus.INSTANCE.publish(new LocationEnabledEvent(false));
@@ -285,6 +289,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     private void setupViews() {
         setupSlidingLayout();
         reconnectSnackbar = setupSnackbar();
+//        ActionBarDrawerToggle.Delegate delegate = getDrawerToggleDelegate();
 
 //        binding.toolbar.setPadding(0, Utils.getStatusBarHeight(getResources()), 0, 0);
 
@@ -315,7 +320,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     }
 
-// to call when router need arrow back
+    // to call when router need arrow back
     private void configureNavigationDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout);
         NavigationView navView = findViewById(R.id.nav_view);
@@ -331,19 +336,19 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                     break;
 
                 case R.id.nav_settings:
-                    if(AspectHolder.INSTANCE.hasAspectSettings())
-                    viewModel.goTo(Screens.TV_SETTINGS_FRAGMENT);
+                    if (AspectHolder.INSTANCE.hasAspectSettings())
+                        viewModel.goTo(Screens.TV_SETTINGS_FRAGMENT);
                     break;
 
                 case R.id.nav_support:
                     String url = "https://kivi.ua/support-center";
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
-                    try{
+                    try {
                         startActivity(i);
-                    }catch (ActivityNotFoundException e){
+                    } catch (ActivityNotFoundException e) {
                         Timber.e("can't go to support " + e);
-                        Toast.makeText(this, " ActivityNotFoundException" , Toast.LENGTH_LONG).show();
+                        Toast.makeText(this, " ActivityNotFoundException", Toast.LENGTH_LONG).show();
                     }
                     break;
 
@@ -577,6 +582,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     @Override
     public void onBackPressed() {
         changeFabVisibility(View.GONE);
+        if (!fragmentsBackKeyIntercept())
             super.onBackPressed();
     }
 

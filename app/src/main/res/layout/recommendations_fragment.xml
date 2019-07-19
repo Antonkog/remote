@@ -8,7 +8,7 @@
         android:layout_height="match_parent">
 
         <android.support.constraint.ConstraintLayout
-            android:id="@+id/recent_devices_container"
+            android:id="@+id/recommendations_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="15dp"
@@ -18,12 +18,24 @@
             <TextView
                 android:id="@+id/text_subscriptions"
                 style="@style/KiviRecommendText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/recom_kivi"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
+
+            <ImageView
+                android:id="@+id/img_recommend_menu"
+                android:padding="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/recicler_recommendations"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/js_right" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recicler_recommendations"
@@ -42,12 +54,24 @@
             <TextView
                 android:id="@+id/text_channel"
                 style="@style/KiviRecommendText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/recom_chennel"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recicler_recommendations" />
 
+
+            <ImageView
+                android:id="@+id/img_channels_menu"
+                android:padding="8dp"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/recicler_channels"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recicler_recommendations"
+                app:srcCompat="@drawable/js_right" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recicler_channels"
@@ -73,6 +97,17 @@
                 app:layout_constraintTop_toBottomOf="@+id/recicler_channels" />
 
 
+            <ImageView
+                android:id="@+id/img_apps_menu"
+                android:layout_width="0dp"
+                android:padding="8dp"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                app:layout_constraintBottom_toTopOf="@+id/recicler_apps"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/recicler_channels"
+                app:srcCompat="@drawable/js_right" />
+
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recicler_apps"
                 android:layout_width="match_parent"
@@ -89,7 +124,7 @@
             <TextView
                 android:id="@+id/text_ports"
                 style="@style/KiviRecommendText"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/recom_inputs"
                 app:layout_constraintStart_toStartOf="parent"
@@ -120,7 +155,7 @@
 
         </android.support.constraint.ConstraintLayout>
 
-    </ScrollView>
+        </ScrollView>
 
 
 </layout>

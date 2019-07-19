@@ -110,7 +110,7 @@ class DirectoriesFragment : BaseFragment() {
             supportActionBar?.run {
                 setDisplayShowTitleEnabled(false)
                 setDisplayHomeAsUpEnabled(true)
-                setDisplayHomeAsUpEnabled(true)
+                setDisplayShowHomeEnabled(true)
             }
             modifyPadding(isPanelCollapsed.value)
             isPanelCollapsed.observe(this, panelObserver)

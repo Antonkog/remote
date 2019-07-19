@@ -133,7 +133,7 @@ class RecentDeviceFragment : BaseFragment() {
             supportActionBar?.run {
                 setDisplayShowTitleEnabled(false)
                 setDisplayHomeAsUpEnabled(true)
-                setDisplayHomeAsUpEnabled(true)
+                setDisplayShowHomeEnabled(true)
             }
         }
     }
