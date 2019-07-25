@@ -20,6 +20,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
+import android.support.annotation.IntDef;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -68,6 +69,7 @@ import com.wezom.kiviremote.views.UPnPControlsNotification;
 
 import org.fourthline.cling.android.FixedAndroidLogHandler;
 
+import java.lang.annotation.Retention;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -82,6 +84,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
 
 import static com.wezom.kiviremote.common.Constants.NOTIFICATION_ID;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public class HomeActivity extends BaseActivity implements BackHandler {
 
@@ -230,13 +233,16 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
         binding.toolbarETxt.mainTextHide.setOnClickListener(v -> hideKeyboard());
 
-        binding.fab.setOnClickListener(view -> viewModel.goTo(Screens.REMOTE_CONTROL_FRAGMENT));
+        binding.fab.setOnClickListener(view -> viewModel.goTo(Screens.TOUCH_PAD_FRAGMENT));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding.fab.setElevation(getResources().getDimension(R.dimen.elevation_small));
         }
     }
 
-    @Override
+    public void changeToolbarVisibility(int visible){
+        this.runOnUiThread(() -> toolbar.setVisibility(visible));
+    }
+
     public void changeFabVisibility(int visible) {
         this.runOnUiThread(() -> binding.fab.setVisibility(visible));
     }
@@ -350,6 +356,9 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                         Timber.e("can't go to support " + e);
                         Toast.makeText(this, " ActivityNotFoundException", Toast.LENGTH_LONG).show();
                     }
+                    break;
+                case R.id.dark_mode:
+                    viewModel.restartColorScheme(this);
                     break;
 
                 case R.id.nav_exit:
@@ -581,7 +590,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     @Override
     public void onBackPressed() {
-        changeFabVisibility(View.GONE);
         if (!fragmentsBackKeyIntercept())
             super.onBackPressed();
     }
@@ -604,6 +612,11 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     public boolean hasReadPermission() {
         return ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+    }
+
+
+    public boolean hasRecordAudioPermission() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED;
     }
 
     public void showOpenSettingsDialog() {

@@ -113,6 +113,7 @@ public class Input implements LauncherBasedData {
         this.imageUrl = input.getImageUrl();
         this.portName = input.getPortName();
         this.inputIcon =input.getInputIcon();
+        this.portNum = input.getPortNum();
     }
 
     @Override

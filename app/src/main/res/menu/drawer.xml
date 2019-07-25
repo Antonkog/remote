@@ -19,6 +19,12 @@
             android:title="@string/drawer_support" />
 
         <item
+            android:id="@+id/dark_mode"
+            android:icon="@drawable/ic_btn_back"
+            android:title="@string/drawer_dark_mode" />
+
+
+        <item
             android:id="@+id/nav_exit"
             android:icon="@drawable/nav_exit"
             android:title="@string/drawer_exit" />

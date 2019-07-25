@@ -14,28 +14,6 @@ public class AspectAvailableMock {
         PICTUREMODE
     }
 
-    /*
-    /todo : remove after test
-        AspectHolder.INSTANCE.setAvailableSettings(new AspectAvailable(AspectAvailableMock.getRtkValues(this)));
-        AspectHolder.INSTANCE.setMessage(new AspectMessage.AspectMsgBuilder()
-                .addValue(AspectMessage.ASPECT_VALUE.BACKLIGHT, 2)
-                .addValue(AspectMessage.ASPECT_VALUE.SATURATION, 50)
-                .addValue(AspectMessage.ASPECT_VALUE.SHARPNESS, 42)
-                .addValue(AspectMessage.ASPECT_VALUE.BRIGHTNESS, 52)
-                .addValue(AspectMessage.ASPECT_VALUE.CONTRAST, 52)
-
-                .addValue(AspectMessage.ASPECT_VALUE.GREEN, 23)
-                .addValue(AspectMessage.ASPECT_VALUE.BLUE, 32)
-                .addValue(AspectMessage.ASPECT_VALUE.RED, 23)
-
-                .addValue(AspectMessage.ASPECT_VALUE.HDR, 22)
-                .addValue(AspectMessage.ASPECT_VALUE.TEMPERATURE, 62)
-                .addValue(AspectMessage.ASPECT_VALUE.VIDEOARCTYPE, 9)
-                .buildAspect());
-
-     */
-
-
     public static AspectMessage getTestMessage(){
         return new AspectMessage.AspectMsgBuilder()
                 .addValue(AspectMessage.ASPECT_VALUE.BACKLIGHT, 50)

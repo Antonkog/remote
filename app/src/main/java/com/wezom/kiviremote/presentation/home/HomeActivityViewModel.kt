@@ -1,13 +1,17 @@
 package com.wezom.kiviremote.presentation.home
 
+import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
+import android.content.Intent
 import android.content.SharedPreferences
+import com.wezom.kiviremote.App
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.Screens.DEVICE_SEARCH_FRAGMENT
 import com.wezom.kiviremote.bus.*
 import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.Constants.*
+import com.wezom.kiviremote.common.PreferencesManager
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.common.extensions.boolean
@@ -128,7 +132,7 @@ class HomeActivityViewModel(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = { initialEvent ->
                     if (initialEvent.previewCommonStructures != null) {
-                        Timber.e("12345  got previewCommonStructures ")
+                        Timber.e("12345  got previewCommonStructures 3: " + initialEvent.previewCommonStructures.size)
                         launch(CommonPool) {
                             database.serverAppDao().run {
                                 removeAll()
@@ -318,6 +322,7 @@ class HomeActivityViewModel(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
                     sendAspectChanged(it.message)
+                    Timber.e("12345 sendAspectChanged " + it.message)
                 }, onError = Timber::e)
 
         disposables += RxBus.listen(LaunchAppEvent::class.java)
@@ -417,8 +422,11 @@ class HomeActivityViewModel(
                         connectToServer(nsdModel.host, nsdModel.port)
                         launch(CommonPool) {
                             database.recentDeviceDao().insert(RecentDevice(nsdModel.name, null))
-                            //database.recommendationsDao().removeAll() todo: revert
-                           // database.chennelsDao().removeAll() todo: revert
+                            database.recommendationsDao().removeAll()
+                            database.serverInputsDao().removeAll()
+                            database.chennelsDao().removeAll()
+                            database.serverAppDao().removeAll()
+
                             RxBus.publish(RequestInitialPreviewEvent())
                         }
                     }
@@ -491,6 +499,7 @@ class HomeActivityViewModel(
     }
 
     private fun sendAction(action: Action) {
+        Timber.e("12345  send Action " + action.name)
         serverConnection?.sendMessage(SocketConnectionModel().apply {
             setAction(action)
         })
@@ -530,6 +539,18 @@ class HomeActivityViewModel(
 
     fun backHome() {
         router.backTo(Screens.DEVICE_SEARCH_FRAGMENT)
+    }
+
+    fun restartColorScheme(ctx: Activity?) {
+        if (ctx != null) {
+            PreferencesManager.setDarkMode(!App.isDarkMode())
+            val i = ctx.intent
+            i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            i.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK
+            i.putExtra(Constants.BUNDLE_REALUNCH_KEY, true)
+            ctx.finish()
+            ctx.startActivity(i)
+        }
     }
 
     fun progressTo(progress: Int, max: Int) = uPnPManager.progressTo(progress, max)

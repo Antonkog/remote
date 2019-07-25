@@ -25,6 +25,7 @@ import timber.log.Timber
 import javax.inject.Inject
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.main.BackHandler
+import kotlinx.android.synthetic.main.home_activity.*
 import java.lang.ref.WeakReference
 import kotlin.collections.HashMap
 
@@ -51,12 +52,14 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private val recommendationsObserver = Observer<List<Comparable<Recommendation>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterRecommend.swapData(it)
+            updateRecommendations(true)
         } ?: Timber.e("TYPE_RECOMMENDATIONS empty")
     }
 
     private val channelsObserver = Observer<List<Comparable<Channel>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterChannels.swapData(it)
+            updateRecommendations(true)
         } ?: Timber.e("TYPE_Channels empty")
     }
 
@@ -74,7 +77,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
 
     override fun onInputChosen(item: Input, position: Int) {
-        Toast.makeText(context, "port chosen " + item.name, Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, "port chosen id: " + item.intID + "name" + item.name, Toast.LENGTH_SHORT).show()
         onPortChecked(item.intID)
     }
 
@@ -104,22 +107,30 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         viewModel.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.INPUT_PORT, portId)
     }
 
+    private fun updateRecommendations(isVisible: Boolean) {
+        if(!isVisible){
+            binding.recsRefreshBar.visibility = View.VISIBLE
+            binding.scrollTop.visibility = View.INVISIBLE
+        }else{
+            binding.recsRefreshBar.visibility = View.GONE
+            binding.scrollTop.visibility = View.VISIBLE
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = RecommendationsFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecommendationsViewModel::class.java)
 
-        adapterApps = RecommendationsAdapter(cache, this)
-        adapterPorts = RecommendationsAdapter(cache, this)
-        adapterRecommend = RecommendationsAdapter(cache, this)
-        adapterChannels = RecommendationsAdapter(cache, this)
+        adapterApps = RecommendationsAdapter( this)
+        adapterPorts = RecommendationsAdapter( this)
+        adapterRecommend = RecommendationsAdapter(this)
+        adapterChannels = RecommendationsAdapter(this)
 
         viewModel.run {
 
@@ -229,7 +240,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         } else return false
     }
 
-    //this END is for handling back in fragment
+//this END is for handling back in fragment
 
     private fun changeRowsVisibility(viewExceptId: Int, visibility: Int) {
         for ((key, value) in rowsViews) {
@@ -259,14 +270,16 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             }
         }
     }
+
+    override fun onResume() {
+        super.onResume()
+        (activity as HomeActivity).changeFabVisibility(View.VISIBLE)
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        (activity as HomeActivity).changeFabVisibility(View.GONE)
+    }
 }
 
 
-//    override fun onResume() {
-//        super.onResume()
-//    }
-//
-//
-//    override fun onDestroyView() {
-//        super.onDestroyView()
-//    }

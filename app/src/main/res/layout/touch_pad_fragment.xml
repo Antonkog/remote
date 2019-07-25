@@ -1,104 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:id="@+id/layout">
 
     <android.support.constraint.ConstraintLayout
-        android:id="@+id/container"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.wezom.kiviremote.views.TouchpadView
-            android:id="@+id/touchpad"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/standard"
-            android:layout_marginStart="@dimen/standard"
-            android:layout_marginTop="@dimen/standard"
-            app:layout_constraintBottom_toTopOf="@+id/seekbar"
-            app:layout_constraintHorizontal_bias="0.0"
+        <View
+            android:id="@+id/top_container"
+            android:layout_width="match_parent"
+            android:layout_height="?android:attr/actionBarSize"
+            android:background="@color/colorPrimary"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
+            android:id="@+id/microphone"
+            android:layout_width="34dp"
+            android:layout_height="42dp"
+            android:layout_marginEnd="8dp"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/top_container"
+            app:layout_constraintEnd_toEndOf="@+id/top_container"
+            app:layout_constraintTop_toTopOf="@+id/top_container"
+            app:srcCompat="@drawable/ic_microphone" />
+
+        <ImageView
+            android:id="@+id/power_off"
+            android:layout_width="34dp"
+            android:layout_height="37dp"
+            android:layout_marginStart="8dp"
+            android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/top_container"
+            app:layout_constraintStart_toStartOf="@id/top_container"
+            app:layout_constraintTop_toTopOf="@+id/top_container"
+            app:srcCompat="@drawable/ic_power_w" />
+
+        <com.wezom.kiviremote.views.TouchpadView
+            android:id="@+id/touchpad"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="@dimen/standard"
+            android:layout_marginTop="@dimen/standard"
+            android:layout_marginBottom="@dimen/standard"
+            app:layout_constraintBottom_toTopOf="@+id/home"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/top_container" />
+
+        <ImageView
             android:id="@+id/scroll"
             android:layout_width="@dimen/scroll_width"
             android:layout_height="0dp"
-            android:layout_marginBottom="@dimen/scroll_margin"
-            android:layout_marginEnd="@dimen/scroll_margin"
             android:layout_marginStart="@dimen/scroll_margin"
             android:layout_marginTop="@dimen/scroll_margin"
-            app:srcCompat="@drawable/ic_scroll_gray"
+            android:layout_marginEnd="@dimen/scroll_margin"
+            android:layout_marginBottom="@dimen/scroll_margin"
+            android:scaleType="fitXY"
             android:padding="@dimen/scroll_margin"
             app:layout_constraintBottom_toBottomOf="@+id/touchpad"
             app:layout_constraintRight_toRightOf="@+id/touchpad"
-            app:layout_constraintTop_toTopOf="@+id/touchpad" />
+            app:layout_constraintTop_toTopOf="@+id/touchpad"
+            app:srcCompat="@drawable/ic_scroll_gray" />
 
-        <SeekBar
-            android:id="@+id/seekbar"
-            style="@style/Widget.AppCompat.SeekBar"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:thumbTint="@color/colorPrimary"
-            android:indeterminateTint="@color/colorPrimary"
-            android:indeterminateTintMode="src_in"
-            android:max="100"
-            android:progress="50"
-            app:layout_constraintBottom_toTopOf="@+id/home"
-            app:layout_constraintLeft_toLeftOf="@+id/touchpad"
-            app:layout_constraintRight_toRightOf="@+id/scroll" />
-
-        <com.wezom.kiviremote.views.ButtonCustomView
+        <ImageView
             android:id="@+id/back"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:layout_marginStart="22dp"
-            android:layout_marginBottom="22dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            app:srcCompat="@drawable/ic_back"
+            android:padding="8dp"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="@+id/home"
             app:layout_constraintEnd_toStartOf="@+id/home"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:central_dr="@drawable/selector_back_btn" />
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent" />
 
-        <com.wezom.kiviremote.views.ButtonCustomView
+        <ImageView
             android:id="@+id/home"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="22dp"
             android:focusableInTouchMode="false"
             android:scaleType="centerInside"
+            app:srcCompat="@drawable/ic_home"
+            android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/input"
+            app:layout_constraintEnd_toStartOf="@+id/aspect_menu"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/back"
-            app:central_dr="@drawable/selector_home_btn" />
+            app:layout_constraintStart_toEndOf="@+id/back" />
 
-
-        <com.wezom.kiviremote.views.ButtonCustomView
-            android:id="@+id/input"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:layout_marginBottom="22dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/menu"
-            app:layout_constraintHorizontal_bias="0.5"
-            android:visibility="visible"
-            app:layout_constraintStart_toEndOf="@+id/home"
-            app:central_dr="@drawable/selector_input_btn" />
-
-
-        <com.wezom.kiviremote.views.ButtonCustomView
-            android:id="@+id/menu"
-            android:layout_width="@dimen/button_size"
-            android:layout_height="@dimen/button_size"
-            android:layout_marginEnd="22dp"
-            android:layout_marginBottom="22dp"
-            app:layout_constraintBottom_toBottomOf="parent"
+        <ImageView
+            android:id="@+id/aspect_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            app:srcCompat="@drawable/ic_aspect"
+            android:padding="8dp"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toBottomOf="@+id/home"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/input"
-            app:central_dr="@drawable/selector_menu_btn" />
+            app:layout_constraintStart_toEndOf="@+id/home" />
 
     </android.support.constraint.ConstraintLayout>
 </layout>

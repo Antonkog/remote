@@ -26,9 +26,10 @@ public class ServerAppInfo implements LauncherBasedData {
     private String imageUri;
 
 
-    public ServerAppInfo(String applicationName, String packageName) {
+    public ServerAppInfo(String applicationName, String packageName, String baseIcon) {
         this.applicationName = applicationName;
         this.packageName = packageName;
+        this.baseIcon = baseIcon;
     }
 
     public String getApplicationName() {

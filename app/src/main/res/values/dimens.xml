@@ -43,6 +43,7 @@
 
     <dimen name="divider_size">25dp</dimen>
     <dimen name="tab_size">22dp</dimen>
+    <dimen name="port_icon_size">30dp</dimen>
 
     <dimen name="app_icon_size">96dp</dimen>
 

@@ -14,6 +14,7 @@ import com.wezom.kiviremote.persistence.model.ServerChannel
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.apps.AppModel
 import com.wezom.kiviremote.upnp.UPnPManager
+import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
@@ -42,7 +43,6 @@ class RecommendationsViewModel(private val router: Router,
     fun requestChannels() = RxBus.publish(SendActionEvent(Action.REQUEST_CHANNELS))
 
     fun populateChannels() {
-        Timber.d("12345 Populate channels list")
         disposables += database.chennelsDao()
                 .all
                 .subscribeOn(Schedulers.computation())
@@ -50,6 +50,7 @@ class RecommendationsViewModel(private val router: Router,
                         onNext = { dbChannels ->
                             val channels = ArrayList<Channel>()
                             dbChannels.forEach {
+//                                Timber.d("12345 Populate channel  " + it.name)
                                 channels.add(Channel()
                                         .addId(it.serverId)
                                         .addActive(it.is_active)
@@ -63,12 +64,12 @@ class RecommendationsViewModel(private val router: Router,
 //                            this.inputs.postValue(newInputs.distinct()) //could n't be same values
                             this.channels.postValue(channels)
                         }, onError = {
+                    Timber.e(it.message)
                 }
                 )
     }
 
     fun populateRecommendations() {
-        Timber.d("12345 Populate recommendations list")
         disposables += database.recommendationsDao()
                 .all
                 .subscribeOn(Schedulers.computation())
@@ -76,6 +77,7 @@ class RecommendationsViewModel(private val router: Router,
                         onNext = { dbRecs ->
                             val recommendations = ArrayList<Recommendation>()
                             dbRecs.forEach {
+                                Timber.d("12345 Populate recommendation  " + it.title)
                                 recommendations.add(Recommendation()
                                         .addContentId(it.contentID)
                                         .addImageUrl(it.imageUrl)
@@ -88,13 +90,13 @@ class RecommendationsViewModel(private val router: Router,
                             }
                             this.recommendations.postValue(recommendations)
                         }, onError = {
+                    Timber.e(it.message)
                 }
                 )
     }
 
 
     fun populateApps() {
-        Timber.d("Populate app list")
         disposables += database.serverAppDao()
                 .all
                 .subscribeOn(Schedulers.computation())
@@ -103,34 +105,8 @@ class RecommendationsViewModel(private val router: Router,
                             val recommendations = ArrayList<ServerAppInfo>()
                             dbApps.forEach {
                                 Timber.e("12345 got app from db " + it.appName + " package " + it.packageName)
-
-                                val key = it.packageName
-                                if (cache.get(key) == null) {
-                                    Timber.e("12345 no app cache" + it.packageName)
-
-                                    if (it.baseIcon != null && it.baseIcon.isNotEmpty()) {
-                                        decodeFromBase64(it.baseIcon).let { bitmap ->
-                                            cache.put(key, bitmap)
-                                        }
-
-                                    } else {
-                                        val bitmap = BitmapFactory.decodeByteArray(
-                                                it.appIcon,
-                                                0,
-                                                it.appIcon.size
-                                        )
-
-                                        if (bitmap != null)
-                                            cache.put(key, bitmap)
-                                    }
+                                recommendations.add(ServerAppInfo(it.appName, it.packageName, it.baseIcon))
                                 }
-
-                                if (cache.get(key) != null)
-                                    recommendations.add(ServerAppInfo(it.appName, it.packageName))
-                                else {
-                                    Timber.e("12345 no app cache2" + it.packageName)
-                                }
-                            }
                             this.apps.postValue(recommendations)
                         },
                         onError = Timber::e
@@ -148,14 +124,6 @@ class RecommendationsViewModel(private val router: Router,
                             val newInputs = ArrayList<Input>()
                             inputs.forEach {
                                 Timber.e("got input from db " + it.portName + " id = " + it.portNum)
-                                val key = it.portName
-                                if (cache.get(key) == null) {
-                                    decodeFromBase64(it.inputIcon).let { bitmap ->
-                                        cache.put(key, bitmap)
-                                    }
-                                }
-
-                                if (cache.get(key) != null)
                                     newInputs.add(Input(it))
                             }
                             this.inputs.postValue(newInputs.distinct()) //could n't be same values

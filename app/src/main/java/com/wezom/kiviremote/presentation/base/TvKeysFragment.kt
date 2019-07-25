@@ -11,11 +11,11 @@ abstract class TvKeysFragment : BaseFragment() {
     private var homeClickTime: Long = 0
     private val handler = Handler()
 
-    fun setTvButtons(viewModel : TvKeysViewModel, menu : View, back : View, home : View ) {
+    fun setTvButtons(viewModel : TvKeysViewModel, aspectMenu : View, back : View, home : View ) {
 
         val launchQuickApps = { viewModel.launchQuickApps() }
 
-        menu.setOnClickListener { _ -> viewModel.sendKeyEvent(KeyEvent.KEYCODE_MENU) }
+        aspectMenu.setOnClickListener { _ -> viewModel.showHideAspect() }
         back.setOnClickListener { _-> viewModel.sendKeyEvent(KeyEvent.KEYCODE_BACK) }
         home.setOnTouchListener { view, event ->
             when (event.action) {

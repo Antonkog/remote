@@ -61,7 +61,7 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
     @SuppressLint("CheckResult")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
+        (activity as HomeActivity).changeFabVisibility(View.GONE)
         RxBus.listen(LocationEnabledEvent::class.java).subscribe { (enabled) ->
             if (enabled) {
                 if (NetConnectionUtils.isConnectedWithWifi(context!!)) {

@@ -43,7 +43,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
 
-    protected abstract void changeFabVisibility(int visible);
 
     protected Navigator baseNavigator =
             new SupportFragmentNavigator(getSupportFragmentManager(),
@@ -57,11 +56,6 @@ public abstract class BaseActivity extends AppCompatActivity {
                 @Override
                 protected Fragment createFragment(String screenKey, Object data) {
                     Utils.hideKeyboard(BaseActivity.this);
-                    if(screenKey.equals(Screens.RECCOMENDATIONS_FRAGMENT)){
-                        changeFabVisibility(View.VISIBLE);
-                    }else {
-                        changeFabVisibility(View.GONE);
-                    }
                     switch (screenKey) {
                         case Screens.DEVICE_SEARCH_FRAGMENT:
                             return new DeviceSearchFragment();

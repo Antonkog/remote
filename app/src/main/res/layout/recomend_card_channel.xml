@@ -5,14 +5,14 @@
         android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/recom_card_margin"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
         android:clickable="true"
         android:focusable="true"
-        app:cardBackgroundColor="@android:color/transparent"
+        android:layout_marginLeft="@dimen/recom_card_margin"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         app:cardCornerRadius="@dimen/recom_card_radius"
         app:cardElevation="@dimen/recom_card_elevation"
+        app:cardBackgroundColor="@android:color/transparent"
         app:cardPreventCornerOverlap="false">
 
         <android.support.constraint.ConstraintLayout
@@ -22,11 +22,12 @@
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="@dimen/port_icon_size"
-                android:layout_height="@dimen/port_icon_size"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/text"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -36,13 +37,12 @@
                 style="@style/KiviMainTextSmall"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:textAllCaps="true"
-                android:textSize="8sp"
+                android:textSize="9dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/image" />
 

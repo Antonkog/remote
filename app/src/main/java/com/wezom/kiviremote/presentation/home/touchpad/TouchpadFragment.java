@@ -1,20 +1,20 @@
 package com.wezom.kiviremote.presentation.home.touchpad;
 
-import android.arch.lifecycle.Observer;
+import android.Manifest;
 import android.arch.lifecycle.ViewModelProviders;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.speech.RecognizerIntent;
+import android.speech.SpeechRecognizer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SeekBar;
+import android.widget.Toast;
 
-import com.wezom.kiviremote.R;
-import com.wezom.kiviremote.bus.GotAspectEvent;
 import com.wezom.kiviremote.common.Action;
 import com.wezom.kiviremote.common.Constants;
 import com.wezom.kiviremote.common.PreferencesManager;
@@ -23,7 +23,9 @@ import com.wezom.kiviremote.databinding.TouchPadFragmentBinding;
 import com.wezom.kiviremote.interfaces.OnTouchPadMessageListener;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
 import com.wezom.kiviremote.presentation.base.TvKeysFragment;
-import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder;
+import com.wezom.kiviremote.presentation.home.HomeActivity;
+
+import java.util.Locale;
 
 import javax.inject.Inject;
 
@@ -47,12 +49,9 @@ public class TouchpadFragment extends TvKeysFragment
 
     private int y1;
     private long scrollTime = System.currentTimeMillis();
+    private Intent mSpeechRecognizerIntent = null;
 
-    private Observer<GotAspectEvent> showAspectObserver = show -> setInputButton(!show.getInputsList().isEmpty());
-
-    private void setInputButton(Boolean show) {
-        binding.input.setVisibility(show ? View.VISIBLE : View.GONE);
-    }
+    private final int REQUEST_PERMISSION_CODE = 12123;
 
     @Nullable
     @Override
@@ -60,6 +59,19 @@ public class TouchpadFragment extends TvKeysFragment
         binding = TouchPadFragmentBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
+
+    @Override
+    public void onDestroyView() {
+        ((HomeActivity) getActivity()).changeToolbarVisibility(View.VISIBLE);
+        super.onDestroyView();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((HomeActivity) getActivity()).changeToolbarVisibility(View.GONE);
+    }
+
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -75,37 +87,43 @@ public class TouchpadFragment extends TvKeysFragment
 
     private void init() {
         binding.touchpad.setListener(this);
-
-
-        int cursorSpeedMultiplier = PreferencesManager.INSTANCE.getCursorSpeed();
-
-        viewModel.getAspectSeen().observe(this, showAspectObserver);
-        binding.touchpad.setSpeedMultiplier(cursorSpeedMultiplier);
-        binding.seekbar.getProgressDrawable().setColorFilter(new PorterDuffColorFilter(getResources().getColor(R.color.colorAccent), PorterDuff.Mode.MULTIPLY));
-        binding.seekbar.setProgress(cursorSpeedMultiplier);
-        binding.seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-            @Override
-            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-            }
-
-            @Override
-            public void onStartTrackingTouch(SeekBar seekBar) {
-
-            }
-
-            @Override
-            public void onStopTrackingTouch(SeekBar seekBar) {
-                int progress = seekBar.getProgress();
-                PreferencesManager.INSTANCE.setCursorSpeed(progress);
-                binding.touchpad.setSpeedMultiplier(progress);
+        binding.powerOff.setOnClickListener(view -> viewModel.switchOff());
+        binding.microphone.setOnClickListener(view -> {
+            if (((HomeActivity) getActivity()).hasRecordAudioPermission()) {
+                startListenIntent();
+            } else {
+                String s[] = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                requestPermissions(s, REQUEST_PERMISSION_CODE);
             }
         });
 
-        binding.input.setOnClickListener(view -> viewModel.goToInputSettings());
 
-        setInputButton(!AspectHolder.INSTANCE.getInputsList().isEmpty());
+        viewModel.setSpeachRecognizer(SpeechRecognizer.createSpeechRecognizer(getContext()));
+
+        binding.microphone.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_UP:
+                        viewModel.speechListener.stopListening();
+                        break;
+
+                    case MotionEvent.ACTION_DOWN:
+                        if (mSpeechRecognizerIntent != null)
+                            viewModel.speechListener.startListening(mSpeechRecognizerIntent);
+                        Toast.makeText(getContext(), "listening ", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                return false;
+            }
+        });
+
+        int cursorSpeedMultiplier = PreferencesManager.INSTANCE.getCursorSpeed();
+
+        binding.touchpad.setSpeedMultiplier(cursorSpeedMultiplier);
+
         setScroll();
-        setTvButtons(viewModel, binding.menu, binding.back, binding.home);
+        setTvButtons(viewModel, binding.aspectMenu, binding.back, binding.home);
     }
 
     private void setScroll() {
@@ -142,6 +160,31 @@ public class TouchpadFragment extends TvKeysFragment
             return true;
         });
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+
+        if (requestCode == REQUEST_PERMISSION_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startListenIntent();
+            } else {
+                Toast.makeText(getContext(), " has no record audio permission", Toast.LENGTH_LONG).show();
+            }
+        }
+
+    }
+
+    private void startListenIntent() {
+        mSpeechRecognizerIntent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+        mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
+                Locale.getDefault());
+
+
+    }
+
 
     @Override
     public void sendMotionEvent(TouchpadMotionModel data) {
