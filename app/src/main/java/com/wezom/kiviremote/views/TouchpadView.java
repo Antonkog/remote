@@ -1,6 +1,10 @@
 package com.wezom.kiviremote.views;
 
 import android.content.Context;
+import android.graphics.Canvas;
+import android.graphics.DashPathEffect;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
@@ -54,6 +58,33 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
 
     public void setListener(OnTouchPadMessageListener<TouchpadMotionModel, TouchpadButtonClickEvent> listener) {
         this.listener = listener;
+    }
+
+    Path path = new Path();
+    Paint paint = new Paint();
+
+    @Override
+    public void onDraw(Canvas canvas) {
+        int w = getWidth();
+        int h = getHeight();
+//        paint.setColor(ResourcesCompat.getColor(getResources(), R.color.colorWhite, null));
+        paint.setARGB(151, 151, 151, 151);
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setPathEffect(new DashPathEffect(new float[]{20, 20}, 0));
+
+        int marging = getWidth() / 4;
+        int xlength = getWidth() -marging -marging;
+//        int scale = (h / w) < 1 ? (w/h) : h/w;
+        int vertMarging = (getHeight() - xlength)/2;
+        path.moveTo(w / 2, vertMarging);
+        path.lineTo(w / 2, h - vertMarging);
+        paint.setPathEffect(new DashPathEffect(new float[]{20, 20}, 10));
+        path.moveTo(marging, h / 2);
+        path.lineTo(w - marging, h / 2);
+//
+//        canvas.drawLine(w / 2 , vertMarging, w / 2 , h - vertMarging, paint); //vertical
+//        canvas.drawLine(marging, h / 2 , w -marging, h / 2, paint); // horizontal
+        canvas.drawPath(path, paint);
     }
 
     private void init(Context context) {

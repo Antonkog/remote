@@ -12,7 +12,7 @@
         android:layout_marginBottom="10dp"
         app:cardCornerRadius="@dimen/recom_card_radius"
         app:cardElevation="@dimen/recom_card_elevation"
-        app:cardBackgroundColor="@android:color/transparent"
+        app:cardBackgroundColor="@android:color/white"
         app:cardPreventCornerOverlap="false">
 
         <android.support.constraint.ConstraintLayout

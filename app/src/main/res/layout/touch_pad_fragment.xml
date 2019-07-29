@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout">
 
     <android.support.constraint.ConstraintLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -59,8 +59,8 @@
             android:layout_marginTop="@dimen/scroll_margin"
             android:layout_marginEnd="@dimen/scroll_margin"
             android:layout_marginBottom="@dimen/scroll_margin"
-            android:scaleType="fitXY"
             android:padding="@dimen/scroll_margin"
+            android:scaleType="fitXY"
             app:layout_constraintBottom_toBottomOf="@+id/touchpad"
             app:layout_constraintRight_toRightOf="@+id/touchpad"
             app:layout_constraintTop_toTopOf="@+id/touchpad"
@@ -71,14 +71,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            app:srcCompat="@drawable/ic_back"
             android:padding="8dp"
             android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="@+id/home"
             app:layout_constraintEnd_toStartOf="@+id/home"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:srcCompat="@drawable/ic_back" />
 
         <ImageView
             android:id="@+id/home"
@@ -86,13 +86,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="22dp"
             android:focusableInTouchMode="false"
-            android:scaleType="centerInside"
-            app:srcCompat="@drawable/ic_home"
             android:padding="8dp"
+            android:scaleType="centerInside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/aspect_menu"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/back" />
+            app:layout_constraintStart_toEndOf="@+id/back"
+            app:srcCompat="@drawable/ic_home" />
 
         <ImageView
             android:id="@+id/aspect_menu"

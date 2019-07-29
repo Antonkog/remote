@@ -1,21 +1,19 @@
 package com.wezom.kiviremote.presentation.home.recommendations
 
-import android.graphics.Bitmap
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v7.widget.CardView
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.wezom.kiviremote.App
 import com.wezom.kiviremote.R
-import com.wezom.kiviremote.common.KiviCache
 import com.wezom.kiviremote.common.decodeFromBase64
-import com.wezom.kiviremote.common.extensions.invertBitmap
+import com.wezom.kiviremote.common.extensions.makeBlueBitmap
 import com.wezom.kiviremote.common.glide.GlideApp
-import com.wezom.kiviremote.net.model.*
+import com.wezom.kiviremote.net.model.Channel
+import com.wezom.kiviremote.net.model.Input
+import com.wezom.kiviremote.net.model.Recommendation
+import com.wezom.kiviremote.net.model.ServerAppInfo
 import timber.log.Timber
 
 class RecommendationsAdapter(private val listener: HorizontalCVContract.HorizontalCVListener)
@@ -107,17 +105,17 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
         override fun bind(item: Input) {
             view.setOnClickListener(this)
 
-            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
-                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
+//            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
+//                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
 //
 
             if (item.inputIcon != null&& item.inputIcon.isNotEmpty())
                 decodeFromBase64(item.inputIcon).let { bitmap ->
                     val imageView = view.findViewById(R.id.image) as ImageView
 
-                    if (App.isDarkMode())
-                    imageView.setImageBitmap(bitmap)
-                    else imageView.setImageBitmap(invertBitmap(bitmap))
+//                    if (App.isDarkMode())
+//                    imageView.setImageBitmap(bitmap) else
+                 imageView.setImageBitmap(makeBlueBitmap(bitmap))
 
                 }
             view.findViewById<TextView>(R.id.text).text = item.name
@@ -140,8 +138,8 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
                          val data: List<Comparable<*>>) : RecommendationsViewHolder<ServerAppInfo>(view), View.OnClickListener {
 
         override fun bind(item: ServerAppInfo) {
-            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
-                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
+//            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
+//                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
 
             if (item.baseIcon != null&& item.baseIcon.isNotEmpty())
                 decodeFromBase64(item.baseIcon).let { bitmap ->
@@ -170,8 +168,8 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
                                 val data: List<Comparable<*>>) : RecommendationsViewHolder<Recommendation>(view), View.OnClickListener {
 
         override fun bind(item: Recommendation) {
-            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
-                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
+//            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
+//                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
 
             view.setOnClickListener(this)
 
@@ -204,8 +202,8 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
 
         override fun bind(item: Channel) {
 
-            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
-                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
+//            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
+//                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
 
             val image: ImageView = view.findViewById(R.id.image)
 

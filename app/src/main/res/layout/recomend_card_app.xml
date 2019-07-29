@@ -11,7 +11,7 @@
         android:clickable="true"
         android:focusable="true"
         app:cardCornerRadius="@dimen/recom_card_radius"
-        app:cardBackgroundColor="@android:color/transparent"
+        app:cardBackgroundColor="@android:color/white"
         app:cardElevation="@dimen/recom_card_elevation"
         app:cardPreventCornerOverlap="false">
 
@@ -19,7 +19,7 @@
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="centerInside"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

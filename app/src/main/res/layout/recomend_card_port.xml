@@ -10,7 +10,7 @@
         android:layout_marginBottom="10dp"
         android:clickable="true"
         android:focusable="true"
-        app:cardBackgroundColor="@android:color/transparent"
+        app:cardBackgroundColor="@android:color/white"
         app:cardCornerRadius="@dimen/recom_card_radius"
         app:cardElevation="@dimen/recom_card_elevation"
         app:cardPreventCornerOverlap="false">

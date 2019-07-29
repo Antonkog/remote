@@ -15,7 +15,6 @@ import com.wezom.kiviremote.common.PreferencesManager
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.common.extensions.boolean
-import com.wezom.kiviremote.common.extensions.getModelName
 import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.net.ChatConnection
 import com.wezom.kiviremote.net.model.*
@@ -39,7 +38,6 @@ import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
-import java.util.HashMap
 import java.util.Observer
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
@@ -355,11 +353,6 @@ class HomeActivityViewModel(
                 .subscribeBy(onNext = {
                 }, onError = Timber::e)
 
-        disposables += RxBus.listen(SendTextEvent::class.java)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(onNext = {
-                    sendText(it.text)
-                }, onError = Timber::e)
     }
 
     val showSettingsDialog = MutableLiveData<Boolean>()

@@ -5,10 +5,7 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
 import com.wezom.kiviremote.Screens
-import com.wezom.kiviremote.bus.GotAspectEvent
-import com.wezom.kiviremote.bus.SendActionEvent
-import com.wezom.kiviremote.bus.SendCursorCoordinatesEvent
-import com.wezom.kiviremote.bus.SendScrollEvent
+import com.wezom.kiviremote.bus.*
 import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.presentation.base.BaseViewModel
@@ -51,6 +48,10 @@ class TouchpadViewModel(private val router: Router) : BaseViewModel(), TvKeysVie
 
     fun goToInputSettings() = router.navigateTo(Screens.PORTS_FRAGMENT)
 
+    fun sendText(text: String) {
+        RxBus.publish(SendTextEvent(text))
+    }
+
     fun setSpeachRecognizer(speechRecognizer: SpeechRecognizer) {
         speechListener = speechRecognizer
 
@@ -87,6 +88,8 @@ class TouchpadViewModel(private val router: Router) : BaseViewModel(), TvKeysVie
                 //displaying the first match
                 if (matches != null)
                     router.showSystemMessage(matches[0])
+
+                sendText(matches[0])
             }
 
             override fun onPartialResults(partialResults: Bundle) {

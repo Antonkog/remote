@@ -11,11 +11,20 @@ fun View.vanish() {
     this.visibility = View.GONE
 }
 
-fun invertBitmap(src: Bitmap): Bitmap {
-    val colorMatrix = ColorMatrix(floatArrayOf(-1f, 0f, 0f, 0f, 255f,
-            0f, -1f, 0f, 0f, 255f,
-            0f, 0f, -1f, 0f, 255f,
-            0f, 0f, 0f, 1f, 0f))
+val invertMatrix =
+        floatArrayOf(-1f, 0f, 0f, 0f, 255f,
+                        0f, -1f, 0f, 0f, 255f,
+                        0f, 0f, -1f, 0f, 255f,
+                        0f, 0f, 0f, 1f, 0f)
+
+val blueMatrix =
+        floatArrayOf(0f, 0f, 0f, 0f, 0f,
+                0f, 0f, 0f, 0f, 65f,
+                0f, 0f, 0f, 0f, 172f,
+                0f, 0f, 0f, 1f, 0f)
+
+fun makeBlueBitmap(src: Bitmap): Bitmap {
+    val colorMatrix = ColorMatrix(blueMatrix)
 
     val cf: ColorFilter = ColorMatrixColorFilter(colorMatrix);
     val bitmap: Bitmap = Bitmap.createBitmap(src.width, src.height,
