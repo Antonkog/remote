@@ -19,6 +19,8 @@ enum class Action {
     LAUNCH_FAVORITE,
     PING,
     SWITCH_OFF,
+    VOICE_SEARCH,
+    SET_VOLUME,
     SCROLL,
     HOME_DOWN,
     HOME_UP,

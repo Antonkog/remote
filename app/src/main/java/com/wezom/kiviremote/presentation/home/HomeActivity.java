@@ -15,6 +15,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,6 +32,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -49,6 +51,7 @@ import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
 import com.wezom.kiviremote.bus.HideKeyboardEvent;
 import com.wezom.kiviremote.bus.LocationEnabledEvent;
 import com.wezom.kiviremote.bus.NetworkStateEvent;
+import com.wezom.kiviremote.bus.SetVolumeEvent;
 import com.wezom.kiviremote.bus.ShowKeyboardEvent;
 import com.wezom.kiviremote.common.GpsUtils;
 import com.wezom.kiviremote.common.RxBus;
@@ -99,6 +102,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     protected Toolbar toolbar;
     protected ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
+    private AudioManager audioManager;
 
     @Inject
     BaseViewModelFactory viewModelFactory;
@@ -195,6 +199,8 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
 
+       audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+
         initNetworkChangeReceiver();
         initUpnpRequirements();
         setupViews();
@@ -239,7 +245,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         }
     }
 
-    public void changeToolbarVisibility(int visible){
+    public void changeToolbarVisibility(int visible) {
         this.runOnUiThread(() -> toolbar.setVisibility(visible));
     }
 
@@ -369,6 +375,20 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             return false;
         });
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        switch (keyCode) {
+            case KeyEvent.KEYCODE_VOLUME_DOWN:
+            case KeyEvent.KEYCODE_VOLUME_UP:
+                int volume = Math.round(audioManager.getStreamVolume(AudioManager.STREAM_SYSTEM)*100/audioManager.getStreamMaxVolume(AudioManager.STREAM_SYSTEM));
+                RxBus.INSTANCE.publish(new SetVolumeEvent(volume));
+                return true;
+            default:
+                return super.onKeyDown(keyCode, event);
+        }
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

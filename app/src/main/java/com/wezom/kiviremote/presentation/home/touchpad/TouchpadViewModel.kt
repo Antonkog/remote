@@ -48,8 +48,8 @@ class TouchpadViewModel(private val router: Router) : BaseViewModel(), TvKeysVie
 
     fun goToInputSettings() = router.navigateTo(Screens.PORTS_FRAGMENT)
 
-    fun sendText(text: String) {
-        RxBus.publish(SendTextEvent(text))
+    fun sendVoiceAsText(text: String) {
+        RxBus.publish(SendVoiceEvent(text))
     }
 
     fun setSpeachRecognizer(speechRecognizer: SpeechRecognizer) {
@@ -89,7 +89,7 @@ class TouchpadViewModel(private val router: Router) : BaseViewModel(), TvKeysVie
                 if (matches != null)
                     router.showSystemMessage(matches[0])
 
-                sendText(matches[0])
+                sendVoiceAsText(matches[0])
             }
 
             override fun onPartialResults(partialResults: Bundle) {

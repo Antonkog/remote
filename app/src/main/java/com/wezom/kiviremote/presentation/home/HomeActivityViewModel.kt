@@ -242,13 +242,26 @@ class HomeActivityViewModel(
         disposables += RxBus.listen(SendTextEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
-                    sendText(it.text)
+                    sendArgAction(Action.TEXT, it.text)
+                }, onError = Timber::e)
+
+        disposables += RxBus.listen(SendVoiceEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    sendArgAction(Action.VOICE_SEARCH, it.text)
+                }, onError = Timber::e)
+
+
+        disposables += RxBus.listen(SetVolumeEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    sendArgAction(Action.SET_VOLUME, it.newVolumeToSend.toString())
                 }, onError = Timber::e)
 
         disposables += RxBus.listen(SendKeyEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
-                    sendKey(it.keyEvent)
+                    sendArgAction(Action.KEY_EVENT, it.keyEvent.toString())
                 }, onError = Timber::e)
 
         disposables += RxBus.listen(RequestAspectEvent::class.java)
@@ -313,7 +326,7 @@ class HomeActivityViewModel(
 
         disposables += RxBus.listen(NewNameEvent::class.java)
                 .subscribeBy(onNext = {
-                    sendNameChanged(it.name)
+                    sendArgAction(Action.NAME_CHANGE, it.name)
                 }, onError = Timber::e)
 
         disposables += RxBus.listen(NewAspectEvent::class.java)
@@ -448,30 +461,12 @@ class HomeActivityViewModel(
             })
 
 
-    private fun sendText(text: String) {
+    private fun sendArgAction(action: Action, argText: String) {
         serverConnection?.sendMessage(SocketConnectionModel().apply {
             setArgs(ArrayList<String>().apply {
-                add(text)
+                add(argText)
             })
-            setAction(Action.TEXT)
-        })
-    }
-
-    private fun sendKey(key: Int) {
-        serverConnection?.sendMessage(SocketConnectionModel().apply {
-            setArgs(ArrayList<String>().apply {
-                add(key.toString())
-            })
-            setAction(Action.KEY_EVENT)
-        })
-    }
-
-    private fun sendNameChanged(newName: String) {
-        serverConnection?.sendMessage(SocketConnectionModel().apply {
-            setArgs(ArrayList<String>().apply {
-                add(newName)
-            })
-            setAction(Action.NAME_CHANGE)
+            setAction(action)
         })
     }
 

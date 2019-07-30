@@ -100,26 +100,18 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
     class InputsViewHolder(val view: View, val listener: HorizontalCVContract.HorizontalCVListener,
                            val data: List<Comparable<*>>) : RecommendationsViewHolder<Input>(view), View.OnClickListener {
 
-//        val trailerImageView = view.thumbnail_trailer_image_view
-
         override fun bind(item: Input) {
             view.setOnClickListener(this)
-
-//            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
-//                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
-//
 
             if (item.inputIcon != null&& item.inputIcon.isNotEmpty())
                 decodeFromBase64(item.inputIcon).let { bitmap ->
                     val imageView = view.findViewById(R.id.image) as ImageView
 
-//                    if (App.isDarkMode())
-//                    imageView.setImageBitmap(bitmap) else
-                 imageView.setImageBitmap(makeBlueBitmap(bitmap))
+                 imageView.setImageBitmap(bitmap)
 
                 }
-            view.findViewById<TextView>(R.id.text).text = item.name
 
+            view.findViewById<TextView>(R.id.text).text = item.name
         }
 
         override fun onClick(view: View) {
