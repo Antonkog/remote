@@ -21,7 +21,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
-import android.support.annotation.IntDef;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -72,7 +71,6 @@ import com.wezom.kiviremote.views.UPnPControlsNotification;
 
 import org.fourthline.cling.android.FixedAndroidLogHandler;
 
-import java.lang.annotation.Retention;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -87,7 +85,6 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
 
 import static com.wezom.kiviremote.common.Constants.NOTIFICATION_ID;
-import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 public class HomeActivity extends BaseActivity implements BackHandler {
 
@@ -199,7 +196,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
 
-       audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
         initNetworkChangeReceiver();
         initUpnpRequirements();
@@ -381,9 +378,8 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
             case KeyEvent.KEYCODE_VOLUME_UP:
-                int volume = Math.round(audioManager.getStreamVolume(AudioManager.STREAM_SYSTEM)*100/audioManager.getStreamMaxVolume(AudioManager.STREAM_SYSTEM));
+                int volume = Math.round(audioManager.getStreamVolume(AudioManager.STREAM_RING) * 100 / audioManager.getStreamMaxVolume(AudioManager.STREAM_RING));
                 RxBus.INSTANCE.publish(new SetVolumeEvent(volume));
-                return true;
             default:
                 return super.onKeyDown(keyCode, event);
         }
