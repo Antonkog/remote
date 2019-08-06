@@ -52,16 +52,20 @@ import com.wezom.kiviremote.bus.LocationEnabledEvent;
 import com.wezom.kiviremote.bus.NetworkStateEvent;
 import com.wezom.kiviremote.bus.SetVolumeEvent;
 import com.wezom.kiviremote.bus.ShowKeyboardEvent;
+import com.wezom.kiviremote.common.Constants;
 import com.wezom.kiviremote.common.GpsUtils;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.Utils;
 import com.wezom.kiviremote.common.extensions.StringUtils;
 import com.wezom.kiviremote.databinding.HomeActivityBinding;
+import com.wezom.kiviremote.persistence.model.RecentDevice;
 import com.wezom.kiviremote.presentation.base.BaseActivity;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
 import com.wezom.kiviremote.presentation.home.main.BackHandler;
+import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo;
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder;
+import com.wezom.kiviremote.presentation.home.tvsettings.LastVolume;
 import com.wezom.kiviremote.receivers.NetworkChangeReceiver;
 import com.wezom.kiviremote.services.CleanupService;
 import com.wezom.kiviremote.services.NotificationService;
@@ -70,20 +74,17 @@ import com.wezom.kiviremote.upnp.org.droidupnp.model.upnp.IRendererState;
 import com.wezom.kiviremote.views.UPnPControlsNotification;
 
 import org.fourthline.cling.android.FixedAndroidLogHandler;
-
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
-
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
-
 import static com.wezom.kiviremote.common.Constants.NOTIFICATION_ID;
 
 public class HomeActivity extends BaseActivity implements BackHandler {
@@ -113,8 +114,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     private IRendererState.State currentState;
     private SlidingUpPanelLayout.PanelState lastKnownState;
 
-    private Disposable flowDisposable;
-    private Disposable playDelayDisposable;
+    private Disposable flowDisposable, playDelayDisposable, hardKeySoundDisposable;
 
     private boolean isInterrupted;
 
@@ -296,10 +296,10 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
     private void setupViews() {
+
         setupSlidingLayout();
         reconnectSnackbar = setupSnackbar();
 //        ActionBarDrawerToggle.Delegate delegate = getDrawerToggleDelegate();
-
 //        binding.toolbar.setPadding(0, Utils.getStatusBarHeight(getResources()), 0, 0);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
@@ -345,8 +345,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                     break;
 
                 case R.id.nav_settings:
-                    if (AspectHolder.INSTANCE.hasAspectSettings())
-                        viewModel.goTo(Screens.TV_SETTINGS_FRAGMENT);
+                    viewModel.goToDeviceInfo(new TvDeviceInfo(new RecentDevice(viewModel.getCurrentContentName(), null), null, 0));
                     break;
 
                 case R.id.nav_support:
@@ -375,14 +374,22 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+        final int volume;
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_DOWN:
+                volume = LastVolume.INSTANCE.getVolumeInt() >= Constants.VOLUME_EVENT_POINT ? LastVolume.INSTANCE.getVolumeInt() - Constants.VOLUME_EVENT_POINT : 0;
+                break;
             case KeyEvent.KEYCODE_VOLUME_UP:
-                int volume = Math.round(audioManager.getStreamVolume(AudioManager.STREAM_RING) * 100 / audioManager.getStreamMaxVolume(AudioManager.STREAM_RING));
-                RxBus.INSTANCE.publish(new SetVolumeEvent(volume));
+                volume = LastVolume.INSTANCE.getVolumeInt() >= 100 ? 100 : LastVolume.INSTANCE.getVolumeInt() + Constants.VOLUME_EVENT_POINT;
+                break;
             default:
                 return super.onKeyDown(keyCode, event);
         }
+        if (volume != LastVolume.INSTANCE.getVolumeInt()) {
+            RxBus.INSTANCE.publish(new SetVolumeEvent(volume));
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 
@@ -502,8 +509,15 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         viewModel.getSlidingPanelContent().removeObserver(slidingContentObserver);
         viewModel.getCurrentContentObservable().removeObserver(slidingContentObserver);
         viewModel.getSlideshowStateObservable().removeObserver(slideshowProgressObserver);
-        if (flowDisposable != null && !flowDisposable.isDisposed())
-            flowDisposable.dispose();
+        dispose(flowDisposable);
+    }
+
+
+    private void dispose(Disposable disposable) {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
+            disposable = null;
+        }
     }
 
     public void stopPlayback() {
@@ -855,9 +869,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
     private void restartPlayDelay() {
-        if (playDelayDisposable != null && !playDelayDisposable.isDisposed())
-            playDelayDisposable.dispose();
-
+        dispose(playDelayDisposable);
         playDelayDisposable = Single.timer(5, TimeUnit.SECONDS).subscribe(delay -> refreshClickListeners(GalleryFragment.MediaType.VIDEO));
     }
 

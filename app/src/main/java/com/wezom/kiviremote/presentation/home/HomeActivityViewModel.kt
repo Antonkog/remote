@@ -15,6 +15,7 @@ import com.wezom.kiviremote.common.PreferencesManager
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.common.extensions.boolean
+import com.wezom.kiviremote.common.extensions.int
 import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.net.ChatConnection
 import com.wezom.kiviremote.net.model.*
@@ -24,8 +25,11 @@ import com.wezom.kiviremote.persistence.model.*
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment
 import com.wezom.kiviremote.presentation.home.ports.InputSourceHelper
+import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo
+import com.wezom.kiviremote.presentation.home.subscriptions.subs_price_list.PricePerTime
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadButtonClickEvent
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
+import com.wezom.kiviremote.presentation.home.tvsettings.LastVolume
 import com.wezom.kiviremote.upnp.UPnPManager
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -120,7 +124,7 @@ class HomeActivityViewModel(
                         Timber.e("12345 got channels")
                     }
 
-                    if (it.volume != -1) {
+                    if (it.volume != NO_VALUE) {
                         RxBus.publish(NewVolumeEvent(it.volume))
                         muteStatus = it.volume <= 0
                     }
@@ -255,6 +259,7 @@ class HomeActivityViewModel(
         disposables += RxBus.listen(SetVolumeEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
+                    LastVolume.volumeInt = it.newVolumeToSend
                     sendArgAction(Action.SET_VOLUME, it.newVolumeToSend.toString())
                 }, onError = Timber::e)
 
@@ -571,4 +576,7 @@ class HomeActivityViewModel(
     fun goTo(screenKey: String) {
         router.navigateTo(screenKey);
     }
+
+    fun goToDeviceInfo(data: TvDeviceInfo) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)
+
 }

@@ -34,12 +34,15 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
     private long eventStart;
 
     private boolean stop;
-    private boolean multiFinger = false;
 
     private float ix, iy;
     private float xDiff, yDiff;
 
     private float x1, x2, y1, y2, dx, dy;
+
+    public void setScrollMode(boolean scroll) {
+        this.scroll = scroll;
+    }
 
     public TouchpadView(Context context) {
         super(context);
@@ -76,14 +79,19 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
         int xlength = getWidth() -marging -marging;
 //        int scale = (h / w) < 1 ? (w/h) : h/w;
         int vertMarging = (getHeight() - xlength)/2;
-        path.moveTo(w / 2, vertMarging);
+
+        path.moveTo(w / 2, h/2);
+        path.lineTo(w / 2,  vertMarging);
+
+        path.moveTo(w / 2, h/2);
         path.lineTo(w / 2, h - vertMarging);
-        paint.setPathEffect(new DashPathEffect(new float[]{20, 20}, 10));
-        path.moveTo(marging, h / 2);
+
+        path.moveTo(w/2, h / 2);
+        path.lineTo(marging, h / 2);
+
+        path.moveTo(w/2, h / 2);
         path.lineTo(w - marging, h / 2);
-//
-//        canvas.drawLine(w / 2 , vertMarging, w / 2 , h - vertMarging, paint); //vertical
-//        canvas.drawLine(marging, h / 2 , w -marging, h / 2, paint); // horizontal
+
         canvas.drawPath(path, paint);
     }
 
@@ -92,19 +100,17 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
         this.gestureDetectorCompat = new GestureDetectorCompat(context, this);
 
         this.setOnTouchListener((v, event) -> {
-            int pointerCount = event.getPointerCount();
-            if (pointerCount == 1) {
+//            int pointerCount = event.getPointerCount();
+            if (!scroll) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         eventStart = System.currentTimeMillis();
                         stop = false;
-                        multiFinger = false;
                         x1 = NumUtils.getToDp(event.getX());
                         y1 = NumUtils.getToDp(event.getY());
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-                        if (!multiFinger) {
                             x2 = NumUtils.getToDp(event.getX());
                             y2 = NumUtils.getToDp(event.getY());
                             dx = x2 - x1;
@@ -118,7 +124,7 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
 
                             double multiplyBy = 2 + speedMultiplier * 1.5;
                             listener.sendMotionEvent(new TouchpadMotionModel(dx * multiplyBy, dy * multiplyBy));
-                        }
+
                         break;
 
                     case MotionEvent.ACTION_UP:
@@ -135,10 +141,10 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
                 }
             }
 
-            if (pointerCount == 2) {
-                multiFinger = true;
+            if (scroll) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        stop = false;
                         x1 = NumUtils.getToDp(event.getX());
                         y1 = NumUtils.getToDp(event.getY());
                         break;
@@ -187,13 +193,6 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
                 }
             }
 
-            if (event.getAction() == MotionEvent.ACTION_UP) {
-                if (scroll) {
-                    scroll = false;
-                    return true;
-                }
-            }
-
             // prevent mouse from moving when scrolled with two fingers
             if (scroll)
                 return true;
@@ -212,7 +211,7 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
         long eventEnd = System.currentTimeMillis();
         long eventDifference = eventEnd - eventStart;
 
-        if (multiFinger && eventDifference < DOUBLE_FINGER_TAP_TIMEOUT)
+        if (scroll && eventDifference < DOUBLE_FINGER_TAP_TIMEOUT)
             listener.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         return super.performClick();
     }

@@ -12,7 +12,7 @@
             android:id="@+id/top_container"
             android:layout_width="match_parent"
             android:layout_height="?android:attr/actionBarSize"
-            android:background="@color/colorPrimary"
+            android:elevation="@dimen/small"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -23,6 +23,7 @@
             android:layout_height="42dp"
             android:layout_marginEnd="8dp"
             android:padding="8dp"
+            android:translationZ="@dimen/small"
             app:layout_constraintBottom_toBottomOf="@+id/top_container"
             app:layout_constraintEnd_toEndOf="@+id/top_container"
             app:layout_constraintTop_toTopOf="@+id/top_container"
@@ -34,6 +35,7 @@
             android:layout_height="37dp"
             android:layout_marginStart="8dp"
             android:padding="8dp"
+            android:translationZ="@dimen/small"
             app:layout_constraintBottom_toBottomOf="@+id/top_container"
             app:layout_constraintStart_toStartOf="@id/top_container"
             app:layout_constraintTop_toTopOf="@+id/top_container"
@@ -55,16 +57,26 @@
             android:id="@+id/scroll"
             android:layout_width="@dimen/scroll_width"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/scroll_margin"
             android:layout_marginTop="@dimen/scroll_margin"
-            android:layout_marginEnd="@dimen/scroll_margin"
-            android:layout_marginBottom="@dimen/scroll_margin"
             android:padding="@dimen/scroll_margin"
             android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="@+id/touchpad"
+            app:layout_constraintBottom_toTopOf="@+id/img_action_mode"
             app:layout_constraintRight_toRightOf="@+id/touchpad"
             app:layout_constraintTop_toTopOf="@+id/touchpad"
             app:srcCompat="@drawable/ic_scroll_gray" />
+
+        <ImageView
+            android:id="@+id/img_action_mode"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:scaleType="fitXY"
+            app:layout_constraintBottom_toBottomOf="@+id/touchpad"
+            app:layout_constraintRight_toRightOf="@+id/touchpad"
+            app:layout_constraintTop_toBottomOf="@+id/scroll"
+            app:srcCompat="@drawable/ic_swipe" />
+
 
         <ImageView
             android:id="@+id/back"
@@ -106,6 +118,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toEndOf="@+id/home" />
+
+        <!--<com.wezom.kiviremote.views.MovableFloatingActionButton-->
+            <!--android:id="@+id/cursor"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="end|bottom"-->
+            <!--app:backgroundTint="@color/trans"-->
+            <!--app:layout_constraintBottom_toBottomOf="@+id/finger"-->
+            <!--app:layout_constraintEnd_toStartOf="@+id/finger"-->
+            <!--app:layout_constraintTop_toTopOf="@+id/finger"-->
+            <!--app:borderWidth="0dp"-->
+            <!--app:elevation="0dp"-->
+            <!--app:fabSize="normal"-->
+            <!--app:srcCompat="@drawable/ic_cursor" />-->
 
     </android.support.constraint.ConstraintLayout>
 </layout>

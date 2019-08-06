@@ -22,6 +22,7 @@ public class Constants {
     public final static String LOG_FILE_EXTENSION = ".txt";
 
     public static final int DPAD_EVENT_FREQUENCY = 200;
+    public static final int VOLUME_EVENT_POINT= 1;
     public static final int VOLUME_EVENT_FREQUENCY = 75;
     public static final long TOUCH_EVENT_FREQUENCY = 10 ; //  < 1sec / 25 frames (<40)
     public static final long SCROLL_EVENT_FREQUENCY = 20 ; //  < 1sec / 25 frames (<40)

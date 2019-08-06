@@ -9,12 +9,16 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.res.ResourcesCompat;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.wezom.kiviremote.App;
+import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.common.Action;
 import com.wezom.kiviremote.common.Constants;
 import com.wezom.kiviremote.common.PreferencesManager;
@@ -53,6 +57,7 @@ public class TouchpadFragment extends TvKeysFragment
 
     private final int REQUEST_PERMISSION_CODE = 12123;
 
+    private boolean isScrollMode = false;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -122,8 +127,27 @@ public class TouchpadFragment extends TvKeysFragment
 
         binding.touchpad.setSpeedMultiplier(cursorSpeedMultiplier);
 
+        binding.microphone.setImageResource(App.isDarkMode()? R.drawable.ic_microphone_dm : R.drawable.ic_microphone);
+        binding.powerOff.setImageResource(App.isDarkMode()? R.drawable.ic_power_w_dm : R.drawable.ic_power_w);
+        binding.topContainer.setBackgroundColor(binding.getRoot().getResources().getColor(App.isDarkMode()? R.color.colorBlack :R.color.colorWhite));
+        setScrollBtn();
+
+        binding.imgActionMode.setOnClickListener(v -> {
+            this.isScrollMode = !isScrollMode;
+            setScrollBtn();
+        });
+
         setScroll();
         setTvButtons(viewModel, binding.aspectMenu, binding.back, binding.home);
+    }
+
+    private void setScrollBtn() {
+        binding.touchpad.setScrollMode(isScrollMode);
+        if(isScrollMode){
+            binding.imgActionMode.setImageResource(App.isDarkMode()? R.drawable.ic_swipe_dm : R.drawable.ic_swipe);
+        } else {
+            binding.imgActionMode.setImageResource(App.isDarkMode()? R.drawable.ic_cursor_dm : R.drawable.ic_cursor);
+        }
     }
 
     private void setScroll() {
