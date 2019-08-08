@@ -403,18 +403,14 @@ class HomeActivityViewModel(
     private fun initConnection(nsdModel: NsdServiceModel, firstConnection: Boolean) {
         killPing()
         serverConnection = ChatConnection()
-        if (firstConnection)
-            Run.after(DELAY_ASK_APPS) {
-                RxBus.publish(RequestAppsEvent())
-            }
-        connect(nsdModel)
+        connect(nsdModel, firstConnection)
     }
 
     private fun killPing() {
         serverConnection?.dispose()
     }
 
-    private fun connect(nsdModel: NsdServiceModel) { //research
+    private fun connect(nsdModel: NsdServiceModel, firstConnection: Boolean) { //research
         val currentConnectionName = currentConnection
         if (nsdModel.name != currentConnectionName) {
             launch(CommonPool) {
@@ -432,13 +428,14 @@ class HomeActivityViewModel(
                     serverConnection?.run {
                         connectToServer(nsdModel.host, nsdModel.port)
                         launch(CommonPool) {
-                            database.recentDeviceDao().insert(RecentDevice(nsdModel.name, null))
-                            database.recommendationsDao().removeAll()
-                            database.serverInputsDao().removeAll()
-                            database.chennelsDao().removeAll()
-                            database.serverAppDao().removeAll()
-
-                            RxBus.publish(RequestInitialPreviewEvent())
+                            if(firstConnection){
+                                database.recentDeviceDao().insert(RecentDevice(nsdModel.name, null))
+                                database.recommendationsDao().removeAll()
+                                database.serverInputsDao().removeAll()
+                                database.chennelsDao().removeAll()
+                                database.serverAppDao().removeAll()
+                                RxBus.publish(RequestInitialPreviewEvent())
+                            }
                         }
                     }
                 },

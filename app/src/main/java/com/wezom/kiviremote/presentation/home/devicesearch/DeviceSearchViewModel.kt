@@ -194,8 +194,7 @@ class DeviceSearchViewModel(
     private fun navigateToMainScreen(service: NsdServiceInfo) {
         if (service.host != null) {
             nsdHelper.stopDiscovery()
-            router.navigateTo(Screens.RECCOMENDATIONS_FRAGMENT)
-
+            router.navigateTo(Screens.RECOMMENDATIONS_FRAGMENT)
         }
     }
 }

@@ -16,7 +16,7 @@ public class Constants {
     public static final long DELAY_ASK_APPS = 2;
     public static final long DELAY_APPS_GET = 12000; //or show noResultDelay on swipeRefreshLayout
     public static final long DELAY_RECONNECT = 1;
-    public static final int PING_PERIOD = 3;
+    public static final int PING_PERIOD = 2;
 
     public final static String LOG_FILE_PREFIX = "KiviLogs";
     public final static String LOG_FILE_EXTENSION = ".txt";

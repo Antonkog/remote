@@ -24,7 +24,7 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
         return when (viewType) {
             TYPE_INPUTS -> {
                 val view = LayoutInflater.from(context).inflate(R.layout.recomend_card_port, parent, false)
-                InputsViewHolder( view, listener, data)
+                InputsViewHolder(view, listener, data)
             }
             TYPE_APPS -> {
                 val view = LayoutInflater.from(context).inflate(R.layout.recomend_card_app, parent, false)
@@ -103,11 +103,11 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
         override fun bind(item: Input) {
             view.setOnClickListener(this)
 
-            if (item.inputIcon != null&& item.inputIcon.isNotEmpty())
+            if (item.inputIcon != null && item.inputIcon.isNotEmpty())
                 decodeFromBase64(item.inputIcon).let { bitmap ->
                     val imageView = view.findViewById(R.id.image) as ImageView
 
-                 imageView.setImageBitmap(bitmap)
+                    imageView.setImageBitmap(bitmap)
 
                 }
 
@@ -126,14 +126,14 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
         }
     }
 
-    class AppsViewHolder( val view: View, val listener: HorizontalCVContract.HorizontalCVListener,
+    class AppsViewHolder(val view: View, val listener: HorizontalCVContract.HorizontalCVListener,
                          val data: List<Comparable<*>>) : RecommendationsViewHolder<ServerAppInfo>(view), View.OnClickListener {
 
         override fun bind(item: ServerAppInfo) {
 //            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
 //                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
 
-            if (item.baseIcon != null&& item.baseIcon.isNotEmpty())
+            if (item.baseIcon != null && item.baseIcon.isNotEmpty())
                 decodeFromBase64(item.baseIcon).let { bitmap ->
                     val imageView = view.findViewById(R.id.image) as ImageView
                     imageView.setImageBitmap(bitmap)

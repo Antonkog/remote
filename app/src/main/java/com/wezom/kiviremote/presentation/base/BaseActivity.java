@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDelegate;
-import android.view.View;
 import android.widget.Toast;
 
 import com.wezom.kiviremote.App;
@@ -61,7 +60,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                             return new DeviceSearchFragment();
                         case Screens.REMOTE_CONTROL_FRAGMENT:
                             return new RemoteControlFragment();
-                        case Screens.RECCOMENDATIONS_FRAGMENT:
+                        case Screens.RECOMMENDATIONS_FRAGMENT:
                             return new RecommendationsFragment();
                         case Screens.TOUCH_PAD_FRAGMENT:
                             return new TouchpadFragment();

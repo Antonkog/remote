@@ -2,6 +2,7 @@ package com.wezom.kiviremote.presentation.home.recommendations
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.databinding.generated.callback.OnClickListener
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
@@ -35,9 +36,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
-
-    @Inject
-    lateinit var cache: KiviCache
 
     private lateinit var viewModel: RecommendationsViewModel
     private lateinit var binding: RecommendationsFragmentBinding
@@ -127,8 +125,8 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecommendationsViewModel::class.java)
 
-        adapterApps = RecommendationsAdapter( this)
-        adapterPorts = RecommendationsAdapter( this)
+        adapterApps = RecommendationsAdapter(this)
+        adapterPorts = RecommendationsAdapter(this)
         adapterRecommend = RecommendationsAdapter(this)
         adapterChannels = RecommendationsAdapter(this)
 
@@ -154,7 +152,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             populatePorts()
             populateChannels()
             populateRecommendations()
-            requestAllPreviews()
         }
 
         rowsViews.put(binding.reciclerApps.id, WeakReference(binding.reciclerApps))
@@ -169,34 +166,50 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         rowsViews.put(binding.imgChannelsMenu.id, WeakReference(binding.imgChannelsMenu))
         rowsViews.put(binding.imgRecommendMenu.id, WeakReference(binding.imgRecommendMenu))
 
+        val listener = View.OnClickListener {
+            view ->
+            run {
+                when (view.id) {
+                    R.id.img_recommend_menu, R.id.text_subscriptions -> {
+                        isDeepMenuOpen = true
+                        (activity as HomeActivity).setHomeAsUp(true)
+                        changeRowsVisibility(binding.reciclerRecommendations.id, View.GONE)
+                        binding.reciclerRecommendations.layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
+                        binding.reciclerRecommendations.adapter.notifyItemRangeChanged(0, binding.reciclerRecommendations.adapter?.itemCount
+                                ?: 0)
+                    }
 
-        binding.imgAppsMenu.setOnClickListener {
-            isDeepMenuOpen = true
-            changeRowsVisibility(binding.reciclerApps.id, View.GONE)
-            (activity as HomeActivity).setHomeAsUp(true)
-            binding.reciclerApps.layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
-            binding.reciclerApps.adapter.notifyItemRangeChanged(0, binding.reciclerApps.adapter?.itemCount
-                    ?: 0)
+                    R.id.img_apps_menu, R.id.text_apps -> {
+                        isDeepMenuOpen = true
+                        (activity as HomeActivity).setHomeAsUp(true)
+                        changeRowsVisibility(binding.reciclerApps.id, View.GONE)
+                        binding.reciclerApps.layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
+                        binding.reciclerApps.adapter.notifyItemRangeChanged(0, binding.reciclerApps.adapter?.itemCount
+                                ?: 0)
+                    }
+
+                    R.id.img_channels_menu, R.id.text_channel -> {
+                        isDeepMenuOpen = true
+                        (activity as HomeActivity).setHomeAsUp(true)
+                        changeRowsVisibility(binding.reciclerChannels.id, View.GONE)
+                        binding.reciclerChannels.layoutManager = GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false)
+                        binding.reciclerChannels.adapter.notifyItemRangeChanged(0, binding.reciclerChannels.adapter?.itemCount
+                                ?: 0)
+                    }
+                }
+            }
         }
 
-        binding.imgChannelsMenu.setOnClickListener {
-            isDeepMenuOpen = true
-            changeRowsVisibility(binding.reciclerChannels.id, View.GONE)
-            (activity as HomeActivity).setHomeAsUp(true)
-            binding.reciclerChannels.layoutManager = GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false)
-            binding.reciclerChannels.adapter.notifyItemRangeChanged(0, binding.reciclerChannels.adapter?.itemCount
-                    ?: 0)
 
-        }
+        binding.imgRecommendMenu.setOnClickListener(listener)
+        binding.textSubscriptions.setOnClickListener(listener)
 
-        binding.imgRecommendMenu.setOnClickListener {
-            isDeepMenuOpen = true
-            changeRowsVisibility(binding.reciclerRecommendations.id, View.GONE)
-            (activity as HomeActivity).setHomeAsUp(true)
-            binding.reciclerRecommendations.layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
-            binding.reciclerRecommendations.adapter.notifyItemRangeChanged(0, binding.reciclerRecommendations.adapter?.itemCount
-                    ?: 0)
-        }
+        binding.imgChannelsMenu.setOnClickListener(listener)
+        binding.textChannel.setOnClickListener(listener)
+
+        binding.imgAppsMenu.setOnClickListener(listener)
+        binding.textApps.setOnClickListener(listener)
+
     }
 
     //this is START for handling back in fragment

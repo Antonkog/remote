@@ -42,7 +42,7 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
 
         if (!(isAvailable != null && isAvailable)) {
             adapter.swapData(listOf())
-            binding.searchProgressContainer.visibility = View.GONE
+            showProgress(false)
         }
     }
 
@@ -69,6 +69,11 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
                 }
             }
         }
+    }
+
+    fun showProgress(visibility: Boolean) {
+        binding.searchProgressContainer.visibility = if (visibility) View.VISIBLE else View.GONE
+        binding.devicesContainer.visibility = if (!visibility) View.VISIBLE else View.GONE
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -113,32 +118,14 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         viewModel.updateRecentDevices()
         viewModel.initResolveListener()
         viewModel.discoverDevices()
-
-//        viewModel.nsdDevices.observe(this, nsdDevicesObserver)
-//        viewModel.networkState.observe(this, networkStateObserver)
     }
 
-    private fun tryGoMainScreen(devices: Set<NsdServiceInfoWrapper>) {
-        if (LastNsdHolder.nsdServiceWrapper == null) { return }
-        val isRelaunch = activity!!.intent.getBooleanExtra(Constants.BUNDLE_REALUNCH_KEY, false)
-
-        if (isRelaunch && devices.contains(LastNsdHolder.nsdServiceWrapper!!)) {
-            LastNsdHolder.nsdServiceWrapper?.let { wrapper ->
-                Handler().postDelayed({
-                    viewModel.connect(wrapper)
-                    LastNsdHolder.nsdServiceWrapper = wrapper
-                }, Constants.DELAY_COLOR_RESTART.toLong())
-            }
-        }
-    }
 
     private fun updateDeviceList(set: Set<NsdServiceInfoWrapper>) {
         currentDevices.clear()
         currentDevices.addAll(set)
-
         adapter.swapData(currentDevices)
-        binding.devicesContainer.visibility = View.VISIBLE
-        binding.searchProgressContainer.visibility = View.GONE
+        showProgress(false)
     }
 
     private fun updateWifiInfoViews() {
