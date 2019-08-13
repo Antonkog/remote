@@ -130,20 +130,13 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
                     case MotionEvent.ACTION_UP:
                         performClick();
                         break;
-
-                    case MotionEvent.ACTION_CANCEL:
-                        Timber.d("Action was CANCEL");
-                        break;
-
-                    case MotionEvent.ACTION_OUTSIDE:
-                        Timber.d("Movement occurred outside bounds of current screen element");
-                        break;
                 }
             }
 
             if (scroll) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
+                        eventStart = System.currentTimeMillis();
                         stop = false;
                         x1 = NumUtils.getToDp(event.getX());
                         y1 = NumUtils.getToDp(event.getY());
@@ -177,10 +170,13 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
                                 stop = true;
                             }
                         }
+
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        performClick();
+                        if(Math.abs(dx) + Math.abs(dy) < 65){
+                            performClick();
+                        }
                         break;
 
                     case MotionEvent.ACTION_CANCEL:

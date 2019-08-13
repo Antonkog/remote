@@ -64,7 +64,6 @@ import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
 import com.wezom.kiviremote.presentation.home.main.BackHandler;
 import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo;
-import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder;
 import com.wezom.kiviremote.presentation.home.tvsettings.LastVolume;
 import com.wezom.kiviremote.receivers.NetworkChangeReceiver;
 import com.wezom.kiviremote.services.CleanupService;
@@ -74,17 +73,20 @@ import com.wezom.kiviremote.upnp.org.droidupnp.model.upnp.IRendererState;
 import com.wezom.kiviremote.views.UPnPControlsNotification;
 
 import org.fourthline.cling.android.FixedAndroidLogHandler;
+
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
+
 import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
+
 import static com.wezom.kiviremote.common.Constants.NOTIFICATION_ID;
 
 public class HomeActivity extends BaseActivity implements BackHandler {
@@ -306,6 +308,12 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         configureNavigationDrawer();
         configureToolbar();
 
+        binding.switchDm.setChecked(App.isDarkMode());
+
+        binding.switchDm.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            viewModel.restartColorScheme(this);
+        });
+
         if (binding.layoutRender != null) {
             binding.layoutRender.renderProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
@@ -335,12 +343,12 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         NavigationView navView = findViewById(R.id.nav_view);
 //        navView.setPadding(0, Utils.getStatusBarHeight(getResources()), 0, 0);
         navView.setNavigationItemSelectedListener(menuItem -> {
+
+            drawerLayout.closeDrawer(GravityCompat.START);
+            menuItem.setChecked(true);
+
             switch (menuItem.getItemId()) {
                 case R.id.nav_devices:
-                    viewModel.goTo(Screens.DEVICE_SEARCH_FRAGMENT);
-                    break;
-
-                case R.id.nav_subscriptions:
                     viewModel.goTo(Screens.DEVICE_SEARCH_FRAGMENT);
                     break;
 
@@ -358,9 +366,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                         Timber.e("can't go to support " + e);
                         Toast.makeText(this, " ActivityNotFoundException", Toast.LENGTH_LONG).show();
                     }
-                    break;
-                case R.id.dark_mode:
-                    viewModel.restartColorScheme(this);
                     break;
 
                 case R.id.nav_exit:

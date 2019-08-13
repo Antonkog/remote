@@ -115,7 +115,7 @@ class RecentDevicesViewModel(private val router: Router,
         if (service.host != null) {
             nsdHelper.stopDiscovery()
             router.navigateTo(
-                    Screens.MAIN_FRAGMENT, NsdServiceModel(
+                    Screens.RECOMMENDATIONS_FRAGMENT, NsdServiceModel(
                     service.host,
                     service.port, service.serviceName
             )

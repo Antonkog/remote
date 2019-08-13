@@ -146,7 +146,7 @@ class DeviceSearchViewModel(
                                     )
                             )
                     )
-                    navigateToMainScreen(service)
+                    navigateToRecommendations(service)
                     resolving = false
                 }
             }
@@ -191,7 +191,7 @@ class DeviceSearchViewModel(
     )
 
      */
-    private fun navigateToMainScreen(service: NsdServiceInfo) {
+    private fun navigateToRecommendations(service: NsdServiceInfo) {
         if (service.host != null) {
             nsdHelper.stopDiscovery()
             router.navigateTo(Screens.RECOMMENDATIONS_FRAGMENT)

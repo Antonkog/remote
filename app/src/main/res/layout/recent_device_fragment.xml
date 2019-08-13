@@ -8,35 +8,8 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="16dp"
         android:orientation="vertical">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/recent_device_toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            tools:ignore="MissingConstraints" />
-
-        <TextView
-            android:id="@+id/recent_device_name"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:ellipsize="marquee"
-            android:gravity="center"
-            android:singleLine="true"
-            android:text="@string/placeholder"
-            android:textColor="@color/colorSecondaryText"
-            android:textSize="@dimen/font_size_14"
-            app:layout_constraintBottom_toBottomOf="@+id/recent_device_toolbar"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@id/recent_device_toolbar" />
-
-        <View
-            style="@style/Divider"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recent_device_toolbar"/>
 
         <ImageView
             android:id="@+id/iv_rename"

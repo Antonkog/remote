@@ -15,7 +15,6 @@ import com.wezom.kiviremote.common.PreferencesManager
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.common.extensions.boolean
-import com.wezom.kiviremote.common.extensions.int
 import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.net.ChatConnection
 import com.wezom.kiviremote.net.model.*
@@ -26,7 +25,6 @@ import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment
 import com.wezom.kiviremote.presentation.home.ports.InputSourceHelper
 import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo
-import com.wezom.kiviremote.presentation.home.subscriptions.subs_price_list.PricePerTime
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadButtonClickEvent
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.presentation.home.tvsettings.LastVolume

@@ -1,6 +1,7 @@
 package com.wezom.kiviremote.common.extensions
 
 import android.graphics.*
+import android.graphics.drawable.Drawable
 import android.support.v4.content.ContextCompat
 import android.view.View
 import android.view.ViewGroup
@@ -11,7 +12,7 @@ fun View.vanish() {
     this.visibility = View.GONE
 }
 
-val invertMatrix =
+ val invertMatrix =
         floatArrayOf(-1f, 0f, 0f, 0f, 255f,
                         0f, -1f, 0f, 0f, 255f,
                         0f, 0f, -1f, 0f, 255f,
@@ -23,8 +24,22 @@ val blueMatrix =
                 0f, 0f, 0f, 0f, 172f,
                 0f, 0f, 0f, 1f, 0f)
 
-fun makeBlueBitmap(src: Bitmap): Bitmap {
-    val colorMatrix = ColorMatrix(blueMatrix)
+val blackMatrix =
+        floatArrayOf(0f, 0f, 0f, 0f, 0f,
+                0f, 0f, 0f, 0f, 0f,
+                0f, 0f, 0f, 0f, 0f,
+                0f, 0f, 0f, 1f, 0f)
+
+val whiteMatrix =
+        floatArrayOf(0f, 0f, 0f, 0f, 255f,
+                0f, 0f, 0f, 0f, 255f,
+                0f, 0f, 0f, 0f, 255f,
+                0f, 0f, 0f, 1f, 0f)
+
+
+
+fun setBitmapMatrix(src: Bitmap, matrix : ColorMatrix): Bitmap {
+    val colorMatrix = ColorMatrix(matrix)
 
     val cf: ColorFilter = ColorMatrixColorFilter(colorMatrix);
     val bitmap: Bitmap = Bitmap.createBitmap(src.width, src.height,
@@ -37,15 +52,13 @@ fun makeBlueBitmap(src: Bitmap): Bitmap {
     return bitmap
 }
 
-fun View.changeBackgroundRecurcevly() {
+fun View.changeBackgroundRecurcevly(drawable: Drawable) {
     if (this is ViewGroup)
         for (counter in 0..childCount) {
-            this.getChildAt(counter).changeBackgroundRecurcevly()
+            this.getChildAt(counter).changeBackgroundRecurcevly(drawable)
         }
     else {
-
-        this.background = ContextCompat.getDrawable(context, R.drawable.shape_gradient_black)
-
+        this.background = drawable
     }
 
 }

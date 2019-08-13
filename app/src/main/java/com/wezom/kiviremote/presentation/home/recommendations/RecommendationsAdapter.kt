@@ -8,7 +8,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.decodeFromBase64
-import com.wezom.kiviremote.common.extensions.makeBlueBitmap
 import com.wezom.kiviremote.common.glide.GlideApp
 import com.wezom.kiviremote.net.model.Channel
 import com.wezom.kiviremote.net.model.Input

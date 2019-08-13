@@ -59,6 +59,8 @@
                         android:layout_height="match_parent"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
+                        android:clickable="false"
+                        android:visibility="invisible"
                         android:layout_alignParentBottom="true"
                         android:layout_marginStart="@dimen/toolbar_mg_search_l"
                         android:layout_marginEnd="@dimen/toolbar_mg_search_padding"
@@ -122,7 +124,49 @@
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
-            app:menu="@menu/drawer" />
+            app:menu="@menu/drawer">
+
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="2px"
+                android:background="@color/colorLightGray"
+                app:layout_constraintBottom_toTopOf="@+id/switch_dm"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+            <Switch
+                android:id="@+id/switch_dm"
+                android:layout_width="match_parent"
+                android:layout_height="96dp"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:text="@string/dark_mode"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="16dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/switch_dm"
+                app:srcCompat="@drawable/ic_dm" />
+        </android.support.constraint.ConstraintLayout>
+    </android.support.design.widget.NavigationView>
+
 
     </android.support.v4.widget.DrawerLayout>
 </layout>

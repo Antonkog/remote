@@ -24,7 +24,6 @@
     <!-- general colors -->
     <color name="gradient_start">#F2F2F2</color>
     <color name="shadow_outline">#E3E3E3</color>
-
     <color name="preview_title">@color/colorSecondaryText</color>
     <color name="inactive_progress">#e2e2e2</color>
     <color name="playback">@color/colorWhite</color>

@@ -91,6 +91,9 @@
     <dimen name="recom_mov_w">120dp</dimen>
     <dimen name="recom_mov_h">190dp</dimen>
 
+    <dimen name="recom_mov_w_small">110dp</dimen>
+    <dimen name="recom_mov_h_small">180dp</dimen>
+
     <dimen name="recom_tv">85dp</dimen>
     <dimen name="recom_port">85dp</dimen>
     <dimen name="recom_card_radius">5dp</dimen>

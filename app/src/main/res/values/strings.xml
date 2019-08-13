@@ -86,7 +86,7 @@
     <string name="digit_eight" translatable="false">8</string>
     <string name="digit_nine" translatable="false">9</string>
 
-    <string name="channels" translatable="false">CHANNEL</string>
+    <string name="channels">Chanels</string>
     <string name="channels_placeholder" translatable="false">000</string>
     <string name="refresh">ОБНОВИТЬ</string>
 
@@ -120,7 +120,7 @@
     <string name="number_of_videos">%1$s видео</string>
     <string name="empty_directory">Директория пуста</string>
 
-    <string name="dark_mode">Темная тема приложения</string>
+    <string name="dark_mode">Темная тема</string>
     <string name="ratio">соотношение</string>
     <string name="channel">канал</string>
     <string name="optimization">Начать оптимизацию</string>

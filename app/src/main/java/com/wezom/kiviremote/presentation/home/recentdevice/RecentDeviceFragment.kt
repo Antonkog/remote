@@ -30,6 +30,7 @@ import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import kotlinx.android.synthetic.main.home_activity.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.support.v4.toast
@@ -63,7 +64,6 @@ class RecentDeviceFragment : BaseFragment() {
 
         tvRename = binding.tvRename
         switchAutoConnect = binding.switchAutoConnect
-        tvDeviceName = binding.tvDeviceName
         rvInfoContainer = binding.rvInfoContainer
         ivForgetDevice = binding.ivForgetDevice
         tvForgetDevice = binding.tvForgetDevice
@@ -88,12 +88,10 @@ class RecentDeviceFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecentDeviceViewModel::class.java)
-        (activity as HomeActivity).showBackButton()
 
         val adapter = TvInfoAdapter()
         data = arguments!!.getSerializable("data") as TvDeviceInfo
 
-        tvDeviceName.text = "УСТРОЙСТВО ${(data.recentDevice.userDefinedName ?: data.recentDevice.actualName).remove032Space()}"
         dialogEditText.setText((data.recentDevice.userDefinedName ?: "").remove032Space())
 
         switchAutoConnect.setOnCheckedChangeListener(null)
@@ -128,13 +126,9 @@ class RecentDeviceFragment : BaseFragment() {
                 TvInfoUnit("Автоподключение", "Да")
         ))
 
-        (activity as HomeActivity).run {
-            setSupportActionBar(binding.recentDeviceToolbar)
-            supportActionBar?.run {
-                setDisplayShowTitleEnabled(false)
-                setDisplayHomeAsUpEnabled(true)
-                setDisplayShowHomeEnabled(true)
-            }
+        (activity as HomeActivity).run{
+            setHomeAsUp(false)
+            toolbar.setTitle( "УСТРОЙСТВО ${(data.recentDevice.userDefinedName ?: data.recentDevice.actualName).remove032Space()}")
         }
     }
 
