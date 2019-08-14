@@ -6,13 +6,10 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
-import android.widget.ImageView
-import android.widget.Switch
 import android.widget.TextView
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.bus.NewNameEvent
@@ -47,12 +44,6 @@ class RecentDeviceFragment : BaseFragment() {
 
     private lateinit var data: TvDeviceInfo
 
-    private lateinit var tvRename: TextView
-    private lateinit var switchAutoConnect: Switch
-    private lateinit var tvDeviceName: TextView
-    private lateinit var rvInfoContainer: RecyclerView
-    private lateinit var ivForgetDevice: ImageView
-    private lateinit var tvForgetDevice: TextView
 
     private lateinit var dialog: AlertDialog
     private lateinit var dialogEditText: EditText
@@ -61,12 +52,6 @@ class RecentDeviceFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = RecentDeviceFragmentBinding.inflate(inflater, container!!, false)
-
-        tvRename = binding.tvRename
-        switchAutoConnect = binding.switchAutoConnect
-        rvInfoContainer = binding.rvInfoContainer
-        ivForgetDevice = binding.ivForgetDevice
-        tvForgetDevice = binding.tvForgetDevice
 
         dialog = AlertDialog.Builder(binding.root.context).create()
 
@@ -94,25 +79,33 @@ class RecentDeviceFragment : BaseFragment() {
 
         dialogEditText.setText((data.recentDevice.userDefinedName ?: "").remove032Space())
 
-        switchAutoConnect.setOnCheckedChangeListener(null)
-        switchAutoConnect.isEnabled = data.nsdServiceInfoWrapper != null
+        binding.switchAutoConnect.isEnabled = data.nsdServiceInfoWrapper != null
 
-        if (switchAutoConnect.isEnabled) {
-            switchAutoConnect.isChecked = LastNsdHolder.nsdServiceWrapper?.equals(data.nsdServiceInfoWrapper!!) ?: false
-            switchAutoConnect.setOnCheckedChangeListener { _, checked -> LastNsdHolder.nsdServiceWrapper = if (checked) data.nsdServiceInfoWrapper else null }
+        if (binding.switchAutoConnect.isEnabled) {
+            binding.switchAutoConnect.isChecked = LastNsdHolder.nsdServiceWrapper?.equals(data.nsdServiceInfoWrapper!!)
+                    ?: false
+            binding.switchAutoConnect.setOnCheckedChangeListener { _, checked -> LastNsdHolder.nsdServiceWrapper = if (checked) data.nsdServiceInfoWrapper else null }
         }
 
-        rvInfoContainer.apply {
+        binding.rvInfoContainer.apply {
             this.adapter = adapter
             this.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
             this.setHasFixedSize(true)
         }
 
-        tvForgetDevice.setOnClickListener {
+        binding.ivForgetDevice.setOnClickListener {
             confirmDeletion()
         }
 
-        tvRename.setOnClickListener {
+        binding.tvForgetDevice.setOnClickListener {
+            confirmDeletion()
+        }
+
+        binding.tvRename.setOnClickListener {
+            dialog.show()
+        }
+
+        binding.ivRename.setOnClickListener {
             dialog.show()
         }
 
@@ -126,9 +119,10 @@ class RecentDeviceFragment : BaseFragment() {
                 TvInfoUnit("Автоподключение", "Да")
         ))
 
-        (activity as HomeActivity).run{
+        (activity as HomeActivity).run {
             setHomeAsUp(false)
-            toolbar.setTitle( "УСТРОЙСТВО ${(data.recentDevice.userDefinedName ?: data.recentDevice.actualName).remove032Space()}")
+            toolbar.setTitle("УСТРОЙСТВО ${(data.recentDevice.userDefinedName
+                    ?: data.recentDevice.actualName).remove032Space()}")
         }
     }
 
@@ -154,7 +148,7 @@ class RecentDeviceFragment : BaseFragment() {
             launch(UI) {
                 viewModel.saveChanges(value)
                 RxBus.publish(NewNameEvent(newName))
-                tvDeviceName.text = "УСТРОЙСТВО ${newName.remove032Space()}"
+                binding.tvDeviceName.text = "УСТРОЙСТВО ${newName.remove032Space()}"
             }
         }
     }

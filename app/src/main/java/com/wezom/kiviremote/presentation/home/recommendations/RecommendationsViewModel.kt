@@ -2,26 +2,20 @@ package com.wezom.kiviremote.presentation.home.recommendations
 
 import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.*
-import com.wezom.kiviremote.common.*
-import com.wezom.kiviremote.common.extensions.Run
+import com.wezom.kiviremote.common.Action
+import com.wezom.kiviremote.common.Constants
+import com.wezom.kiviremote.common.KiviCache
+import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.net.model.*
 import com.wezom.kiviremote.persistence.AppDatabase
-import com.wezom.kiviremote.persistence.model.ServerChannel
 import com.wezom.kiviremote.presentation.base.BaseViewModel
-import com.wezom.kiviremote.presentation.home.apps.AppModel
 import com.wezom.kiviremote.upnp.UPnPManager
-import io.reactivex.Single
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
-import java.util.*
-import kotlin.collections.ArrayList
 
 class RecommendationsViewModel(private val router: Router,
                                val database: AppDatabase,
@@ -50,7 +44,7 @@ class RecommendationsViewModel(private val router: Router,
                         onNext = { dbChannels ->
                             val channels = ArrayList<Channel>()
                             dbChannels.forEach {
-//                                Timber.d("12345 Populate channel  " + it.name)
+                                //                                Timber.d("12345 Populate channel  " + it.name)
                                 channels.add(Channel()
                                         .addId(it.serverId)
                                         .addActive(it.is_active)
@@ -106,7 +100,7 @@ class RecommendationsViewModel(private val router: Router,
                             dbApps.forEach {
                                 Timber.e("12345 got app from db " + it.appName + " package " + it.packageName)
                                 recommendations.add(ServerAppInfo(it.appName, it.packageName, it.baseIcon))
-                                }
+                            }
                             this.apps.postValue(recommendations)
                         },
                         onError = Timber::e
@@ -124,7 +118,7 @@ class RecommendationsViewModel(private val router: Router,
                             val newInputs = ArrayList<Input>()
                             inputs.forEach {
                                 Timber.e("got input from db " + it.portName + " id = " + it.portNum)
-                                    newInputs.add(Input(it))
+                                newInputs.add(Input(it))
                             }
                             this.inputs.postValue(newInputs.distinct()) //could n't be same values
                         },
@@ -157,8 +151,12 @@ class RecommendationsViewModel(private val router: Router,
 
 
     fun launchApp(name: String) {
-        RxBus.publish(LaunchAppEvent(name))
-        RxBus.publish(NavigateToRemoteEvent())
+        if (name != Constants.MEDIA_SHARE_TXT_ID) {
+            RxBus.publish(LaunchAppEvent(name))
+            RxBus.publish(NavigateToRemoteEvent())
+        } else {
+            router.navigateTo(Screens.MEDIA_FRAGMENT)
+        }
     }
 
     fun goSearch() = router.navigateTo(Screens.DEVICE_SEARCH_FRAGMENT)

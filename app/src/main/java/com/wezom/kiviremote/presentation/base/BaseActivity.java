@@ -18,6 +18,7 @@ import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchFragment;
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesFragment;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
 import com.wezom.kiviremote.presentation.home.main.MainFragment;
+import com.wezom.kiviremote.presentation.home.media.MediaFragment;
 import com.wezom.kiviremote.presentation.home.ports.PortsFragment;
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragment;
@@ -64,6 +65,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                             return new RecommendationsFragment();
                         case Screens.TOUCH_PAD_FRAGMENT:
                             return new TouchpadFragment();
+                        case Screens.MEDIA_FRAGMENT:
+                            return new MediaFragment();
                         case Screens.MAIN_FRAGMENT:
                             return new MainFragment();
                         case Screens.RECENT_DEVICES_FRAGMENT:

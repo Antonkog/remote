@@ -15,6 +15,7 @@ public class Screens {
     public static final String MAIN_FRAGMENT = "main_screen";
     public static final String RECENT_DEVICES_FRAGMENT = "recent_devices_screen";
     public static final String RECENT_DEVICE_FRAGMENT = "recent_device_screen";
+    public static final String MEDIA_FRAGMENT = "media_fragment";
     public static final String GALLERY_FRAGMENT = "gallery_screen";
     public static final String DIRECTORIES_FRAGMENT = "directories_screen";
     public static final String TV_SETTINGS_FRAGMENT = "tv_settings_screen";

@@ -20,6 +20,11 @@ public interface ServerAppsDao {
     @Insert
     void insertAll(List<ServerApp> apps);
 
+
+    @Insert
+    void insertMediaShareStaticApp(ServerApp app);
+
+
     @Query("DELETE FROM apps")
     void removeAll();
 }

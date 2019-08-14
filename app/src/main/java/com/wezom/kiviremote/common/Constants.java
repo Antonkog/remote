@@ -20,6 +20,7 @@ public class Constants {
 
     public final static String LOG_FILE_PREFIX = "KiviLogs";
     public final static String LOG_FILE_EXTENSION = ".txt";
+    public final static String MEDIA_SHARE_TXT_ID = "media_share";
 
     public static final int DPAD_EVENT_FREQUENCY = 200;
     public static final int VOLUME_EVENT_POINT= 1;

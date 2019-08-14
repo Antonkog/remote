@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.os.Handler
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,10 @@ import android.view.ViewGroup
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent
 import com.wezom.kiviremote.bus.KillPingEvent
 import com.wezom.kiviremote.bus.LocationEnabledEvent
-import com.wezom.kiviremote.common.*
+import com.wezom.kiviremote.common.GpsUtils
+import com.wezom.kiviremote.common.NetConnectionUtils
+import com.wezom.kiviremote.common.PreferencesManager
+import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.databinding.HomeFragmentBinding
 import com.wezom.kiviremote.nsd.LastNsdHolder
 import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper

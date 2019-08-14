@@ -136,6 +136,11 @@ class HomeActivityViewModel(
                         launch(CommonPool) {
                             database.serverAppDao().run {
                                 removeAll()
+                                insertMediaShareStaticApp(ServerApp().apply {
+                                    appName =  Constants.MEDIA_SHARE_TXT_ID
+                                    packageName = Constants.MEDIA_SHARE_TXT_ID
+                                })
+
                                 insertAll(
                                         initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.APPLICATION.name }.mapTo(ArrayList(), {
                                             Timber.e("12345 got app:" + it.id)

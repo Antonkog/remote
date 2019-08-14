@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.wezom.kiviremote.R
+import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.decodeFromBase64
 import com.wezom.kiviremote.common.glide.GlideApp
 import com.wezom.kiviremote.net.model.Channel
@@ -131,6 +132,10 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
         override fun bind(item: ServerAppInfo) {
 //            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
 //                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
+
+            if(Constants.MEDIA_SHARE_TXT_ID.equals(item.applicationName)){
+                (  view.findViewById(R.id.image) as ImageView ).setImageResource(R.drawable.ic_media_share)
+            }
 
             if (item.baseIcon != null && item.baseIcon.isNotEmpty())
                 decodeFromBase64(item.baseIcon).let { bitmap ->

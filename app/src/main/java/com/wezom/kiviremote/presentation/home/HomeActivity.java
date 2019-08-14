@@ -58,12 +58,10 @@ import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.Utils;
 import com.wezom.kiviremote.common.extensions.StringUtils;
 import com.wezom.kiviremote.databinding.HomeActivityBinding;
-import com.wezom.kiviremote.persistence.model.RecentDevice;
 import com.wezom.kiviremote.presentation.base.BaseActivity;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
 import com.wezom.kiviremote.presentation.home.main.BackHandler;
-import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo;
 import com.wezom.kiviremote.presentation.home.tvsettings.LastVolume;
 import com.wezom.kiviremote.receivers.NetworkChangeReceiver;
 import com.wezom.kiviremote.services.CleanupService;
@@ -349,12 +347,12 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
             switch (menuItem.getItemId()) {
                 case R.id.nav_devices:
-                    viewModel.goTo(Screens.DEVICE_SEARCH_FRAGMENT);
+                    viewModel.goTo(Screens.RECENT_DEVICES_FRAGMENT);
                     break;
 
-                case R.id.nav_settings:
-                    viewModel.goToDeviceInfo(new TvDeviceInfo(new RecentDevice(viewModel.getCurrentContentName(), null), null, 0));
-                    break;
+//                case R.id.nav_settings:
+//                    viewModel.goToDeviceInfo(new TvDeviceInfo(new RecentDevice(viewModel.getCurrentContentName(), null), null, 0));
+//                    break;
 
                 case R.id.nav_support:
                     String url = "https://kivi.ua/support-center";
