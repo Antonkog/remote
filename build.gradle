@@ -2,8 +2,8 @@
 buildscript {
     ext.kotlin_version = '1.2.21'
     ext.versions = [
-            'compileSdk'            : 26,
-            'buildTools'            : '26.0.2',
+            'compileSdk'            : 28,
+            'buildTools'            : '28.0.2',
             'minSdk'                : 19,
             'targetSdk'             : 26,
             'versionMajor'          : 2,
@@ -71,7 +71,6 @@ buildscript {
 
             ],
             'multidex'              : "com.android.support:multidex:1.0.1",
-            'slidingUpPanel'        : "com.sothree.slidinguppanel:library:3.4.0",
             'coroutines'            : "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.19.3",
             'anko'                  : [
                     'commons'  : "org.jetbrains.anko:anko-commons:${versions.anko}",

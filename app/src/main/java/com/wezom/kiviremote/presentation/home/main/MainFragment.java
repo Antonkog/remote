@@ -144,13 +144,13 @@ public class MainFragment extends BaseFragment implements BackHandler.OnBackClic
     }
 
     private void initListeners() {
-        binding.toolbar.mainText.setOnKeyListener((view1, i, keyEvent) -> {
+        binding.editText.setOnKeyListener((view1, i, keyEvent) -> {
             if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL)
                 viewModel.sendKeyEvent(KeyEvent.KEYCODE_DEL);
             return false;
         });
 
-        binding.toolbar.mainText.addTextChangedListener(new TextWatcher() {
+        binding.editText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
@@ -165,7 +165,7 @@ public class MainFragment extends BaseFragment implements BackHandler.OnBackClic
             }
         });
 
-        binding.toolbar.mainText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+        binding.editText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
             if (actionId == EditorInfo.IME_ACTION_DONE) {
                 viewModel.sendKeyEvent(KeyEvent.KEYCODE_ENTER);
                 return true;
@@ -181,7 +181,7 @@ public class MainFragment extends BaseFragment implements BackHandler.OnBackClic
         binding.mainViewPager.setCurrentItem(getSelectedTab());
         binding.keyboard.setOnClickListener(v -> showInput());
         binding.devices.setOnClickListener(v -> viewModel.navigateToDevices());
-        binding.toolbar.mainTextHide.setOnClickListener(v -> hideKeyboard());
+        binding.mainTextHide.setOnClickListener(v -> hideKeyboard());
     }
 
 
@@ -222,20 +222,20 @@ public class MainFragment extends BaseFragment implements BackHandler.OnBackClic
 
     private void hideInput() {
         Utils.hideKeyboard(getActivity());
-        binding.toolbar.mainText.clearFocus();
-        binding.toolbar.mainContainer.setVisibility(View.GONE);
+        binding.editText.clearFocus();
+        binding.mainContainer.setVisibility(View.GONE);
         binding.topContainer.setVisibility(View.VISIBLE);
         binding.mainViewPager.setVisibility(View.VISIBLE);
         isKeyboardShown = false;
     }
 
     private void showInput() {
-        binding.toolbar.mainText.clearFocus();
-        binding.toolbar.mainContainer.setVisibility(View.VISIBLE);
+        binding.editText.clearFocus();
+        binding.mainContainer.setVisibility(View.VISIBLE);
         binding.topContainer.setVisibility(View.GONE);
         binding.mainViewPager.setVisibility(View.GONE);
-        binding.toolbar.mainText.requestFocus();
-        binding.toolbar.mainText.setText("");
+        binding.editText.requestFocus();
+        binding.editText.setText("");
         Utils.showKeyboard(getActivity());
         isKeyboardShown = true;
     }

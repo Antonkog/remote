@@ -9,8 +9,6 @@ import android.speech.RecognizerIntent;
 import android.speech.SpeechRecognizer;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -66,19 +64,6 @@ public class TouchpadFragment extends TvKeysFragment
     }
 
     @Override
-    public void onDestroyView() {
-        ((HomeActivity) getActivity()).changeToolbarVisibility(View.VISIBLE);
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        ((HomeActivity) getActivity()).changeToolbarVisibility(View.GONE);
-    }
-
-
-    @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         viewModel = ViewModelProviders.of(getActivity(), viewModelFactory).get(TouchpadViewModel.class);
@@ -129,7 +114,11 @@ public class TouchpadFragment extends TvKeysFragment
 
         binding.microphone.setImageResource(App.isDarkMode()? R.drawable.ic_microphone_dm : R.drawable.ic_microphone);
         binding.powerOff.setImageResource(App.isDarkMode()? R.drawable.ic_power_w_dm : R.drawable.ic_power_w);
+
+
+        binding.getRoot().setBackgroundColor(binding.getRoot().getResources().getColor(App.isDarkMode()? R.color.colorBlack :R.color.colorWhite));
         binding.topContainer.setBackgroundColor(binding.getRoot().getResources().getColor(App.isDarkMode()? R.color.colorBlack :R.color.colorWhite));
+//        binding.topLayout.setBackgroundColor(binding.getRoot().getResources().getColor(App.isDarkMode()? R.color.colorBlack :R.color.colorWhite));
         setScrollBtn();
 
         binding.imgActionMode.setOnClickListener(v -> {

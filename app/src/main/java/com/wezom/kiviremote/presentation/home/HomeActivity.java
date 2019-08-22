@@ -15,14 +15,15 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.drawable.Drawable;
-import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.Settings;
-import android.support.design.widget.NavigationView;
+import android.support.annotation.NonNull;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -32,17 +33,16 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.Toolbar;
 import android.view.KeyEvent;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.sothree.slidinguppanel.SlidingUpPanelLayout;
 import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.Screens;
@@ -62,12 +62,14 @@ import com.wezom.kiviremote.presentation.base.BaseActivity;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
 import com.wezom.kiviremote.presentation.home.main.BackHandler;
+import com.wezom.kiviremote.presentation.home.touchpad.TouchpadFragment;
 import com.wezom.kiviremote.presentation.home.tvsettings.LastVolume;
 import com.wezom.kiviremote.receivers.NetworkChangeReceiver;
 import com.wezom.kiviremote.services.CleanupService;
 import com.wezom.kiviremote.services.NotificationService;
 import com.wezom.kiviremote.upnp.UPnPManager;
 import com.wezom.kiviremote.upnp.org.droidupnp.model.upnp.IRendererState;
+import com.wezom.kiviremote.views.LockableBottomSheetBehavior;
 import com.wezom.kiviremote.views.UPnPControlsNotification;
 
 import org.fourthline.cling.android.FixedAndroidLogHandler;
@@ -100,7 +102,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     protected Toolbar toolbar;
     protected ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
-    private AudioManager audioManager;
+    private LockableBottomSheetBehavior bottomSheetBehavior, touchpadSheetBehavior = null;
 
     @Inject
     BaseViewModelFactory viewModelFactory;
@@ -112,7 +114,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     private AppCompatDialog dialog;
 
     private IRendererState.State currentState;
-    private SlidingUpPanelLayout.PanelState lastKnownState;
+    private int lastKnownStateMedia;
 
     private Disposable flowDisposable, playDelayDisposable, hardKeySoundDisposable;
 
@@ -130,6 +132,10 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                     model.getRendererModel().getDurationElapse(),
                     model.getCurrentMediaType());
     };
+
+    public Toolbar getToolbar() {
+        return toolbar;
+    }
 
     private Observer<Boolean> showSettingsObserver = show -> {
         if (show != null && show)
@@ -196,8 +202,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
 
-        audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-
         initNetworkChangeReceiver();
         initUpnpRequirements();
         setupViews();
@@ -229,17 +233,20 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-        binding.mainText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_selector, 0);
-
+        binding.toolbarText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_selector, 0);
 
         binding.search.setOnClickListener(v -> showKeyboard());
 
-        binding.toolbarETxt.mainTextHide.setOnClickListener(v -> hideKeyboard());
+        binding.mainTextHide.setOnClickListener(v -> hideKeyboard());
 
-        binding.fab.setOnClickListener(view -> viewModel.goTo(Screens.TOUCH_PAD_FRAGMENT));
+        binding.fab.setOnClickListener(view -> moveTouchPad( BottomSheetBehavior.STATE_EXPANDED));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding.fab.setElevation(getResources().getDimension(R.dimen.elevation_small));
         }
+    }
+
+    public void moveTouchPad(int stateExpanded) {
+        touchpadSheetBehavior.setState(stateExpanded);
     }
 
     public void changeToolbarVisibility(int visible) {
@@ -263,9 +270,9 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                     float slideOffset = (Float) valueAnimator.getAnimatedValue();
                     toggle.onDrawerSlide(drawerLayout, slideOffset);
                     if (isHomeAsUp)
-                        binding.mainText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+                        binding.toolbarText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
                     else
-                        binding.mainText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_selector, 0);
+                        binding.toolbarText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_selector, 0);
 
                 }
             });
@@ -297,7 +304,8 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     private void setupViews() {
 
-        setupSlidingLayout();
+        setupMediaSlider();
+        setupTouchpadSlider();
         reconnectSnackbar = setupSnackbar();
 //        ActionBarDrawerToggle.Delegate delegate = getDrawerToggleDelegate();
 //        binding.toolbar.setPadding(0, Utils.getStatusBarHeight(getResources()), 0, 0);
@@ -338,9 +346,8 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     // to call when router need arrow back
     private void configureNavigationDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout);
-        NavigationView navView = findViewById(R.id.nav_view);
-//        navView.setPadding(0, Utils.getStatusBarHeight(getResources()), 0, 0);
-        navView.setNavigationItemSelectedListener(menuItem -> {
+
+        binding.navView.setNavigationItemSelectedListener(menuItem -> {
 
             drawerLayout.closeDrawer(GravityCompat.START);
             menuItem.setChecked(true);
@@ -393,20 +400,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        switch (itemId) {
-            // Android home
-            case android.R.id.home:
-                drawerLayout.openDrawer(GravityCompat.START);
-                return true;
-            // manage other entries if you have it ...
-        }
-        return true;
     }
 
     private void initUpnpRequirements() {
@@ -530,7 +523,85 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         }
     }
 
-    private void setupSlidingLayout() {
+    private void setupMediaSlider() {
+
+// настройка поведения нижнего экрана
+        bottomSheetBehavior = LockableBottomSheetBehavior.Companion.from(findViewById(R.id.bottomSheet));
+
+        bottomSheetBehavior.setHideable(true);
+
+        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                lastKnownStateMedia = newState;
+
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        isPanelCollapsed.postValue(true);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                        isPanelCollapsed.postValue(false);
+                        if (binding.layoutRender != null) {
+                            binding.layoutRender.renderPanelNext.setClickable(false);
+                            binding.layoutRender.renderPanelPrevious.setClickable(false);
+                            binding.layoutRender.renderPanelPlay.setClickable(false);
+                            binding.layoutRender.renderPanelCloseClick.setClickable(false);
+                        }
+                        break;
+                    default:
+                        isPanelCollapsed.postValue(false);
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+    }
+
+
+    private void setupTouchpadSlider() {
+
+        FrameLayout frameLayout = new FrameLayout(this);
+        frameLayout.setId(View.generateViewId());
+        Fragment touchpadFragment = new TouchpadFragment();
+        getSupportFragmentManager().beginTransaction().add(frameLayout.getId(), touchpadFragment, Screens.TOUCH_PAD_FRAGMENT).commit();
+        binding.touchpadSlider.addView(frameLayout);
+
+        touchpadSheetBehavior = LockableBottomSheetBehavior.Companion.from(findViewById(R.id.touchpad_slider));
+        touchpadSheetBehavior.setHideable(true);
+        touchpadSheetBehavior.setSwipeEnabled(false); ///!!!!!!!
+
+        touchpadSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+            @Override
+            public void onStateChanged(@NonNull View bottomSheet, int newState) {
+                switch (newState) {
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                    case BottomSheetBehavior.STATE_HIDDEN:
+                        binding.fab.setVisibility(View.VISIBLE);
+                        break;
+                    case BottomSheetBehavior.STATE_EXPANDED:
+                       binding.fab.setVisibility(View.GONE);
+                        break;
+//                    case BottomSheetBehavior.STATE_DRAGGING:
+//                        touchpadSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                        default:
+                        binding.fab.setVisibility(View.GONE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onSlide(@NonNull View bottomSheet, float slideOffset) {
+
+            }
+        });
+
         hideSlidingPanel();
     }
 
@@ -623,7 +694,9 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     @Override
     public void onBackPressed() {
-        if (!fragmentsBackKeyIntercept())
+        if (bottomSheetBehavior != null && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED)
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        else if (!fragmentsBackKeyIntercept())
             super.onBackPressed();
     }
 
@@ -663,13 +736,13 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
     public void hideSlidingPanel() {
-//        if (binding.slidingLayout.getPanelState() != SlidingUpPanelLayout.PanelState.HIDDEN)
-//            binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.HIDDEN);
+        if (bottomSheetBehavior != null && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED)
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
     }
 
     public void expandSlidingPanel() {
-//        if (binding.slidingLayout.getPanelState() != SlidingUpPanelLayout.PanelState.EXPANDED)
-//            binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.EXPANDED);
+        if (bottomSheetBehavior != null && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED)
+            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
     public void collapseSlidingPanel() {
@@ -677,10 +750,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             hideSlidingPanel();
             return;
         }
-
-//        if (hasContent && binding.slidingLayout.getPanelState() != SlidingUpPanelLayout.PanelState.COLLAPSED) {
-//            binding.slidingLayout.setPanelState(SlidingUpPanelLayout.PanelState.COLLAPSED);
-//        }
     }
 
     public void setVideoProgress(int progress, IRendererState.State state, String durationElapse, String remainingDuration, GalleryFragment.MediaType mediaType) {
@@ -776,7 +845,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             binding.layoutRender.renderPanelNext.setOnClickListener(nextClickListener);
             binding.layoutRender.renderPanelPrevious.setOnClickListener(prevClickListener);
 
-            if (lastKnownState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            if (lastKnownStateMedia == BottomSheetBehavior.STATE_EXPANDED) {
                 binding.layoutRender.renderPanelPlay.setClickable(false);
                 binding.layoutRender.renderPanelNext.setClickable(false);
                 binding.layoutRender.renderPanelPrevious.setClickable(false);
@@ -789,7 +858,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             binding.layoutRender.renderPlay.setOnClickListener(listener);
             binding.layoutRender.renderPanelPlay.setOnClickListener(listener);
 
-            if (lastKnownState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            if (lastKnownStateMedia == BottomSheetBehavior.STATE_EXPANDED) {
                 binding.layoutRender.renderPanelPlay.setClickable(false);
             }
         }
@@ -797,7 +866,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     public void setContent(String title, String url, int position, GalleryFragment.MediaType type) {
         if (binding.layoutRender != null) {
-            binding.layoutRender.slidingPane.setVisibility(View.VISIBLE);
+            binding.layoutRender.slidingPanel.setVisibility(View.VISIBLE);
             hasContent = true;
 
             binding.layoutRender.renderTitle.setText(title);
@@ -907,17 +976,17 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     private void showInput(boolean show) {
         if (show) {
-            binding.toolbarETxt.mainText.clearFocus(); //etxt
-            binding.toolbarETxt.mainContainer.setVisibility(View.VISIBLE);// maint tb
+            binding.editText.clearFocus(); //etxt
             binding.toolbarLayout.setVisibility(View.GONE);//other toolbar
-            binding.toolbarETxt.mainText.requestFocus();//etxt
-            binding.toolbarETxt.mainText.setText("");//etxt
+            binding.toolbarETxt.setVisibility(View.VISIBLE);// maint tb
+            binding.editText.requestFocus();//etxt
+            binding.editText.setText("");//etxt
             Utils.showKeyboard(this);
             isKeyboardShown = true;
         } else {
             Utils.hideKeyboard(this);
-            binding.toolbarETxt.mainText.clearFocus(); //etxt
-            binding.toolbarETxt.mainContainer.setVisibility(View.GONE); // maint tb
+            binding.editText.clearFocus(); //etxt
+            binding.toolbarETxt.setVisibility(View.GONE); // maint tb
             binding.toolbarLayout.setVisibility(View.VISIBLE); //other toolbar
             isKeyboardShown = false;
         }

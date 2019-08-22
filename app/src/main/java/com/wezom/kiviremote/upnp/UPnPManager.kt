@@ -81,7 +81,7 @@ class UPnPManager @Inject constructor(
         val type: MediaType
     ) {
         val title
-        get() = _title
+        get() = _title ?: " Title"
     }
 
     data class RendererModel(

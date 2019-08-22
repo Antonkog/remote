@@ -27,7 +27,6 @@ import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.home_activity.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
 import org.jetbrains.anko.support.v4.toast
@@ -121,8 +120,8 @@ class RecentDeviceFragment : BaseFragment() {
 
         (activity as HomeActivity).run {
             setHomeAsUp(false)
-            toolbar.setTitle("УСТРОЙСТВО ${(data.recentDevice.userDefinedName
-                    ?: data.recentDevice.actualName).remove032Space()}")
+            toolbar.title = "УСТРОЙСТВО ${(data.recentDevice.userDefinedName
+                    ?: data.recentDevice.actualName).remove032Space()}"
         }
     }
 
