@@ -13,6 +13,9 @@ import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.TvSettingsFragment;
 import com.wezom.kiviremote.presentation.home.recommendations.RecommendationsFragment;
+import com.wezom.kiviremote.presentation.home.recommendations.deep.RecsAppsDeepFragment;
+import com.wezom.kiviremote.presentation.home.recommendations.deep.RecsChannelsDeepFragment;
+import com.wezom.kiviremote.presentation.home.recommendations.deep.RecsMovieDeepFragment;
 import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlFragment;
 import com.wezom.kiviremote.presentation.home.subscriptions.subs_info.SubsInfoFragment;
 import com.wezom.kiviremote.presentation.home.subscriptions.subs_payment.SubsPaymentFragment;
@@ -51,6 +54,12 @@ public interface FragmentComponent {
     void inject(RecommendationsFragment recommendationsFragment);
 
     void inject(PortsFragment portsFragment);
+
+    void inject(RecsMovieDeepFragment recsMovieDeepFragment);
+
+    void inject(RecsChannelsDeepFragment recsChannelsDeepFragment);
+
+    void inject(RecsAppsDeepFragment recsAppsDeepFragment);
 
     void inject(SubsPriceListFragment subscriptionPriceListFragment);
 

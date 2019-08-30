@@ -33,7 +33,6 @@
             android:id="@+id/recommendations_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
             android:layout_marginTop="28dp"
             android:animateLayoutChanges="true">
 
@@ -53,8 +52,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginRight="8dp"
                 android:padding="8dp"
-
                 app:layout_constraintBottom_toBottomOf="@+id/text_subscriptions"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/text_subscriptions"
@@ -64,12 +63,9 @@
                 android:id="@+id/recicler_recommendations"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/KiviRecommendRecicler"
                 android:layout_below="@+id/type"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text_subscriptions" />
 
@@ -91,6 +87,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginRight="8dp"
+
                 android:padding="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/text_channel"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -102,9 +100,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/type"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
-                android:visibility="visible"
+                style="@style/KiviRecommendRecicler"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -127,6 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginRight="8dp"
                 android:padding="8dp"
                 app:layout_constraintBottom_toBottomOf="@+id/text_apps"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -138,8 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/type"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
+                style="@style/KiviRecommendRecicler"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -161,8 +157,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/type"
-                android:layout_alignParentStart="true"
-                android:layout_alignParentBottom="true"
+                style="@style/KiviRecommendRecicler"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -172,7 +167,7 @@
 
             <Space
                 android:layout_width="match_parent"
-                android:layout_height="29dp"
+                android:layout_height="60dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"

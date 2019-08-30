@@ -4,34 +4,18 @@
     <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="@dimen/recom_mov_w"
         android:layout_height="@dimen/recom_mov_h"
-        android:clickable="true"
-        android:focusable="true"
         android:id="@+id/cardView"
-        android:layout_marginLeft="@dimen/recom_card_margin"
-        android:layout_marginTop="10dp"
         app:cardBackgroundColor="@android:color/white"
-        android:layout_marginBottom="30dp"
-        app:cardCornerRadius="@dimen/recom_card_radius"
-        app:cardElevation="@dimen/recom_card_elevation"
-        app:cardPreventCornerOverlap="false"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        style="@style/KiviRecommendCard">
 
-        <ImageView
-            android:id="@+id/image"
+    <ImageView
+            android:id="@+id/image_movie"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="@string/recom_kivi"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:scaleType="fitXY" />
 
 
     </android.support.v7.widget.CardView>
-
 
 </layout>

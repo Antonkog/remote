@@ -142,7 +142,8 @@ class HomeActivityViewModel(
                                 })
 
                                 insertAll(
-                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.APPLICATION.name }.mapTo(ArrayList(), {
+                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.APPLICATION.name }.mapTo(ArrayList()
+                                        ) {
                                             Timber.e("12345 got app:" + it.id)
                                             ServerApp().apply {
                                                 appName = it.name
@@ -151,13 +152,12 @@ class HomeActivityViewModel(
                                                 uri = it.imageUrl
                                             }
                                         }
-                                        )
                                 )
                             }
                             database.serverInputsDao().run {
                                 removeAll()
                                 insertAll(
-                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.INPUT.name }.mapTo(ArrayList(), {
+                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.INPUT.name }.mapTo(ArrayList()) {
                                             ServerInput().apply {
                                                 portNum = Integer.parseInt(it.id)
                                                 portName = it.name
@@ -166,13 +166,13 @@ class HomeActivityViewModel(
                                                 inputIcon = it.icon
                                                 localResource = InputSourceHelper.INPUT_PORT.getPicById(portNum)
                                             }
-                                        }))
+                                        })
                             }
 
                             database.chennelsDao().run {
                                 removeAll()
                                 insertAll(
-                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.CHANNEL.name }.mapTo(ArrayList(), {
+                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.CHANNEL.name }.mapTo(ArrayList()) {
                                             ServerChannel().apply {
                                                 serverId = it.id
                                                 name = it.name
@@ -182,13 +182,13 @@ class HomeActivityViewModel(
                                                 edited_at = it.additionalData?.entries?.firstOrNull { it2 -> it2.key == "edited_at" }?.value
                                                 has_timeshift = it.additionalData?.entries?.firstOrNull { it3 -> it3.key == "has_timeshift" }?.value
                                             }
-                                        }))
+                                        })
                             }
 
                             database.recommendationsDao().run {
                                 removeAll()
                                 insertAll(
-                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.RECOMMENDATION.name }.mapTo(ArrayList(), {
+                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.RECOMMENDATION.name }.mapTo(ArrayList()) {
                                             ServerRecommendation().apply {
                                                 contentID = it.id
                                                 favourite = false
@@ -198,7 +198,7 @@ class HomeActivityViewModel(
                                                 monetizationType = it.additionalData?.entries?.firstOrNull { it2 -> it2.key == "monetizationType" }?.value
                                                 imdb = it.additionalData?.entries?.firstOrNull { it3 -> it3.key == "imdb" }?.value
                                             }
-                                        }))
+                                        })
                             }
                         }
                     }

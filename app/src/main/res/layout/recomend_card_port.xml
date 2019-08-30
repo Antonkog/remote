@@ -21,7 +21,7 @@
 
 
             <ImageView
-                android:id="@+id/image"
+                android:id="@+id/image_port"
                 android:layout_width="@dimen/port_icon_size"
                 android:layout_height="@dimen/port_icon_size"
                 android:scaleType="fitXY"
@@ -44,7 +44,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/image" />
+                app:layout_constraintTop_toBottomOf="@+id/image_port" />
 
 
         </android.support.constraint.ConstraintLayout>

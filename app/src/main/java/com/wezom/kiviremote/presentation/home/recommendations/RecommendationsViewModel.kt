@@ -159,6 +159,10 @@ class RecommendationsViewModel(private val router: Router,
         }
     }
 
+    fun goDeep(screen : String) {
+        router.navigateTo(screen)
+    }
+
     fun goSearch() = router.navigateTo(Screens.DEVICE_SEARCH_FRAGMENT)
 
     fun godo(data: Recommendation) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)

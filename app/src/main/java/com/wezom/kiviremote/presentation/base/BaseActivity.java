@@ -25,11 +25,13 @@ import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragmen
 import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo;
 import com.wezom.kiviremote.presentation.home.recentdevices.TvSettingsFragment;
 import com.wezom.kiviremote.presentation.home.recommendations.RecommendationsFragment;
+import com.wezom.kiviremote.presentation.home.recommendations.deep.RecsAppsDeepFragment;
+import com.wezom.kiviremote.presentation.home.recommendations.deep.RecsChannelsDeepFragment;
+import com.wezom.kiviremote.presentation.home.recommendations.deep.RecsMovieDeepFragment;
 import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlFragment;
 import com.wezom.kiviremote.presentation.home.subscriptions.subs_info.SubsInfoFragment;
 import com.wezom.kiviremote.presentation.home.subscriptions.subs_payment.SubsPaymentFragment;
 import com.wezom.kiviremote.presentation.home.subscriptions.subs_price_list.PricePerTime;
-import com.wezom.kiviremote.presentation.home.subscriptions.subs_price_list.SubsPriceListFragment;
 import com.wezom.kiviremote.presentation.home.subscriptions.subs_tariff_plans.SubsTariffPlansFragment;
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadFragment;
 
@@ -63,6 +65,12 @@ public abstract class BaseActivity extends AppCompatActivity {
                             return new RemoteControlFragment();
                         case Screens.RECOMMENDATIONS_FRAGMENT:
                             return new RecommendationsFragment();
+                        case Screens.RECS_APPS_DEEP_FRAGMENT:
+                            return new RecsAppsDeepFragment();
+                        case Screens.RECS_MOVIE_DEEP_FRAGMENT:
+                            return new RecsMovieDeepFragment();
+                        case Screens.RECS_CHANNELS_DEEP_FRAGMENT:
+                            return new RecsChannelsDeepFragment();
                         case Screens.TOUCH_PAD_FRAGMENT:
                             return new TouchpadFragment();
                         case Screens.MEDIA_FRAGMENT:
@@ -82,7 +90,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         case Screens.PORTS_FRAGMENT:
                             return new PortsFragment();
                         case Screens.SUBS_PRICE_LIST_FRAGMENT:
-                            return new SubsPriceListFragment();
+                            return new RecsMovieDeepFragment();
                         case Screens.SUBS_INFO_FRAGMENT:
                             return SubsInfoFragment.newInstance((PricePerTime) data);
                         case Screens.SUBS_TARIFF_PLANS_FRAGMENT:

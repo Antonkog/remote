@@ -16,7 +16,7 @@ buildscript {
             'okHttp'                : '3.6.0',
             'moxy'                  : '1.5.3',
             'butterKnife'           : '8.8.1',
-            'glide'                 : '4.2.0',
+            'glide'                 : '4.6.1',
             'anko'                  : '0.10.4',
             'cling'                 : '2.1.1',
             'jetty'                 : '8.2.0.v20160908'

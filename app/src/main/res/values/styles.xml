@@ -74,6 +74,23 @@
     </style>
 
 
+    <style name="KiviRecommendCard" parent="AppTheme">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:layout_marginLeft">@dimen/recom_card_margin</item>
+        <item name="android:layout_marginBottom">@dimen/recom_card_margin</item>
+        <item name="cardCornerRadius">@dimen/recom_card_radius</item>
+        <item name="cardBackgroundColor">@android:color/white</item>
+        <item name="cardElevation">@dimen/recom_card_elevation</item>
+    </style>
+
+    <style name="KiviRecommendRecicler" parent="AppTheme">
+        <item name="android:layout_alignParentStart">true</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:clipToPadding">false</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
     <style name="KiviMainTextSmall" parent="KiviMainTextAppearance">
         <item name="android:textColor">@color/colorTextPrimary</item>
         <item name="android:textSize">9sp</item>

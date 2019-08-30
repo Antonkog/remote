@@ -6,15 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.request.RequestOptions
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.decodeFromBase64
+import com.wezom.kiviremote.common.dpToPx
 import com.wezom.kiviremote.common.glide.GlideApp
 import com.wezom.kiviremote.net.model.Channel
 import com.wezom.kiviremote.net.model.Input
 import com.wezom.kiviremote.net.model.Recommendation
 import com.wezom.kiviremote.net.model.ServerAppInfo
+import com.wezom.kiviremote.presentation.home.ports.InputSourceHelper
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation
 import timber.log.Timber
+
 
 class RecommendationsAdapter(private val listener: HorizontalCVContract.HorizontalCVListener)
     : RecyclerView.Adapter<RecommendationsAdapter.RecommendationsViewHolder<*>>() {
@@ -23,19 +28,19 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
 
         return when (viewType) {
             TYPE_INPUTS -> {
-                val view = LayoutInflater.from(context).inflate(R.layout.recomend_card_port, parent, false)
+                val view = LayoutInflater.from(context).inflate(com.wezom.kiviremote.R.layout.recomend_card_port, parent, false)
                 InputsViewHolder(view, listener, data)
             }
             TYPE_APPS -> {
-                val view = LayoutInflater.from(context).inflate(R.layout.recomend_card_app, parent, false)
+                val view = LayoutInflater.from(context).inflate(com.wezom.kiviremote.R.layout.recomend_card_app, parent, false)
                 AppsViewHolder(view, listener, data)
             }
             TYPE_RECOMMENDATIONS -> {
-                val view = LayoutInflater.from(context).inflate(R.layout.recomend_card_movie, parent, false)
+                val view = LayoutInflater.from(context).inflate(com.wezom.kiviremote.R.layout.recomend_card_movie, parent, false)
                 RecommendationsHolder(view, listener, data)
             }
             TYPE_TV_CHANNELS -> {
-                val view = LayoutInflater.from(context).inflate(R.layout.recomend_card_channel, parent, false)
+                val view = LayoutInflater.from(context).inflate(com.wezom.kiviremote.R.layout.recomend_card_channel, parent, false)
                 ChannelsViewHolder(view, listener, data)
             }
             else -> throw Throwable("Invalid view type")
@@ -102,16 +107,22 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
 
         override fun bind(item: Input) {
             view.setOnClickListener(this)
+            val imageView = view.findViewById(com.wezom.kiviremote.R.id.image_port) as ImageView
 
             if (item.inputIcon != null && item.inputIcon.isNotEmpty())
                 decodeFromBase64(item.inputIcon).let { bitmap ->
-                    val imageView = view.findViewById(R.id.image) as ImageView
-
                     imageView.setImageBitmap(bitmap)
-
+                    Timber.e(
+                            "12345 loading input bitmap "
+                    )
                 }
+            else {
+                Timber.e("12345 no input icon")
+                imageView.setImageResource(InputSourceHelper.INPUT_PORT.getPicById(item.intID))
 
-            view.findViewById<TextView>(R.id.text).text = item.name
+            }
+
+            view.findViewById<TextView>(com.wezom.kiviremote.R.id.text).text = item.name
         }
 
         override fun onClick(view: View) {
@@ -133,14 +144,19 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
 //            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
 //                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
 
-            if(Constants.MEDIA_SHARE_TXT_ID.equals(item.applicationName)){
-                (  view.findViewById(R.id.image) as ImageView ).setImageResource(R.drawable.ic_media_share)
+            if (Constants.MEDIA_SHARE_TXT_ID == item.applicationName) {
+                (view.findViewById(com.wezom.kiviremote.R.id.image_app) as ImageView).setImageResource(com.wezom.kiviremote.R.drawable.ic_media_share)
+                (view.findViewById(com.wezom.kiviremote.R.id.image_app) as ImageView).alpha = 0.1f //todo: remove later
             }
 
             if (item.baseIcon != null && item.baseIcon.isNotEmpty())
                 decodeFromBase64(item.baseIcon).let { bitmap ->
-                    val imageView = view.findViewById(R.id.image) as ImageView
-                    imageView.setImageBitmap(bitmap)
+                    val imageView = view.findViewById(R.id.image_app) as ImageView
+
+            GlideApp.with(view.context)
+                    .load(bitmap)
+                    .override(dpToPx(view.context, 160),dpToPx(view.context, 90))
+                    .into(imageView)
 
                 }
             view.setOnClickListener(this)
@@ -169,10 +185,10 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
 
             view.setOnClickListener(this)
 
-            val image: ImageView = view.findViewById(R.id.image)
+            val image: ImageView = view.findViewById(com.wezom.kiviremote.R.id.image_movie)
 
             GlideApp.with(view.context).load(item.imageUrl)
-//                    .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(5, 0, RoundedCornersTransformation.CornerType.ALL)))
+                    .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(dpToPx(view.context, 5), 0, RoundedCornersTransformation.CornerType.ALL)))
                     .into(image)
 
             Timber.d(" loading Recommendation " + item.imageUrl + " into view")
@@ -201,11 +217,17 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
 //            view.findViewById<CardView>(R.id.cardView).setBackgroundColor(if (App.isDarkMode()) ResourcesCompat.getColor(view.resources, R.color.colorBlack, null) else
 //                ResourcesCompat.getColor(view.resources, R.color.colorWhite, null))
 
-            val image: ImageView = view.findViewById(R.id.image)
-
+            val image: ImageView = view.findViewById(R.id.image_channel)
             GlideApp.with(view.context).load(item.imageUrl)
-//                    .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(5, 0, RoundedCornersTransformation.CornerType.ALL)))
+                    .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(dpToPx(view.context, 5), 0, RoundedCornersTransformation.CornerType.ALL)))
                     .into(image)
+
+
+//
+//            GlideApp.with(view.context)
+//                    .load(item.imageUrl)
+//                    .into(DrawableImageViewTarget(image, /*waitForLayout=*/ true));
+
 
             view.setOnClickListener(this)
             Timber.d(" loading channel " + item.imageUrl + " into view")

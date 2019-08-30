@@ -16,6 +16,18 @@ fun <DataType, LayoutClassBinding : ViewDataBinding> RecyclerView.initWithLinLay
     adapter.swapData(data)
 }
 
+
+
+fun <DataType, LayoutClassBinding : ViewDataBinding> RecyclerView.initWithManager(layoutManager: LinearLayoutManager, adapter: LazyAdapter<DataType, LayoutClassBinding>, data: List<DataType>) {
+    this.apply {
+        this.adapter = adapter
+        this.layoutManager = layoutManager
+        setHasFixedSize(true)
+    }
+    adapter.swapData(data)
+}
+
+
 fun <DataType, LayoutClassBinding : ViewDataBinding> RecyclerView.initWithGridLay(spanCount: Int, adapter: LazyAdapter<DataType, LayoutClassBinding>, data: List<DataType>) {
     this.apply {
         this.adapter = adapter

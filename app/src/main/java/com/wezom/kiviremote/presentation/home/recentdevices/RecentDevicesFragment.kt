@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.wezom.kiviremote.R
 import com.wezom.kiviremote.databinding.RecentDevicesFragmentBinding
 import com.wezom.kiviremote.nsd.LastNsdHolder
 import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
@@ -15,7 +16,9 @@ import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.persistence.model.RecentDevice
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
+import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.recentdevices.list.DevicesListAdapter
+import kotlinx.android.synthetic.main.home_activity.view.*
 import javax.inject.Inject
 
 class RecentDevicesFragment : BaseFragment() {
@@ -64,12 +67,29 @@ class RecentDevicesFragment : BaseFragment() {
             recentDevices.observe(this@RecentDevicesFragment, recentDevicesObserver)
         }
 
+
         binding.devicesContainer.run {
             adapter = this@RecentDevicesFragment.adapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
             setHasFixedSize(true)
         }
     }
+
+    override fun onPause() {
+        (activity as (HomeActivity)).run {
+            setHomeAsUp(false)
+        }
+        super.onPause()
+    }
+
+    override fun onResume() {
+        (activity as (HomeActivity)).run {
+            toolbar.toolbar_text.text = resources.getString(R.string.devices_kivi)
+            setHomeAsUp(true)
+        }
+        super.onResume()
+    }
+
 
     private fun connect(wrapper: NsdServiceInfoWrapper?) {
         if (wrapper != null) {

@@ -2,9 +2,7 @@ package com.wezom.kiviremote.presentation.home.recommendations
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.databinding.generated.callback.OnClickListener
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -12,26 +10,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.wezom.kiviremote.R
+import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.Constants
-import com.wezom.kiviremote.common.KiviCache
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.databinding.RecommendationsFragmentBinding
 import com.wezom.kiviremote.net.model.*
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
+import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import timber.log.Timber
 import javax.inject.Inject
-import com.wezom.kiviremote.presentation.home.HomeActivity
-import com.wezom.kiviremote.presentation.home.main.BackHandler
-import kotlinx.android.synthetic.main.home_activity.*
-import java.lang.ref.WeakReference
-import kotlin.collections.HashMap
 
 
-class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalCVListener, BackHandler.OnBackClickListener {
+class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalCVListener {
 
 
     @Inject
@@ -44,8 +38,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private lateinit var adapterApps: RecommendationsAdapter
     private lateinit var adapterChannels: RecommendationsAdapter
     private lateinit var adapterRecommend: RecommendationsAdapter
-
-    private var rowsViews = HashMap<Int, WeakReference<View>>()
 
     private val recommendationsObserver = Observer<List<Comparable<Recommendation>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
@@ -154,47 +146,21 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             populateRecommendations()
         }
 
-        rowsViews.put(binding.reciclerApps.id, WeakReference(binding.reciclerApps))
-        rowsViews.put(binding.reciclerPorts.id, WeakReference(binding.reciclerPorts))
-        rowsViews.put(binding.reciclerRecommendations.id, WeakReference(binding.reciclerRecommendations))
-        rowsViews.put(binding.reciclerChannels.id, WeakReference(binding.reciclerChannels))
-        rowsViews.put(binding.textSubscriptions.id, WeakReference(binding.textSubscriptions))
-        rowsViews.put(binding.textChannel.id, WeakReference(binding.textChannel))
-        rowsViews.put(binding.textApps.id, WeakReference(binding.textApps))
-        rowsViews.put(binding.textPorts.id, WeakReference(binding.textPorts))
-        rowsViews.put(binding.imgAppsMenu.id, WeakReference(binding.imgAppsMenu))
-        rowsViews.put(binding.imgChannelsMenu.id, WeakReference(binding.imgChannelsMenu))
-        rowsViews.put(binding.imgRecommendMenu.id, WeakReference(binding.imgRecommendMenu))
 
         val listener = View.OnClickListener {
             view ->
             run {
                 when (view.id) {
                     R.id.img_recommend_menu, R.id.text_subscriptions -> {
-                        isDeepMenuOpen = true
-                        (activity as HomeActivity).setHomeAsUp(true)
-                        changeRowsVisibility(binding.reciclerRecommendations.id, View.GONE)
-                        binding.reciclerRecommendations.layoutManager = GridLayoutManager(context, 3, GridLayoutManager.VERTICAL, false)
-                        binding.reciclerRecommendations.adapter.notifyItemRangeChanged(0, binding.reciclerRecommendations.adapter?.itemCount
-                                ?: 0)
+                      viewModel.goDeep(Screens.RECS_MOVIE_DEEP_FRAGMENT)
                     }
 
                     R.id.img_apps_menu, R.id.text_apps -> {
-                        isDeepMenuOpen = true
-                        (activity as HomeActivity).setHomeAsUp(true)
-                        changeRowsVisibility(binding.reciclerApps.id, View.GONE)
-                        binding.reciclerApps.layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
-                        binding.reciclerApps.adapter.notifyItemRangeChanged(0, binding.reciclerApps.adapter?.itemCount
-                                ?: 0)
+                        viewModel.goDeep(Screens.RECS_APPS_DEEP_FRAGMENT)
                     }
 
                     R.id.img_channels_menu, R.id.text_channel -> {
-                        isDeepMenuOpen = true
-                        (activity as HomeActivity).setHomeAsUp(true)
-                        changeRowsVisibility(binding.reciclerChannels.id, View.GONE)
-                        binding.reciclerChannels.layoutManager = GridLayoutManager(context, 4, GridLayoutManager.VERTICAL, false)
-                        binding.reciclerChannels.adapter.notifyItemRangeChanged(0, binding.reciclerChannels.adapter?.itemCount
-                                ?: 0)
+                        viewModel.goDeep(Screens.RECS_CHANNELS_DEEP_FRAGMENT)
                     }
                 }
             }
@@ -212,56 +178,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
     }
 
-    //this is START for handling back in fragment
-    private var backButtonHandler: BackHandler? = null
-
-    override fun onAttachFragment(childFragment: Fragment?) {
-        super.onAttachFragment(childFragment)
-        attachListener(activity as HomeActivity?)
-    }
-
-    override fun onDetach() {
-        detachListener()
-        super.onDetach()
-    }
-
-    private fun detachListener() {
-        backButtonHandler?.removeBackListener(this)
-        backButtonHandler = null
-    }
-
-    private fun attachListener(activity: HomeActivity?) {
-        if (activity != null)
-            backButtonHandler = activity.addBackListener(this)
-    }
-
-
-    override fun onBackClick(): Boolean {
-        Timber.e("onBackClick")
-        if (isDeepMenuOpen) {
-            isDeepMenuOpen = false
-            (activity as HomeActivity).setHomeAsUp(false)
-            binding.reciclerApps.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            binding.reciclerRecommendations.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
-            binding.reciclerChannels.layoutManager = GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
-
-            binding.reciclerRecommendations.adapter.notifyItemRangeChanged(0, binding.reciclerRecommendations.adapter?.itemCount ?: 0)
-            binding.reciclerChannels.adapter.notifyItemRangeChanged(0, binding.reciclerChannels.adapter?.itemCount ?: 0)
-            binding.reciclerApps.adapter.notifyItemRangeChanged(0, binding.reciclerApps.adapter?.itemCount ?: 0)
-            changeRowsVisibility(0, View.VISIBLE)
-            return true
-        } else return false
-    }
-
-//this END is for handling back in fragment
-
-    private fun changeRowsVisibility(viewExceptId: Int, visibility: Int) {
-        for ((key, value) in rowsViews) {
-            if (key != viewExceptId) {
-                value.get()?.visibility = visibility
-            }
-        }
-    }
 
     override fun injectDependencies() {
         fragmentComponent.inject(this)
