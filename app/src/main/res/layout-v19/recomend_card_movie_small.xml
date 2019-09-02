@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <ImageView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/image_movie"
+        android:layout_width="@dimen/recom_mov_w_small"
+        android:layout_height="@dimen/recom_mov_h_small"
+        style="@style/KiviOldApiCard"
+        android:scaleType="fitXY" />
+</layout>

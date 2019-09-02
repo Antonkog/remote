@@ -2,6 +2,7 @@ package com.wezom.kiviremote;
 
 import android.support.multidex.MultiDexApplication;
 
+import com.bumptech.glide.request.target.ViewTarget;
 import com.crashlytics.android.Crashlytics;
 import com.wezom.kiviremote.common.PreferencesManager;
 import com.wezom.kiviremote.di.components.ApplicationComponent;
@@ -26,6 +27,7 @@ public class App extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        ViewTarget.setTagId(R.id.glide_tag);//deprecated in glide 4.8 (now 4.6)
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());

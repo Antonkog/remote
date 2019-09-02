@@ -91,7 +91,7 @@
     <dimen name="recom_mov_w">120dp</dimen>
     <dimen name="recom_mov_h">190dp</dimen>
 
-    <dimen name="recom_mov_w_small">110dp</dimen>
+    <dimen name="recom_mov_w_small">115dp</dimen>
     <dimen name="recom_mov_h_small">180dp</dimen>
 
     <dimen name="recom_channel">85dp</dimen>

@@ -153,10 +153,10 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
                 decodeFromBase64(item.baseIcon).let { bitmap ->
                     val imageView = view.findViewById(R.id.image_app) as ImageView
 
-            GlideApp.with(view.context)
-                    .load(bitmap)
-                    .override(dpToPx(view.context, 160),dpToPx(view.context, 90))
-                    .into(imageView)
+                    GlideApp.with(view.context)
+                            .load(bitmap)
+                            .override(dpToPx(view.context, 160), dpToPx(view.context, 90))
+                            .into(imageView)
 
                 }
             view.setOnClickListener(this)

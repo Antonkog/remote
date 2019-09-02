@@ -84,6 +84,16 @@
         <item name="cardElevation">@dimen/recom_card_elevation</item>
     </style>
 
+    <style name="KiviOldApiCard" parent="AppTheme">
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:contentDescription">@string/recom_kivi</item>
+        <item name="android:background">@drawable/white_bg_rounded</item>
+        <item name="android:layout_marginLeft">@dimen/recom_card_margin</item>
+        <item name="android:layout_marginBottom">@dimen/recom_card_margin</item>
+    </style>
+
+
     <style name="KiviRecommendRecicler" parent="AppTheme">
         <item name="android:layout_alignParentStart">true</item>
         <item name="android:layout_alignParentBottom">true</item>
