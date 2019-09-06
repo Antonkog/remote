@@ -19,7 +19,7 @@ import timber.log.Timber
 
 class RecommendationsViewModel(private val router: Router,
                                val database: AppDatabase,
-                               private val cache: KiviCache,
+                               val cache: KiviCache,
                                preferences: SharedPreferences,
                                private val uPnPManager: UPnPManager) : BaseViewModel() {
 
@@ -54,7 +54,6 @@ class RecommendationsViewModel(private val router: Router,
                                         .addName(it.name)
                                 )
                             }
-
 //                            this.inputs.postValue(newInputs.distinct()) //could n't be same values
                             this.channels.postValue(channels)
                         }, onError = {
@@ -159,7 +158,7 @@ class RecommendationsViewModel(private val router: Router,
         }
     }
 
-    fun goDeep(screen : String) {
+    fun goDeep(screen: String) {
         router.navigateTo(screen)
     }
 

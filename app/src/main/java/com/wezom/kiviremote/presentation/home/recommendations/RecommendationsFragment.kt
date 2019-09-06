@@ -117,10 +117,10 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecommendationsViewModel::class.java)
 
-        adapterApps = RecommendationsAdapter(this)
-        adapterPorts = RecommendationsAdapter(this)
-        adapterRecommend = RecommendationsAdapter(this)
-        adapterChannels = RecommendationsAdapter(this)
+        adapterApps = RecommendationsAdapter(this, viewModel.cache)
+        adapterPorts = RecommendationsAdapter(this, viewModel.cache)
+        adapterRecommend = RecommendationsAdapter(this, viewModel.cache)
+        adapterChannels = RecommendationsAdapter(this, viewModel.cache)
 
         viewModel.run {
 

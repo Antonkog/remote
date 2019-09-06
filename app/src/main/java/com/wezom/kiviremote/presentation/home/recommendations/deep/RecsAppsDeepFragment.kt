@@ -23,7 +23,7 @@ class RecsAppsDeepFragment : DeepFragment(), LazyAdapter.OnItemClickListener<Ser
 
     private lateinit var binding: RecsDeepFragmentBinding
     private lateinit var viewModel: AppsDeepViewModel
-    private var adapter = AppsDeepAdapter(this)
+    private lateinit var adapter: AppsDeepAdapter
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
@@ -36,6 +36,7 @@ class RecsAppsDeepFragment : DeepFragment(), LazyAdapter.OnItemClickListener<Ser
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AppsDeepViewModel::class.java)
+        adapter = AppsDeepAdapter(this, viewModel.cache)
         viewModel.populateApps();
         viewModel.apps.observe(this@RecsAppsDeepFragment, recommendationsObserver)
 

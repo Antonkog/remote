@@ -8,11 +8,8 @@ import com.wezom.kiviremote.App
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.Screens.DEVICE_SEARCH_FRAGMENT
 import com.wezom.kiviremote.bus.*
-import com.wezom.kiviremote.common.Action
-import com.wezom.kiviremote.common.Constants
+import com.wezom.kiviremote.common.*
 import com.wezom.kiviremote.common.Constants.*
-import com.wezom.kiviremote.common.PreferencesManager
-import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.common.extensions.boolean
 import com.wezom.kiviremote.common.extensions.string
@@ -35,12 +32,13 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.coroutines.experimental.CommonPool
+import kotlinx.coroutines.experimental.async
 import kotlinx.coroutines.experimental.launch
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
-import java.util.Observer
+import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
@@ -48,6 +46,7 @@ import kotlin.collections.ArrayList
 class HomeActivityViewModel(
         private val database: AppDatabase,
         private val navigatorHolder: NavigatorHolder,
+        private val cache: KiviCache,
         private val router: Router,
         private val uPnPManager: UPnPManager, preferences: SharedPreferences
 ) : BaseViewModel() {
@@ -133,40 +132,30 @@ class HomeActivityViewModel(
                 .subscribeBy(onNext = { initialEvent ->
                     if (initialEvent.previewCommonStructures != null) {
                         Timber.e("12345  got previewCommonStructures 3: " + initialEvent.previewCommonStructures.size)
+
                         launch(CommonPool) {
+
+                            val apps = async {
+                                cacheAppIcons(initialEvent, cache)
+                            }.await()
+
                             database.serverAppDao().run {
                                 removeAll()
                                 insertMediaShareStaticApp(ServerApp().apply {
-                                    appName =  Constants.MEDIA_SHARE_TXT_ID
+                                    appName = Constants.MEDIA_SHARE_TXT_ID
                                     packageName = Constants.MEDIA_SHARE_TXT_ID
                                 })
 
-                                insertAll(
-                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.APPLICATION.name }.mapTo(ArrayList()
-                                        ) {
-                                            Timber.e("12345 got app:" + it.id)
-                                            ServerApp().apply {
-                                                appName = it.name
-                                                packageName = it.id
-                                                baseIcon = it.icon
-                                                uri = it.imageUrl
-                                            }
-                                        }
-                                )
+                                insertAll(apps)
                             }
+
+                            val inputs = async {
+                                cacheAppInputs(initialEvent, cache)
+                            }.await()
+
                             database.serverInputsDao().run {
                                 removeAll()
-                                insertAll(
-                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.INPUT.name }.mapTo(ArrayList()) {
-                                            ServerInput().apply {
-                                                portNum = Integer.parseInt(it.id)
-                                                portName = it.name
-                                                imageUrl = it.imageUrl
-                                                active = it.is_active
-                                                inputIcon = it.icon
-                                                localResource = InputSourceHelper.INPUT_PORT.getPicById(portNum)
-                                            }
-                                        })
+                                insertAll(inputs)
                             }
 
                             database.chennelsDao().run {
@@ -431,7 +420,7 @@ class HomeActivityViewModel(
                     serverConnection?.run {
                         connectToServer(nsdModel.host, nsdModel.port)
                         launch(CommonPool) {
-                            if(firstConnection){
+                            if (firstConnection) {
                                 database.recentDeviceDao().insert(RecentDevice(nsdModel.name, null))
                                 database.recommendationsDao().removeAll()
                                 database.serverInputsDao().removeAll()

@@ -5,6 +5,7 @@ import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.LaunchAppEvent
 import com.wezom.kiviremote.bus.NavigateToRemoteEvent
 import com.wezom.kiviremote.common.Constants
+import com.wezom.kiviremote.common.KiviCache
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.net.model.ServerAppInfo
 import com.wezom.kiviremote.persistence.AppDatabase
@@ -14,7 +15,7 @@ import io.reactivex.schedulers.Schedulers
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
-class AppsDeepViewModel (val router: Router, val database : AppDatabase): BaseViewModel() {
+class AppsDeepViewModel (val router: Router, val cache: KiviCache, val database : AppDatabase): BaseViewModel() {
 
     val apps = MutableLiveData<List<ServerAppInfo>>()
 

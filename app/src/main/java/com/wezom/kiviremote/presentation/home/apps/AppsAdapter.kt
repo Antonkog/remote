@@ -30,8 +30,11 @@ class AppsAdapter(private val cache: KiviCache,
 
     override fun onBindViewHolder(holder: AppsViewHolder, position: Int) {
         val app = apps[position]
-        val appModel = AppBindingModel(app, cache[app.appName])
-        holder.bind(appModel)
+        val bitmap = cache.get(app.appName)
+        if (bitmap != null) {
+            val appModel = AppBindingModel(app, bitmap)
+            holder.bind(appModel)
+        }
     }
 
     fun launchApp(app: AppModel) = command(app.appPackage)

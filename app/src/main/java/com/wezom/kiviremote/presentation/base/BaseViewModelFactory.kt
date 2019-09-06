@@ -48,7 +48,7 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T = when {
         modelClass.isAssignableFrom(HomeActivityViewModel::class.java) ->
-            HomeActivityViewModel(database, navigatorHolder, router, uPnPManager, preferences) as T
+            HomeActivityViewModel(database, navigatorHolder, cache, router, uPnPManager, preferences) as T
 
         modelClass.isAssignableFrom(RecentDeviceViewModel::class.java) ->
             RecentDeviceViewModel(database, router) as T
@@ -106,10 +106,10 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
             RecsDeepViewModel(router, database) as T
 
         modelClass.isAssignableFrom(ChannelsDeepViewModel::class.java) ->
-            ChannelsDeepViewModel(router,database) as T
+            ChannelsDeepViewModel(router, database) as T
 
         modelClass.isAssignableFrom(AppsDeepViewModel::class.java) ->
-            AppsDeepViewModel(router, database) as T
+            AppsDeepViewModel(router, cache, database) as T
 
         else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.canonicalName}")
     }
