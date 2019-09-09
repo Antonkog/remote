@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.wezom.kiviremote.R
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent
 import com.wezom.kiviremote.bus.KillPingEvent
 import com.wezom.kiviremote.bus.LocationEnabledEvent
@@ -41,7 +42,6 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
 
     private val networkStateObserver: Observer<Boolean> = Observer { isAvailable ->
         updateWifiInfoViews()
-
         if (!(isAvailable != null && isAvailable)) {
             adapter.swapData(listOf())
             showProgress(false)
@@ -51,7 +51,6 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
     private val nsdDevicesObserver: Observer<Set<NsdServiceInfoWrapper>> = Observer { devices ->
         devices?.let {
             updateDeviceList(it)
-//            tryGoMainScreen(it)
         }
     }
 
@@ -66,9 +65,7 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         (activity as HomeActivity).changeFabVisibility(View.GONE)
         RxBus.listen(LocationEnabledEvent::class.java).subscribe { (enabled) ->
             if (enabled) {
-                if (NetConnectionUtils.isConnectedWithWifi(context!!)) {
-                    binding.wifiName.text = NetConnectionUtils.getCurrentSsid(context!!).replace("\"", "")
-                }
+                setWifiName(enabled)
             }
         }
     }
@@ -91,11 +88,7 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         viewModel.initResolveListener()
         viewModel.discoverDevices()
 
-        // show wifi name
-        if (NetConnectionUtils.isConnectedWithWifi(context!!)) {
-            binding.wifiName.text = NetConnectionUtils.getCurrentSsid(context!!).replace("\"", "")
-        }
-
+        setWifiName(true)
         viewModel.nsdDevices.observe(this, nsdDevicesObserver)
         viewModel.networkState.observe(this, networkStateObserver)
 
@@ -128,6 +121,16 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         currentDevices.addAll(set)
         adapter.swapData(currentDevices)
         showProgress(false)
+    }
+
+
+    private fun setWifiName(enabled : Boolean) {
+        // show wifi name
+        if  (enabled && NetConnectionUtils.isConnectedWithWifi(context!!)) {
+            binding.wifiName.text = NetConnectionUtils.getCurrentSsid(context!!).replace("\"", "")
+        } else{
+            binding.wifiName.text  = resources.getString(R.string.unknown_wifi)
+        }
     }
 
     private fun updateWifiInfoViews() {

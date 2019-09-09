@@ -127,8 +127,16 @@ fun decodeFromBase64(bitmapString: String, w: Int, h: Int): Bitmap {
         outWidth = h
         inSampleSize = calculateInSampleSize(this, w, h)
     }
-
-    return BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, options)
+    val optionsWeek = BitmapFactory.Options().apply {
+        outHeight = w
+        outWidth = h
+        inSampleSize = 4
+    }
+    return try {
+        BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, options)
+    } catch (e: OutOfMemoryError) {
+        BitmapFactory.decodeByteArray(byteArray, 0, byteArray.size, optionsWeek)
+    }
 }
 
 

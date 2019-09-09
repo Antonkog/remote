@@ -9,6 +9,7 @@ public class Constants {
     }
 
     // All in MS
+    public static final int SMALL_BITMAP = 640;
     public static final int INITIAL_DELAY = 500;
     public static final int DELAY_COLOR_RESTART = 1000;
     public static final int CONNECTION_TIMEOUT = 5000;

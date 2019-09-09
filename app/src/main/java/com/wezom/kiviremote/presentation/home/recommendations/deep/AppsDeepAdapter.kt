@@ -3,6 +3,7 @@ package com.wezom.kiviremote.presentation.home.recommendations.deep
 import android.widget.ImageView
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.Constants
+import com.wezom.kiviremote.common.Constants.SMALL_BITMAP
 import com.wezom.kiviremote.common.KiviCache
 import com.wezom.kiviremote.common.glide.GlideApp
 import com.wezom.kiviremote.common.glide.PreviewsTransformation
@@ -26,7 +27,7 @@ class AppsDeepAdapter(itemClickListener: OnItemClickListener<ServerAppInfo>, val
 
 
 
-                    if(it?.width!= null &&  it.width > 640){
+                    if(it?.width!= null &&  it.width > SMALL_BITMAP){
 
                         Timber.e(" PreviewsTransformation app width ${it?.width} " + item.packageName)
 
@@ -35,13 +36,12 @@ class AppsDeepAdapter(itemClickListener: OnItemClickListener<ServerAppInfo>, val
                                 .transform(PreviewsTransformation(5, 5))
                                 .into(imageView)
                     }
-                    if(it?.width!= null &&  it.width <= 640){
+                    if(it?.width!= null &&  it.width <= SMALL_BITMAP){
                         Timber.e(" PreviewsTransformation2 app width ${it?.width} " + item.packageName)
 
                         GlideApp.with(imageView.context)
                                 .load(it)
-//                                .transform(RoundedCornersTransformation(5, 5))
-                                .fitCenter()
+                                .centerInside()
                                 .into(imageView)
                     }
                 }

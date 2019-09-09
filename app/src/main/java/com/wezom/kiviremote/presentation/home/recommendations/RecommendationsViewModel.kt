@@ -154,7 +154,7 @@ class RecommendationsViewModel(private val router: Router,
             RxBus.publish(LaunchAppEvent(name))
             RxBus.publish(NavigateToRemoteEvent())
         } else {
-            router.navigateTo(Screens.MEDIA_FRAGMENT)
+          //  router.navigateTo(Screens.MEDIA_FRAGMENT) todo next version
         }
     }
 
