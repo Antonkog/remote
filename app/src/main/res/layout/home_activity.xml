@@ -176,23 +176,15 @@
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="2px"
-                    android:background="@color/colorLightGray"
-                    app:layout_constraintBottom_toTopOf="@+id/switch_dm"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-
                 <Switch
                     android:id="@+id/switch_dm"
                     android:layout_width="match_parent"
                     android:layout_height="96dp"
                     android:layout_gravity="bottom"
                     android:gravity="center"
+                    android:paddingStart="20dp"
                     android:text="@string/dark_mode"
+                    android:background="@color/colorBlackAlpha"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />

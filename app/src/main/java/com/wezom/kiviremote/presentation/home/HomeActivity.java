@@ -39,7 +39,6 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -239,10 +238,15 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
         binding.mainTextHide.setOnClickListener(v -> hideKeyboard());
 
-        binding.fab.setOnClickListener(view -> moveTouchPad( BottomSheetBehavior.STATE_EXPANDED));
+        binding.fab.setOnClickListener(view -> moveTouchPad(BottomSheetBehavior.STATE_EXPANDED));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding.fab.setElevation(getResources().getDimension(R.dimen.elevation_small));
         }
+    }
+
+    public void setToolbarTxt(String text) {
+        binding.toolbarText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+        binding.toolbarText.setText(text);
     }
 
     public void moveTouchPad(int stateExpanded) {
@@ -369,7 +373,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                         startActivity(i);
                     } catch (ActivityNotFoundException e) {
                         Timber.e("can't go to support " + e);
-                        Toast.makeText(this, " ActivityNotFoundException", Toast.LENGTH_LONG).show();
                     }
                     break;
 
@@ -586,11 +589,11 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                         binding.fab.setVisibility(View.VISIBLE);
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED:
-                       binding.fab.setVisibility(View.GONE);
+                        binding.fab.setVisibility(View.GONE);
                         break;
 //                    case BottomSheetBehavior.STATE_DRAGGING:
 //                        touchpadSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-                        default:
+                    default:
                         binding.fab.setVisibility(View.GONE);
                         break;
                 }

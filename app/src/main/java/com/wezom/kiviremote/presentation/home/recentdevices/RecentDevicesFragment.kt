@@ -95,6 +95,7 @@ class RecentDevicesFragment : BaseFragment() {
         if (wrapper != null) {
             viewModel.connect(wrapper)
             LastNsdHolder.nsdServiceWrapper = wrapper
+            (activity as HomeActivity).setToolbarTxt(wrapper.serviceName)
         }
     }
 

@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.SendActionEvent
@@ -17,6 +16,7 @@ import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.databinding.RecommendationsFragmentBinding
 import com.wezom.kiviremote.net.model.*
+import com.wezom.kiviremote.nsd.LastNsdHolder
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
@@ -67,23 +67,19 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
 
     override fun onInputChosen(item: Input, position: Int) {
-        Toast.makeText(context, "port chosen id: " + item.intID + "name" + item.name, Toast.LENGTH_SHORT).show()
         onPortChecked(item.intID)
     }
 
     override fun onChannelChosen(item: Channel, position: Int) {
-        Toast.makeText(context, "channel chosen " + item.toString(), Toast.LENGTH_SHORT).show()
         viewModel.launchChannel(item)
 
     }
 
     override fun onRecommendationChosen(item: Recommendation, position: Int) {
-        Toast.makeText(context, "rec chosen " + item.toString(), Toast.LENGTH_SHORT).show()
         viewModel.launchRecommendation(item)
     }
 
     override fun appChosenNeedOpen(appModel: ServerAppInfo, positio: Int) {
-        Toast.makeText(context, "app chosen " + appModel.applicationName, Toast.LENGTH_SHORT).show()
         viewModel.launchApp(appModel.packageName)
     }
 
@@ -114,8 +110,11 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecommendationsViewModel::class.java)
+
+        LastNsdHolder.nsdServiceWrapper?.serviceName.let {
+            (activity as HomeActivity).setToolbarTxt(it)
+        }
 
         adapterApps = RecommendationsAdapter(this, viewModel.cache)
         adapterPorts = RecommendationsAdapter(this, viewModel.cache)

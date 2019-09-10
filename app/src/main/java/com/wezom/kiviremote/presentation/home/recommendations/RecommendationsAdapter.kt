@@ -115,10 +115,9 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
             val imageView = view.findViewById(R.id.image_port) as ImageView
             if (cache.get(item.id) != null) {
                 imageView.setImageBitmap(cache.get(item.id))
-                //coloring bitmap
-                imageView.drawable.setColorFilter(ResourcesCompat.getColor(view.context.resources, R.color.colorAccent, null), PorterDuff.Mode.DST_IN)
+                val color = ResourcesCompat.getColor(view.context.resources, R.color.colorAccent, null);
+                imageView.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
             } else {
-                Timber.e("12345 no input icon")
                 imageView.setImageResource(InputSourceHelper.INPUT_PORT.getPicById(item.intID))
             }
             view.findViewById<TextView>(R.id.text).text = item.name
