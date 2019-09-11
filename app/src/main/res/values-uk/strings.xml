@@ -138,9 +138,7 @@
     <string name="card_validity_period">Період дії карти</string>
     <string name="cvv_code">CVV-код</string>
     <string name="make_payment">Оплатити</string>
-
-
-
+    <string name="auto_connect">Автопідключення</string>
 
 
 </resources>

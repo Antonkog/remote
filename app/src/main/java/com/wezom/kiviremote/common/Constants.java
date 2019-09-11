@@ -11,11 +11,11 @@ public class Constants {
     // All in MS
     public static final int SMALL_BITMAP = 640;
     public static final int INITIAL_DELAY = 500;
-    public static final int DELAY_COLOR_RESTART = 1000;
+    public static final long DELAY_AUTO_CONNECT = 1000;
     public static final int CONNECTION_TIMEOUT = 5000;
     public static final int RECONNECT_TRY = 3;
     public static final long DELAY_ASK_APPS = 2;
-    public static final long DELAY_APPS_GET = 12000; //or show noResultDelay on swipeRefreshLayout
+    public static final long DELAY_APPS_GET = 12000; //or show noResultDelay on swipeRefreshLayoutF
     public static final long DELAY_RECONNECT = 1;
     public static final int PING_PERIOD = 2;
 
@@ -44,12 +44,14 @@ public class Constants {
     public static final int RESTART_APP_PI = 214212;
     public static final String UNIDENTIFIED = "unidentified";
     public static final String DARK_MODE = "dark_mode";
+    public static final String AUTO_CONNECT = "auto_connect";
 
     public static final String IMAGE = "Фото";
     public static final String VIDEO = "Видео";
     public static final String AUDIO = "Аудио";
 
     public static final String CURRENT_CONNECTION_KEY = "current_connection";
+    public static final String LAST_NSD_HOLDER_NAME = "current_connection";
     public static final String MUTE_STATUS_KEY = "muteStatus";
     public static final String CURSOR_SPEED_KEY = "cursor_speed";
     public static final String TAB_SELECTED_KEY = "tab_selected";

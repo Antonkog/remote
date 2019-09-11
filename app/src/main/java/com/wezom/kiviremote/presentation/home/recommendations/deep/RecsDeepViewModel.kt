@@ -27,7 +27,6 @@ class RecsDeepViewModel (val router: Router, val database: AppDatabase): BaseVie
                         onNext = { dbRecs ->
                             val recommendations = ArrayList<Recommendation>()
                             dbRecs.forEach {
-                                Timber.d("12345 Populate recommendation  " + it.title)
                                 recommendations.add(Recommendation()
                                         .addContentId(it.contentID)
                                         .addImageUrl(it.imageUrl)

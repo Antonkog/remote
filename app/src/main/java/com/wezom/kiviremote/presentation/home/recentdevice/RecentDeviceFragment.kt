@@ -18,11 +18,9 @@ import com.wezom.kiviremote.common.extensions.remove032Space
 import com.wezom.kiviremote.common.hideKeyboard
 import com.wezom.kiviremote.common.restartApp
 import com.wezom.kiviremote.databinding.RecentDeviceFragmentBinding
-import com.wezom.kiviremote.nsd.LastNsdHolder
 import com.wezom.kiviremote.persistence.model.RecentDevice
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
-import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -78,14 +76,6 @@ class RecentDeviceFragment : BaseFragment() {
 
         dialogEditText.setText((data.recentDevice.userDefinedName ?: "").remove032Space())
 
-        binding.switchAutoConnect.isEnabled = data.nsdServiceInfoWrapper != null
-
-        if (binding.switchAutoConnect.isEnabled) {
-            binding.switchAutoConnect.isChecked = LastNsdHolder.nsdServiceWrapper?.equals(data.nsdServiceInfoWrapper!!)
-                    ?: false
-            binding.switchAutoConnect.setOnCheckedChangeListener { _, checked -> LastNsdHolder.nsdServiceWrapper = if (checked) data.nsdServiceInfoWrapper else null }
-        }
-
         binding.rvInfoContainer.apply {
             this.adapter = adapter
             this.layoutManager = LinearLayoutManager(view.context, LinearLayoutManager.VERTICAL, false)
@@ -107,22 +97,16 @@ class RecentDeviceFragment : BaseFragment() {
         binding.ivRename.setOnClickListener {
             dialog.show()
         }
-
-        // Test data
-        adapter.swapData(listOf(
-                TvInfoUnit("Диагональ", "32"),
-                TvInfoUnit("Тип матрицы", "IPS"),
-                TvInfoUnit("Bluetooth модуль", "4.2"),
-                TvInfoUnit("Статус сети:", "DIR-320"),
-                TvInfoUnit("Разрешение экрана", "1920х1080"),
-                TvInfoUnit("Автоподключение", "Да")
-        ))
-
-        (activity as HomeActivity).run {
-            setHomeAsUp(false)
-            toolbar.title = "УСТРОЙСТВО ${(data.recentDevice.userDefinedName
-                    ?: data.recentDevice.actualName).remove032Space()}"
-        }
+//
+//        // Test data
+//        adapter.swapData(listOf(
+//                TvInfoUnit("Диагональ", "32"),
+//                TvInfoUnit("Тип матрицы", "IPS"),
+//                TvInfoUnit("Bluetooth модуль", "4.2"),
+//                TvInfoUnit("Статус сети:", "DIR-320"),
+//                TvInfoUnit("Разрешение экрана", "1920х1080"),
+//                TvInfoUnit("Автоподключение", "Да")
+//        ))
     }
 
     @SuppressLint("CheckResult")

@@ -28,7 +28,6 @@ class ChannelsDeepViewModel(val router: Router, val database: AppDatabase) : Bas
                         onNext = { dbChannels ->
                             val channels = ArrayList<Channel>()
                             dbChannels.forEach {
-                                //                                Timber.d("12345 Populate channel  " + it.name)
                                 channels.add(Channel()
                                         .addId(it.serverId)
                                         .addActive(it.is_active)
@@ -38,8 +37,6 @@ class ChannelsDeepViewModel(val router: Router, val database: AppDatabase) : Bas
                                         .addName(it.name)
                                 )
                             }
-
-//                            this.inputs.postValue(newInputs.distinct()) //could n't be same values
                             this.channels.postValue(channels)
                         }, onError = {
                     Timber.e(it.message)

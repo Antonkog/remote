@@ -10,7 +10,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.databinding.RecentDevicesFragmentBinding
-import com.wezom.kiviremote.nsd.LastNsdHolder
 import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
 import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.persistence.model.RecentDevice
@@ -94,8 +93,6 @@ class RecentDevicesFragment : BaseFragment() {
     private fun connect(wrapper: NsdServiceInfoWrapper?) {
         if (wrapper != null) {
             viewModel.connect(wrapper)
-            LastNsdHolder.nsdServiceWrapper = wrapper
-            (activity as HomeActivity).setToolbarTxt(wrapper.serviceName)
         }
     }
 

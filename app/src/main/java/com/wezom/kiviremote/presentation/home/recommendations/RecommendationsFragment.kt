@@ -14,9 +14,9 @@ import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.RxBus
+import com.wezom.kiviremote.common.extensions.removeMasks
 import com.wezom.kiviremote.databinding.RecommendationsFragmentBinding
 import com.wezom.kiviremote.net.model.*
-import com.wezom.kiviremote.nsd.LastNsdHolder
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
@@ -43,26 +43,26 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterRecommend.swapData(it)
             updateRecommendations(true)
-        } ?: Timber.e("TYPE_RECOMMENDATIONS empty")
+        } ?: Timber.d("TYPE_RECOMMENDATIONS empty")
     }
 
     private val channelsObserver = Observer<List<Comparable<Channel>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterChannels.swapData(it)
             updateRecommendations(true)
-        } ?: Timber.e("TYPE_Channels empty")
+        } ?: Timber.d("TYPE_Channels empty")
     }
 
     private val appsObserver = Observer<List<Comparable<ServerAppInfo>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterApps.swapData(it)
-        } ?: Timber.e("TYPE_APPS empty")
+        } ?: Timber.d("TYPE_APPS empty")
     }
 
     private val inputPortObserver = Observer<List<Comparable<Input>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterPorts.swapData(it)
-        } ?: Timber.e("TYPE_INPUTS empty")
+        } ?: Timber.d("TYPE_INPUTS empty")
     }
 
 
@@ -112,8 +112,8 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecommendationsViewModel::class.java)
 
-        LastNsdHolder.nsdServiceWrapper?.serviceName.let {
-            (activity as HomeActivity).setToolbarTxt(it)
+        viewModel.lastNsdHolderName.let {
+            (activity as HomeActivity).setToolbarTxt(it.removeMasks())
         }
 
         adapterApps = RecommendationsAdapter(this, viewModel.cache)

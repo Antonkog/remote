@@ -1,6 +1,5 @@
 package com.wezom.kiviremote.presentation.home.devicesearch
 
-import android.annotation.SuppressLint
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
@@ -11,13 +10,11 @@ import android.view.ViewGroup
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent
 import com.wezom.kiviremote.bus.KillPingEvent
-import com.wezom.kiviremote.bus.LocationEnabledEvent
 import com.wezom.kiviremote.common.GpsUtils
 import com.wezom.kiviremote.common.NetConnectionUtils
 import com.wezom.kiviremote.common.PreferencesManager
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.databinding.HomeFragmentBinding
-import com.wezom.kiviremote.nsd.LastNsdHolder
 import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
@@ -59,17 +56,6 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
-    @SuppressLint("CheckResult")
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        (activity as HomeActivity).changeFabVisibility(View.GONE)
-        RxBus.listen(LocationEnabledEvent::class.java).subscribe { (enabled) ->
-            if (enabled) {
-                setWifiName(enabled)
-            }
-        }
-    }
-
     fun showProgress(visibility: Boolean) {
         binding.searchProgressContainer.visibility = if (visibility) View.VISIBLE else View.GONE
         binding.devicesContainer.visibility = if (!visibility) View.VISIBLE else View.GONE
@@ -110,6 +96,7 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
 
     override fun onResume() {
         super.onResume()
+        (activity as HomeActivity).setToolbarTxt(resources.getString(R.string.app_name))
         viewModel.updateRecentDevices()
         viewModel.initResolveListener()
         viewModel.discoverDevices()
@@ -120,16 +107,17 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         currentDevices.clear()
         currentDevices.addAll(set)
         adapter.swapData(currentDevices)
+        if (viewModel.tryAutoConnect(set))
         showProgress(false)
     }
 
 
-    private fun setWifiName(enabled : Boolean) {
+    private fun setWifiName(enabled: Boolean) {
         // show wifi name
-        if  (enabled && NetConnectionUtils.isConnectedWithWifi(context!!)) {
+        if (enabled && NetConnectionUtils.isConnectedWithWifi(context!!)) {
             binding.wifiName.text = NetConnectionUtils.getCurrentSsid(context!!).replace("\"", "")
-        } else{
-            binding.wifiName.text  = resources.getString(R.string.unknown_wifi)
+        } else {
+            binding.wifiName.text = resources.getString(R.string.unknown_wifi)
         }
     }
 
@@ -144,7 +132,6 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
     }
 
     override fun onLazyItemClick(data: NsdServiceInfoWrapper) {
-        LastNsdHolder.nsdServiceWrapper = data
         viewModel.connect(data)
     }
 }

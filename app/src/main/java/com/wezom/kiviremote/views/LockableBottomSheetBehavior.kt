@@ -7,7 +7,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import com.wezom.kiviremote.common.dpToPx
-import timber.log.Timber
 
 
 @Suppress("unused")
@@ -35,17 +34,6 @@ class LockableBottomSheetBehavior<V : View> : BottomSheetBehavior<V> {
         }
 
 
-//            val tv = TypedValue()
-//            if (parent.context.theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-//                val actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, parent.context.resources.displayMetrics)
-//                if(event.y < actionBarHeight ){
-//                    topDrag = true
-//                    Timber.e("12345 eevnt  actionBarHeight" + actionBarHeight)
-//                    super.onInterceptTouchEvent(parent, child, event)
-//                }
-//            }
-
-
     }
 
     var swipeEnabled = true
@@ -62,7 +50,7 @@ class LockableBottomSheetBehavior<V : View> : BottomSheetBehavior<V> {
         if (event.action == MotionEvent.ACTION_DOWN) {
             val maxH = child.top + dpToPx(parent.context, scrollHinDp)
             shouldProceed = (event.y < maxH && event.y > child.top)
-            Timber.e("qwqqe" + event.action + " evnt y" + event.y + " child top + " + child.top + " maxH  = " + maxH + " topdrag? " + shouldProceed)
+//            Timber.e("qwqqe" + event.action + " evnt y" + event.y + " child top + " + child.top + " maxH  = " + maxH + " topdrag? " + shouldProceed)
         }
 //        if(event.action == MotionEvent.ACTION_UP) shouldProceed = false
         if (shouldProceed) return super.onInterceptTouchEvent(parent, child, event)

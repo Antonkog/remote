@@ -28,59 +28,30 @@
             android:layout_marginStart="32dp"
             android:fontFamily="sans-serif"
             android:text="Переименовать устройство"
-            android:textColor="@color/colorBlack"
             android:textSize="14sp"
             app:layout_constraintBottom_toBottomOf="@+id/iv_rename"
             app:layout_constraintStart_toEndOf="@+id/iv_rename"
             app:layout_constraintTop_toTopOf="@+id/iv_rename" />
 
-        <ImageView
-            android:id="@+id/iv_auto_connect"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_rename"
-            app:srcCompat="@drawable/ic_loading" />
-
-        <TextView
-            android:id="@+id/tv_auto_connect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="32dp"
-            android:fontFamily="sans-serif"
-            android:text="Автоподключение"
-            android:textColor="@color/colorBlack"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_auto_connect"
-            app:layout_constraintStart_toEndOf="@+id/iv_auto_connect"
-            app:layout_constraintTop_toTopOf="@+id/iv_auto_connect" />
-
-        <Switch
-            android:id="@+id/switch_auto_connect"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_auto_connect"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tv_auto_connect" />
-
         <TextView
             android:id="@+id/tv_device_name"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="31dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif-medium"
+            android:gravity="left|center_vertical"
             android:textColor="#0F6BFB"
             android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/iv_auto_connect"
+            app:layout_constraintTop_toBottomOf="@+id/iv_rename"
             tools:text="УСТРОЙСТВО FK32GU54" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_info_container"
+            android:visibility="gone"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginTop="20dp"

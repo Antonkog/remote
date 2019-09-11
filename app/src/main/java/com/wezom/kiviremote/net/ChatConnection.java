@@ -152,9 +152,6 @@ public class ChatConnection {
                     case KEYBOARD_NOT_SET:
                         keyboardNotSet = true;
                         break;
-                    case INITIAL_II:
-                        Timber.e("12345 got initial 2: " + serverEvent.getPreviewCommonStructures().size());
-                        break;
                     case SHOW_KEYBOARD:
                         showKeyboard = true;
                         break;
@@ -177,8 +174,6 @@ public class ChatConnection {
             }
 
             if (serverEvent.getPreviewCommonStructures() != null) {
-                Timber.d("12345 getPreviewCommonStructures" + serverEvent.getEvent());
-
                 RxBus.INSTANCE.publish(new GotPreviewsInitialEvent().setPreviewCommonStructures(serverEvent.getPreviewCommonStructures()));
             }
 

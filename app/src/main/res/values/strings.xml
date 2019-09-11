@@ -131,6 +131,7 @@
     <string name="economy">Эконом</string>
     <string name="vivid">Яркий</string>
     <string name="auto">Авто</string>
+    <string name="auto_connect">Автоподключение</string>
     <string name="user">Пользовательский</string>
     <string name="r_16x9" translatable="false">16x9</string>
     <string name="default_r">По умолчанию</string>

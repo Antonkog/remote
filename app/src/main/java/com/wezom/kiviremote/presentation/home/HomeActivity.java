@@ -324,6 +324,11 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             viewModel.restartColorScheme(this);
         });
 
+        binding.autoConnect.setChecked(viewModel.getAutoConnect());
+        binding.autoConnect.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            viewModel.setAutoConnect(isChecked);
+        });
+
         if (binding.layoutRender != null) {
             binding.layoutRender.renderProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override

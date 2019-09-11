@@ -139,9 +139,7 @@
     <string name="card_validity_period">Card validity period</string>
     <string name="cvv_code">CVV-code</string>
     <string name="make_payment">Pay</string>
-
-
-
+    <string name="auto_connect">Auto connect</string>
 
 
 </resources>

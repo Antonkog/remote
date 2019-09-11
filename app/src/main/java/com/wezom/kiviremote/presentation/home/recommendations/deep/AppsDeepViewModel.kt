@@ -27,7 +27,6 @@ class AppsDeepViewModel (val router: Router, val cache: KiviCache, val database 
                         onNext = { dbApps ->
                             val recommendations = ArrayList<ServerAppInfo>()
                             dbApps.forEach {
-                                Timber.e("12345 got app from db " + it.appName + " package " + it.packageName)
                                 recommendations.add(ServerAppInfo(it.appName, it.packageName, it.baseIcon))
                             }
                             this.apps.postValue(recommendations)

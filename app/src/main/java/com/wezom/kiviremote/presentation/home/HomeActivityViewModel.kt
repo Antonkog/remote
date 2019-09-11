@@ -50,6 +50,7 @@ class HomeActivityViewModel(
         private val router: Router,
         private val uPnPManager: UPnPManager, preferences: SharedPreferences
 ) : BaseViewModel() {
+    var autoConnect by preferences.boolean(false, Constants.AUTO_CONNECT)
 
     init {
         disposables += RxBus.listen(ConnectionMessage::class.java)
@@ -103,22 +104,15 @@ class HomeActivityViewModel(
                                     }))
                                 }
                             }
-                            Timber.e("12345 got inputs")
                         }
                     }
 
                     if (it.recommendations != null) {
                         RxBus.publish(GotRecommendationsEvent(it.recommendations))
-                        Timber.e("12345 got recommendations")
-                    }
-
-                    if (it.favourites != null) {
-                        Timber.e("12345 got favourites")
                     }
 
                     if (it.channels != null) {
                         RxBus.publish(GotChannelsEvent(it.channels))
-                        Timber.e("12345 got channels")
                     }
 
                     if (it.volume != NO_VALUE) {
@@ -131,8 +125,6 @@ class HomeActivityViewModel(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = { initialEvent ->
                     if (initialEvent.previewCommonStructures != null) {
-                        Timber.e("12345  got previewCommonStructures 3: " + initialEvent.previewCommonStructures.size)
-
                         launch(CommonPool) {
 
                             val apps = async {
@@ -330,7 +322,6 @@ class HomeActivityViewModel(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
                     sendAspectChanged(it.message)
-                    Timber.e("12345 sendAspectChanged " + it.message)
                 }, onError = Timber::e)
 
         disposables += RxBus.listen(LaunchAppEvent::class.java)
@@ -554,7 +545,6 @@ class HomeActivityViewModel(
     fun getCurrentContentObservable() = uPnPManager.currentContentState
 
     fun getCurrentContentName() = currentConnection
-
 
     fun getSlideshowStateObservable() = uPnPManager.slideshowState
 

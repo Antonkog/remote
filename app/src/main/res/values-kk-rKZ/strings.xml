@@ -117,11 +117,7 @@
     <string name="card_validity_period">Картаның әрекет ету мерзімі</string>
     <string name="cvv_code">CVV-коды</string>
     <string name="make_payment">Төлеу үшін</string>
-
-
-
-
-
+    <string name="auto_connect">Автоподключение</string>
 
 
 </resources>

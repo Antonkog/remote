@@ -1,14 +1,15 @@
 package com.wezom.kiviremote.presentation.home.devicesearch
 
 import android.arch.lifecycle.MutableLiveData
+import android.content.SharedPreferences
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.ConnectEvent
 import com.wezom.kiviremote.bus.NetworkStateEvent
+import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.RxBus
-import com.wezom.kiviremote.common.extensions.getTvUniqueId
-import com.wezom.kiviremote.common.extensions.removeMasks
+import com.wezom.kiviremote.common.extensions.*
 import com.wezom.kiviremote.nsd.NsdHelper
 import com.wezom.kiviremote.nsd.NsdHelper.SERVICE_MASK
 import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
@@ -29,8 +30,13 @@ import java.util.concurrent.CopyOnWriteArrayList
 class DeviceSearchViewModel(
         private val nsdHelper: NsdHelper,
         private val router: Router,
-        private val database: AppDatabase
+        private val database: AppDatabase,
+        private val preferences: SharedPreferences
 ) : BaseViewModel() {
+
+
+    private var lastNsdHolderName by preferences.string(Constants.UNIDENTIFIED, key = Constants.LAST_NSD_HOLDER_NAME)
+    private var autoConnect by preferences.boolean(false, Constants.AUTO_CONNECT)
 
     init {
         disposables += RxBus.listen(NetworkStateEvent::class.java).subscribeBy(
@@ -68,6 +74,7 @@ class DeviceSearchViewModel(
     }
 
     fun connect(data: NsdServiceInfoWrapper) {
+        lastNsdHolderName = data.service.serviceName
         serviceInfo = data.service
         connect()
     }
@@ -171,7 +178,7 @@ class DeviceSearchViewModel(
                 nsdDevices.postValue(setOf(wrapper))
                 Timber.d("Found single device: ${wrapper.serviceName}")
             }
-            devices.size > 1 -> devices.forEach {
+            devices.size > 1 -> devices.let {
                 val cleanDevices = devices.mapTo(HashSet(), { checkIfRecent(it, recentDevices) })
                 nsdDevices.postValue(cleanDevices)
                 Timber.d("Found multiple devices: ")
@@ -183,6 +190,18 @@ class DeviceSearchViewModel(
             }
         }
     }
+
+    fun tryAutoConnect(set: Set<NsdServiceInfoWrapper>) : Boolean{
+        if(autoConnect)
+        set.forEach {
+            if (it.service.serviceName.remove032Space() == lastNsdHolderName.remove032Space()) {
+                Run.after(Constants.DELAY_AUTO_CONNECT) { connect(it) }
+                true
+            }
+        }
+        return false
+    }
+
     /***
     todo: temp recheck if NsdServiceModel need to be passed
     NsdServiceModel(

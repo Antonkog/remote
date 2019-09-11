@@ -1,12 +1,15 @@
 package com.wezom.kiviremote.presentation.home.recentdevices
 
 import android.arch.lifecycle.MutableLiveData
+import android.content.SharedPreferences
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.ConnectEvent
+import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.backToMain
+import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.nsd.NsdHelper
 import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
 import com.wezom.kiviremote.nsd.NsdServiceModel
@@ -18,7 +21,10 @@ import timber.log.Timber
 
 class RecentDevicesViewModel(private val router: Router,
                              private val database: AppDatabase,
-                             private val nsdHelper: NsdHelper) : BaseViewModel() {
+                             private val nsdHelper: NsdHelper,
+                             private val preferences: SharedPreferences) : BaseViewModel() {
+
+    private var lastNsdHolderName by preferences.string(Constants.UNIDENTIFIED, key = Constants.LAST_NSD_HOLDER_NAME)
 
     val nsdServices = MutableLiveData<Set<NsdServiceInfoWrapper>>()
 
@@ -35,6 +41,7 @@ class RecentDevicesViewModel(private val router: Router,
     fun navigateToRecentDevice(data: TvDeviceInfo) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)
 
     fun connect(data: NsdServiceInfoWrapper) {
+        lastNsdHolderName = data.service.serviceName
         serviceInfo = data.service
         connect()
     }

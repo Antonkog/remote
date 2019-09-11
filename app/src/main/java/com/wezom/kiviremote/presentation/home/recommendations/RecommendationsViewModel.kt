@@ -8,6 +8,7 @@ import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.KiviCache
 import com.wezom.kiviremote.common.RxBus
+import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.net.model.*
 import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.presentation.base.BaseViewModel
@@ -22,6 +23,8 @@ class RecommendationsViewModel(private val router: Router,
                                val cache: KiviCache,
                                preferences: SharedPreferences,
                                private val uPnPManager: UPnPManager) : BaseViewModel() {
+
+    var lastNsdHolderName by preferences.string(Constants.UNIDENTIFIED, key = Constants.LAST_NSD_HOLDER_NAME)
 
     var aspectTryCounter = Constants.ASPECT_GET_TRY
     var lastPortId = Constants.INPUT_HOME_ID
@@ -70,7 +73,6 @@ class RecommendationsViewModel(private val router: Router,
                         onNext = { dbRecs ->
                             val recommendations = ArrayList<Recommendation>()
                             dbRecs.forEach {
-                                Timber.d("12345 Populate recommendation  " + it.title)
                                 recommendations.add(Recommendation()
                                         .addContentId(it.contentID)
                                         .addImageUrl(it.imageUrl)
@@ -97,7 +99,6 @@ class RecommendationsViewModel(private val router: Router,
                         onNext = { dbApps ->
                             val recommendations = ArrayList<ServerAppInfo>()
                             dbApps.forEach {
-                                Timber.e("12345 got app from db " + it.appName + " package " + it.packageName)
                                 recommendations.add(ServerAppInfo(it.appName, it.packageName, it.baseIcon))
                             }
                             this.apps.postValue(recommendations)
@@ -116,7 +117,6 @@ class RecommendationsViewModel(private val router: Router,
                         onNext = { inputs ->
                             val newInputs = ArrayList<Input>()
                             inputs.forEach {
-                                Timber.e("got input from db " + it.portName + " id = " + it.portNum)
                                 newInputs.add(Input(it))
                             }
                             this.inputs.postValue(newInputs.distinct()) //could n't be same values
@@ -154,7 +154,7 @@ class RecommendationsViewModel(private val router: Router,
             RxBus.publish(LaunchAppEvent(name))
             RxBus.publish(NavigateToRemoteEvent())
         } else {
-          //  router.navigateTo(Screens.MEDIA_FRAGMENT) todo next version
+            //  router.navigateTo(Screens.MEDIA_FRAGMENT) todo next version
         }
     }
 
