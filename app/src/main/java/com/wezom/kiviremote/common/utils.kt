@@ -21,10 +21,10 @@ import android.util.Base64
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import com.wezom.kiviremote.bus.GotPreviewsInitialEvent
+import com.wezom.kiviremote.net.model.InputSourceHelper
 import com.wezom.kiviremote.net.model.LauncherBasedData
 import com.wezom.kiviremote.persistence.model.ServerApp
 import com.wezom.kiviremote.persistence.model.ServerInput
-import com.wezom.kiviremote.presentation.home.ports.InputSourceHelper
 import com.wezom.kiviremote.presentation.splash.SplashActivity
 import io.reactivex.SingleTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers

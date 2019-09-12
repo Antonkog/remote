@@ -15,16 +15,13 @@ import com.wezom.kiviremote.presentation.home.apps.AppsViewModel
 import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchViewModel
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryViewModel
-import com.wezom.kiviremote.presentation.home.main.MainFragmentViewModel
 import com.wezom.kiviremote.presentation.home.media.MediaViewModel
-import com.wezom.kiviremote.presentation.home.ports.PortsViewModel
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceViewModel
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesViewModel
 import com.wezom.kiviremote.presentation.home.recommendations.RecommendationsViewModel
 import com.wezom.kiviremote.presentation.home.recommendations.deep.AppsDeepViewModel
 import com.wezom.kiviremote.presentation.home.recommendations.deep.ChannelsDeepViewModel
 import com.wezom.kiviremote.presentation.home.recommendations.deep.RecsDeepViewModel
-import com.wezom.kiviremote.presentation.home.remotecontrol.RemoteControlViewModel
 import com.wezom.kiviremote.presentation.home.subscriptions.subs_info.SubsInfoViewModel
 import com.wezom.kiviremote.presentation.home.subscriptions.subs_payment.SubsPaymentViewModel
 import com.wezom.kiviremote.presentation.home.subscriptions.subs_price_list.SubsPriceListViewModel
@@ -53,13 +50,6 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
         modelClass.isAssignableFrom(RecentDeviceViewModel::class.java) ->
             RecentDeviceViewModel(database, router) as T
 
-        modelClass.isAssignableFrom(MainFragmentViewModel::class.java) ->
-            MainFragmentViewModel(router, uPnPManager) as T
-
-        modelClass.isAssignableFrom(RemoteControlViewModel::class.java) ->
-            RemoteControlViewModel(router) as T
-
-
         modelClass.isAssignableFrom(RecommendationsViewModel::class.java) ->
             RecommendationsViewModel(router, database, cache, preferences, uPnPManager) as T
 
@@ -86,9 +76,6 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
 
         modelClass.isAssignableFrom(DirectoriesViewModel::class.java) ->
             DirectoriesViewModel(router, uPnPManager) as T
-
-        modelClass.isAssignableFrom(PortsViewModel::class.java) ->
-            PortsViewModel(router) as T
 
         modelClass.isAssignableFrom(SubsPriceListViewModel::class.java) ->
             SubsPriceListViewModel(router) as T

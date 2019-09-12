@@ -4,7 +4,6 @@ import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
-import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.*
 import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.RxBus
@@ -46,7 +45,7 @@ class TouchpadViewModel(private val router: Router) : BaseViewModel(), TvKeysVie
     fun switchOff() = RxBus.publish(SendActionEvent(Action.SWITCH_OFF))
 
 
-    fun goToInputSettings() = router.navigateTo(Screens.PORTS_FRAGMENT)
+//    fun goToInputSettings() = router.navigateTo(Screens.PORTS_FRAGMENT)
 
     fun sendVoiceAsText(text: String) {
         RxBus.publish(SendVoiceEvent(text))

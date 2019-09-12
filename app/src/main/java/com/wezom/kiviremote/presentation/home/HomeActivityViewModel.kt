@@ -20,7 +20,6 @@ import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.persistence.model.*
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment
-import com.wezom.kiviremote.presentation.home.ports.InputSourceHelper
 import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadButtonClickEvent
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder

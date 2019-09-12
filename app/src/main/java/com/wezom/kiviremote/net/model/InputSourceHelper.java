@@ -1,16 +1,14 @@
-package com.wezom.kiviremote.presentation.home.ports;
+package com.wezom.kiviremote.net.model;
 
 import android.support.annotation.DrawableRes;
 import android.support.annotation.StringRes;
 
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.common.Constants;
-import com.wezom.kiviremote.net.model.Input;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.wezom.kiviremote.presentation.home.ports.InputSourceHelper.INPUT_PORT.INPUT_SOURCE_NONE;
 
 
 /**
@@ -134,7 +132,7 @@ public class InputSourceHelper {
         if (portsNumbs == null) return result;
         for (int i = 0; i < portsNumbs.length; i++) {
             INPUT_PORT inputPort = INPUT_PORT.getPortByID(portsNumbs[i]);
-            if (inputPort != INPUT_SOURCE_NONE) {
+            if (inputPort != INPUT_PORT.INPUT_SOURCE_NONE) {
                 result.add(new Input()
                         .addPortName(inputPort.baseName)
                         .addPortNum(inputPort.id)
