@@ -40,6 +40,7 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
 
     private float x1, x2, y1, y2, dx, dy;
 
+    private int centerClickArea = 65; //NumUtils.getToDp(50);
     public void setScrollMode(boolean scroll) {
         this.scroll = scroll;
     }
@@ -150,22 +151,22 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
                         dy = y2 - y1;
 
                         if (!stop) {
-                            if (dy < -65) {
+                            if (dy < - centerClickArea) {
                                 listener.sendKey(KeyEvent.KEYCODE_DPAD_UP);
                                 stop = true;
                             }
 
-                            if (dy > 65) {
+                            if (dy > centerClickArea) {
                                 listener.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
                                 stop = true;
                             }
 
-                            if (dx > 65) {
+                            if (dx > centerClickArea) {
                                 listener.sendKey(KeyEvent.KEYCODE_DPAD_RIGHT);
                                 stop = true;
                             }
 
-                            if (dx < -65) {
+                            if (dx < -centerClickArea) {
                                 listener.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
                                 stop = true;
                             }
@@ -174,7 +175,7 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        if(Math.abs(dx) + Math.abs(dy) < 65){
+                        if(Math.abs(dx) + Math.abs(dy) < getWidth()/2 ){
                             performClick();
                         }
                         break;

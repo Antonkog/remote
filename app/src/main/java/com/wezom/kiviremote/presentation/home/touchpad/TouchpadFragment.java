@@ -19,7 +19,6 @@ import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.common.Action;
 import com.wezom.kiviremote.common.Constants;
-import com.wezom.kiviremote.common.PreferencesManager;
 import com.wezom.kiviremote.common.extensions.NumUtils;
 import com.wezom.kiviremote.databinding.TouchPadFragmentBinding;
 import com.wezom.kiviremote.interfaces.OnTouchPadMessageListener;
@@ -55,7 +54,7 @@ public class TouchpadFragment extends TvKeysFragment
 
     private final int REQUEST_PERMISSION_CODE = 12123;
 
-    private boolean isScrollMode = false;
+    private boolean isScrollMode = true;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -108,9 +107,8 @@ public class TouchpadFragment extends TvKeysFragment
             }
         });
 
-        int cursorSpeedMultiplier = PreferencesManager.INSTANCE.getCursorSpeed();
 
-        binding.touchpad.setSpeedMultiplier(cursorSpeedMultiplier);
+        binding.touchpad.setSpeedMultiplier(50); // can modify but no place in ui
 
         binding.microphone.setImageResource(App.isDarkMode()? R.drawable.ic_microphone_dm : R.drawable.ic_microphone);
         binding.powerOff.setImageResource(App.isDarkMode()? R.drawable.ic_power_w_dm : R.drawable.ic_power_w);

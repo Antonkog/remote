@@ -22,7 +22,7 @@ import timber.log.Timber
 class RecentDevicesViewModel(private val router: Router,
                              private val database: AppDatabase,
                              private val nsdHelper: NsdHelper,
-                             private val preferences: SharedPreferences) : BaseViewModel() {
+                             preferences: SharedPreferences) : BaseViewModel() {
 
     private var lastNsdHolderName by preferences.string(Constants.UNIDENTIFIED, key = Constants.LAST_NSD_HOLDER_NAME)
 

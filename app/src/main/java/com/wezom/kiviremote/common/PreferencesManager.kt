@@ -3,7 +3,6 @@ package com.wezom.kiviremote.common
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import com.wezom.kiviremote.common.Constants.*
 
 // todo remove this
 @Deprecated(
@@ -21,17 +20,8 @@ object PreferencesManager {
         }
     }
 
-    fun getMuteStatus() = preferences.getBoolean(MUTE_STATUS_KEY, false)
-
-    fun setCursorSpeed(value: Int) = preferences.edit().putInt(CURSOR_SPEED_KEY, value).apply()
-
-    fun getCursorSpeed(): Int = preferences.getInt(CURSOR_SPEED_KEY, 50)
-
-    fun setSelectedTab(value: Int) = preferences.edit().putInt(TAB_SELECTED_KEY, value).apply()
-
     fun setDarkMode(value: Boolean) = preferences.edit().putBoolean(Constants.DARK_MODE, value).apply()
 
     fun getDarkMode(): Boolean = preferences.getBoolean(Constants.DARK_MODE, true)
 
-    fun getSelectedTab() = preferences.getInt(TAB_SELECTED_KEY, 0)
 }

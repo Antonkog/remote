@@ -12,7 +12,6 @@ import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent
 import com.wezom.kiviremote.bus.KillPingEvent
 import com.wezom.kiviremote.common.GpsUtils
 import com.wezom.kiviremote.common.NetConnectionUtils
-import com.wezom.kiviremote.common.PreferencesManager
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.databinding.HomeFragmentBinding
 import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
@@ -47,7 +46,9 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
 
     private val nsdDevicesObserver: Observer<Set<NsdServiceInfoWrapper>> = Observer { devices ->
         devices?.let {
+            if(it.isNotEmpty())
             updateDeviceList(it)
+            else showProgress(true)
         }
     }
 
@@ -78,8 +79,6 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         viewModel.nsdDevices.observe(this, nsdDevicesObserver)
         viewModel.networkState.observe(this, networkStateObserver)
 
-        PreferencesManager.setSelectedTab(0)
-
         // recyclerview init
         binding.devicesContainer.initWithLinLay(LinearLayoutManager.VERTICAL, adapter, listOf())
         binding.devicesContainer.addItemDivider()
@@ -107,7 +106,7 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         currentDevices.clear()
         currentDevices.addAll(set)
         adapter.swapData(currentDevices)
-        if (viewModel.tryAutoConnect(set))
+        viewModel.tryAutoConnect(set)
         showProgress(false)
     }
 
