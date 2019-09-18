@@ -24,7 +24,7 @@ import timber.log.Timber;
 public class NsdHelper {
     public static final String SERVICE_MASK = "(KIVI_TV)";
     private static final String SERVICE_TYPE = "_http._tcp.";
-    private CopyOnWriteArraySet<NsdServiceInfoWrapper> servicesSet = new CopyOnWriteArraySet<>();
+    private CopyOnWriteArraySet<NsdServiceInfo> servicesSet = new CopyOnWriteArraySet<>();
 
     private final NsdManager mNsdManager;
 
@@ -32,7 +32,7 @@ public class NsdHelper {
     private NsdManager.DiscoveryListener mDiscoveryListener;
     private NsdServiceInfo chosenServiceInfo;
 
-    private Relay<Set<NsdServiceInfoWrapper>> nsdServices;
+    private Relay<Set<NsdServiceInfo>> nsdServices;
 
     private Disposable deviceNotFoundTimerDisposable;
 
@@ -75,7 +75,7 @@ public class NsdHelper {
                     Timber.d("Same machine: " + SERVICE_MASK);
                 } else if (service.getServiceName().contains(SERVICE_MASK)) {
                     killTimer();
-                    servicesSet.add(new NsdServiceInfoWrapper(service));
+                    servicesSet.add(service);
                     nsdServices.accept(servicesSet);
                 }
             }
@@ -83,7 +83,7 @@ public class NsdHelper {
             @Override
             public void onServiceLost(NsdServiceInfo serviceInfo) {
                 Timber.d("NSD onServiceLost %s ", serviceInfo.getHost());
-                boolean removedSuccessfully = servicesSet.remove(new NsdServiceInfoWrapper(serviceInfo));
+                boolean removedSuccessfully = servicesSet.remove(serviceInfo);
                 if (removedSuccessfully) {
                     nsdServices.accept(servicesSet);
                     if (chosenServiceInfo != null && chosenServiceInfo.equals(serviceInfo)) {
@@ -94,7 +94,7 @@ public class NsdHelper {
         };
     }
 
-    public Relay<Set<NsdServiceInfoWrapper>> getNsdRelay() {
+    public Relay<Set<NsdServiceInfo>> getNsdRelay() {
         return nsdServices;
     }
 

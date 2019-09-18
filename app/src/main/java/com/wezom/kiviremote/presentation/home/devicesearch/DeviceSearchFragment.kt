@@ -2,6 +2,7 @@ package com.wezom.kiviremote.presentation.home.devicesearch
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.net.nsd.NsdServiceInfo
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -14,7 +15,6 @@ import com.wezom.kiviremote.common.GpsUtils
 import com.wezom.kiviremote.common.NetConnectionUtils
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.databinding.HomeFragmentBinding
-import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.base.recycler.LazyAdapter
@@ -28,7 +28,7 @@ import javax.inject.Inject
  * Created by andre on 22.05.2017.
  */
 
-class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<NsdServiceInfoWrapper> {
+class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<NsdServiceInfo> {
 
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
@@ -44,7 +44,7 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         }
     }
 
-    private val nsdDevicesObserver: Observer<Set<NsdServiceInfoWrapper>> = Observer { devices ->
+    private val nsdDevicesObserver: Observer<Set<NsdServiceInfo>> = Observer { devices ->
         devices?.let {
             if(it.isNotEmpty())
             updateDeviceList(it)
@@ -53,7 +53,7 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
     }
 
     private var adapter = DeviceSearchAdapter(this)
-    private val currentDevices = ArrayList<NsdServiceInfoWrapper>()
+    private val currentDevices = ArrayList<NsdServiceInfo>()
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
@@ -71,7 +71,6 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(DeviceSearchViewModel::class.java)
 
-        viewModel.updateRecentDevices()
         viewModel.initResolveListener()
         viewModel.discoverDevices()
 
@@ -96,13 +95,12 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).setToolbarTxt(resources.getString(R.string.app_name))
-        viewModel.updateRecentDevices()
         viewModel.initResolveListener()
         viewModel.discoverDevices()
     }
 
 
-    private fun updateDeviceList(set: Set<NsdServiceInfoWrapper>) {
+    private fun updateDeviceList(set: Set<NsdServiceInfo>) {
         currentDevices.clear()
         currentDevices.addAll(set)
         adapter.swapData(currentDevices)
@@ -130,7 +128,7 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         binding.wifiName.visibility = if (isConnectedWithWifi) View.VISIBLE else View.INVISIBLE
     }
 
-    override fun onLazyItemClick(data: NsdServiceInfoWrapper) {
+    override fun onLazyItemClick(data: NsdServiceInfo) {
         viewModel.connect(data)
     }
 }

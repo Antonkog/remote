@@ -411,7 +411,6 @@ class HomeActivityViewModel(
                         connectToServer(nsdModel.host, nsdModel.port)
                         launch(CommonPool) {
                             if (firstConnection) {
-                                database.recentDeviceDao().insert(RecentDevice(nsdModel.name, null))
                                 database.recommendationsDao().removeAll()
                                 database.serverInputsDao().removeAll()
                                 database.chennelsDao().removeAll()

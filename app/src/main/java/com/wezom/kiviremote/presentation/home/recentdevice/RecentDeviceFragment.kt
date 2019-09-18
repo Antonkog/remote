@@ -115,7 +115,7 @@ class RecentDeviceFragment : BaseFragment() {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    if (data.indexInRecentList == 0)
+                    if (data.indexInRecentList == 0 && context != null)
                         restartApp(context!!)
                     else
                         viewModel.goBack()
@@ -126,7 +126,7 @@ class RecentDeviceFragment : BaseFragment() {
         if (newName.isEmpty()) {
             toast(R.string.device_name_cannot_be_empty)
         } else {
-            val value = RecentDevice(data.recentDevice.id, data.recentDevice.actualName, newName)
+            val value = RecentDevice(data.recentDevice.actualName, newName, true)
             hideKeyboard(activity as Activity)
             launch(UI) {
                 viewModel.saveChanges(value)

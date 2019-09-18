@@ -11,7 +11,7 @@ import ru.terrakok.cicerone.Router
 class RecentDeviceViewModel(val database: AppDatabase, val router: Router) : BaseViewModel() {
     suspend fun saveChanges(model: RecentDevice) {
         run(CommonPool) {
-            database.recentDeviceDao().insertAll(model)
+            database.recentDeviceDao().insertReplace(model)
         }
     }
 

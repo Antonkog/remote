@@ -83,7 +83,7 @@
     <string name="audio">Audio</string>
     <string name="photo">Photo</string>
     <string name="service_failure_message">Service is unavailable. Try again later.</string>
-    <string name="network_failure_message">Network unavailable</string>
+    <string name="network_failure_message">Вы действительно хотите подключить %s ?</string>
     <string name="type_command">Type Command&#8230;</string>
     <string name="connect_to_lan">Connected to network: %s</string>
     <string name="discovery_choose_tv">List of TVs in WiFi</string>
@@ -118,6 +118,9 @@
     <string name="cvv_code">CVV-коды</string>
     <string name="make_payment">Төлеу үшін</string>
     <string name="auto_connect">Автоподключение</string>
+    <string name="conection">Подключение</string>
+    <string name="really_connect">Вы действительно хотите подключить %s ?</string>
+    <string name="connect">Подключить</string>
 
 
 </resources>

@@ -5,7 +5,7 @@
     <string name="cancel">Скасувати</string>
     <string name="error">Сталася помилка, спробуйте ще раз</string>
     <string name="service_failure_message">Сервіс недоступний. Спробуйте пізніше.</string>
-    <string name="network_failure_message">Мережа недоступна</string>
+    <string name="network_failure_message">Мережа Ви дійсно хочете підключити %s ?</string>
 
 
     <!--CLIENT SIDE strings-->
@@ -139,6 +139,8 @@
     <string name="cvv_code">CVV-код</string>
     <string name="make_payment">Оплатити</string>
     <string name="auto_connect">Автопідключення</string>
+    <string name="really_connect">Ви дійсно бажаєте підключити% s?</string>
+    <string name="conection">"Підключення "</string>
 
 
 </resources>

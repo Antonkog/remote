@@ -12,19 +12,16 @@ import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.*
 import com.wezom.kiviremote.nsd.NsdHelper
 import com.wezom.kiviremote.nsd.NsdHelper.SERVICE_MASK
-import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
 import com.wezom.kiviremote.nsd.NsdServiceModel
 import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.persistence.model.RecentDevice
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
-import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.launch
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
-import java.util.concurrent.CopyOnWriteArrayList
 
 
 class DeviceSearchViewModel(
@@ -33,7 +30,6 @@ class DeviceSearchViewModel(
         private val database: AppDatabase,
         private val preferences: SharedPreferences
 ) : BaseViewModel() {
-
 
     private var lastNsdHolderName by preferences.string(Constants.UNIDENTIFIED, key = Constants.LAST_NSD_HOLDER_NAME)
     private var autoConnect by preferences.boolean(false, Constants.AUTO_CONNECT)
@@ -53,29 +49,16 @@ class DeviceSearchViewModel(
     }
 
     val networkState = MutableLiveData<Boolean>()
-    val nsdDevices = MutableLiveData<Set<NsdServiceInfoWrapper>>()
+    val nsdDevices = MutableLiveData<Set<NsdServiceInfo>>()
 
     private var resolveListener: NsdManager.ResolveListener? = null
     private var resolving = false
     private var serviceInfo: NsdServiceInfo? = null
 
-    private val recentDevices = CopyOnWriteArrayList<RecentDevice>()
 
-    fun updateRecentDevices() {
-        disposables += database.recentDeviceDao()
-                .all
-                .subscribeOn(Schedulers.io())
-                .subscribe({
-                    with(recentDevices) {
-                        clear()
-                        addAll(it)
-                    }
-                }, { Timber.e(it, it.message) })
-    }
-
-    fun connect(data: NsdServiceInfoWrapper) {
-        lastNsdHolderName = data.service.serviceName
-        serviceInfo = data.service
+    fun connect(data: NsdServiceInfo) {
+        lastNsdHolderName = data.serviceName
+        serviceInfo = data
         connect()
     }
 
@@ -88,31 +71,6 @@ class DeviceSearchViewModel(
         if (!resolving) {
             resolveService()
         }
-    }
-
-    private fun checkIfRecent(
-            wrapper: NsdServiceInfoWrapper,
-            recentDevices: CopyOnWriteArrayList<RecentDevice>
-    ): NsdServiceInfoWrapper {
-        recentDevices.takeIf { it.isNotEmpty() }?.let { devices ->
-            devices.forEach {
-                val name = it.actualName
-                val userDefinedName = it.userDefinedName
-                if (name != null && wrapper.serviceName.contains(name.getTvUniqueId())) {
-                    if (name != wrapper.serviceName) {
-                        val value = RecentDevice(it.id, wrapper.serviceName, userDefinedName)
-                        launch(CommonPool) {
-                            database.recentDeviceDao().insertAll(value)
-                        }
-                    }
-
-                    if (userDefinedName != null) {
-                        return NsdServiceInfoWrapper(wrapper.service, userDefinedName)
-                    }
-                }
-            }
-        }
-        return NsdServiceInfoWrapper(wrapper.service, wrapper.serviceName.removeMasks())
     }
 
     fun initResolveListener() {
@@ -170,35 +128,25 @@ class DeviceSearchViewModel(
         nsdHelper.discoverServices()
     }
 
-    private fun handleDevices(devices: Set<NsdServiceInfoWrapper>) {
-        when {
-            devices.size == 1 -> {
-                val wrapper = checkIfRecent(devices.first(), recentDevices)
-                serviceInfo = wrapper.service
-                nsdDevices.postValue(setOf(wrapper))
-                Timber.d("Found single device: ${wrapper.serviceName}")
-            }
-            devices.size > 1 -> devices.let {
-                val cleanDevices = devices.mapTo(HashSet(), { checkIfRecent(it, recentDevices) })
-                nsdDevices.postValue(cleanDevices)
-                Timber.d("Found multiple devices: ")
-                cleanDevices.forEach { Timber.d("device: ${it.serviceName}") }
-            }
-            devices.isEmpty() -> {
-                nsdDevices.postValue(setOf())
-                Timber.d("KIVI_NSD device is not found.")
+    private fun handleDevices(devices: Set<NsdServiceInfo>) {
+        nsdDevices.postValue(devices)
+        launch(CommonPool) {
+            database.recentDeviceDao().removeAll()
+            devices.takeIf { it != null && it.isNotEmpty() }?.map { RecentDevice(it.serviceName, it.serviceName.removeMasks(), true) }.let {
+                database.recentDeviceDao().insert(it)
             }
         }
+        devices.forEach { Timber.d(" found device: ${it}") }
     }
 
-    fun tryAutoConnect(set: Set<NsdServiceInfoWrapper>) : Boolean{
-        if(autoConnect)
-        set.forEach {
-            if (it.service.serviceName.remove032Space() == lastNsdHolderName.remove032Space()) {
-                Run.after(Constants.DELAY_AUTO_CONNECT) { connect(it) }
-                true
+    fun tryAutoConnect(set: Set<NsdServiceInfo>): Boolean {
+        if (autoConnect)
+            set.forEach {
+                if (it.serviceName.remove032Space() == lastNsdHolderName.remove032Space()) {
+                    Run.after(Constants.DELAY_AUTO_CONNECT) { connect(it) }
+                    true
+                }
             }
-        }
         return false
     }
 

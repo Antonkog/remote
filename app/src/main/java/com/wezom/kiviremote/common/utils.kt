@@ -16,6 +16,7 @@ import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.MediaStore
+import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
 import android.util.Base64
 import android.view.View
@@ -289,6 +290,17 @@ fun triggerRebirth(context: Context) {
     triggerRebirth(context, getRestartIntent(context))
 }
 
+fun <T> lazyFast(operation: () -> T): Lazy<T> = lazy(LazyThreadSafetyMode.NONE) {
+    operation()
+}
+
+@RequiresApi(Build.VERSION_CODES.N)
+fun Context.safeContext(): Context =
+        takeUnless { isDeviceProtectedStorage }?.run {
+            applicationContext.let {
+                ContextCompat.createDeviceProtectedStorageContext(it) ?: it
+            }
+        } ?: this
 
 fun restartApp(ctx: Context) {
     try {

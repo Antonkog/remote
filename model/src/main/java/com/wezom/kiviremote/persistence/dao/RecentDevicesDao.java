@@ -24,17 +24,14 @@ public interface RecentDevicesDao {
     @Query("SELECT * FROM recent_devices WHERE actual_name = :name")
     Flowable<RecentDevice> getDevice(String name);
 
-    @Query("SELECT * FROM recent_devices ORDER BY id DESC LIMIT :limit")
-    Flowable<List<RecentDevice>> getLastAdded(int limit);
-
     @Insert
     void insertAll(List<RecentDevice> devices);
 
     @Insert(onConflict = REPLACE)
-    void insertAll(RecentDevice... device);
+    void insertReplace(RecentDevice device);
 
     @Insert(onConflict = IGNORE)
-    void insert(RecentDevice device);
+    void insert(List<RecentDevice>devices);
 
     @Query("DELETE FROM recent_devices")
     void removeAll();

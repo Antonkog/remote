@@ -5,7 +5,7 @@
     <string name="cancel">Cancel</string>
     <string name="error">An error occurred, please try again</string>
     <string name="service_failure_message">Service is unavailable. Try again later.</string>
-    <string name="network_failure_message">Network unavailable</string>
+    <string name="network_failure_message">You really want to connect %s ?</string>
 
 
     <!--CLIENT SIDE strings-->
@@ -140,6 +140,9 @@
     <string name="cvv_code">CVV-code</string>
     <string name="make_payment">Pay</string>
     <string name="auto_connect">Auto connect</string>
+    <string name="conection">Connection</string>
+    <string name="really_connect">Are you sure you want to connect% s?</string>
+    <string name="connect" translatable="false">Connect</string>
 
 
 </resources>

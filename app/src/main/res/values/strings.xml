@@ -4,15 +4,16 @@
     <string name="open">открыть</string>
     <string name="close">закрыть</string>
     <string name="ok" translatable="false">ОК</string>
+    <string name="connect">Подключить</string>
     <string name="cancel">Отмена</string>
     <string name="error">Произошла ошибка, попробуйте ещё раз</string>
     <string name="service_failure_message">Сервис недоступен. Попробуйте позже.</string>
     <string name="network_failure_message">Сеть недоступна</string>
-
+    <string name="really_connect">Вы действительно хотите подключить %s ?</string>
+    <string name="conection">Подключение</string>
 
     <!--CLIENT SIDE strings-->
     <string name="type_command">Type Command&#8230;</string>
-    <string name="connect" translatable="false">Connect</string>
     <string name="server_ip" formatted="false" translatable="false">Server at IP: %s, port: %s</string>
     <string name="connect_to_lan" formatted="false">Подключено к сети: "%s"</string>
 

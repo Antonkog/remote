@@ -3,6 +3,7 @@ package com.wezom.kiviremote.presentation.home.recentdevices
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.SharedPreferences
+import android.net.nsd.NsdServiceInfo
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -10,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.databinding.RecentDevicesFragmentBinding
-import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
 import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.persistence.model.RecentDevice
 import com.wezom.kiviremote.presentation.base.BaseFragment
@@ -39,10 +39,6 @@ class RecentDevicesFragment : BaseFragment() {
         it?.let { setRecentDevices(it) }
     }
 
-    private val nsdServicesObserver = Observer<Set<NsdServiceInfoWrapper>> {
-        it?.let { onNewDevicesDiscovered(it) }
-    }
-
     private val adapter: DevicesListAdapter by lazy {
         DevicesListAdapter(preferences, viewModel::navigateToRecentDevice, this::connect)
     }
@@ -57,12 +53,8 @@ class RecentDevicesFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecentDevicesViewModel::class.java)
-
-        viewModel.initResolveListener()
         viewModel.run {
             requestRecentDevices()
-            discoverDevices()
-            nsdServices.observe(this@RecentDevicesFragment, nsdServicesObserver)
             recentDevices.observe(this@RecentDevicesFragment, recentDevicesObserver)
         }
 
@@ -90,17 +82,13 @@ class RecentDevicesFragment : BaseFragment() {
     }
 
 
-    private fun connect(wrapper: NsdServiceInfoWrapper?) {
-        if (wrapper != null) {
-            viewModel.connect(wrapper)
+    private fun connect(data: NsdServiceInfo) {
+        if (context != null) {
+            viewModel.connect(data,context!!)
         }
     }
 
     private fun setRecentDevices(devices: List<RecentDevice>) {
         adapter.setRecentDevices(if (devices.size > 5) devices.takeLast(5) else devices)
-    }
-
-    private fun onNewDevicesDiscovered(devicesOnline: Set<NsdServiceInfoWrapper>) {
-        adapter.setOnlineDevices(devicesOnline)
     }
 }

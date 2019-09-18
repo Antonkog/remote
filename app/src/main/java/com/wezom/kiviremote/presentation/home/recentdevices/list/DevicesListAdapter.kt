@@ -1,19 +1,20 @@
 package com.wezom.kiviremote.presentation.home.recentdevices.list
 
 import android.content.SharedPreferences
+import android.net.nsd.NsdServiceInfo
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.extensions.string
-import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
 import com.wezom.kiviremote.persistence.model.RecentDevice
 import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo
 import com.wezom.kiviremote.presentation.home.recentdevices.item.DevicesAdapter
+import timber.log.Timber
 import java.util.*
 
-class DevicesListAdapter(preferences: SharedPreferences, val navigateCommand: (TvDeviceInfo) -> Unit, val connectCommand: (NsdServiceInfoWrapper) -> Unit) : RecyclerView.Adapter<DevicesListViewHolder>() {
+class DevicesListAdapter(preferences: SharedPreferences, val navigateCommand: (TvDeviceInfo) -> Unit, val connectCommand: (NsdServiceInfo) -> Unit) : RecyclerView.Adapter<DevicesListViewHolder>() {
 
     companion object {
         private const val TYPE_RECENT = 0
@@ -43,7 +44,7 @@ class DevicesListAdapter(preferences: SharedPreferences, val navigateCommand: (T
             TYPE_ONLINE -> {
                 counter++
                 tvDeviceChunks[TYPE_ONLINE]?.let {
-                    holder.bindData(holder.view.context.getString(R.string.other_devices).toString(), it, DevicesAdapter(currentConnection, navigateCommand, connectCommand,false))
+                    holder.bindData(holder.view.context.getString(R.string.other_devices).toString(), it, DevicesAdapter(currentConnection, navigateCommand, connectCommand, false))
                 }
             }
         }
@@ -65,19 +66,12 @@ class DevicesListAdapter(preferences: SharedPreferences, val navigateCommand: (T
 
     fun setRecentDevices(recentDevices: List<RecentDevice>) {
         tvDeviceChunks[TYPE_RECENT] = recentDevices.map {
-            TvDeviceInfo(RecentDevice(it.actualName, it.userDefinedName), null)
+            TvDeviceInfo(RecentDevice(it.actualName, it.userDefinedName, it.isOnline), null)
         }.toMutableList()
 
         tvDeviceChunks[TYPE_ONLINE]?.let { sortExistingRecentDevices() }
     }
 
-    fun setOnlineDevices(onlineDevices: Set<NsdServiceInfoWrapper>) {
-        tvDeviceChunks[TYPE_ONLINE] = onlineDevices.map {
-            TvDeviceInfo(RecentDevice(it.serviceName, null).also { it.isOnline = true }, it)
-        }.toMutableList()
-
-        tvDeviceChunks[TYPE_RECENT]?.let { sortExistingRecentDevices() }
-    }
 
     private fun sortExistingRecentDevices() {
         val onlineTvDevices: List<TvDeviceInfo> = tvDeviceChunks[TYPE_ONLINE]!!.toList()
@@ -92,10 +86,13 @@ class DevicesListAdapter(preferences: SharedPreferences, val navigateCommand: (T
 
         val connectedDeviceIndex = tvDeviceChunks[TYPE_RECENT]?.indexOfFirst { it.recentDevice.actualName == currentConnection }
         if (connectedDeviceIndex != -1)
-        Collections.swap(tvDeviceChunks[TYPE_RECENT], 0, connectedDeviceIndex ?: 0)
+            Collections.swap(tvDeviceChunks[TYPE_RECENT], 0, connectedDeviceIndex ?: 0)
 
         // Removing OnlineDevices elements that contains in RecentDevices
         tvDeviceChunks[TYPE_ONLINE]?.removeAll { tvDeviceChunks[TYPE_RECENT]?.any { devInfo -> devInfo.recentDevice.actualName == it.recentDevice.actualName } ?: false }
+
+        tvDeviceChunks.forEach{ device -> device.value?.forEach { Timber.e(getItemViewType(device.key).toString() + " " + toString()) }}
+
         notifyDataSetChanged()
     }
 

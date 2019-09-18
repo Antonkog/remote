@@ -15,7 +15,7 @@ import com.wezom.kiviremote.persistence.model.ServerChannel;
 import com.wezom.kiviremote.persistence.model.ServerInput;
 import com.wezom.kiviremote.persistence.model.ServerRecommendation;
 
-@Database(entities = {ServerApp.class, RecentDevice.class, ServerInput.class, ServerChannel.class, ServerRecommendation.class}, version = 8, exportSchema = false)
+@Database(entities = {ServerApp.class, RecentDevice.class, ServerInput.class, ServerChannel.class, ServerRecommendation.class}, version = 10, exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract ServerAppsDao serverAppDao();

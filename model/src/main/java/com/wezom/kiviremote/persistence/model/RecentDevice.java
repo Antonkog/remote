@@ -2,43 +2,43 @@ package com.wezom.kiviremote.persistence.model;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
-import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.Index;
 import android.arch.persistence.room.PrimaryKey;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import java.io.Serializable;
 
 @Entity(tableName = "recent_devices", indices = {@Index(value = {"actual_name"}, unique = true)})
 public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Serializable {
 
-    public RecentDevice(String actualName, @Nullable String userDefinedName) {
+    public RecentDevice(String actualName, String userDefinedName, boolean online) {
         this.actualName = actualName;
         this.userDefinedName = userDefinedName;
+        this.online = online;
     }
 
-    @Ignore
-    public RecentDevice(int id, String actualName, String userDefinedName) {
-        this.id = id;
-        this.actualName = actualName;
-        this.userDefinedName = userDefinedName;
-    }
-
-
-    @PrimaryKey(autoGenerate = true)
-    private int id;
-
+    @PrimaryKey
+    @NonNull
     @ColumnInfo(name = "actual_name")
     private String actualName;
 
     @ColumnInfo(name = "user_defined_name")
     private String userDefinedName;
 
-    @Ignore
+    @ColumnInfo(name = "online")
     private boolean online;
+
+
+
+    public void setActualName(String actualName) {
+        this.actualName = actualName;
+    }
+
+    public void setUserDefinedName(String userDefinedName) {
+        this.userDefinedName = userDefinedName;
+    }
 
     public boolean isOnline() {
         return online;
@@ -46,14 +46,6 @@ public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Seria
 
     public void setOnline(boolean online) {
         this.online = online;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getActualName() {
@@ -79,7 +71,6 @@ public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Seria
     @Override
     public String toString() {
         return "RecentDevice{" +
-                "id=" + id +
                 ", actualName='" + actualName + '\'' +
                 ", userDefinedName='" + userDefinedName + '\'' +
                 ", online=" + online +
@@ -94,21 +85,21 @@ public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Seria
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt(this.id);
         dest.writeString(this.actualName);
         dest.writeString(this.userDefinedName);
+        dest.writeByte(this.online ? (byte) 1 : (byte) 0);
     }
 
     protected RecentDevice(Parcel in) {
-        this.id = in.readInt();
         this.actualName = in.readString();
         this.userDefinedName = in.readString();
+        this.online = in.readByte() != 0;
     }
 
     public static final Creator<RecentDevice> CREATOR = new Creator<RecentDevice>() {
         @Override
-        public RecentDevice createFromParcel(Parcel in) {
-            return new RecentDevice(in);
+        public RecentDevice createFromParcel(Parcel source) {
+            return new RecentDevice(source);
         }
 
         @Override

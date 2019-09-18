@@ -66,7 +66,7 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
             GalleryViewModel(uPnPManager) as T
 
         modelClass.isAssignableFrom(RecentDevicesViewModel::class.java) ->
-            RecentDevicesViewModel(router, database, nsdHelper,preferences) as T
+            RecentDevicesViewModel(router, database, preferences) as T
 
         modelClass.isAssignableFrom(TvSettingsViewModel::class.java) ->
             TvSettingsViewModel(router) as T

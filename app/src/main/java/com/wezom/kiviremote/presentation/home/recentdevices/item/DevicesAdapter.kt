@@ -1,13 +1,13 @@
 package com.wezom.kiviremote.presentation.home.recentdevices.item
 
+import android.net.nsd.NsdServiceInfo
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.wezom.kiviremote.R
-import com.wezom.kiviremote.nsd.NsdServiceInfoWrapper
 import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo
 
-class DevicesAdapter(private val currentConnection: String, val navigateCommand: (TvDeviceInfo) -> Unit = {}, val connectCommand: (NsdServiceInfoWrapper) -> Unit = {}, private val isShowInfoIcon: Boolean = true) : RecyclerView.Adapter<DeviceViewHolder>() {
+class DevicesAdapter(private val currentConnection: String, val navigateCommand: (TvDeviceInfo) -> Unit = {}, val connectCommand: (NsdServiceInfo) -> Unit = {}, private val isShowInfoIcon: Boolean = true) : RecyclerView.Adapter<DeviceViewHolder>() {
 
     private val devices = mutableListOf<TvDeviceInfo>()
 
