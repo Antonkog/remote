@@ -47,9 +47,6 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
         modelClass.isAssignableFrom(HomeActivityViewModel::class.java) ->
             HomeActivityViewModel(database, navigatorHolder, cache, router, uPnPManager, preferences) as T
 
-        modelClass.isAssignableFrom(RecentDeviceViewModel::class.java) ->
-            RecentDeviceViewModel(database, router) as T
-
         modelClass.isAssignableFrom(RecommendationsViewModel::class.java) ->
             RecommendationsViewModel(router, database, cache, preferences, uPnPManager) as T
 
@@ -67,6 +64,9 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
 
         modelClass.isAssignableFrom(RecentDevicesViewModel::class.java) ->
             RecentDevicesViewModel(router, database, preferences) as T
+
+        modelClass.isAssignableFrom(RecentDeviceViewModel::class.java) ->
+            RecentDeviceViewModel(database, router, preferences) as T
 
         modelClass.isAssignableFrom(TvSettingsViewModel::class.java) ->
             TvSettingsViewModel(router) as T

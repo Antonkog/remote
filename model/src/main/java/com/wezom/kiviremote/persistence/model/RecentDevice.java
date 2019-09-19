@@ -13,10 +13,9 @@ import java.io.Serializable;
 @Entity(tableName = "recent_devices", indices = {@Index(value = {"actual_name"}, unique = true)})
 public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Serializable {
 
-    public RecentDevice(String actualName, String userDefinedName, boolean online) {
+    public RecentDevice(String actualName) {
         this.actualName = actualName;
-        this.userDefinedName = userDefinedName;
-        this.online = online;
+        this.online = true;
     }
 
     @PrimaryKey
@@ -30,7 +29,8 @@ public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Seria
     @ColumnInfo(name = "online")
     private boolean online;
 
-
+    @ColumnInfo(name = "wasConnected")
+    private Long wasConnected;
 
     public void setActualName(String actualName) {
         this.actualName = actualName;
@@ -46,6 +46,14 @@ public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Seria
 
     public void setOnline(boolean online) {
         this.online = online;
+    }
+
+    public Long getWasConnected() {
+        return wasConnected;
+    }
+
+    public void setWasConnected(Long wasConnected) {
+        this.wasConnected = wasConnected;
     }
 
     public String getActualName() {
@@ -88,12 +96,14 @@ public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Seria
         dest.writeString(this.actualName);
         dest.writeString(this.userDefinedName);
         dest.writeByte(this.online ? (byte) 1 : (byte) 0);
+        dest.writeValue(this.wasConnected);
     }
 
     protected RecentDevice(Parcel in) {
         this.actualName = in.readString();
         this.userDefinedName = in.readString();
         this.online = in.readByte() != 0;
+        this.wasConnected = (Long) in.readValue(Long.class.getClassLoader());
     }
 
     public static final Creator<RecentDevice> CREATOR = new Creator<RecentDevice>() {

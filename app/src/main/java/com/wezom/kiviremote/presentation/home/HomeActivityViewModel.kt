@@ -20,7 +20,6 @@ import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.persistence.model.*
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment
-import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadButtonClickEvent
 import com.wezom.kiviremote.presentation.home.tvsettings.AspectHolder
 import com.wezom.kiviremote.presentation.home.tvsettings.LastVolume
@@ -553,7 +552,4 @@ class HomeActivityViewModel(
     fun goTo(screenKey: String) {
         router.navigateTo(screenKey);
     }
-
-    fun goToDeviceInfo(data: TvDeviceInfo) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)
-
 }

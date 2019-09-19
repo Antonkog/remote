@@ -19,13 +19,11 @@ class RecentDevicesViewModel(private val router: Router,
                              private val database: AppDatabase,
                              preferences: SharedPreferences) : BaseViewModel() {
 
-    private var lastNsdHolderName by preferences.string(Constants.UNIDENTIFIED, key = Constants.LAST_NSD_HOLDER_NAME)
+    var lastNsdHolderName by preferences.string(Constants.UNIDENTIFIED, key = Constants.LAST_NSD_HOLDER_NAME)
 
     val recentDevices = MutableLiveData<List<RecentDevice>>()
 
-    private var serviceInfo: NsdServiceInfo? = null
-
-    fun navigateToRecentDevice(data: TvDeviceInfo) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)
+    fun navigateToRecentDevice(data: RecentDevice) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)
 
     fun connect(data: NsdServiceInfo, contetx: Context) {
         lastNsdHolderName = data.serviceName
@@ -33,8 +31,7 @@ class RecentDevicesViewModel(private val router: Router,
     }
 
     fun requestRecentDevices() {
-        disposables += database.recentDeviceDao().all.backToMain()
+        disposables += database.recentDeviceDao().fiveByConnection.backToMain()
                 .subscribe({ result -> recentDevices.postValue(result) }, { t -> Timber.e(t, t.message) })
     }
-
 }

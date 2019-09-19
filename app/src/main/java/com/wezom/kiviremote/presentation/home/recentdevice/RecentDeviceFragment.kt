@@ -16,12 +16,10 @@ import com.wezom.kiviremote.bus.NewNameEvent
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.remove032Space
 import com.wezom.kiviremote.common.hideKeyboard
-import com.wezom.kiviremote.common.restartApp
 import com.wezom.kiviremote.databinding.RecentDeviceFragmentBinding
 import com.wezom.kiviremote.persistence.model.RecentDevice
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
-import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -39,8 +37,7 @@ class RecentDeviceFragment : BaseFragment() {
     private lateinit var binding: RecentDeviceFragmentBinding
     lateinit var viewModel: RecentDeviceViewModel
 
-    private lateinit var data: TvDeviceInfo
-
+    private lateinit var data: RecentDevice
 
     private lateinit var dialog: AlertDialog
     private lateinit var dialogEditText: EditText
@@ -72,9 +69,9 @@ class RecentDeviceFragment : BaseFragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecentDeviceViewModel::class.java)
 
         val adapter = TvInfoAdapter()
-        data = arguments!!.getSerializable("data") as TvDeviceInfo
+        data = arguments!!.getSerializable("data") as RecentDevice
 
-        dialogEditText.setText((data.recentDevice.userDefinedName ?: "").remove032Space())
+        dialogEditText.setText((data.userDefinedName ?: "").remove032Space())
 
         binding.rvInfoContainer.apply {
             this.adapter = adapter
@@ -111,14 +108,11 @@ class RecentDeviceFragment : BaseFragment() {
 
     @SuppressLint("CheckResult")
     private fun confirmDeletion() {
-        Completable.fromAction { viewModel.database.recentDeviceDao()?.removeByName(data.recentDevice.actualName) }
+        Completable.fromAction { viewModel.database.recentDeviceDao()?.removeByName(data.actualName) }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    if (data.indexInRecentList == 0 && context != null)
-                        restartApp(context!!)
-                    else
-                        viewModel.goBack()
+                        viewModel.goBack(data)
                 }
     }
 
@@ -126,7 +120,11 @@ class RecentDeviceFragment : BaseFragment() {
         if (newName.isEmpty()) {
             toast(R.string.device_name_cannot_be_empty)
         } else {
-            val value = RecentDevice(data.recentDevice.actualName, newName, true)
+            val value = RecentDevice(data.actualName).apply {
+                userDefinedName = newName
+                isOnline = true
+                wasConnected = System.currentTimeMillis()
+            }
             hideKeyboard(activity as Activity)
             launch(UI) {
                 viewModel.saveChanges(value)

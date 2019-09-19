@@ -2,8 +2,6 @@ package com.wezom.kiviremote.presentation.home.recentdevices
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
-import android.content.SharedPreferences
-import android.net.nsd.NsdServiceInfo
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -11,37 +9,28 @@ import android.view.View
 import android.view.ViewGroup
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.databinding.RecentDevicesFragmentBinding
-import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.persistence.model.RecentDevice
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
-import com.wezom.kiviremote.presentation.home.recentdevices.list.DevicesListAdapter
 import kotlinx.android.synthetic.main.home_activity.view.*
+import java.util.*
 import javax.inject.Inject
 
-class RecentDevicesFragment : BaseFragment() {
-
-    @Inject
-    lateinit var database: AppDatabase
+class RecentDevicesFragment : BaseFragment(), RecentDevicesListener {
 
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
 
-    @Inject
-    lateinit var preferences: SharedPreferences
-
     private lateinit var viewModel: RecentDevicesViewModel
 
-    private lateinit var binding: RecentDevicesFragmentBinding
+    private lateinit var binding: com.wezom.kiviremote.databinding.RecentDevicesFragmentBinding
 
     private val recentDevicesObserver = Observer<List<RecentDevice>> {
         it?.let { setRecentDevices(it) }
     }
 
-    private val adapter: DevicesListAdapter by lazy {
-        DevicesListAdapter(preferences, viewModel::navigateToRecentDevice, this::connect)
-    }
+    private lateinit var adapter: RecentDevicesAdapter
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
@@ -53,16 +42,18 @@ class RecentDevicesFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecentDevicesViewModel::class.java)
-        viewModel.run {
-            requestRecentDevices()
-            recentDevices.observe(this@RecentDevicesFragment, recentDevicesObserver)
-        }
 
+        adapter = RecentDevicesAdapter(this, currentConnection = viewModel.lastNsdHolderName)
 
         binding.devicesContainer.run {
             adapter = this@RecentDevicesFragment.adapter
             layoutManager = LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
             setHasFixedSize(true)
+        }
+
+        viewModel.run {
+            requestRecentDevices()
+            recentDevices.observe(this@RecentDevicesFragment, recentDevicesObserver)
         }
     }
 
@@ -81,14 +72,30 @@ class RecentDevicesFragment : BaseFragment() {
         super.onResume()
     }
 
-
-    private fun connect(data: NsdServiceInfo) {
-        if (context != null) {
-            viewModel.connect(data,context!!)
-        }
+    override fun connectDeviceChosen(recentDevice: RecentDevice, position: Int) {
+        //show dialog
     }
 
+    override fun infoBtnChosen(recentDevice: RecentDevice, position: Int) {
+        viewModel.navigateToRecentDevice(recentDevice)
+    }
+
+/*
+    private fun connect(data: NsdServiceInfo) {
+        if (context != null) {
+            viewModel.connect(data, context!!)
+        }
+    }
+*/
+
+
     private fun setRecentDevices(devices: List<RecentDevice>) {
-        adapter.setRecentDevices(if (devices.size > 5) devices.takeLast(5) else devices)
+        Collections.sort(devices)
+        val newData : MutableList<Comparable<*>>  = ArrayList()
+        newData.add(resources.getString(R.string.mine_devices))
+        devices.forEach { if(it.wasConnected != null &&  it.wasConnected > 0) newData.add(it) }
+        newData.add(resources.getString(R.string.other_devices))
+        devices.forEach { if(it.wasConnected == null || it.wasConnected == 0L) newData.add(it) }
+        adapter.swapData(newData)
     }
 }

@@ -14,13 +14,13 @@ import com.wezom.kiviremote.di.components.ActivityComponent;
 import com.wezom.kiviremote.di.components.ApplicationComponent;
 import com.wezom.kiviremote.di.modules.ActivityModule;
 import com.wezom.kiviremote.navigation.SupportFragmentNavigator;
+import com.wezom.kiviremote.persistence.model.RecentDevice;
 import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchFragment;
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesFragment;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
 import com.wezom.kiviremote.presentation.home.media.MediaFragment;
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragment;
-import com.wezom.kiviremote.presentation.home.recentdevices.TvDeviceInfo;
 import com.wezom.kiviremote.presentation.home.recommendations.RecommendationsFragment;
 import com.wezom.kiviremote.presentation.home.recommendations.deep.RecsAppsDeepFragment;
 import com.wezom.kiviremote.presentation.home.recommendations.deep.RecsChannelsDeepFragment;
@@ -76,7 +76,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         case Screens.RECENT_DEVICES_FRAGMENT:
                             return new RecentDevicesFragment();
                         case Screens.RECENT_DEVICE_FRAGMENT:
-                            return RecentDeviceFragment.newInstance((TvDeviceInfo) data);
+                            return RecentDeviceFragment.newInstance((RecentDevice) data);
                         case Screens.SUBS_PRICE_LIST_FRAGMENT:
                             return new RecsMovieDeepFragment();
                         case Screens.SUBS_INFO_FRAGMENT:

@@ -9,7 +9,10 @@ import com.wezom.kiviremote.bus.ConnectEvent
 import com.wezom.kiviremote.bus.NetworkStateEvent
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.RxBus
-import com.wezom.kiviremote.common.extensions.*
+import com.wezom.kiviremote.common.extensions.Run
+import com.wezom.kiviremote.common.extensions.boolean
+import com.wezom.kiviremote.common.extensions.remove032Space
+import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.nsd.NsdHelper
 import com.wezom.kiviremote.nsd.NsdHelper.SERVICE_MASK
 import com.wezom.kiviremote.nsd.NsdServiceModel
@@ -57,6 +60,11 @@ class DeviceSearchViewModel(
 
 
     fun connect(data: NsdServiceInfo) {
+        launch(CommonPool) {
+            database.recentDeviceDao().update(RecentDevice(data.serviceName).apply {
+                isOnline = true
+            wasConnected = System.currentTimeMillis()})
+        }
         lastNsdHolderName = data.serviceName
         serviceInfo = data
         connect()
@@ -131,8 +139,7 @@ class DeviceSearchViewModel(
     private fun handleDevices(devices: Set<NsdServiceInfo>) {
         nsdDevices.postValue(devices)
         launch(CommonPool) {
-            database.recentDeviceDao().removeAll()
-            devices.takeIf { it != null && it.isNotEmpty() }?.map { RecentDevice(it.serviceName, it.serviceName.removeMasks(), true) }.let {
+            devices.takeIf { it != null && it.isNotEmpty() }?.map { RecentDevice(it.serviceName) }?.let {
                 database.recentDeviceDao().insert(it)
             }
         }
