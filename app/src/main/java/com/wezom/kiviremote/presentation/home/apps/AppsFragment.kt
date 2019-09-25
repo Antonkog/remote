@@ -142,11 +142,6 @@ class AppsFragment : BaseFragment() {
 
     private fun removeRefreshingRunnable() = handler.removeCallbacks(noResultRunnable)
 
-    override fun onResume() {
-        super.onResume()
-        viewModel?.updateName()
-    }
-
     override fun onDestroyView() {
         removeRefreshingRunnable()
         super.onDestroyView()

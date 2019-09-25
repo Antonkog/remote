@@ -9,6 +9,7 @@ import com.wezom.kiviremote.presentation.base.BaseViewModel
 import kotlinx.coroutines.experimental.CommonPool
 import kotlinx.coroutines.experimental.run
 import ru.terrakok.cicerone.Router
+import timber.log.Timber
 
 
 class RecentDeviceViewModel(val database: AppDatabase, val router: Router, preferences: SharedPreferences) : BaseViewModel() {
@@ -17,7 +18,8 @@ class RecentDeviceViewModel(val database: AppDatabase, val router: Router, prefe
 
     suspend fun saveChanges(model: RecentDevice) {
         run(CommonPool) {
-            database.recentDeviceDao().update(model)
+            val update = database.recentDeviceDao().update(model)
+            if (update > 0) Timber.e("setting new name in db: $update")
         }
     }
 

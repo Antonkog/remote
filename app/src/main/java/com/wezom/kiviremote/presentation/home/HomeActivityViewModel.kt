@@ -17,7 +17,10 @@ import com.wezom.kiviremote.net.ChatConnection
 import com.wezom.kiviremote.net.model.*
 import com.wezom.kiviremote.nsd.NsdServiceModel
 import com.wezom.kiviremote.persistence.AppDatabase
-import com.wezom.kiviremote.persistence.model.*
+import com.wezom.kiviremote.persistence.model.ServerApp
+import com.wezom.kiviremote.persistence.model.ServerChannel
+import com.wezom.kiviremote.persistence.model.ServerInput
+import com.wezom.kiviremote.persistence.model.ServerRecommendation
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadButtonClickEvent
@@ -131,11 +134,10 @@ class HomeActivityViewModel(
 
                             database.serverAppDao().run {
                                 removeAll()
-                                insertMediaShareStaticApp(ServerApp().apply {
-                                    appName = Constants.MEDIA_SHARE_TXT_ID
-                                    packageName = Constants.MEDIA_SHARE_TXT_ID
-                                })
-
+//                                insertMediaShareStaticApp(ServerApp().apply {
+//                                    appName = Constants.MEDIA_SHARE_TXT_ID
+//                                    packageName = Constants.MEDIA_SHARE_TXT_ID
+//                                })
                                 insertAll(apps)
                             }
 

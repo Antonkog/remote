@@ -1,5 +1,6 @@
 package com.wezom.kiviremote.presentation.home.devicesearch
 
+import android.annotation.SuppressLint
 import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
 import android.net.nsd.NsdManager
@@ -38,6 +39,14 @@ class DeviceSearchViewModel(
     private var autoConnect by preferences.boolean(false, Constants.AUTO_CONNECT)
 
     init {
+        launch(CommonPool) {
+            // moke all offline
+            database.recentDeviceDao().all?.forEach { device ->
+              val update =   database.recentDeviceDao().update(device.apply { isOnline = false })
+                if(update > 0) Timber.e(" updated as offline " + device.actualName)
+                else Timber.e("was NOT updated as offline " + device.actualName)
+            }
+        }
         disposables += RxBus.listen(NetworkStateEvent::class.java).subscribeBy(
                 onNext = {
                     if (it.isAvailable) {
@@ -60,11 +69,6 @@ class DeviceSearchViewModel(
 
 
     fun connect(data: NsdServiceInfo) {
-        launch(CommonPool) {
-            database.recentDeviceDao().update(RecentDevice(data.serviceName).apply {
-                isOnline = true
-            wasConnected = System.currentTimeMillis()})
-        }
         lastNsdHolderName = data.serviceName
         serviceInfo = data
         connect()
@@ -85,6 +89,12 @@ class DeviceSearchViewModel(
         resolveListener = object : NsdManager.ResolveListener {
             override fun onResolveFailed(serviceInfo: NsdServiceInfo, errorCode: Int) {
                 Timber.e("Resolve failed: $errorCode")
+                if (errorCode != NsdManager.FAILURE_ALREADY_ACTIVE) launch(CommonPool) {
+                    val updated = database.recentDeviceDao().update(RecentDevice(serviceInfo.serviceName).apply {
+                        isOnline = false
+                    })
+                    Timber.e("Resolve failed updated as offline in db: $updated")
+                }
                 when (errorCode) {
                     NsdManager.FAILURE_ALREADY_ACTIVE -> {
                         Timber.e("FAILURE_ALREADY_ACTIVE")
@@ -119,6 +129,15 @@ class DeviceSearchViewModel(
                                     )
                             )
                     )
+                    launch(CommonPool) {
+                        val updated = database.recentDeviceDao().update(RecentDevice(service.serviceName).apply {
+                            isOnline = true
+                            wasConnected = System.currentTimeMillis()
+                        })
+
+                        if (updated > 0) Timber.e("Resolved  updated as online in db: $updated")
+                        else  Timber.e("Resolved NOT updated as online in db: $updated")
+                    }
                     navigateToRecommendations(service)
                     resolving = false
                 }
@@ -138,12 +157,27 @@ class DeviceSearchViewModel(
 
     private fun handleDevices(devices: Set<NsdServiceInfo>) {
         nsdDevices.postValue(devices)
+        devices.forEach { Timber.d(" found device: ${it}") }
         launch(CommonPool) {
-            devices.takeIf { it != null && it.isNotEmpty() }?.map { RecentDevice(it.serviceName) }?.let {
-                database.recentDeviceDao().insert(it)
+            devices.takeIf { it != null && it.isNotEmpty() }?.forEach {
+                upsert(it.serviceName, database)
             }
         }
-        devices.forEach { Timber.d(" found device: ${it}") }
+    }
+
+    @SuppressLint("CheckResult")
+    fun upsert(serviceName: String, database: AppDatabase) { //to update saving old name
+        val id = database.recentDeviceDao().insert(RecentDevice(serviceName))
+        if (id == -1L) {
+            database.recentDeviceDao().getDevice(serviceName).subscribe {
+                if (!it.isOnline) {
+                    val result = database.recentDeviceDao().update(it.apply { isOnline = true })
+                    Timber.e(" insert in db Ignore : $serviceName updating $result")
+                }
+            }
+        } else {
+            Timber.e(" insert in db success : $serviceName")
+        }
     }
 
     fun tryAutoConnect(set: Set<NsdServiceInfo>): Boolean {

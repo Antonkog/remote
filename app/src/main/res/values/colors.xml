@@ -10,6 +10,8 @@
     <color name="colorBlackAlpha">#0D000000</color>
     <color name="kiviDark">#232323</color>
     <color name="btnDark">#0B0B0B</color>
+    <color name="touch_header_dm">#1E1E1E</color>
+    <color name="touch_body">#141414</color>
 
     <color name="colorWhite">#ffffff</color>
     <color name="light_red">#fd6666</color>
@@ -19,6 +21,7 @@
     <color name="colorTextPrimary">#515254</color>
     <color name="colorSecondaryText">#94969A</color>
     <color name="playing_now">@color/colorSecondaryText</color>
+
 
     <color name="divider">#80BDBDBD</color>
 
@@ -36,5 +39,5 @@
 
     <color name="image_counter">#B6BAC1</color>
 
-    <color name="directory_title">#5D5F62</color>
+    <color name="directory_title">@color/colorTextPrimary</color>
 </resources>

@@ -8,6 +8,8 @@ import com.jakewharton.rxrelay2.BehaviorRelay;
 import com.jakewharton.rxrelay2.Relay;
 import com.wezom.kiviremote.di.qualifiers.ApplicationContext;
 
+import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.concurrent.TimeUnit;
@@ -24,7 +26,6 @@ import timber.log.Timber;
 public class NsdHelper {
     public static final String SERVICE_MASK = "(KIVI_TV)";
     private static final String SERVICE_TYPE = "_http._tcp.";
-    private CopyOnWriteArraySet<NsdServiceInfo> servicesSet = new CopyOnWriteArraySet<>();
 
     private final NsdManager mNsdManager;
 
@@ -33,6 +34,7 @@ public class NsdHelper {
     private NsdServiceInfo chosenServiceInfo;
 
     private Relay<Set<NsdServiceInfo>> nsdServices;
+    private CopyOnWriteArraySet<NsdServiceInfoWrapper> serviceWrappers = new CopyOnWriteArraySet<>();
 
     private Disposable deviceNotFoundTimerDisposable;
 
@@ -75,17 +77,17 @@ public class NsdHelper {
                     Timber.d("Same machine: " + SERVICE_MASK);
                 } else if (service.getServiceName().contains(SERVICE_MASK)) {
                     killTimer();
-                    servicesSet.add(service);
-                    nsdServices.accept(servicesSet);
+                    serviceWrappers.add(new NsdServiceInfoWrapper(service));
+                    nsdServices.accept(toServiceSet(serviceWrappers));
                 }
             }
 
             @Override
             public void onServiceLost(NsdServiceInfo serviceInfo) {
                 Timber.d("NSD onServiceLost %s ", serviceInfo.getHost());
-                boolean removedSuccessfully = servicesSet.remove(serviceInfo);
+                boolean removedSuccessfully = serviceWrappers.remove(new NsdServiceInfoWrapper(serviceInfo));
                 if (removedSuccessfully) {
-                    nsdServices.accept(servicesSet);
+                    nsdServices.accept(toServiceSet(serviceWrappers));
                     if (chosenServiceInfo != null && chosenServiceInfo.equals(serviceInfo)) {
                         chosenServiceInfo = null;
                     }
@@ -103,7 +105,7 @@ public class NsdHelper {
     }
 
     public void discoverServices() {
-        servicesSet.clear();
+        serviceWrappers.clear();
         stopDiscovery();
         initializeDiscoveryListener();
         startTimer();
@@ -117,7 +119,7 @@ public class NsdHelper {
     private void startTimer() {
         if (deviceNotFoundTimerDisposable != null && !deviceNotFoundTimerDisposable.isDisposed())
             deviceNotFoundTimerDisposable.dispose();
-        deviceNotFoundTimerDisposable = getTimer().subscribe(() -> nsdServices.accept(servicesSet));
+        deviceNotFoundTimerDisposable = getTimer().subscribe(() -> nsdServices.accept(toServiceSet(serviceWrappers)));
     }
 
     private void killTimer() {
@@ -144,6 +146,46 @@ public class NsdHelper {
             mNsdManager.resolveService(serviceInfo, mResolveListener);
         } catch (Exception e) {
             Timber.e(e, e.getMessage());
+        }
+    }
+
+    public Set<NsdServiceInfo> toServiceSet(Set<NsdServiceInfoWrapper> services) {
+        Set<NsdServiceInfo> result = new HashSet<>();
+        for (NsdServiceInfoWrapper wrapper: services) {
+            result.add(wrapper.service);
+        }
+        return result;
+    }
+
+    private class NsdServiceInfoWrapper implements Serializable {
+        private NsdServiceInfo service;
+
+        public NsdServiceInfoWrapper(NsdServiceInfo service) {
+            this.service = service;
+        }
+
+        @Override
+        public boolean equals(Object object) {
+            if (object == null)
+                return false;
+
+            if (this == object) {
+                return true;
+            }
+
+            NsdServiceInfoWrapper serviceInfoWrapper = (NsdServiceInfoWrapper) object;
+            return service.getServiceName().equals(serviceInfoWrapper.service.getServiceName());
+        }
+
+        @Override
+        public int hashCode() {
+            int hash = 3;
+            hash = 53 * hash + (this.service.getServiceName() != null ? this.service.getServiceName().hashCode() : 0);
+            return hash;
+        }
+
+        public NsdServiceInfo getService() {
+            return service;
         }
     }
 }

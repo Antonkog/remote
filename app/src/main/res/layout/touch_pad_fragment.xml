@@ -4,134 +4,153 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout">
 
-    <android.support.constraint.ConstraintLayout
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <View
-            android:id="@+id/top_container"
+        <ImageView
+            android:id="@+id/drag_view"
             android:layout_width="match_parent"
-            android:layout_height="?android:attr/actionBarSize"
-            android:elevation="@dimen/small"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <ImageView
-            android:id="@+id/microphone"
-            android:layout_width="34dp"
-            android:layout_height="42dp"
-            android:layout_marginEnd="8dp"
-            android:padding="8dp"
-            android:translationZ="@dimen/small"
-            app:layout_constraintBottom_toBottomOf="@+id/top_container"
-            app:layout_constraintEnd_toEndOf="@+id/top_container"
-            app:layout_constraintTop_toTopOf="@+id/top_container"
-            app:srcCompat="@drawable/ic_microphone" />
-
-        <ImageView
-            android:id="@+id/power_off"
-            android:layout_width="34dp"
-            android:layout_height="37dp"
-            android:layout_marginStart="8dp"
-            android:padding="8dp"
-            android:translationZ="@dimen/small"
-            app:layout_constraintBottom_toBottomOf="@+id/top_container"
-            app:layout_constraintStart_toStartOf="@id/top_container"
-            app:layout_constraintTop_toTopOf="@+id/top_container"
-            app:srcCompat="@drawable/ic_power_w" />
-
-        <com.wezom.kiviremote.views.TouchpadView
-            android:id="@+id/touchpad"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="@dimen/standard"
-            android:layout_marginTop="@dimen/standard"
-            android:layout_marginBottom="@dimen/standard"
-            app:layout_constraintBottom_toTopOf="@+id/home"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/top_container" />
-
-        <ImageView
-            android:id="@+id/scroll"
-            android:layout_width="@dimen/scroll_width"
-            android:layout_height="0dp"
-            android:layout_marginTop="@dimen/scroll_margin"
-            android:padding="@dimen/scroll_margin"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toTopOf="@+id/img_action_mode"
-            app:layout_constraintRight_toRightOf="@+id/touchpad"
-            app:layout_constraintTop_toTopOf="@+id/touchpad"
-            app:srcCompat="@drawable/ic_scroll_gray" />
-
-        <ImageView
-            android:id="@+id/img_action_mode"
-            android:layout_width="30dp"
             android:layout_height="30dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginBottom="16dp"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="@+id/touchpad"
-            app:layout_constraintRight_toRightOf="@+id/touchpad"
-            app:layout_constraintTop_toBottomOf="@+id/scroll"
-            app:srcCompat="@drawable/ic_swipe" />
+            android:elevation="@dimen/mid"
+            android:layout_marginBottom="10dp"
+            app:srcCompat="@drawable/ic_dragger_w" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/touch_body"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:background="@color/touch_body"
+            android:layout_marginTop="30dp"
+            app:layout_anchor="@id/drag_view"
+            app:layout_anchorGravity="bottom|center_horizontal">
 
 
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:padding="8dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="@+id/home"
-            app:layout_constraintEnd_toStartOf="@+id/home"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:srcCompat="@drawable/ic_back" />
+            <View
+                android:id="@+id/top_container"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:elevation="@dimen/small"
+                tools:background="@color/touch_header_dm"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/home"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="22dp"
-            android:focusableInTouchMode="false"
-            android:padding="8dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/aspect_menu"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/back"
-            app:srcCompat="@drawable/ic_home" />
 
-        <ImageView
-            android:id="@+id/aspect_menu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp"
-            app:srcCompat="@drawable/ic_aspect"
-            android:padding="8dp"
-            android:scaleType="centerInside"
-            app:layout_constraintBottom_toBottomOf="@+id/home"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/home" />
+            <ImageView
+                android:id="@+id/microphone"
+                android:layout_width="34dp"
+                android:layout_height="42dp"
+                android:layout_marginEnd="8dp"
+                android:padding="8dp"
+                android:translationZ="@dimen/small"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@+id/top_container"
+                app:layout_constraintEnd_toEndOf="@+id/top_container"
+                app:layout_constraintTop_toTopOf="@+id/top_container"
+                app:srcCompat="@drawable/ic_microphone" />
 
-        <!--<com.wezom.kiviremote.views.MovableFloatingActionButton-->
-            <!--android:id="@+id/cursor"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="end|bottom"-->
-            <!--app:backgroundTint="@color/trans"-->
-            <!--app:layout_constraintBottom_toBottomOf="@+id/finger"-->
-            <!--app:layout_constraintEnd_toStartOf="@+id/finger"-->
-            <!--app:layout_constraintTop_toTopOf="@+id/finger"-->
-            <!--app:borderWidth="0dp"-->
-            <!--app:elevation="0dp"-->
-            <!--app:fabSize="normal"-->
-            <!--app:srcCompat="@drawable/ic_cursor" />-->
+            <ImageView
+                android:id="@+id/power_off"
+                android:layout_width="34dp"
+                android:layout_height="37dp"
+                android:layout_marginStart="8dp"
+                android:padding="8dp"
+                android:translationZ="@dimen/small"
+                app:layout_constraintBottom_toBottomOf="@+id/top_container"
+                app:layout_constraintStart_toStartOf="@id/top_container"
+                app:layout_constraintTop_toTopOf="@+id/top_container"
+                app:srcCompat="@drawable/ic_power" />
 
-    </android.support.constraint.ConstraintLayout>
+            <com.wezom.kiviremote.views.TouchpadView
+                android:id="@+id/touchpad"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="@dimen/standard"
+                android:layout_marginTop="@dimen/standard"
+                android:layout_marginBottom="@dimen/standard"
+                app:layout_constraintBottom_toTopOf="@+id/home"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/top_container" />
+
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/divider"
+                app:layout_constraintBottom_toBottomOf="@id/touchpad"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent" />
+
+
+            <ImageView
+                android:id="@+id/scroll"
+                android:layout_width="@dimen/scroll_width"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/scroll_margin"
+                android:padding="@dimen/scroll_margin"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toTopOf="@+id/img_action_mode"
+                app:layout_constraintRight_toRightOf="@+id/touchpad"
+                app:layout_constraintTop_toTopOf="@+id/touchpad"
+                app:srcCompat="@drawable/ic_scroll_gray" />
+
+            <ImageView
+                android:id="@+id/img_action_mode"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="@+id/touchpad"
+                app:layout_constraintRight_toRightOf="@+id/touchpad"
+                app:layout_constraintTop_toBottomOf="@+id/scroll"
+                app:srcCompat="@drawable/ic_swipe" />
+
+
+            <ImageView
+                android:id="@+id/back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toBottomOf="@+id/home"
+                app:layout_constraintEnd_toStartOf="@+id/home"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintHorizontal_chainStyle="spread_inside"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@drawable/ic_back" />
+
+            <ImageView
+                android:id="@+id/home"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="22dp"
+                android:focusableInTouchMode="false"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/aspect_menu"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/back"
+                app:srcCompat="@drawable/ic_home" />
+
+            <ImageView
+                android:id="@+id/aspect_menu"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:padding="8dp"
+                android:scaleType="centerInside"
+                app:layout_constraintBottom_toBottomOf="@+id/home"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/home"
+                app:srcCompat="@drawable/ic_aspect" />
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.design.widget.CoordinatorLayout>
 </layout>

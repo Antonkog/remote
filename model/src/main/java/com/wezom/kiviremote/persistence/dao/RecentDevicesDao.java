@@ -14,38 +14,33 @@ import java.util.List;
 import io.reactivex.Flowable;
 
 import static android.arch.persistence.room.OnConflictStrategy.IGNORE;
-import static android.arch.persistence.room.OnConflictStrategy.REPLACE;
 
 @Dao
 public interface RecentDevicesDao {
 
     @Query("SELECT * FROM recent_devices")
-    Flowable<List<RecentDevice>> getAll();
+    List<RecentDevice> getAll();
 
     @Query("SELECT * FROM recent_devices ORDER BY wasConnected DESC LIMIT 5")
     Flowable<List<RecentDevice>> getFiveByConnection();
 
-
-    @Query("SELECT * FROM recent_devices WHERE actual_name = :name")
-    Flowable<RecentDevice> getDevice(String name);
-
-    @Insert
-    void insertAll(List<RecentDevice> devices);
-
-    @Update
-    void update(RecentDevice device);
-
-    @Insert(onConflict = REPLACE)
-    void insertReplace(RecentDevice device);
-
-    @Insert(onConflict = IGNORE)
-    void insert(List<RecentDevice>devices);
-
-    @Query("DELETE FROM recent_devices")
-    void removeAll();
-
     @Query("DELETE FROM recent_devices WHERE actual_name = :name")
     void removeByName(String name);
+
+    @Update
+    int update(RecentDevice device);
+
+//    @Insert(onConflict = IGNORE)
+//    void insert(List<RecentDevice>devices);
+
+    @Insert(onConflict = IGNORE)
+    long insert(RecentDevice device);
+
+    @Query("SELECT * FROM recent_devices WHERE actual_name = :name")
+    Flowable<RecentDevice> getDevice(String name); //- replaced by preference that hold name
+
+//    @Query("DELETE FROM recent_devices")
+//    void removeAll();
 
     @Delete
     void deleteDevices(List<RecentDevice> devices);

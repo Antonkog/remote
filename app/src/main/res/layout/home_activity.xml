@@ -65,8 +65,7 @@
                         android:layout_centerHorizontal="true"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:paddingEnd="?actionBarSize"
-                        android:text="@string/app_name"/>
+                        android:paddingEnd="?actionBarSize"/>
 
 
                     <ImageView
@@ -106,7 +105,7 @@
                 android:layout_below="@+id/activity_home_container"
                 android:layout_gravity="bottom"
                 android:orientation="vertical"
-                android:visibility="visible"
+                android:visibility="gone"
                 app:behavior_hideable="true"
                 app:behavior_peekHeight="0dp"
                 app:layout_behavior="com.wezom.kiviremote.views.LockableBottomSheetBehavior">
@@ -129,7 +128,6 @@
                 android:layout_below="@+id/activity_home_container"
                 android:orientation="vertical"
                 android:layout_gravity="bottom"
-                android:layout_marginTop="?attr/actionBarSize"
                 app:behavior_hideable="true"
                 app:behavior_peekHeight="0dp"
                 app:layout_behavior="com.wezom.kiviremote.views.LockableBottomSheetBehavior"
@@ -151,6 +149,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
+                android:visibility="gone"
                 android:layout_margin="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="32dp"
@@ -168,6 +167,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            app:itemBackground="@drawable/selector_general_accent"
             app:menu="@menu/drawer">
 
 
@@ -181,11 +181,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
                     android:layout_gravity="bottom"
+                    android:ellipsize="marquee"
                     android:gravity="left|center_vertical"
                     android:paddingStart="50dp"
                     android:paddingEnd="8dp"
                     android:text="@string/auto_connect"
-                    android:ellipsize="marquee"
                     app:layout_constraintBottom_toTopOf="@+id/switch_dm"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
@@ -208,11 +208,11 @@
                     android:layout_width="match_parent"
                     android:layout_height="96dp"
                     android:layout_gravity="bottom"
+                    android:background="@color/colorBlackAlpha"
                     android:gravity="left|center_vertical"
                     android:paddingStart="50dp"
                     android:paddingEnd="8dp"
                     android:text="@string/dark_mode"
-                    android:background="@color/colorBlackAlpha"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />

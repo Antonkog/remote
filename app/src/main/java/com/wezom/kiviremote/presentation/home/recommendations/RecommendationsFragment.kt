@@ -3,6 +3,7 @@ package com.wezom.kiviremote.presentation.home.recommendations
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
+import android.support.design.widget.BottomSheetBehavior
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -42,21 +43,25 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private val recommendationsObserver = Observer<List<Comparable<Recommendation>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterRecommend.swapData(it)
+            changeMoviesVisible(View.VISIBLE)
             updateRecommendations(true)
-        } ?: Timber.d("TYPE_RECOMMENDATIONS empty")
+        } ?: changeMoviesVisible(View.GONE)
     }
 
     private val channelsObserver = Observer<List<Comparable<Channel>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterChannels.swapData(it)
+            changeChannelsVisible(View.VISIBLE)
             updateRecommendations(true)
-        } ?: Timber.d("TYPE_Channels empty")
+        } ?:  changeChannelsVisible(View.GONE)
+
     }
 
     private val appsObserver = Observer<List<Comparable<ServerAppInfo>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterApps.swapData(it)
-        } ?: Timber.d("TYPE_APPS empty")
+            changeAppsVisible(View.VISIBLE)
+        } ?: changeAppsVisible(View.GONE)
     }
 
     private val inputPortObserver = Observer<List<Comparable<Input>>> {
@@ -72,15 +77,17 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
     override fun onChannelChosen(item: Channel, position: Int) {
         viewModel.launchChannel(item)
-
+        (activity as HomeActivity).moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
     }
 
     override fun onRecommendationChosen(item: Recommendation, position: Int) {
         viewModel.launchRecommendation(item)
+        (activity as HomeActivity).moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
     }
 
     override fun appChosenNeedOpen(appModel: ServerAppInfo, positio: Int) {
         viewModel.launchApp(appModel.packageName)
+        (activity as HomeActivity).moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
     }
 
     private fun setPortServerCheck(id: Int) {
@@ -107,6 +114,24 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         binding = RecommendationsFragmentBinding.inflate(inflater, container, false)
         return binding.root
     }
+
+    private fun changeChannelsVisible(visible : Int){
+        binding.imgChannelsMenu.visibility = visible
+        binding.textChannel.visibility = visible
+    }
+
+
+    private fun changeMoviesVisible(visible : Int){
+        binding.imgRecommendMenu.visibility = visible
+        binding.textSubscriptions.visibility = visible
+    }
+
+
+    private fun changeAppsVisible(visible : Int){
+        binding.imgAppsMenu.visibility = visible
+        binding.textApps.visibility = visible
+    }
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -202,6 +227,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     override fun onResume() {
         super.onResume()
         (activity as HomeActivity).changeFabVisibility(View.VISIBLE)
+        (activity as HomeActivity).uncheckMenu()
     }
 
     override fun onDestroyView() {

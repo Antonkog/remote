@@ -39,8 +39,6 @@ import timber.log.Timber;
 public class TouchpadFragment extends TvKeysFragment
         implements OnTouchPadMessageListener<TouchpadMotionModel, TouchpadButtonClickEvent> {
 
-    public static final int POSITION = 1;
-
     @Inject
     BaseViewModelFactory viewModelFactory;
 
@@ -55,6 +53,7 @@ public class TouchpadFragment extends TvKeysFragment
     private final int REQUEST_PERMISSION_CODE = 12123;
 
     private boolean isScrollMode = true;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -110,30 +109,27 @@ public class TouchpadFragment extends TvKeysFragment
 
         binding.touchpad.setSpeedMultiplier(50); // can modify but no place in ui
 
-        binding.microphone.setImageResource(App.isDarkMode()? R.drawable.ic_microphone_dm : R.drawable.ic_microphone);
-        binding.powerOff.setImageResource(App.isDarkMode()? R.drawable.ic_power_w_dm : R.drawable.ic_power_w);
+        binding.microphone.setImageResource(App.isDarkMode() ? R.drawable.ic_microphone_dm : R.drawable.ic_microphone);
+        binding.powerOff.setImageResource(App.isDarkMode() ? R.drawable.ic_power_dm : R.drawable.ic_power);
 
-
-        binding.getRoot().setBackgroundColor(binding.getRoot().getResources().getColor(App.isDarkMode()? R.color.colorBlack :R.color.colorWhite));
-        binding.topContainer.setBackgroundColor(binding.getRoot().getResources().getColor(App.isDarkMode()? R.color.colorBlack :R.color.colorWhite));
-//        binding.topLayout.setBackgroundColor(binding.getRoot().getResources().getColor(App.isDarkMode()? R.color.colorBlack :R.color.colorWhite));
-        setScrollBtn();
+        binding.touchBody.setBackgroundColor(binding.getRoot().getResources().getColor(App.isDarkMode()? R.color.touch_body :R.color.colorWhite));
+        binding.topContainer.setBackgroundColor(binding.getRoot().getResources().getColor(App.isDarkMode()? R.color.touch_header_dm :R.color.colorWhite));
 
         binding.imgActionMode.setOnClickListener(v -> {
             this.isScrollMode = !isScrollMode;
             setScrollBtn();
         });
-
+        setScrollBtn();
         setScroll();
         setTvButtons(viewModel, binding.aspectMenu, binding.back, binding.home);
     }
 
     private void setScrollBtn() {
         binding.touchpad.setScrollMode(isScrollMode);
-        if(isScrollMode){
-            binding.imgActionMode.setImageResource(App.isDarkMode()? R.drawable.ic_swipe_dm : R.drawable.ic_swipe);
+        if (isScrollMode) {
+            binding.imgActionMode.setImageResource(App.isDarkMode() ? R.drawable.ic_swipe_dm : R.drawable.ic_swipe);
         } else {
-            binding.imgActionMode.setImageResource(App.isDarkMode()? R.drawable.ic_cursor_dm : R.drawable.ic_cursor);
+            binding.imgActionMode.setImageResource(App.isDarkMode() ? R.drawable.ic_cursor_dm : R.drawable.ic_cursor);
         }
     }
 

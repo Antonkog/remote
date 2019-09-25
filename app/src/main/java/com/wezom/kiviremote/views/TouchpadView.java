@@ -24,7 +24,7 @@ import timber.log.Timber;
  */
 
 public class TouchpadView extends android.support.v7.widget.AppCompatImageView implements GestureDetector.OnGestureListener {
-    private static final int DOUBLE_FINGER_TAP_TIMEOUT = 75;
+    private static final int DOUBLE_FINGER_TAP_TIMEOUT = 100;
 
     private boolean scroll = false;
     private GestureDetectorCompat gestureDetectorCompat;
@@ -41,6 +41,7 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
     private float x1, x2, y1, y2, dx, dy;
 
     private int centerClickArea = 65; //NumUtils.getToDp(50);
+
     public void setScrollMode(boolean scroll) {
         this.scroll = scroll;
     }
@@ -77,20 +78,20 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
         paint.setPathEffect(new DashPathEffect(new float[]{20, 20}, 0));
 
         int marging = getWidth() / 4;
-        int xlength = getWidth() -marging -marging;
+        int xlength = getWidth() - marging - marging;
 //        int scale = (h / w) < 1 ? (w/h) : h/w;
-        int vertMarging = (getHeight() - xlength)/2;
+        int vertMarging = (getHeight() - xlength) / 2;
 
-        path.moveTo(w / 2, h/2);
-        path.lineTo(w / 2,  vertMarging);
+        path.moveTo(w / 2, h / 2);
+        path.lineTo(w / 2, vertMarging);
 
-        path.moveTo(w / 2, h/2);
+        path.moveTo(w / 2, h / 2);
         path.lineTo(w / 2, h - vertMarging);
 
-        path.moveTo(w/2, h / 2);
+        path.moveTo(w / 2, h / 2);
         path.lineTo(marging, h / 2);
 
-        path.moveTo(w/2, h / 2);
+        path.moveTo(w / 2, h / 2);
         path.lineTo(w - marging, h / 2);
 
         canvas.drawPath(path, paint);
@@ -112,23 +113,23 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
                         break;
 
                     case MotionEvent.ACTION_MOVE:
-                            x2 = NumUtils.getToDp(event.getX());
-                            y2 = NumUtils.getToDp(event.getY());
-                            dx = x2 - x1;
-                            dy = y2 - y1;
+                        x2 = NumUtils.getToDp(event.getX());
+                        y2 = NumUtils.getToDp(event.getY());
+                        dx = x2 - x1;
+                        dy = y2 - y1;
 
-                            x1 = x2;
-                            y1 = y2;
+                        x1 = x2;
+                        y1 = y2;
 
-                            Timber.d("Dx: " + dx);
-                            Timber.d("Dy: " + dy);
+                        Timber.d("Dx: " + dx);
+                        Timber.d("Dy: " + dy);
 
-                            double multiplyBy = 2 + speedMultiplier * 1.5;
-                            listener.sendMotionEvent(new TouchpadMotionModel(dx * multiplyBy, dy * multiplyBy));
-
+                        double multiplyBy = 2 + speedMultiplier * 1.5;
+                        listener.sendMotionEvent(new TouchpadMotionModel(dx * multiplyBy, dy * multiplyBy));
                         break;
 
                     case MotionEvent.ACTION_UP:
+                        if (centerClickArea > Math.sqrt(Math.pow(dx, 2) * Math.pow(dy, 2)));
                         performClick();
                         break;
                 }
@@ -151,7 +152,7 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
                         dy = y2 - y1;
 
                         if (!stop) {
-                            if (dy < - centerClickArea) {
+                            if (dy < -centerClickArea) {
                                 listener.sendKey(KeyEvent.KEYCODE_DPAD_UP);
                                 stop = true;
                             }
@@ -175,9 +176,8 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        if(Math.abs(dx) + Math.abs(dy) < getWidth()/2 ){
-                            performClick();
-                        }
+                        if (centerClickArea > Math.sqrt(Math.pow(dx, 2) * Math.pow(dy, 2)));
+                        performClick();
                         break;
 
                     case MotionEvent.ACTION_CANCEL:
@@ -208,7 +208,7 @@ public class TouchpadView extends android.support.v7.widget.AppCompatImageView i
         long eventEnd = System.currentTimeMillis();
         long eventDifference = eventEnd - eventStart;
 
-        if (scroll && eventDifference < DOUBLE_FINGER_TAP_TIMEOUT)
+        if (eventDifference < DOUBLE_FINGER_TAP_TIMEOUT)
             listener.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         return super.performClick();
     }

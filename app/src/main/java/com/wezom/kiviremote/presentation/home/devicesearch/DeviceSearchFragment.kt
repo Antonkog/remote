@@ -21,7 +21,6 @@ import com.wezom.kiviremote.presentation.base.recycler.LazyAdapter
 import com.wezom.kiviremote.presentation.base.recycler.addItemDivider
 import com.wezom.kiviremote.presentation.base.recycler.initWithLinLay
 import com.wezom.kiviremote.presentation.home.HomeActivity
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -53,7 +52,6 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
     }
 
     private var adapter = DeviceSearchAdapter(this)
-    private val currentDevices = ArrayList<NsdServiceInfo>()
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
@@ -94,16 +92,18 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).setToolbarTxt(resources.getString(R.string.app_name))
+        (activity as HomeActivity).run {
+            uncheckMenu()
+            changeFabVisibility(View.GONE)
+            setToolbarTxt("")
+        }
         viewModel.initResolveListener()
         viewModel.discoverDevices()
     }
 
 
     private fun updateDeviceList(set: Set<NsdServiceInfo>) {
-        currentDevices.clear()
-        currentDevices.addAll(set)
-        adapter.swapData(currentDevices)
+        adapter.swapData(set.toList())
         viewModel.tryAutoConnect(set)
         showProgress(false)
     }

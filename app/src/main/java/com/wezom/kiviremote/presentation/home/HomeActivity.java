@@ -232,7 +232,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                 drawerLayout.openDrawer(GravityCompat.START);
             }
         });
-        binding.toolbarText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_selector, 0);
 
         binding.search.setOnClickListener(v -> showKeyboard());
 
@@ -245,8 +244,14 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
     public void setToolbarTxt(String text) {
-        binding.toolbarText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
+//        binding.toolbarText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
         binding.toolbarText.setText(text);
+    }
+
+    public void uncheckMenu(){
+        for (int i = 0; i < binding.navView.getMenu().size(); i++) {
+            binding.navView.getMenu().getItem(i).setChecked(false);
+        }
     }
 
     public void moveTouchPad(int stateExpanded) {
@@ -273,11 +278,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                 public void onAnimationUpdate(ValueAnimator valueAnimator) {
                     float slideOffset = (Float) valueAnimator.getAnimatedValue();
                     toggle.onDrawerSlide(drawerLayout, slideOffset);
-                    if (isHomeAsUp)
-                        binding.toolbarText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-                    else
-                        binding.toolbarText.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.arrow_down_selector, 0);
-
                 }
             });
             anim.setInterpolator(new DecelerateInterpolator());
@@ -498,12 +498,14 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     public void showReconnectSnackbar() {
         if (!reconnectSnackbar.isShown())
             reconnectSnackbar.show();
+//        changeFabVisibility(View.GONE);
         binding.disconnectStatusIndicator.setVisibility(View.VISIBLE);
     }
 
     public void hideReconnectSnackbar() {
         if (reconnectSnackbar.isShown())
             reconnectSnackbar.dismiss();
+//        changeFabVisibility(View.VISIBLE);
         binding.disconnectStatusIndicator.setVisibility(View.GONE);
     }
 
@@ -584,22 +586,21 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         touchpadSheetBehavior = LockableBottomSheetBehavior.Companion.from(findViewById(R.id.touchpad_slider));
         touchpadSheetBehavior.setHideable(true);
         touchpadSheetBehavior.setSwipeEnabled(false); ///!!!!!!!
-
         touchpadSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_COLLAPSED:
                     case BottomSheetBehavior.STATE_HIDDEN:
-                        binding.fab.setVisibility(View.VISIBLE);
+                        changeFabVisibility(View.VISIBLE);
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED:
-                        binding.fab.setVisibility(View.GONE);
+                        changeFabVisibility(View.GONE);
                         break;
 //                    case BottomSheetBehavior.STATE_DRAGGING:
 //                        touchpadSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     default:
-                        binding.fab.setVisibility(View.GONE);
+                        changeFabVisibility(View.GONE);
                         break;
                 }
             }
@@ -704,7 +705,9 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     public void onBackPressed() {
         if (bottomSheetBehavior != null && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED)
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        else if (!fragmentsBackKeyIntercept())
+        if (touchpadSheetBehavior != null && touchpadSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED)
+            touchpadSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        if (!fragmentsBackKeyIntercept())
             super.onBackPressed();
     }
 

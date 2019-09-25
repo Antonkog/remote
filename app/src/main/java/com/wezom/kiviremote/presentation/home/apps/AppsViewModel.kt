@@ -13,11 +13,9 @@ import com.wezom.kiviremote.common.Constants.CURRENT_CONNECTION_KEY
 import com.wezom.kiviremote.common.KiviCache
 import com.wezom.kiviremote.common.ResourceProvider
 import com.wezom.kiviremote.common.RxBus
-import com.wezom.kiviremote.common.extensions.removeMasks
 import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.presentation.base.BaseViewModel
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import timber.log.Timber
@@ -73,24 +71,6 @@ class AppsViewModel(
     }
 
     fun requestApps() = RxBus.publish(RequestAppsEvent())
-
-    fun updateName() {
-        disposables += database
-                .recentDeviceDao()
-                .getDevice(currentConnection)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(onNext = { device ->
-                    if (device.userDefinedName != null) {
-                        setCurrentDeviceName(device.userDefinedName)
-                    } else {
-                        setCurrentDeviceName(currentConnection.removeMasks())
-                    }
-                }, onError = {
-                    Timber.e(it, "Name doesn't exist: ${it.message}")
-                    setCurrentDeviceName(currentConnection.removeMasks())
-                })
-    }
 
     private fun setCurrentDeviceName(value: String) {
         deviceName.set(resourceProvider.getString(R.string.current_device, value))

@@ -13,7 +13,6 @@ import com.wezom.kiviremote.persistence.model.RecentDevice
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
-import kotlinx.android.synthetic.main.home_activity.view.*
 import java.util.*
 import javax.inject.Inject
 
@@ -66,7 +65,7 @@ class RecentDevicesFragment : BaseFragment(), RecentDevicesListener {
 
     override fun onResume() {
         (activity as (HomeActivity)).run {
-            toolbar.toolbar_text.text = resources.getString(R.string.devices_kivi)
+            setToolbarTxt(resources.getString(R.string.devices_kivi))
             setHomeAsUp(true)
         }
         super.onResume()
