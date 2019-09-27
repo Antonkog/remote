@@ -130,10 +130,14 @@ class DeviceSearchViewModel(
                             )
                     )
                     launch(CommonPool) {
-                        val updated = database.recentDeviceDao().update(RecentDevice(service.serviceName).apply {
+
+                        val device = RecentDevice(service.serviceName).apply {
                             isOnline = true
-                            wasConnected = System.currentTimeMillis()
-                        })
+                            wasConnected = System.currentTimeMillis()}
+
+                        Timber.e("trying to update: " + device.actualName)
+
+                        val updated = database.recentDeviceDao().update(device)
 
                         if (updated > 0) Timber.e("Resolved  updated as online in db: $updated")
                         else  Timber.e("Resolved NOT updated as online in db: $updated")

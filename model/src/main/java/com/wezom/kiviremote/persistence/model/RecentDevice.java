@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Serializable {
 
     public RecentDevice(String actualName) {
-        this.actualName = actualName;
+        this.actualName = replace032(actualName);
         this.online = true;
     }
 
@@ -40,6 +40,10 @@ public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Seria
         this.userDefinedName = userDefinedName;
     }
 
+    private String replace032(String actualName){
+        return actualName.replace("\\032", " ").replace("\\03", "");
+    }
+
     public boolean isOnline() {
         return online;
     }
@@ -57,7 +61,7 @@ public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Seria
     }
 
     public String getActualName() {
-        return actualName;
+        return replace032(actualName);
     }
 
     public String getUserDefinedName() {
