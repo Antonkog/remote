@@ -17,6 +17,7 @@ public class ServerEvent {
     private AspectMessage aspectMessage;
     private AspectAvailable availableAspectValues;
     private InitialMessage initialMessage;
+    private List<PreviewContent> previewContents;
     private List<PreviewCommonStructure> previewCommonStructures;
     private List<Recommendation> recommendations;
     private List<Recommendation> favorites;
@@ -34,6 +35,10 @@ public class ServerEvent {
 
     public List<ServerAppInfo> getApps() {
         return apps;
+    }
+
+    public List<PreviewContent> getPreviewContents() {
+        return previewContents;
     }
 
     public int getVolume() {

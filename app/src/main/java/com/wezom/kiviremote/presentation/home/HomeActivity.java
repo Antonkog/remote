@@ -248,7 +248,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         binding.toolbarText.setText(text);
     }
 
-    public void uncheckMenu(){
+    public void uncheckMenu() {
         for (int i = 0; i < binding.navView.getMenu().size(); i++) {
             binding.navView.getMenu().getItem(i).setChecked(false);
         }
@@ -367,7 +367,9 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                     break;
 
 //                case R.id.nav_settings:
-//                    viewModel.goToDeviceInfo(new TvDeviceInfo(new RecentDevice(viewModel.getCurrentContentName(), null), null, 0));
+//                    viewModel.clearData(); ///test!!!
+//                    Toast.makeText(this, " cleaned db ", Toast.LENGTH_LONG).show();
+////                    viewModel.goToDeviceInfo(new TvDeviceInfo(new RecentDevice(viewModel.getCurrentContentName(), null), null, 0));
 //                    break;
 
                 case R.id.nav_support:

@@ -128,9 +128,7 @@ class HomeActivityViewModel(
                     if (initialEvent.previewCommonStructures != null) {
                         launch(CommonPool) {
 
-                            val apps = async {
-                                cacheAppIcons(initialEvent, cache)
-                            }.await()
+                            val apps = async { getApps(initialEvent) }.await()
 
                             database.serverAppDao().run {
                                 removeAll()
@@ -140,6 +138,13 @@ class HomeActivityViewModel(
 //                                })
                                 insertAll(apps)
                             }
+
+                            val ids = arrayListOf<String>()
+                            apps.forEach { app ->
+                                ids.add(app.packageName)
+                            }
+                            RxBus.publish(RequestImgByIds(ids))
+
 
                             val inputs = async {
                                 cacheAppInputs(initialEvent, cache)
@@ -182,6 +187,15 @@ class HomeActivityViewModel(
                                         })
                             }
                         }
+                    }
+                })
+
+
+        disposables += RxBus.listen(GotPreviewsContentEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = { previewsContents ->
+                    previewsContents.previewContents.forEach {
+                        updateAppIcon(it)
                     }
                 })
 
@@ -281,6 +295,17 @@ class HomeActivityViewModel(
                 }, onError = Timber::e)
 
 
+
+        disposables += RxBus.listen(RequestImgByIds::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                    serverConnection?.sendMessage(SocketConnectionModel().apply {
+                        setAction(Action.REQUEST_IMG_BY_IDS)
+                        setArgs(it.ids)
+                    })
+                }, onError = Timber::e)
+
+
         disposables += RxBus.listen(RequestAppsEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
@@ -356,6 +381,19 @@ class HomeActivityViewModel(
 
     }
 
+    fun updateAppIcon(appData: PreviewContent) { //to update saving old name
+        if (appData.id != null && appData.img != null)
+            decodeFromBase64(appData.img, 120, 90).let { bitmap ->
+                cache.put(appData.id, bitmap)
+            }
+
+        database.serverAppDao().getApp(appData.id).subscribe {
+            val result = database.serverAppDao().update(it.apply { baseIcon = appData.img })
+            Timber.e(" insert in serverAppDao: $appData.id updating $result")
+        }
+    }
+
+
     val showSettingsDialog = MutableLiveData<Boolean>()
     val progress = MutableLiveData<ProgressModel>()
     val slidingPanelContent = MutableLiveData<UPnPManager.SlidingContentModel>()
@@ -382,6 +420,12 @@ class HomeActivityViewModel(
             val rendererModel: UPnPManager.RendererModel,
             val currentMediaType: GalleryFragment.MediaType
     )
+
+    fun clearData() {
+        launch(CommonPool) {
+            database.recommendationsDao().removeAll()
+        }
+    }
 
     private fun initConnection(nsdModel: NsdServiceModel, firstConnection: Boolean) {
         killPing()

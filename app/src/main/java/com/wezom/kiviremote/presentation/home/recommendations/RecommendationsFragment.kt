@@ -117,18 +117,21 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
     private fun changeChannelsVisible(visible : Int){
         binding.imgChannelsMenu.visibility = visible
+        binding.reciclerChannels.visibility = visible
         binding.textChannel.visibility = visible
     }
 
 
     private fun changeMoviesVisible(visible : Int){
         binding.imgRecommendMenu.visibility = visible
+        binding.reciclerRecommendations.visibility = visible
         binding.textSubscriptions.visibility = visible
     }
 
 
     private fun changeAppsVisible(visible : Int){
         binding.imgAppsMenu.visibility = visible
+        binding.reciclerApps.visibility = visible
         binding.textApps.visibility = visible
     }
 

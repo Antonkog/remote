@@ -4,6 +4,7 @@ package com.wezom.kiviremote.persistence.dao;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Update;
 
 import com.wezom.kiviremote.persistence.model.ServerApp;
 
@@ -20,6 +21,11 @@ public interface ServerAppsDao {
     @Insert
     void insertAll(List<ServerApp> apps);
 
+    @Query("SELECT * FROM apps WHERE package_name = :name")
+    Flowable<ServerApp> getApp(String name); //- replaced by preference that hold name
+
+    @Update
+    int update(ServerApp app);
 
     @Insert
     void insertMediaShareStaticApp(ServerApp app);

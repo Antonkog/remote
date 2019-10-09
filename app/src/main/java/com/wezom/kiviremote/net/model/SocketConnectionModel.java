@@ -40,8 +40,9 @@ public class SocketConnectionModel {
         return this;
     }
 
-    public void setArgs(List<String> args) {
+    public SocketConnectionModel setArgs(List<String> args) {
         this.args = args;
+        return this;
     }
 
 

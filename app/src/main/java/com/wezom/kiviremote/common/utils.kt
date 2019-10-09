@@ -164,22 +164,19 @@ fun calculateInSampleSize(
 }
 
 
-fun cacheAppIcons(initialEvent: GotPreviewsInitialEvent, cache: KiviCache): List<ServerApp> {
-    val apps = LinkedList<ServerApp>()
 
+fun getApps(initialEvent: GotPreviewsInitialEvent): List<ServerApp> {
+    val apps = LinkedList<ServerApp>()
     initialEvent.previewCommonStructures.filter {
         it.type == LauncherBasedData.TYPE.APPLICATION.name
     }.forEach {
         if (it.name != null && it.icon != null) {
-            decodeFromBase64(it.icon, 120, 90).let { bitmap ->
-                cache.put(it.id, bitmap)
                 apps.add(ServerApp().apply {
                     appName = it.name
                     packageName = it.id
                     baseIcon = it.icon
                     uri = it.imageUrl
                 })
-            }
         }
     }
     return apps

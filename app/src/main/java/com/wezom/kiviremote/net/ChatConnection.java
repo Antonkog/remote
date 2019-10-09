@@ -23,6 +23,7 @@ import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.wezom.kiviremote.bus.ChangeSnackbarStateEvent;
+import com.wezom.kiviremote.bus.GotPreviewsContentEvent;
 import com.wezom.kiviremote.bus.GotPreviewsInitialEvent;
 import com.wezom.kiviremote.bus.NewAppListEvent;
 import com.wezom.kiviremote.bus.ReconnectEvent;
@@ -68,6 +69,7 @@ public class ChatConnection {
     private static final String INPUTS = "INPUTS";
     private static final String INITIAL_II = "INITIAL_II";
     private static final String APPS = "APPS";
+    private static final String IMG_BY_IDS = "IMG_BY_IDS";
     private static final String RECOMMENDATIONS = "RECOMMENDATIONS";
     private static final String FAVORITES = "FAVORITES";
 
@@ -163,6 +165,9 @@ public class ChatConnection {
                         break;
                     case APPS:
                         break;
+                    case IMG_BY_IDS:
+                        Timber.d("IMG_BY_IDS  event has been received " );
+                        break;
                     default:
                         Timber.d("12345 Unknown event has been received " + serverEvent.getEvent());
                         break;
@@ -175,6 +180,11 @@ public class ChatConnection {
 
             if (serverEvent.getPreviewCommonStructures() != null) {
                 RxBus.INSTANCE.publish(new GotPreviewsInitialEvent().setPreviewCommonStructures(serverEvent.getPreviewCommonStructures()));
+            }
+
+
+            if (serverEvent.getPreviewContents()!= null) {
+                RxBus.INSTANCE.publish(new GotPreviewsContentEvent(serverEvent.getPreviewContents()));
             }
 
             if (!msg.isEmpty())

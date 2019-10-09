@@ -145,8 +145,9 @@ class RecommendationsViewModel(private val router: Router,
 
     fun requestAspect() = RxBus.publish(RequestAspectEvent())
 
-
     fun requestAllPreviews() = RxBus.publish(RequestInitialPreviewEvent())
+
+    fun requestImgByIds(ids : List<String>) = RxBus.publish(RequestImgByIds(ids))
 
 
     fun launchApp(name: String) {
