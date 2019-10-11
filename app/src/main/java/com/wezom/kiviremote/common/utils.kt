@@ -170,11 +170,10 @@ fun getApps(initialEvent: GotPreviewsInitialEvent): List<ServerApp> {
     initialEvent.previewCommonStructures.filter {
         it.type == LauncherBasedData.TYPE.APPLICATION.name
     }.forEach {
-        if (it.name != null && it.icon != null) {
+        if (it.name != null) {
                 apps.add(ServerApp().apply {
                     appName = it.name
                     packageName = it.id
-                    baseIcon = it.icon
                     uri = it.imageUrl
                 })
         }
@@ -183,13 +182,10 @@ fun getApps(initialEvent: GotPreviewsInitialEvent): List<ServerApp> {
 }
 
 
-fun cacheAppInputs(initialEvent: GotPreviewsInitialEvent, cache: KiviCache): List<ServerInput> {
+fun getInputs(initialEvent: GotPreviewsInitialEvent): List<ServerInput> {
     val inputs = LinkedList<ServerInput>()
     initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.INPUT.name }.forEach {
-        if (it.id != null && it.icon != null) {
-            decodeFromBase64(it.icon, 85, 85).let { bitmap ->
-                cache.put(it.id, bitmap)
-                inputs.add(ServerInput().apply {
+         inputs.add(ServerInput().apply {
                     portNum = Integer.parseInt(it.id)
                     portName = it.name
                     imageUrl = it.imageUrl
@@ -197,9 +193,6 @@ fun cacheAppInputs(initialEvent: GotPreviewsInitialEvent, cache: KiviCache): Lis
                     inputIcon = it.icon
                     localResource = InputSourceHelper.INPUT_PORT.getPicById(portNum)
                 })
-            }
-
-        }
     }
     return inputs
 }

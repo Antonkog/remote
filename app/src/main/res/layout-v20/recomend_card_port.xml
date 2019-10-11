@@ -22,8 +22,8 @@
 
             <ImageView
                 android:id="@+id/image_port"
-                android:layout_width="@dimen/port_icon_size"
-                android:layout_height="@dimen/port_icon_size"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

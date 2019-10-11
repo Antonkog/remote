@@ -129,6 +129,24 @@ class HomeActivityViewModel(
                         launch(CommonPool) {
 
                             val apps = async { getApps(initialEvent) }.await()
+                            var ids = arrayListOf<String>()
+
+                            apps.forEach { app ->
+                                ids.add(app.packageName)
+                            }
+
+                            val inputs = async {
+                                getInputs(initialEvent)
+                            }.await()
+
+//                            inputs.forEach { input ->
+//                                ids.add(""+input.portNum)
+//                            }
+
+                            database.serverInputsDao().run {
+                                removeAll()
+                                insertAll(inputs)
+                            }
 
                             database.serverAppDao().run {
                                 removeAll()
@@ -139,21 +157,8 @@ class HomeActivityViewModel(
                                 insertAll(apps)
                             }
 
-                            val ids = arrayListOf<String>()
-                            apps.forEach { app ->
-                                ids.add(app.packageName)
-                            }
-                            RxBus.publish(RequestImgByIds(ids))
-
-
-                            val inputs = async {
-                                cacheAppInputs(initialEvent, cache)
-                            }.await()
-
-                            database.serverInputsDao().run {
-                                removeAll()
-                                insertAll(inputs)
-                            }
+                            Timber.e("12345 ids size = "+ ids.size)
+                            RxBus.publish(RequestImgByIds(ids)) // refrest imgs
 
                             database.chennelsDao().run {
                                 removeAll()
@@ -382,9 +387,13 @@ class HomeActivityViewModel(
     }
 
     fun updateAppIcon(appData: PreviewContent) { //to update saving old name
+        Timber.e(" 12345 updateAppIcon:")
+
+
         if (appData.id != null && appData.img != null)
             decodeFromBase64(appData.img, 120, 90).let { bitmap ->
                 cache.put(appData.id, bitmap)
+                Timber.e("12345 caching app:")
             }
 
         database.serverAppDao().getApp(appData.id).subscribe {

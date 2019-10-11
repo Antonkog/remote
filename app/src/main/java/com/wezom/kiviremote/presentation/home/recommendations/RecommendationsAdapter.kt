@@ -1,7 +1,5 @@
 package com.wezom.kiviremote.presentation.home.recommendations
 
-import android.graphics.PorterDuff
-import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -109,13 +107,7 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
         override fun bind(item: Input) {
             view.setOnClickListener(this)
             val imageView = view.findViewById(R.id.image_port) as ImageView
-            if (cache.get(item.id) != null) {
-                imageView.setImageBitmap(cache.get(item.id))
-                val color = ResourcesCompat.getColor(view.context.resources, R.color.colorAccent, null);
-                imageView.setColorFilter(color, PorterDuff.Mode.MULTIPLY)
-            } else {
-                imageView.setImageResource(InputSourceHelper.INPUT_PORT.getPicById(item.intID))
-            }
+            imageView.setImageResource(InputSourceHelper.INPUT_PORT.getPicById(item.intID))
             view.findViewById<TextView>(R.id.text).text = item.name
         }
 
@@ -148,7 +140,7 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
                 if (item.packageName != null)
                     cache.get(item.packageName).let {
 
-                        if(it?.width!= null &&  it.width > SMALL_BITMAP){
+                        if (it?.width != null && it.width > SMALL_BITMAP) {
 
                             Timber.e(" PreviewsTransformation app width ${it?.width} " + item.packageName)
 
@@ -158,7 +150,7 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
                                     .transform(PreviewsTransformation(5, 5))
                                     .into(imageView)
                         }
-                        if(it?.width!= null &&  it.width <= SMALL_BITMAP){
+                        if (it?.width != null && it.width <= SMALL_BITMAP) {
                             Timber.e(" PreviewsTransformation2 app width ${it?.width} " + item.packageName)
 
                             GlideApp.with(view.context)

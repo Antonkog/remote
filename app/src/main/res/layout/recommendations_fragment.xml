@@ -33,8 +33,7 @@
             android:id="@+id/recommendations_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="28dp"
-            android:animateLayoutChanges="true">
+            android:layout_marginTop="28dp">
 
             <TextView
                 android:id="@+id/text_subscriptions"

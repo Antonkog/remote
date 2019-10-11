@@ -142,13 +142,7 @@ class RecommendationsViewModel(private val router: Router,
         RxBus.publish(LaunchRecommendationEvent(recommendation))
     }
 
-
     fun requestAspect() = RxBus.publish(RequestAspectEvent())
-
-    fun requestAllPreviews() = RxBus.publish(RequestInitialPreviewEvent())
-
-    fun requestImgByIds(ids : List<String>) = RxBus.publish(RequestImgByIds(ids))
-
 
     fun launchApp(name: String) {
         if (name != Constants.MEDIA_SHARE_TXT_ID) {
