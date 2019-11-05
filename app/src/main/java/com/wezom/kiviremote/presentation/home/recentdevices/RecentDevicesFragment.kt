@@ -1,12 +1,12 @@
 package com.wezom.kiviremote.presentation.home.recentdevices
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.databinding.RecentDevicesFragmentBinding
 import com.wezom.kiviremote.persistence.model.RecentDevice

@@ -3,7 +3,6 @@ package com.wezom.kiviremote.presentation.home.media
 import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.support.v4.content.res.ResourcesCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.Constants.*
 import com.wezom.kiviremote.upnp.org.droidupnp.model.upnp.didl.IDIDLItem

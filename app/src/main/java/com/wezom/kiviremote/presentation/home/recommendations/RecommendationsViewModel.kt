@@ -1,7 +1,7 @@
 package com.wezom.kiviremote.presentation.home.recommendations
 
-import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
+import androidx.lifecycle.MutableLiveData
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.*
 import com.wezom.kiviremote.common.Action

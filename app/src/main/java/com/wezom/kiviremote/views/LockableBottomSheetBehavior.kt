@@ -1,11 +1,11 @@
 package com.wezom.kiviremote.views
 
 import android.content.Context
-import android.support.design.widget.BottomSheetBehavior
-import android.support.design.widget.CoordinatorLayout
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.wezom.kiviremote.common.dpToPx
 
 

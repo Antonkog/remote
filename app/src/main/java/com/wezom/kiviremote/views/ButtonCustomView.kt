@@ -3,15 +3,16 @@ package com.wezom.kiviremote.views
 import android.content.Context
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.View
+import androidx.appcompat.widget.AppCompatImageView
+import androidx.core.content.ContextCompat
 import com.wezom.kiviremote.App
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.Constants
 
 
-class ButtonCustomView : android.support.v7.widget.AppCompatImageView {
+class ButtonCustomView : AppCompatImageView {
 
 
     private var listener: View.OnClickListener? = null

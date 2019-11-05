@@ -3,11 +3,11 @@ package com.wezom.kiviremote.views
 import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
-import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.widget.LinearLayout
 import android.widget.SeekBar
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.wezom.kiviremote.R
 
 

@@ -2,7 +2,8 @@ package com.wezom.kiviremote.di.modules;
 
 import android.app.Activity;
 import android.content.Context;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.wezom.kiviremote.di.scopes.ActivityScope;
 

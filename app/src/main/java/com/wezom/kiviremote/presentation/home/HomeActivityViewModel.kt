@@ -1,9 +1,9 @@
 package com.wezom.kiviremote.presentation.home
 
 import android.app.Activity
-import android.arch.lifecycle.MutableLiveData
 import android.content.Intent
 import android.content.SharedPreferences
+import androidx.lifecycle.MutableLiveData
 import com.wezom.kiviremote.App
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.Screens.DEVICE_SEARCH_FRAGMENT

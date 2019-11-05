@@ -1,7 +1,7 @@
 package com.wezom.kiviremote.presentation.home.devicesearch
 
 import android.net.nsd.NsdServiceInfo
-import android.support.v4.content.res.ResourcesCompat
+import androidx.core.content.res.ResourcesCompat
 import com.wezom.kiviremote.App
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.extensions.removeMasks

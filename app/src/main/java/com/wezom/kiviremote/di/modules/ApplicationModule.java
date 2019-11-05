@@ -2,10 +2,11 @@ package com.wezom.kiviremote.di.modules;
 
 import android.app.ActivityManager;
 import android.app.Application;
-import android.arch.persistence.room.Room;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+
+import androidx.room.Room;
 
 import com.wezom.kiviremote.common.KiviCache;
 import com.wezom.kiviremote.common.PreferencesManager;

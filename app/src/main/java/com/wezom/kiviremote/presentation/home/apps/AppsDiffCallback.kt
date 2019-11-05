@@ -1,6 +1,6 @@
 package com.wezom.kiviremote.presentation.home.apps
 
-import android.support.v7.util.DiffUtil
+import androidx.recyclerview.widget.DiffUtil
 
 
 class AppsDiffCallback(private val oldApps: List<AppModel>, private val newApps: List<AppModel>) : DiffUtil.Callback() {

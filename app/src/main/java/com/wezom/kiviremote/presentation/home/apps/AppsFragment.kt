@@ -1,14 +1,13 @@
 package com.wezom.kiviremote.presentation.home.apps
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.os.Handler
-import android.support.v7.widget.GridLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.wezom.kiviremote.R
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.KiviCache
 import com.wezom.kiviremote.common.extensions.toPx
@@ -16,7 +15,6 @@ import com.wezom.kiviremote.databinding.AppsFragmentBinding
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
-import org.jetbrains.anko.support.v4.toast
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -49,7 +47,7 @@ class AppsFragment : BaseFragment() {
                 binding.appsRefreshLabel.visibility = View.GONE
         }
 
-        toast(R.string.error)
+        //toast(R.string.error)
     }
 
     private val handler = Handler()

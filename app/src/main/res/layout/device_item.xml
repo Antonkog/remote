@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/device_container"
         android:layout_width="match_parent"
         android:layout_height="48dp"
@@ -46,5 +46,5 @@
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_info_outline" />
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

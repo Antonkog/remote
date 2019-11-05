@@ -1,6 +1,6 @@
 package com.wezom.kiviremote.presentation.home.recommendations.deep
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.LaunchAppEvent
 import com.wezom.kiviremote.bus.NavigateToRemoteEvent

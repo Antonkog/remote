@@ -1,12 +1,11 @@
 package com.wezom.kiviremote.net.model;
 
 import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
+
+import androidx.annotation.NonNull;
 
 import com.wezom.kiviremote.persistence.model.ServerInput;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class Input implements LauncherBasedData {

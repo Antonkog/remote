@@ -3,11 +3,12 @@ package com.wezom.kiviremote.views;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.support.v4.content.res.ResourcesCompat;
-import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.core.content.res.ResourcesCompat;
+import androidx.viewpager.widget.ViewPager;
 
 import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;

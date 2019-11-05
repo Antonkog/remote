@@ -1,8 +1,8 @@
 package com.wezom.kiviremote.presentation.home.tvsettings
 
 import android.app.Activity
-import android.arch.lifecycle.MutableLiveData
 import android.content.Intent
+import androidx.lifecycle.MutableLiveData
 import com.wezom.kiviremote.App
 import com.wezom.kiviremote.bus.GotAspectEvent
 import com.wezom.kiviremote.bus.NewAspectEvent

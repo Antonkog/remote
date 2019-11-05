@@ -1,9 +1,9 @@
 package com.wezom.kiviremote.presentation.home.apps
 
-import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
-import android.databinding.ObservableField
 import android.graphics.BitmapFactory
+import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.bus.LaunchAppEvent
 import com.wezom.kiviremote.bus.NavigateToRemoteEvent

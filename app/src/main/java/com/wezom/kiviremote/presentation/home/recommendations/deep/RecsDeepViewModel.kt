@@ -1,6 +1,6 @@
 package com.wezom.kiviremote.presentation.home.recommendations.deep
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.wezom.kiviremote.bus.LaunchRecommendationEvent
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.net.model.Recommendation

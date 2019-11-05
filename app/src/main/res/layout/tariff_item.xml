@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v7.widget.CardView
+    <androidx.cardview.widget.CardView
         android:id="@+id/cv_container"
         android:layout_width="75dp"
         android:layout_height="75dp"
@@ -20,6 +20,6 @@
             android:adjustViewBounds="true"
             tools:background="@color/light_red" />
 
-    </android.support.v7.widget.CardView>
+    </androidx.cardview.widget.CardView>
 
 </layout>

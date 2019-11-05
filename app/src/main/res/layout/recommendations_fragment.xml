@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:id="@+id/coordinator_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -29,7 +28,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.constraint.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/recommendations_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -58,7 +57,7 @@
                 app:layout_constraintTop_toTopOf="@+id/text_subscriptions"
                 app:srcCompat="@drawable/js_right" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recicler_recommendations"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -94,7 +93,7 @@
                 app:layout_constraintTop_toTopOf="@+id/text_channel"
                 app:srcCompat="@drawable/js_right" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recicler_channels"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -129,7 +128,7 @@
                 app:layout_constraintTop_toTopOf="@+id/text_apps"
                 app:srcCompat="@drawable/js_right" />
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recicler_apps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -151,7 +150,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/recicler_apps" />
 
 
-            <android.support.v7.widget.RecyclerView
+            <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recicler_ports"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -172,10 +171,10 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/recicler_ports" />
 
-        </android.support.constraint.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
 
 
-    </android.support.design.widget.CoordinatorLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

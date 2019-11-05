@@ -1,7 +1,7 @@
 package com.wezom.kiviremote.upnp
 
-import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
+import androidx.lifecycle.MutableLiveData
 import com.wezom.kiviremote.bus.TriggerRebirthEvent
 import com.wezom.kiviremote.common.Constants.CURRENT_CONNECTION_IP_KEY
 import com.wezom.kiviremote.common.ImageInfo

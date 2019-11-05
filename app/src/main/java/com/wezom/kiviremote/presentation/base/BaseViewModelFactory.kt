@@ -2,9 +2,9 @@
 
 package com.wezom.kiviremote.presentation.base
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
 import android.content.SharedPreferences
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.wezom.kiviremote.common.KiviCache
 import com.wezom.kiviremote.common.ResourceProvider
 import com.wezom.kiviremote.di.scopes.ActivityScope

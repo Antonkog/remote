@@ -1,14 +1,13 @@
 package com.wezom.kiviremote.presentation.home.media
 
 import android.Manifest
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.wezom.kiviremote.R
+import androidx.lifecycle.ViewModelProviders
 import com.wezom.kiviremote.common.Constants.*
 import com.wezom.kiviremote.databinding.MediaFragmentBinding
 import com.wezom.kiviremote.presentation.base.BaseFragment
@@ -16,7 +15,6 @@ import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.upnp.ContentCallback
 import com.wezom.kiviremote.upnp.org.droidupnp.view.DIDLObjectDisplay
-import org.jetbrains.anko.support.v4.toast
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -87,7 +85,7 @@ class MediaFragment : BaseFragment() {
 
             if (content?.size == 0 && contentAdapter.count != 0) {
                 contentAdapter.notifyDataSetChanged()
-                toast(R.string.empty_directory)
+//                toast(R.string.empty_directory)
             }
         }
     }

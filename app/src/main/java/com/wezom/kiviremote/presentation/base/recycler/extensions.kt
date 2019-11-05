@@ -1,10 +1,11 @@
 package com.wezom.kiviremote.presentation.base.recycler
 
-import android.databinding.ViewDataBinding
-import android.support.v7.widget.DividerItemDecoration
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+
 
 fun <DataType, LayoutClassBinding : ViewDataBinding> RecyclerView.initWithLinLay(orientation: Int, adapter: LazyAdapter<DataType, LayoutClassBinding>, data: List<DataType>) {
     this.apply {

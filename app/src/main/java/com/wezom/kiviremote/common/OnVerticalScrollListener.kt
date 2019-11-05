@@ -1,6 +1,6 @@
 package com.wezom.kiviremote.common
 
-import android.support.v7.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView
 
 
 abstract class OnVerticalScrollListener : RecyclerView.OnScrollListener() {

@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <android.support.v4.widget.DrawerLayout
+    <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:openDrawer="start">
 
-        <android.support.design.widget.CoordinatorLayout
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/main_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <android.support.v7.widget.Toolbar
+            <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -85,7 +85,7 @@
 
                 </RelativeLayout>
 
-            </android.support.v7.widget.Toolbar>
+            </androidx.appcompat.widget.Toolbar>
 
 
             <FrameLayout
@@ -133,7 +133,6 @@
                 app:layout_behavior="com.wezom.kiviremote.views.LockableBottomSheetBehavior"
                 />
 
-
             <View
                 android:id="@+id/disconnect_status_indicator"
                 android:layout_width="match_parent"
@@ -142,7 +141,6 @@
                 android:layout_marginBottom="8dp"
                 android:background="@color/light_red"
                 android:visibility="visible" />
-
 
             <com.wezom.kiviremote.views.MovableFloatingActionButton
                 android:id="@+id/fab"
@@ -158,11 +156,11 @@
                 app:srcCompat="@drawable/ic_remote" />
 
 
-        </android.support.design.widget.CoordinatorLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 
         <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
-        <android.support.design.widget.NavigationView
+        <com.google.android.material.navigation.NavigationView
             android:id="@+id/nav_view"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
@@ -171,12 +169,12 @@
             app:menu="@menu/drawer">
 
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
 
-                <android.support.v7.widget.SwitchCompat
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/auto_connect"
                     android:layout_width="match_parent"
                     android:layout_height="48dp"
@@ -202,8 +200,7 @@
                     app:layout_constraintTop_toTopOf="@+id/auto_connect"
                     app:srcCompat="@drawable/ic_auto_connect" />
 
-
-                <android.support.v7.widget.SwitchCompat
+                <androidx.appcompat.widget.SwitchCompat
                     android:id="@+id/switch_dm"
                     android:layout_width="match_parent"
                     android:layout_height="96dp"
@@ -228,10 +225,10 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@+id/switch_dm"
                     app:srcCompat="@drawable/ic_dm" />
-            </android.support.constraint.ConstraintLayout>
-        </android.support.design.widget.NavigationView>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.navigation.NavigationView>
 
 
-    </android.support.v4.widget.DrawerLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
 </layout>
 
