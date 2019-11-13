@@ -85,9 +85,9 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         RxBus.publish(KillPingEvent())
 
         //resetMediaPlayback
-        val homeActivity = activity as HomeActivity
-        homeActivity.isHasContent = false
-        homeActivity.stopPlayback()
+//        val homeActivity = activity as HomeActivity
+//        homeActivity.isHasContent = false
+//        homeActivity.stopPlayback()
     }
 
     override fun onResume() {

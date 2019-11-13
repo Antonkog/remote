@@ -192,6 +192,7 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
 
             GlideApp.with(view.context)
                     .load(item.imageUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(dpToPx(view.context, 5), 0, RoundedCornersTransformation.CornerType.ALL)))
                     .into(image)
 
@@ -223,6 +224,7 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
 
             val image: ImageView = view.findViewById(com.wezom.kiviremote.R.id.image_channel)
             GlideApp.with(view.context).load(item.imageUrl)
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(dpToPx(view.context, 5), 0, RoundedCornersTransformation.CornerType.ALL)))
                     .into(image)
 

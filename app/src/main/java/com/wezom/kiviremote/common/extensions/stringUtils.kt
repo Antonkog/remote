@@ -2,7 +2,10 @@
 
 package com.wezom.kiviremote.common.extensions
 
+import java.util.concurrent.TimeUnit
 import java.util.regex.Pattern
+
+
 
 
 //private val mStar = "MStar Semiconductor, Inc."
@@ -36,11 +39,21 @@ fun String.addKiviPrefix(): String {
     return this
 }
 
+fun String.getIviPreviewDuration(): String {
+    this.toLongOrNull()?.let {
+       return String.format("%02d:%02d:%02d", TimeUnit.MILLISECONDS.toHours(it),
+                TimeUnit.MILLISECONDS.toMinutes(it) - TimeUnit.HOURS.toMinutes(TimeUnit.MILLISECONDS.toHours(it)),
+                TimeUnit.MILLISECONDS.toSeconds(it) - TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(it)))
+
+//        return SimpleDateFormat("hh:mm:ss").format(Date(it).toLocaleString())
+    } ?: return ""
+}
+
 fun String.getModelName(): String = this.substringBefore(" [").addKiviPrefix()
 
 fun String.remove032Space(): String = this.replace("\\032", " ", true).replace("\\03", "", true)
 
-fun String.getTvUniqueId(): String =  this.substringAfter(" [").substringBefore("]")
+fun String.getTvUniqueId(): String = this.substringAfter(" [").substringBefore("]")
 
 fun String.removeMasks(): String = this.remove032Space().getModelName()
 

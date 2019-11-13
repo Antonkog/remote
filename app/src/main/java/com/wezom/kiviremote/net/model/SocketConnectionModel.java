@@ -1,7 +1,10 @@
 package com.wezom.kiviremote.net.model;
 
+import android.support.annotation.Nullable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.wezom.kiviremote.bus.RemotePlayerEvent;
 import com.wezom.kiviremote.common.Action;
 
 import java.util.ArrayList;
@@ -46,15 +49,25 @@ public class SocketConnectionModel {
     }
 
 
-    public SocketConnectionModel setArg(String  arg) {
+    public SocketConnectionModel setArg(String arg) {
         this.args.clear();
         this.args.add(arg);
         return this;
     }
 
-    public void setMotion(List<Double> motion) {
+    public SocketConnectionModel setMotion(List<Double> motion) {
         this.motion = motion;
+        return this;
     }
+
+    public SocketConnectionModel setSeekTo(RemotePlayerEvent event) {
+        if (event != null && event.getArgs() != null && event.getArgs().get(0) != null) {
+            this.motion.clear();
+            this.motion.add(event.getArgs().get(0).doubleValue());
+        }
+        return this;
+    }
+
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;

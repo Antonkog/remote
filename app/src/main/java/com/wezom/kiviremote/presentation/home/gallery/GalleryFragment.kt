@@ -60,7 +60,7 @@ class GalleryFragment : BaseFragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(GalleryViewModel::class.java)
 
         (activity as HomeActivity).run {
-            isPanelCollapsed.observe(this, panelObserver)
+            isTouchPadCollapsed.observe(this, panelObserver)
         }
 
         binding.galleryTitle.text = viewModel.manager.currentDir
@@ -101,7 +101,7 @@ class GalleryFragment : BaseFragment() {
     }
 
     override fun onDestroyView() {
-        (activity as HomeActivity).isPanelCollapsed.removeObserver(panelObserver)
+        (activity as HomeActivity).isTouchPadCollapsed.removeObserver(panelObserver)
         super.onDestroyView()
     }
 
@@ -113,7 +113,7 @@ class GalleryFragment : BaseFragment() {
     private fun render(item: IDIDLItem, image: String?, position: Int, imageThumbnails: Set<ImageInfo>?, videoThumbnails: Set<VideoInfo>?, type: MediaType) {
         viewModel.renderItem(item, position, imageThumbnails, videoThumbnails, type)
         (activity as HomeActivity).run {
-            setContent(item.title, image, position, type)
+            setUpnpContent(item.title, image, position, type)
             expandSlidingPanel()
         }
     }

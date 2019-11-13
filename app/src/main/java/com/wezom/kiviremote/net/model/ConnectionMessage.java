@@ -13,10 +13,6 @@ public class ConnectionMessage {
     private String message;
     private boolean isSetKeyboard;
     @SerializedName("app_info")
-    private List<Recommendation> recommendations;
-    private List<Recommendation> favorites;
-    private List<Channel> channels;
-    private List<Input> inputs;
     private InitialMessage initialMessage;
     private AspectMessage aspectMessage;
     private AspectAvailable available;
@@ -39,29 +35,6 @@ public class ConnectionMessage {
 
     public ConnectionMessage addInitial (InitialMessage initialMessage) {
         this.initialMessage = initialMessage;
-        return this;
-    }
-
-    public ConnectionMessage addRecommendations(List<Recommendation> recommendations) {
-        this.recommendations = recommendations;
-        return this;
-    }
-
-
-    public ConnectionMessage addFavorites(List<Recommendation> favorites) {
-        this.favorites = favorites;
-        return this;
-    }
-
-
-
-    public ConnectionMessage addChannels(List<Channel> channels) {
-        this.channels = channels;
-        return this;
-    }
-
-    public ConnectionMessage addInputs(List<Input> inputs) {
-        this.inputs = inputs;
         return this;
     }
 
@@ -97,22 +70,6 @@ public class ConnectionMessage {
 
     public AspectAvailable getAvailable() {
         return available;
-    }
-
-    public List<Recommendation> getRecommendations() {
-        return recommendations;
-    }
-
-    public List<Recommendation> getFavourites() {
-        return favorites;
-    }
-
-    public List<Channel> getChannels() {
-        return channels;
-    }
-
-    public List<Input> getInputs() {
-        return inputs;
     }
 
     public boolean isShowKeyboard() {

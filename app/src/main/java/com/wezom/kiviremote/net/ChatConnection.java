@@ -27,12 +27,15 @@ import com.wezom.kiviremote.bus.GotPreviewsContentEvent;
 import com.wezom.kiviremote.bus.GotPreviewsInitialEvent;
 import com.wezom.kiviremote.bus.NewAppListEvent;
 import com.wezom.kiviremote.bus.ReconnectEvent;
+import com.wezom.kiviremote.bus.RemotePlayerEvent;
+import com.wezom.kiviremote.bus.TVPlayerEvent;
 import com.wezom.kiviremote.common.Action;
 import com.wezom.kiviremote.common.Constants;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.gson.ListAdapter;
 import com.wezom.kiviremote.net.model.Channel;
 import com.wezom.kiviremote.net.model.ConnectionMessage;
+import com.wezom.kiviremote.net.model.PreviewCommonStructure;
 import com.wezom.kiviremote.net.model.Recommendation;
 import com.wezom.kiviremote.net.model.ServerEvent;
 import com.wezom.kiviremote.net.model.SocketConnectionModel;
@@ -47,6 +50,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -65,14 +69,12 @@ public class ChatConnection {
     private static final String HIDE_KEYBOARD = "HIDE_KEYBOARD";
     private static final String VOLUME = "VOLUME";
     private static final String DISCONNECT = "DISCONNECT";
-    private static final String CHANNELS = "CHANNELS";
-    private static final String INPUTS = "INPUTS";
     private static final String INITIAL_II = "INITIAL_II";
     private static final String APPS = "APPS";
     private static final String IMG_BY_IDS = "IMG_BY_IDS";
-    private static final String RECOMMENDATIONS = "RECOMMENDATIONS";
-    private static final String FAVORITES = "FAVORITES";
-
+    private static final String SEEK_TO = "SEEK_TO";
+    private static final String LAUNCH_PLAYER = "LAUNCH_PLAYER";
+    private static final String CHANGE_STATE = "CHANGE_STATE";
     private ChatServer mChatServer;
     private ChatClient mChatClient;
     private Gson gson;
@@ -132,6 +134,16 @@ public class ChatConnection {
         }
     }
 
+
+    public void synchronizePlayerToTV(RemotePlayerEvent event) {
+        if (mChatClient != null) {
+            mChatClient.sendMessage(
+                    new SocketConnectionModel().setAction(Action.PLAYER_ACTION)
+                            .setArg(event.getPlayerAction().name())
+                            .setSeekTo(event));
+        }
+    }
+
     private void setLocalPort(int port) {
         mPort = port;
     }
@@ -168,6 +180,18 @@ public class ChatConnection {
                     case IMG_BY_IDS:
                         Timber.d("IMG_BY_IDS  event has been received " );
                         break;
+                    case SEEK_TO:
+                        Timber.d("SEEK_TO  event has been received " );
+                        RxBus.INSTANCE.publish(new TVPlayerEvent(TVPlayerEvent.PlayerAction.SEEK_TO, serverEvent.getVolume()));
+                        break;
+                    case LAUNCH_PLAYER:
+                        Timber.d("LAUNCH_PLAYER  event has been received " );
+                        RxBus.INSTANCE.publish(new TVPlayerEvent(serverEvent.getPreviewCommonStructures().get(0)));
+                        break;
+                    case CHANGE_STATE:
+                        Timber.d("CHANGE_STATE  event has been received " );
+                        RxBus.INSTANCE.publish(new TVPlayerEvent(TVPlayerEvent.PlayerAction.CHANGE_STATE, serverEvent.getVolume()));
+                        break;
                     default:
                         Timber.d("12345 Unknown event has been received " + serverEvent.getEvent());
                         break;
@@ -182,12 +206,11 @@ public class ChatConnection {
                 RxBus.INSTANCE.publish(new GotPreviewsInitialEvent().setPreviewCommonStructures(serverEvent.getPreviewCommonStructures()));
             }
 
-
             if (serverEvent.getPreviewContents()!= null) {
                 RxBus.INSTANCE.publish(new GotPreviewsContentEvent(serverEvent.getPreviewContents()));
             }
 
-            if (!msg.isEmpty())
+            if (!msg.isEmpty()){
                 RxBus.INSTANCE.publish(new ConnectionMessage(msg,
                         !keyboardNotSet,
                         showKeyboard,
@@ -197,11 +220,8 @@ public class ChatConnection {
                         .addAspectMessage(serverEvent.getAspectMessage())
                         .addInitial(serverEvent.getInitialMessage())
                         .addAvailable(serverEvent.getAvailableAspectValues())
-                        .addRecommendations(serverEvent.getRecommendations())
-                        .addFavorites(serverEvent.getFavorites())
-                        .addChannels(serverEvent.getChannels())
-                        .addInputs(serverEvent.getInputs())
                 );
+            }
             else Timber.d("Server message is empty");
         } else Timber.d("Server event is null");
     }

@@ -14,11 +14,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetBehavior;
@@ -37,11 +35,8 @@ import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
-import android.widget.SeekBar;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.Screens;
@@ -55,46 +50,38 @@ import com.wezom.kiviremote.common.Constants;
 import com.wezom.kiviremote.common.GpsUtils;
 import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.Utils;
-import com.wezom.kiviremote.common.extensions.StringUtils;
 import com.wezom.kiviremote.databinding.HomeActivityBinding;
 import com.wezom.kiviremote.presentation.base.BaseActivity;
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
 import com.wezom.kiviremote.presentation.home.main.BackHandler;
+import com.wezom.kiviremote.presentation.home.player.PlayerFragment;
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadFragment;
 import com.wezom.kiviremote.presentation.home.tvsettings.LastVolume;
 import com.wezom.kiviremote.receivers.NetworkChangeReceiver;
 import com.wezom.kiviremote.services.CleanupService;
-import com.wezom.kiviremote.services.NotificationService;
-import com.wezom.kiviremote.upnp.UPnPManager;
-import com.wezom.kiviremote.upnp.org.droidupnp.model.upnp.IRendererState;
 import com.wezom.kiviremote.views.LockableBottomSheetBehavior;
-import com.wezom.kiviremote.views.UPnPControlsNotification;
 
-import org.fourthline.cling.android.FixedAndroidLogHandler;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
-import io.reactivex.Single;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
-import jp.wasabeef.glide.transformations.BlurTransformation;
 import timber.log.Timber;
-
-import static com.wezom.kiviremote.common.Constants.NOTIFICATION_ID;
 
 public class HomeActivity extends BaseActivity implements BackHandler {
 
-    public final MutableLiveData<Boolean> isPanelCollapsed = new MutableLiveData<>();
+    public final MutableLiveData<Boolean> isTouchPadCollapsed = new MutableLiveData<>();
+    public final MutableLiveData<Boolean> isPlayerCollapsed = new MutableLiveData<>();
 
     private final ArrayList<WeakReference<OnBackClickListener>> backClickListeners = new ArrayList<>();
 
-    private boolean hasContent = false;
     // define a variable to track hamburger-arrow state
     protected boolean isHomeAsUp = false;
     protected boolean isKeyboardShown = false;
@@ -112,25 +99,10 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     private Snackbar reconnectSnackbar;
     private AppCompatDialog dialog;
 
-    private IRendererState.State currentState;
-    private int lastKnownStateMedia;
-
-    private Disposable flowDisposable, playDelayDisposable, hardKeySoundDisposable;
-
-    private boolean isInterrupted;
 
     private NetworkChangeReceiver networkChangeReceiver = new NetworkChangeReceiver();
 
     private NotificationManager notificationManager;
-
-    private Observer<HomeActivityViewModel.ProgressModel> progressObserver = model -> {
-        if (model != null)
-            setVideoProgress(model.getRendererModel().getProgress(),
-                    model.getRendererModel().getState(),
-                    model.getRendererModel().getDurationRemaining(),
-                    model.getRendererModel().getDurationElapse(),
-                    model.getCurrentMediaType());
-    };
 
     public Toolbar getToolbar() {
         return toolbar;
@@ -141,44 +113,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             showSettingsDialog();
     };
 
-    private Observer<UPnPManager.SlidingContentModel> slidingContentObserver = content -> {
-        if (content != null) {
-            setContent(content.getTitle(), content.getUri(), content.getPosition(), content.getType());
-        }
-    };
-
-    private Observer<UPnPManager.SlideshowProgress> slideshowProgressObserver = state -> {
-        if (state != null) {
-            if (binding.layoutRender != null) {
-                binding.layoutRender.renderSlideshowProgress.setProgress(state.getProgress());
-            }
-
-            if (state.getTerminate()) {
-                binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
-                binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_play);
-                refreshPlayListener(null);
-                return;
-            }
-
-            if (state.getPauseState()) {
-                binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
-                binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_play);
-                refreshPlayListener(v -> {
-                    Intent serviceIntent = new Intent(this, NotificationService.class);
-                    serviceIntent.setAction(NotificationService.ACTION_SLIDESHOW_START);
-                    startService(serviceIntent);
-                });
-            } else {
-                binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_pause);
-                binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_pause);
-                refreshPlayListener(v -> {
-                    Intent serviceIntent = new Intent(this, NotificationService.class);
-                    serviceIntent.setAction(NotificationService.ACTION_SLIDESHOW_STOP);
-                    startService(serviceIntent);
-                });
-            }
-        }
-    };
 
     public static PendingIntent getDismissIntent(Context context) {
         Intent intent = new Intent(context, HomeActivity.class);
@@ -202,9 +136,10 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
 
         initNetworkChangeReceiver();
-        initUpnpRequirements();
         setupViews();
         setupObservers();
+
+        expandSlidingPanel();
     }
 
 
@@ -254,16 +189,20 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         }
     }
 
-    public void moveTouchPad(int stateExpanded) {
-        touchpadSheetBehavior.setState(stateExpanded);
+    public void moveTouchPad(int state) {
+        touchpadSheetBehavior.setState(state);
     }
 
-    public void changeToolbarVisibility(int visible) {
-        this.runOnUiThread(() -> toolbar.setVisibility(visible));
+    public void moveSlider(int state) {
+        bottomSheetBehavior.setState(state);
     }
 
-    public void changeFabVisibility(int visible) {
-        this.runOnUiThread(() -> binding.fab.setVisibility(visible));
+    public void changeToolbarVisibility(int visibility) {
+        this.runOnUiThread(() -> toolbar.setVisibility(visibility));
+    }
+
+    public void changeFabVisibility(int visibility) {
+        this.runOnUiThread(() -> binding.fab.setVisibility(visibility));
     }
 
 
@@ -329,27 +268,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             viewModel.setAutoConnect(isChecked);
         });
 
-        if (binding.layoutRender != null) {
-            binding.layoutRender.renderProgress.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                    viewModel.progressTo(seekBar.getProgress(), seekBar.getMax());
-                }
-            });
-
-            binding.layoutRender.renderPanelCloseClick.setOnClickListener(v -> stopPlayback());
-        }
-
     }
 
     // to call when router need arrow back
@@ -412,14 +330,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         return super.onKeyDown(keyCode, event);
     }
 
-    private void initUpnpRequirements() {
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
-
-        // Fix the logging integration between java.util.logging and Android internal logging
-        org.seamless.util.logging.LoggingUtil.resetRootHandler(new FixedAndroidLogHandler());
-    }
-
     private void initNetworkChangeReceiver() {
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.net.wifi.WIFI_STATE_CHANGED");
@@ -443,16 +353,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
     private void setupObservers() {
-        viewModel.getProgress().observe(this, progressObserver);
         viewModel.getShowSettingsDialog().observe(this, showSettingsObserver);
-        viewModel.getSlidingPanelContent().observe(this, slidingContentObserver);
-        viewModel.getCurrentContentObservable().observe(this, slidingContentObserver);
-        viewModel.getSlideshowStateObservable().observe(this, slideshowProgressObserver);
-        flowDisposable = viewModel.getFlowSubject().subscribe(interrupted -> {
-            this.isInterrupted = interrupted;
-            if (isInterrupted)
-                hideSlidingPanel();
-        }, Timber::e);
 
         viewModel.getTriggerRebirth().observe(this, value -> {
             if (value != null && value) {
@@ -512,12 +413,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
     private void removeObservers() {
-        viewModel.getProgress().removeObserver(progressObserver);
         viewModel.getShowSettingsDialog().removeObserver(showSettingsObserver);
-        viewModel.getSlidingPanelContent().removeObserver(slidingContentObserver);
-        viewModel.getCurrentContentObservable().removeObserver(slidingContentObserver);
-        viewModel.getSlideshowStateObservable().removeObserver(slideshowProgressObserver);
-        dispose(flowDisposable);
     }
 
 
@@ -528,43 +424,37 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         }
     }
 
-    public void stopPlayback() {
-        if (viewModel != null) {
-            viewModel.stopPlayback();
-            notificationManager.cancel(NOTIFICATION_ID);
-        }
-    }
 
     private void setupMediaSlider() {
 
-// настройка поведения нижнего экрана
-        bottomSheetBehavior = LockableBottomSheetBehavior.Companion.from(findViewById(R.id.bottomSheet));
+// настройка поведения нижнего экрана for player
+        FrameLayout frameLayout = new FrameLayout(this);
+        frameLayout.setId(View.generateViewId());
+
+        Fragment playerFragment = new PlayerFragment();
+        getSupportFragmentManager().beginTransaction().add(frameLayout.getId(), playerFragment, Screens.PLAYER_FRAGMENT).commit();
+        binding.mediaSlider.addView(frameLayout);
+
+        bottomSheetBehavior = LockableBottomSheetBehavior.Companion.from(findViewById(R.id.media_slider));
 
         bottomSheetBehavior.setHideable(true);
 
         bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
-                lastKnownStateMedia = newState;
-
                 switch (newState) {
                     case BottomSheetBehavior.STATE_COLLAPSED:
                     case BottomSheetBehavior.STATE_HIDDEN:
-                        isPanelCollapsed.postValue(true);
+                        isPlayerCollapsed.postValue(true);
+                        changeFabVisibility(View.VISIBLE);
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED:
-                        isPanelCollapsed.postValue(false);
-                        if (binding.layoutRender != null) {
-                            binding.layoutRender.renderPanelNext.setClickable(false);
-                            binding.layoutRender.renderPanelPrevious.setClickable(false);
-                            binding.layoutRender.renderPanelPlay.setClickable(false);
-                            binding.layoutRender.renderPanelCloseClick.setClickable(false);
-                        }
+                        isPlayerCollapsed.postValue(false);
+                        changeFabVisibility(View.GONE);
                         break;
                     default:
-                        isPanelCollapsed.postValue(false);
+                        isPlayerCollapsed.postValue(false);
                         break;
-
                 }
             }
 
@@ -594,13 +484,10 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                 switch (newState) {
                     case BottomSheetBehavior.STATE_COLLAPSED:
                     case BottomSheetBehavior.STATE_HIDDEN:
-                        changeFabVisibility(View.VISIBLE);
                         break;
                     case BottomSheetBehavior.STATE_EXPANDED:
                         changeFabVisibility(View.GONE);
                         break;
-//                    case BottomSheetBehavior.STATE_DRAGGING:
-//                        touchpadSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     default:
                         changeFabVisibility(View.GONE);
                         break;
@@ -672,25 +559,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         return this;
     }
 
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        if (intent != null && intent.getAction() != null && binding.layoutRender != null) {
-            switch (intent.getAction()) {
-                case UPnPControlsNotification.ACTION_PLAY:
-                    binding.layoutRender.renderPlay.performClick();
-                    break;
-                case UPnPControlsNotification.ACTION_NEXT:
-                    binding.layoutRender.renderNext.performClick();
-                    break;
-                case UPnPControlsNotification.ACTION_PREVIOUS:
-                    binding.layoutRender.renderPrevious.performClick();
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
 
     @Override
     public void removeBackListener(OnBackClickListener listener) {
@@ -758,225 +626,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
-    public void collapseSlidingPanel() {
-        if (isInterrupted) {
-            hideSlidingPanel();
-            return;
-        }
-    }
-
-    public void setVideoProgress(int progress, IRendererState.State state, String durationElapse, String remainingDuration, GalleryFragment.MediaType mediaType) {
-        runOnUiThread(() -> {
-            if (binding.layoutRender != null) {
-                binding.layoutRender.renderProgress.setProgress(progress);
-                if (remainingDuration != null)
-                    binding.layoutRender.renderElapsed.setText(StringUtils.formatDuration(remainingDuration));
-                if (durationElapse != null)
-                    binding.layoutRender.renderRemaining.setText(StringUtils.formatDuration(durationElapse));
-
-                if (mediaType == GalleryFragment.MediaType.VIDEO) {
-                    switch (state) {
-                        case PLAY:
-                            binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_pause);
-                            binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_pause);
-                            refreshPlayListener(v -> viewModel.pausePlayback());
-                            break;
-
-                        case PAUSE:
-                            binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
-                            binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_play);
-                            refreshPlayListener(v -> viewModel.resumePlayback());
-                            break;
-
-                        case STOP:
-                            binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
-                            binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_play);
-                            restartPlayDelay();
-                            break;
-
-                        default:
-                            binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
-                            binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_play);
-                            break;
-                    }
-                    currentState = state;
-                }
-            }
-        });
-    }
-
-    private void refreshClickListeners(GalleryFragment.MediaType type) {
-        View.OnClickListener playClickListener;
-        if (type == GalleryFragment.MediaType.IMAGE)
-            playClickListener = v -> {
-                Intent serviceIntent = new Intent(this, NotificationService.class);
-                serviceIntent.setAction(NotificationService.ACTION_SLIDESHOW_START);
-                startService(serviceIntent);
-            };
-        else
-            playClickListener = view -> {
-                if (currentState != null) switch (currentState) {
-                    case PLAY:
-                        viewModel.pausePlayback();
-                        break;
-                    case PAUSE:
-                        viewModel.resumePlayback();
-                        break;
-                    case STOP:
-                        viewModel.renderCurrentItem();
-                        break;
-                }
-            };
-
-        View.OnClickListener prevClickListener = v -> {
-            if (binding.layoutRender != null) {
-                binding.layoutRender.renderSlideshowProgress.setProgress(0);
-            }
-
-            Intent serviceIntent = new Intent(this, NotificationService.class);
-            serviceIntent.setAction(NotificationService.ACTION_PREVIOUS);
-            startService(serviceIntent);
-        };
-
-        View.OnClickListener nextClickListener = v -> {
-            if (binding.layoutRender != null) {
-                binding.layoutRender.renderSlideshowProgress.setProgress(0);
-            }
-
-            Intent serviceIntent = new Intent(this, NotificationService.class);
-            serviceIntent.setAction(NotificationService.ACTION_NEXT);
-            startService(serviceIntent);
-        };
-
-        if (binding.layoutRender != null) {
-
-            binding.layoutRender.renderPlay.setOnClickListener(playClickListener);
-            binding.layoutRender.renderNext.setOnClickListener(nextClickListener);
-            binding.layoutRender.renderPrevious.setOnClickListener(prevClickListener);
-
-            binding.layoutRender.renderPanelPlay.setOnClickListener(playClickListener);
-            binding.layoutRender.renderPanelNext.setOnClickListener(nextClickListener);
-            binding.layoutRender.renderPanelPrevious.setOnClickListener(prevClickListener);
-
-            if (lastKnownStateMedia == BottomSheetBehavior.STATE_EXPANDED) {
-                binding.layoutRender.renderPanelPlay.setClickable(false);
-                binding.layoutRender.renderPanelNext.setClickable(false);
-                binding.layoutRender.renderPanelPrevious.setClickable(false);
-            }
-        }
-    }
-
-    private void refreshPlayListener(View.OnClickListener listener) {
-        if (binding.layoutRender != null) {
-            binding.layoutRender.renderPlay.setOnClickListener(listener);
-            binding.layoutRender.renderPanelPlay.setOnClickListener(listener);
-
-            if (lastKnownStateMedia == BottomSheetBehavior.STATE_EXPANDED) {
-                binding.layoutRender.renderPanelPlay.setClickable(false);
-            }
-        }
-    }
-
-    public void setContent(String title, String url, int position, GalleryFragment.MediaType type) {
-        if (binding.layoutRender != null) {
-            binding.layoutRender.slidingPanel.setVisibility(View.VISIBLE);
-            hasContent = true;
-
-            binding.layoutRender.renderTitle.setText(title);
-            binding.layoutRender.renderPreviewTitle.setText(title);
-
-            binding.layoutRender.renderNext.setOnClickListener(null);
-
-            switch (type) {
-                case IMAGE:
-                    viewModel.removeProgressObserver();
-                    binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
-                    binding.layoutRender.renderPanelPlay.setImageResource(R.drawable.ic_panel_play);
-                    binding.layoutRender.renderPrevious.setImageResource(R.drawable.ic_image_prev);
-                    binding.layoutRender.renderNext.setImageResource(R.drawable.ic_image_next);
-                    binding.layoutRender.renderProgress.setVisibility(View.INVISIBLE);
-                    binding.layoutRender.renderMask.setVisibility(View.INVISIBLE);
-                    binding.layoutRender.renderBackgroundPreview.setVisibility(View.INVISIBLE);
-                    binding.layoutRender.renderElapsed.setVisibility(View.INVISIBLE);
-                    binding.layoutRender.renderRemaining.setVisibility(View.INVISIBLE);
-                    binding.layoutRender.renderTitle.setTextColor(getResources().getColor(R.color.sliding_panel_image_title));
-                    binding.layoutRender.renderSlideshowProgressBackground.setVisibility(View.VISIBLE);
-                    binding.layoutRender.renderSlideshowProgress.setVisibility(View.VISIBLE);
-                    binding.layoutRender.renderCounter.setTextColor(getResources().getColor(R.color.image_counter));
-                    binding.layoutRender.renderCounter.setText(getResources().getString(R.string.current_position,
-                            String.valueOf(position + 1),
-                            String.valueOf(viewModel.getImageContentSize())));
-
-                    refreshClickListeners(type);
-                    loadPreview(url, type);
-                    break;
-                case VIDEO:
-                    viewModel.observeProgress();
-                    Glide.with(this)
-                            .load(url)
-                            .apply(RequestOptions.bitmapTransform(new BlurTransformation(5, 2)))
-                            .into(binding.layoutRender.renderBackgroundPreview);
-                    binding.layoutRender.renderPrevious.setImageResource(R.drawable.ic_image_prev);
-                    binding.layoutRender.renderNext.setImageResource(R.drawable.ic_image_next);
-                    binding.layoutRender.renderPlay.setImageResource(R.drawable.ic_image_play);
-                    binding.layoutRender.renderMask.setVisibility(View.VISIBLE);
-                    binding.layoutRender.renderBackgroundPreview.setVisibility(View.VISIBLE);
-                    binding.layoutRender.renderProgress.setVisibility(View.VISIBLE);
-                    binding.layoutRender.renderElapsed.setVisibility(View.VISIBLE);
-                    binding.layoutRender.renderRemaining.setVisibility(View.VISIBLE);
-                    binding.layoutRender.renderTitle.setTextColor(getResources().getColor(App.isDarkMode() ? R.color.sliding_panel_video_title : R.color.sliding_panel_video_black));
-                    binding.layoutRender.renderSlideshowProgressBackground.setVisibility(View.INVISIBLE);
-                    binding.layoutRender.renderSlideshowProgress.setVisibility(View.INVISIBLE);
-                    binding.layoutRender.renderCounter.setTextColor(getResources().getColor(R.color.playing_now));
-                    binding.layoutRender.renderCounter.setText(getResources().getString(R.string.current_position,
-                            String.valueOf(position + 1),
-                            String.valueOf(viewModel.getVideoContentSize())));
-
-                    restartPlayDelay();
-                    loadPreview(url, type);
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        startNotificationService(title, url, position, type);
-    }
-
-    private void startNotificationService(String title, String url, int position, GalleryFragment.MediaType type) {
-        Intent serviceIntent = new Intent(this, NotificationService.class);
-        serviceIntent.putExtra(NotificationService.ITEM_TITLE, title);
-        serviceIntent.putExtra(NotificationService.ITEM_URL, url);
-        serviceIntent.putExtra(NotificationService.ITEM_POSITION, position);
-        serviceIntent.putExtra(NotificationService.ITEM_TYPE, type.name());
-        serviceIntent.setAction(NotificationService.ACTION_START_FOREGROUND);
-        startService(serviceIntent);
-    }
-
-    private void restartPlayDelay() {
-        dispose(playDelayDisposable);
-        playDelayDisposable = Single.timer(5, TimeUnit.SECONDS).subscribe(delay -> refreshClickListeners(GalleryFragment.MediaType.VIDEO));
-    }
-
-    private void loadPreview(String url, GalleryFragment.MediaType type) {
-        switch (type) {
-            case IMAGE:
-                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.placeholder_image)).into(binding.layoutRender.renderPreview);
-                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.placeholder_image)).into(binding.layoutRender.renderPreviewThumbnail);
-                break;
-
-            case VIDEO:
-                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.placeholder_video)).into(binding.layoutRender.renderPreview);
-                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.placeholder_video)).into(binding.layoutRender.renderPreviewThumbnail);
-                break;
-            default:
-                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.placeholder_image)).into(binding.layoutRender.renderPreview);
-                Glide.with(this).load(url).apply(new RequestOptions().error(R.drawable.placeholder_image)).into(binding.layoutRender.renderPreviewThumbnail);
-                break;
-        }
-    }
-
-
     public void showKeyboard() {
         if (!isKeyboardShown)
             showInput(true);
@@ -1005,16 +654,8 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         }
     }
 
-
-    private Drawable getImageDrawable(int id) {
-        return getResources().getDrawable(id);
-    }
-
-    public boolean isHasContent() {
-        return hasContent;
-    }
-
-    public void setHasContent(boolean hasContent) {
-        this.hasContent = hasContent;
+    public void setUpnpContent(@Nullable String title, @Nullable String image, int position, @NotNull GalleryFragment.MediaType type) {
+        //todo: if we will  use UPNP we will need to set content on new sliding panel. (What to do with recommendations media???
     }
 }
+

@@ -9,7 +9,6 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.wezom.kiviremote.R
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.common.Action
@@ -26,6 +25,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
+
+
 class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalCVListener {
 
 
@@ -40,6 +41,13 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private lateinit var adapterChannels: RecommendationsAdapter
     private lateinit var adapterRecommend: RecommendationsAdapter
 
+    val panelObserver=
+    Observer<Boolean> { collapsed -> Timber.i(" pannel collapsed? " + collapsed)
+
+    }
+
+
+
     private val recommendationsObserver = Observer<List<Comparable<Recommendation>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterRecommend.swapData(it)
@@ -53,7 +61,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             adapterChannels.swapData(it)
             changeChannelsVisible(View.VISIBLE)
             updateRecommendations(true)
-        } ?:  changeChannelsVisible(View.GONE)
+        } ?: changeChannelsVisible(View.GONE)
 
     }
 
@@ -77,17 +85,31 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
     override fun onChannelChosen(item: Channel, position: Int) {
         viewModel.launchChannel(item)
-        (activity as HomeActivity).moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
+        (activity as HomeActivity).run {
+            moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
+            moveSlider(BottomSheetBehavior.STATE_HIDDEN)
+            changeFabVisibility(View.GONE)
+        }
+
     }
 
     override fun onRecommendationChosen(item: Recommendation, position: Int) {
         viewModel.launchRecommendation(item)
-        (activity as HomeActivity).moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
+        (activity as HomeActivity).run {
+            moveSlider(BottomSheetBehavior.STATE_EXPANDED)
+            moveTouchPad(BottomSheetBehavior.STATE_HIDDEN)
+            changeFabVisibility(View.GONE)
+        }
+
     }
 
     override fun appChosenNeedOpen(appModel: ServerAppInfo, positio: Int) {
         viewModel.launchApp(appModel.packageName)
-        (activity as HomeActivity).moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
+        (activity as HomeActivity).run {
+            moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
+            moveSlider(BottomSheetBehavior.STATE_HIDDEN)
+            changeFabVisibility(View.GONE)
+        }
     }
 
     private fun setPortServerCheck(id: Int) {
@@ -101,10 +123,10 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     }
 
     private fun updateRecommendations(isVisible: Boolean) {
-        if(!isVisible){
+        if (!isVisible) {
             binding.recsRefreshBar.visibility = View.VISIBLE
             binding.scrollTop.visibility = View.INVISIBLE
-        }else{
+        } else {
             binding.recsRefreshBar.visibility = View.GONE
             binding.scrollTop.visibility = View.VISIBLE
         }
@@ -115,21 +137,21 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         return binding.root
     }
 
-    private fun changeChannelsVisible(visible : Int){
+    private fun changeChannelsVisible(visible: Int) {
         binding.imgChannelsMenu.visibility = visible
         binding.reciclerChannels.visibility = visible
         binding.textChannel.visibility = visible
     }
 
 
-    private fun changeMoviesVisible(visible : Int){
+    private fun changeMoviesVisible(visible: Int) {
         binding.imgRecommendMenu.visibility = visible
         binding.reciclerRecommendations.visibility = visible
         binding.textSubscriptions.visibility = visible
     }
 
 
-    private fun changeAppsVisible(visible : Int){
+    private fun changeAppsVisible(visible: Int) {
         binding.imgAppsMenu.visibility = visible
         binding.reciclerApps.visibility = visible
         binding.textApps.visibility = visible
@@ -174,19 +196,18 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         }
 
 
-        val listener = View.OnClickListener {
-            view ->
+        val listener = View.OnClickListener { view ->
             run {
                 when (view.id) {
-                    R.id.img_recommend_menu, R.id.text_subscriptions -> {
-                      viewModel.goDeep(Screens.RECS_MOVIE_DEEP_FRAGMENT)
+                    com.wezom.kiviremote.R.id.img_recommend_menu, com.wezom.kiviremote.R.id.text_subscriptions -> {
+                        viewModel.goDeep(Screens.RECS_MOVIE_DEEP_FRAGMENT)
                     }
 
-                    R.id.img_apps_menu, R.id.text_apps -> {
+                    com.wezom.kiviremote.R.id.img_apps_menu, com.wezom.kiviremote.R.id.text_apps -> {
                         viewModel.goDeep(Screens.RECS_APPS_DEEP_FRAGMENT)
                     }
 
-                    R.id.img_channels_menu, R.id.text_channel -> {
+                    com.wezom.kiviremote.R.id.img_channels_menu, com.wezom.kiviremote.R.id.text_channel -> {
                         viewModel.goDeep(Screens.RECS_CHANNELS_DEEP_FRAGMENT)
                     }
                 }
@@ -229,14 +250,21 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
     override fun onResume() {
         super.onResume()
-        (activity as HomeActivity).changeFabVisibility(View.VISIBLE)
-        (activity as HomeActivity).uncheckMenu()
+        (activity as HomeActivity).run {
+            changeFabVisibility(View.VISIBLE)
+            uncheckMenu()
+            isPlayerCollapsed.observe(this, panelObserver)
+        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        (activity as HomeActivity).changeFabVisibility(View.GONE)
+        (activity as HomeActivity).run { changeFabVisibility(View.GONE) }
+    }
+
+    fun onPanelShown(shown: Boolean) {
+
+        panelObserver
     }
 }
-
 

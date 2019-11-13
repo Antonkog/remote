@@ -5,6 +5,5 @@
         android:id="@+id/image_channel"
         android:layout_width="@dimen/recom_channel"
         android:layout_height="@dimen/recom_channel"
-        style="@style/KiviOldApiCard"
-        android:scaleType="fitXY" />
+        style="@style/KiviOldApiCard" />
 </layout>

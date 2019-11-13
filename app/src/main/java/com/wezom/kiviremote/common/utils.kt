@@ -182,10 +182,11 @@ fun getApps(initialEvent: GotPreviewsInitialEvent): List<ServerApp> {
 }
 
 
-fun getInputs(initialEvent: GotPreviewsInitialEvent): List<ServerInput> {
+fun getAppInputs(initialEvent: GotPreviewsInitialEvent): List<ServerInput> {
     val inputs = LinkedList<ServerInput>()
     initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.INPUT.name }.forEach {
-         inputs.add(ServerInput().apply {
+        if (it.id != null) {
+                inputs.add(ServerInput().apply {
                     portNum = Integer.parseInt(it.id)
                     portName = it.name
                     imageUrl = it.imageUrl
@@ -193,6 +194,7 @@ fun getInputs(initialEvent: GotPreviewsInitialEvent): List<ServerInput> {
                     inputIcon = it.icon
                     localResource = InputSourceHelper.INPUT_PORT.getPicById(portNum)
                 })
+            }
     }
     return inputs
 }

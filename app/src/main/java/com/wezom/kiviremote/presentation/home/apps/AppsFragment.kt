@@ -108,8 +108,8 @@ class AppsFragment : BaseFragment() {
         }
 
         (activity as HomeActivity).run {
-            modifyPadding(isPanelCollapsed.value)
-            isPanelCollapsed.observe(this, panelObserver)
+            modifyPadding(isTouchPadCollapsed.value)
+            isTouchPadCollapsed.observe(this, panelObserver)
         }
     }
 

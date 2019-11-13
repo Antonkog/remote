@@ -5,7 +5,6 @@ import android.arch.lifecycle.MutableLiveData
 import android.content.Intent
 import android.content.SharedPreferences
 import com.wezom.kiviremote.App
-import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.Screens.DEVICE_SEARCH_FRAGMENT
 import com.wezom.kiviremote.bus.*
 import com.wezom.kiviremote.common.*
@@ -19,7 +18,6 @@ import com.wezom.kiviremote.nsd.NsdServiceModel
 import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.persistence.model.ServerApp
 import com.wezom.kiviremote.persistence.model.ServerChannel
-import com.wezom.kiviremote.persistence.model.ServerInput
 import com.wezom.kiviremote.persistence.model.ServerRecommendation
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment
@@ -39,9 +37,7 @@ import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
-import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
 
 
 class HomeActivityViewModel(
@@ -49,7 +45,7 @@ class HomeActivityViewModel(
         private val navigatorHolder: NavigatorHolder,
         private val cache: KiviCache,
         private val router: Router,
-        private val uPnPManager: UPnPManager, preferences: SharedPreferences
+        preferences: SharedPreferences
 ) : BaseViewModel() {
     var autoConnect by preferences.boolean(false, Constants.AUTO_CONNECT)
 
@@ -88,34 +84,6 @@ class HomeActivityViewModel(
                         disconnect()
                     }
 
-                    if (it.inputs != null) {
-                        launch(CommonPool) {
-                            it.inputs?.let {
-                                database.serverInputsDao().run {
-                                    removeAll()
-                                    insertAll(it.mapTo(ArrayList(), {
-                                        ServerInput().apply {
-                                            portNum = it.intID
-                                            portName = it.name
-                                            imageUrl = it.imageUrl
-                                            active = it.isActive
-                                            inputIcon = it.inputIcon
-                                            localResource = InputSourceHelper.INPUT_PORT.getPicById(it.intID)
-                                        }
-                                    }))
-                                }
-                            }
-                        }
-                    }
-
-                    if (it.recommendations != null) {
-                        RxBus.publish(GotRecommendationsEvent(it.recommendations))
-                    }
-
-                    if (it.channels != null) {
-                        RxBus.publish(GotChannelsEvent(it.channels))
-                    }
-
                     if (it.volume != NO_VALUE) {
                         RxBus.publish(NewVolumeEvent(it.volume))
                         muteStatus = it.volume <= 0
@@ -127,38 +95,33 @@ class HomeActivityViewModel(
                 .subscribeBy(onNext = { initialEvent ->
                     if (initialEvent.previewCommonStructures != null) {
                         launch(CommonPool) {
+                            async {
+                                val apps = getApps(initialEvent)
 
-                            val apps = async { getApps(initialEvent) }.await()
-                            var ids = arrayListOf<String>()
-
-                            apps.forEach { app ->
-                                ids.add(app.packageName)
-                            }
-
-                            val inputs = async {
-                                getInputs(initialEvent)
+                                database.serverAppDao().run {
+                                    removeAll()
+                                    insertMediaShareStaticApp(ServerApp().apply {
+                                        appName = Constants.MEDIA_SHARE_TXT_ID
+                                        packageName = Constants.MEDIA_SHARE_TXT_ID
+                                    })
+                                    insertAll(apps)
+                                }
+                                val ids = arrayListOf<String>()
+                                apps.forEach { app ->
+                                    ids.add(app.packageName)
+                                }
+                                if(ids.isNotEmpty()) RxBus.publish(RequestImgByIds(ids))
                             }.await()
 
-//                            inputs.forEach { input ->
-//                                ids.add(""+input.portNum)
-//                            }
+                            async {
+                                val inputs =   getAppInputs(initialEvent)
+                                database.serverInputsDao().run {
+                                    removeAll()
+                                    insertAll(inputs)
+                                }
+                            }.await()
 
-                            database.serverInputsDao().run {
-                                removeAll()
-                                insertAll(inputs)
-                            }
 
-                            database.serverAppDao().run {
-                                removeAll()
-//                                insertMediaShareStaticApp(ServerApp().apply {
-//                                    appName = Constants.MEDIA_SHARE_TXT_ID
-//                                    packageName = Constants.MEDIA_SHARE_TXT_ID
-//                                })
-                                insertAll(apps)
-                            }
-
-                            Timber.e("12345 ids size = "+ ids.size)
-                            RxBus.publish(RequestImgByIds(ids)) // refrest imgs
 
                             database.chennelsDao().run {
                                 removeAll()
@@ -200,6 +163,7 @@ class HomeActivityViewModel(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = { previewsContents ->
                     previewsContents.previewContents.forEach {
+                        Timber.e(" got preview for ${it.id} " )
                         updateAppIcon(it)
                     }
                 })
@@ -373,6 +337,12 @@ class HomeActivityViewModel(
                 }, onError = Timber::e)
 
 
+        disposables += RxBus.listen(RemotePlayerEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = {
+                   sendPlayerEvent(it)
+                }, onError = Timber::e)
+
         disposables += RxBus.listen(SendActionEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
@@ -395,11 +365,11 @@ class HomeActivityViewModel(
                 cache.put(appData.id, bitmap)
                 Timber.e("12345 caching app:")
             }
-
-        database.serverAppDao().getApp(appData.id).subscribe {
-            val result = database.serverAppDao().update(it.apply { baseIcon = appData.img })
-            Timber.e(" insert in serverAppDao: $appData.id updating $result")
-        }
+// need to update
+//        database.serverAppDao().getApp(appData.id).subscribe {
+//            val result = database.serverAppDao().update(it.apply { baseIcon = appData.img })
+//            Timber.e(" insert in serverAppDao: ${appData.id} updating $result")
+//        }
     }
 
 
@@ -419,11 +389,6 @@ class HomeActivityViewModel(
     private var currentModel: NsdServiceModel? = null
 
     private var reconnectTimer: Disposable? = null
-
-    private val progressObserver = Observer { _, arg ->
-        val model = arg as UPnPManager.RendererModel
-        progress.postValue(ProgressModel(model, uPnPManager.currentMediaType))
-    }
 
     data class ProgressModel(
             val rendererModel: UPnPManager.RendererModel,
@@ -523,6 +488,11 @@ class HomeActivityViewModel(
         serverConnection?.launchRecommendation(msg)
     }
 
+    private fun sendPlayerEvent(msg: RemotePlayerEvent) {
+        serverConnection?.synchronizePlayerToTV(msg)
+    }
+
+
     private fun sendAction(action: Action) {
         Timber.e("12345  send Action " + action.name)
         serverConnection?.sendMessage(SocketConnectionModel().apply {
@@ -555,17 +525,6 @@ class HomeActivityViewModel(
 
     fun newRootScreen(screenKey: String) = router.newRootScreen(screenKey)
 
-    fun startUPnPController() = uPnPManager.controller.resume()
-
-    fun stopUPnPController() {
-        uPnPManager.controller.pause()
-        uPnPManager.controller.serviceListener.serviceConnexion.onServiceDisconnected(null)
-    }
-
-    fun backHome() {
-        router.backTo(Screens.DEVICE_SEARCH_FRAGMENT)
-    }
-
     fun restartColorScheme(ctx: Activity?) {
         if (ctx != null) {
             PreferencesManager.setDarkMode(!App.isDarkMode())
@@ -577,32 +536,6 @@ class HomeActivityViewModel(
             ctx.startActivity(i)
         }
     }
-
-    fun progressTo(progress: Int, max: Int) = uPnPManager.progressTo(progress, max)
-
-    fun observeProgress() = uPnPManager.addObserver(progressObserver)
-
-    fun removeProgressObserver() = uPnPManager.deleteObserver(progressObserver)
-
-    fun pausePlayback() = uPnPManager.pause()
-
-    fun resumePlayback() = uPnPManager.resume()
-
-    fun renderCurrentItem() = uPnPManager.renderCurrentItem()
-
-    fun getImageContentSize() = uPnPManager.currentImageContent.size
-
-    fun getVideoContentSize() = uPnPManager.currentVideoContent.size
-
-    fun getCurrentContentObservable() = uPnPManager.currentContentState
-
-    fun getCurrentContentName() = currentConnection
-
-    fun getSlideshowStateObservable() = uPnPManager.slideshowState
-
-    fun getFlowSubject() = uPnPManager.flowSubject
-
-    fun stopPlayback() = uPnPManager.stop()
 
     fun goTo(screenKey: String) {
         router.navigateTo(screenKey);

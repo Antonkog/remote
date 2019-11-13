@@ -19,6 +19,7 @@ import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchFragment;
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesFragment;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
 import com.wezom.kiviremote.presentation.home.media.MediaFragment;
+import com.wezom.kiviremote.presentation.home.player.PlayerFragment;
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragment;
 import com.wezom.kiviremote.presentation.home.recommendations.RecommendationsFragment;
@@ -83,6 +84,8 @@ public abstract class BaseActivity extends AppCompatActivity {
                             return SubsInfoFragment.newInstance((PricePerTime) data);
                         case Screens.SUBS_TARIFF_PLANS_FRAGMENT:
                             return new SubsTariffPlansFragment();
+                        case Screens.PLAYER_FRAGMENT:
+                            return new PlayerFragment();
                         case Screens.SUBS_PAYMENT_FRAGMENT:
                             return new SubsPaymentFragment();
                         default:

@@ -112,8 +112,8 @@ class DirectoriesFragment : BaseFragment() {
                 setDisplayHomeAsUpEnabled(true)
                 setDisplayShowHomeEnabled(true)
             }
-            modifyPadding(isPanelCollapsed.value)
-            isPanelCollapsed.observe(this, panelObserver)
+            modifyPadding(isTouchPadCollapsed.value)
+            isTouchPadCollapsed.observe(this, panelObserver)
         }
 
         when (viewModel.uPnPManager.currentDirType) {

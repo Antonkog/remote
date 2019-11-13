@@ -7,6 +7,7 @@ import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchFragment;
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesFragment;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
 import com.wezom.kiviremote.presentation.home.media.MediaFragment;
+import com.wezom.kiviremote.presentation.home.player.PlayerFragment;
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.TvSettingsFragment;
@@ -37,6 +38,8 @@ public interface FragmentComponent {
     void inject(RecentDevicesFragment devicesFragment);
 
     void inject(RecentDeviceFragment recentDeviceFragment);
+
+    void inject(PlayerFragment playerFragment);
 
     void inject(MediaFragment mediaFragment);
 

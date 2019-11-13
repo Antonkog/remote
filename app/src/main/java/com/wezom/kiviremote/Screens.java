@@ -23,4 +23,5 @@ public class Screens {
     public static final String SUBS_INFO_FRAGMENT = "subs_info_screen";
     public static final String SUBS_TARIFF_PLANS_FRAGMENT = "subs_tariff_plans_screen";
     public static final String SUBS_PAYMENT_FRAGMENT = "subs_payment_screen";
+    public static final String PLAYER_FRAGMENT = "player_fragment";
 }

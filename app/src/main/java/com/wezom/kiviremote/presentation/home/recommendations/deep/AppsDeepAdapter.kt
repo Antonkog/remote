@@ -1,6 +1,7 @@
 package com.wezom.kiviremote.presentation.home.recommendations.deep
 
 import android.widget.ImageView
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.Constants.SMALL_BITMAP
@@ -25,14 +26,13 @@ class AppsDeepAdapter(itemClickListener: OnItemClickListener<ServerAppInfo>, val
             if (item.packageName != null)
                 cache.get(item.packageName).let {
 
-
-
                     if(it?.width!= null &&  it.width > SMALL_BITMAP){
 
                         Timber.e(" PreviewsTransformation app width ${it?.width} " + item.packageName)
 
                         GlideApp.with(imageView.context)
                                 .load(it)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .transform(PreviewsTransformation(5, 5))
                                 .into(imageView)
                     }
@@ -41,6 +41,7 @@ class AppsDeepAdapter(itemClickListener: OnItemClickListener<ServerAppInfo>, val
 
                         GlideApp.with(imageView.context)
                                 .load(it)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
                                 .centerInside()
                                 .into(imageView)
                     }

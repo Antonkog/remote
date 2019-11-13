@@ -16,6 +16,7 @@ import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchViewModel
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryViewModel
 import com.wezom.kiviremote.presentation.home.media.MediaViewModel
+import com.wezom.kiviremote.presentation.home.player.PlayerViewModel
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceViewModel
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesViewModel
 import com.wezom.kiviremote.presentation.home.recommendations.RecommendationsViewModel
@@ -45,22 +46,16 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T = when {
         modelClass.isAssignableFrom(HomeActivityViewModel::class.java) ->
-            HomeActivityViewModel(database, navigatorHolder, cache, router, uPnPManager, preferences) as T
+            HomeActivityViewModel(database, navigatorHolder, cache, router, preferences) as T
 
         modelClass.isAssignableFrom(RecommendationsViewModel::class.java) ->
-            RecommendationsViewModel(router, database, cache, preferences, uPnPManager) as T
+            RecommendationsViewModel(router, database, cache, preferences) as T
 
         modelClass.isAssignableFrom(TouchpadViewModel::class.java) ->
             TouchpadViewModel(router) as T
 
         modelClass.isAssignableFrom(AppsViewModel::class.java) ->
             AppsViewModel(database, cache, preferences, resourceProvider) as T
-
-        modelClass.isAssignableFrom(MediaViewModel::class.java) ->
-            MediaViewModel(router, uPnPManager) as T
-
-        modelClass.isAssignableFrom(GalleryViewModel::class.java) ->
-            GalleryViewModel(uPnPManager) as T
 
         modelClass.isAssignableFrom(RecentDevicesViewModel::class.java) ->
             RecentDevicesViewModel(router, database, preferences) as T
@@ -73,9 +68,6 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
 
         modelClass.isAssignableFrom(DeviceSearchViewModel::class.java) ->
             DeviceSearchViewModel(nsdHelper, router, database, preferences) as T
-
-        modelClass.isAssignableFrom(DirectoriesViewModel::class.java) ->
-            DirectoriesViewModel(router, uPnPManager) as T
 
         modelClass.isAssignableFrom(SubsPriceListViewModel::class.java) ->
             SubsPriceListViewModel(router) as T
@@ -97,6 +89,18 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
 
         modelClass.isAssignableFrom(AppsDeepViewModel::class.java) ->
             AppsDeepViewModel(router, cache, database) as T
+
+        modelClass.isAssignableFrom(DirectoriesViewModel::class.java) ->
+            DirectoriesViewModel(router, uPnPManager) as T
+
+        modelClass.isAssignableFrom(GalleryViewModel::class.java) ->
+            GalleryViewModel(uPnPManager) as T
+
+        modelClass.isAssignableFrom(MediaViewModel::class.java) ->
+            MediaViewModel(router, uPnPManager) as T
+
+        modelClass.isAssignableFrom(PlayerViewModel::class.java) ->
+            PlayerViewModel(router, uPnPManager) as T
 
         else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.canonicalName}")
     }

@@ -98,27 +98,16 @@
                 android:layout_marginBottom="8dp"
                 android:gravity="top" />
 
-            <LinearLayout
-                android:id="@+id/bottomSheet"
+            <FrameLayout
+                android:id="@+id/media_slider"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@+id/activity_home_container"
                 android:layout_gravity="bottom"
                 android:orientation="vertical"
-                android:visibility="gone"
                 app:behavior_hideable="true"
-                app:behavior_peekHeight="0dp"
-                app:layout_behavior="com.wezom.kiviremote.views.LockableBottomSheetBehavior">
-
-                <include
-                    android:id="@+id/layoutRender"
-                    layout="@layout/layout_render"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/colorLightGray"
-                    android:gravity="center" />
-
-            </LinearLayout>
+                app:behavior_peekHeight="40dp"
+                app:layout_behavior="com.wezom.kiviremote.views.LockableBottomSheetBehavior"/>
 
 
             <FrameLayout
@@ -130,8 +119,7 @@
                 android:layout_gravity="bottom"
                 app:behavior_hideable="true"
                 app:behavior_peekHeight="0dp"
-                app:layout_behavior="com.wezom.kiviremote.views.LockableBottomSheetBehavior"
-                />
+                app:layout_behavior="com.wezom.kiviremote.views.LockableBottomSheetBehavior" />
 
 
             <View

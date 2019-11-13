@@ -21,8 +21,7 @@ import timber.log.Timber
 class RecommendationsViewModel(private val router: Router,
                                val database: AppDatabase,
                                val cache: KiviCache,
-                               preferences: SharedPreferences,
-                               private val uPnPManager: UPnPManager) : BaseViewModel() {
+                               preferences: SharedPreferences) : BaseViewModel() {
 
     var lastNsdHolderName by preferences.string(Constants.UNIDENTIFIED, key = Constants.LAST_NSD_HOLDER_NAME)
 
@@ -160,8 +159,6 @@ class RecommendationsViewModel(private val router: Router,
     fun goSearch() = router.navigateTo(Screens.DEVICE_SEARCH_FRAGMENT)
 
     fun godo(data: Recommendation) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)
-
-    fun startUPnPController() = uPnPManager.controller.resume()
 
 
 }
