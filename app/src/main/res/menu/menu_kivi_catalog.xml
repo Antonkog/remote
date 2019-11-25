@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/item_search"
+        android:icon="@drawable/ic_search_plain"
+        android:title="Search"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="collapseActionView|always" />
+
+    <item
+        android:id="@+id/item_sort"
+        android:icon="@drawable/ic_sort"
+        android:title="Sort"
+        app:showAsAction="always">
+
+        <menu>
+            <group
+                android:id="@+id/group"
+                android:checkableBehavior="single">
+
+                <item
+                    android:id="@+id/item_sort_by_popularity"
+                    android:checked="true"
+                    android:title="@string/by_popularity" />
+
+                <item
+                    android:id="@+id/item_sort_by_appearance_date"
+                    android:title="@string/by_appearance_date" />
+
+                <item
+                    android:id="@+id/item_sort_by_rating_ivi"
+                    android:title="@string/by_rating_ivi" />
+
+                <item
+                    android:id="@+id/item_sort_by_rating_movie_search"
+                    android:title="@string/by_rating_movie_search" />
+
+                <item
+                    android:id="@+id/item_sort_by_rating_imdb"
+                    android:title="@string/by_rating_imdb" />
+
+                <item
+                    android:id="@+id/item_sort_by_budget"
+                    android:title="@string/by_budget" />
+
+                <item
+                    android:id="@+id/item_sort_by_worldwide_fees"
+                    android:title="@string/by_worldwide_fees" />
+
+                <item
+                    android:id="@+id/item_sort_by_release_year"
+                    android:title="@string/by_release_year" />
+
+            </group>
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/item_filter"
+        android:icon="@drawable/ic_filters"
+        android:title="Filter"
+        app:showAsAction="always">
+
+        <menu>
+
+            <item
+                android:id="@+id/item_filter_by_year"
+                android:title="@string/by_year" />
+
+            <item
+                android:id="@+id/item_filter_by_category"
+                android:title="@string/by_category" />
+
+            <item
+                android:id="@+id/item_filter_by_genre"
+                android:title="@string/by_genre" />
+
+            <item
+                android:id="@+id/item_filter_by_country"
+                android:title="@string/by_country" />
+
+        </menu>
+
+    </item>
+
+    <item
+        android:id="@+id/item_microphone"
+        android:icon="@drawable/ic_microphone_white"
+        android:title="Microphone"
+        android:visible="false"
+        app:showAsAction="always" />
+
+</menu>

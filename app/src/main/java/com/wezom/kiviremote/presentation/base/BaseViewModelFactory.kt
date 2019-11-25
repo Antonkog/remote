@@ -15,6 +15,8 @@ import com.wezom.kiviremote.presentation.home.apps.AppsViewModel
 import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchViewModel
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesViewModel
 import com.wezom.kiviremote.presentation.home.gallery.GalleryViewModel
+import com.wezom.kiviremote.presentation.home.kivi_catalog.KiviCatalogSeriesViewModel
+import com.wezom.kiviremote.presentation.home.kivi_catalog.KiviCatalogViewModel
 import com.wezom.kiviremote.presentation.home.media.MediaViewModel
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceViewModel
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesViewModel
@@ -97,6 +99,12 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
 
         modelClass.isAssignableFrom(AppsDeepViewModel::class.java) ->
             AppsDeepViewModel(router, cache, database) as T
+
+        modelClass.isAssignableFrom(KiviCatalogViewModel::class.java) ->
+            KiviCatalogViewModel(database, router) as T
+
+        modelClass.isAssignableFrom(KiviCatalogSeriesViewModel::class.java) ->
+            KiviCatalogSeriesViewModel(database, router) as T
 
         else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.canonicalName}")
     }

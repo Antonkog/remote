@@ -21,6 +21,9 @@
                 android:theme="@style/ToolbarTheme"
                 android:layout_gravity="top"
                 android:visibility="visible"
+                app:contentInsetLeft="-20dp"
+                app:contentInsetStart="-20dp"
+                app:contentInsetStartWithNavigation="-20dp"
                 android:background="@color/colorAccent">
 
                 <RelativeLayout

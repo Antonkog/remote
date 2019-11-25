@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_catalog_movies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="8dp"
+            android:paddingTop="8dp"
+            android:paddingEnd="8dp"
+            tools:itemCount="5"
+            tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            tools:listitem="@layout/item_catalog_movie"
+            tools:orientation="vertical"
+            tools:spanCount="2" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_autocomplete_catalog_movies"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="32dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="10dp"
+            android:visibility="gone"
+            tools:listitem="@layout/item_autocomplete_catalog_movie" />
+
+        <LinearLayout
+            android:id="@+id/ll_not_found_placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                app:srcCompat="@drawable/ic_search_placeholder" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/not_found_anything_by_query"
+                android:textColor="@color/silver_chalice"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</layout>

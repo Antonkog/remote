@@ -40,4 +40,35 @@
     <color name="image_counter">#B6BAC1</color>
 
     <color name="directory_title">@color/colorTextPrimary</color>
+
+    <color name="black_87">#de000000</color>
+    <color name="black_40">#66000000</color>
+    <color name="black_19">#33000000</color>
+    <color name="mine_shaft_3">#232323</color>
+    <color name="mine_shaft_4">#242424</color>
+
+    <color name="white_87">#deffffff</color>
+    <color name="blue_ribbon">#0f6bfb</color>
+    <color name="blue_50">#800091ff</color>
+    
+    <color name="cod_gray">#1a1a1a</color>
+    <color name="athens_gray">#ececf1</color>
+    <color name="gray">#8c8c8c</color>
+
+    <color name="mine_shaft_33">#333333</color>
+    <color name="dusty_gray">#979797</color>
+    <color name="limed_spruce">#3b4952</color>
+
+    <color name="tab_indicator_light">#0091ff</color>
+    <color name="tab_indicator_dark">#0f6bfb</color>
+
+    <color name="dove_gray">#626262</color>
+    <color name="silver">#bebebe</color>
+
+    <color name="autocomplete_genre_dark">#80a1a1a1</color>
+    <color name="autocomplete_genre_light">#803b4952</color>
+    
+    <color name="autocomplete_back_light">#1A979797</color>
+    <color name="silver_chalice">#a1a1a1</color>
+
 </resources>

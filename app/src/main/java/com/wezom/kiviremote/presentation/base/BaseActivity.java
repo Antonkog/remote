@@ -19,6 +19,9 @@ import com.wezom.kiviremote.persistence.model.RecentDevice;
 import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchFragment;
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesFragment;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
+import com.wezom.kiviremote.presentation.home.kivi_catalog.KiviCatalogFragment;
+import com.wezom.kiviremote.presentation.home.kivi_catalog.KiviCatalogSeriesFragment;
+import com.wezom.kiviremote.presentation.home.kivi_catalog.adapters.MovieData;
 import com.wezom.kiviremote.presentation.home.media.MediaFragment;
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceFragment;
 import com.wezom.kiviremote.presentation.home.recentdevices.RecentDevicesFragment;
@@ -86,6 +89,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                             return new SubsTariffPlansFragment();
                         case Screens.SUBS_PAYMENT_FRAGMENT:
                             return new SubsPaymentFragment();
+                        case Screens.KIVI_CATALOG_FRAGMENT:
+                            return new KiviCatalogFragment();
+                        case Screens.KIVI_CATALOG_SERIES_FRAGMENT:
+                            return KiviCatalogSeriesFragment.newInstance((MovieData) data);
                         default:
                             throw new IllegalStateException("Unknown screen");
                     }

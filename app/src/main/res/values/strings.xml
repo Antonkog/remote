@@ -235,4 +235,28 @@
     <string name="drawer_dark_mode">Тёмный режим</string>
     <string name="drawer_devices">Устройства</string>
 
+    <string name="not_found_anything_by_query">По вашему запросу\nничего не найдено</string>
+    <string name="not_found_any_episodes__by_query">Серии для этого сезона\nнедоступны</string>
+
+    <string name="movies_toolbar_tittle">Фильмы</string>
+    <string name="search_movies">Искать фильмы</string>
+    <string name="apply_filters">Применить фильтры</string>
+    <string name="reset_filters">Сбросить фильтры</string>
+
+    <!--sort-->
+    <string name="by_popularity">По популярности</string>
+    <string name="by_appearance_date">Дате появления</string>
+    <string name="by_rating_ivi">Рейтингу ivi</string>
+    <string name="by_rating_movie_search">Рейтингу Кинопоиска</string>
+    <string name="by_rating_imdb">Рейтингу IMDB</string>
+    <string name="by_budget">Бюджету</string>
+    <string name="by_worldwide_fees">Сборам в мире</string>
+    <string name="by_release_year">Году выхода</string>
+
+    <!--filter-->
+    <string name="by_year">Год</string>
+    <string name="by_category">Категория</string>
+    <string name="by_genre">Жанр</string>
+    <string name="by_country">Страна</string>
+
 </resources>

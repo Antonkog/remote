@@ -8,11 +8,22 @@ import androidx.recyclerview.widget.RecyclerView
 
 abstract class LazyAdapter <DataType, LayoutClassBinding : ViewDataBinding> (val itemClickListener: OnItemClickListener<DataType>? = null) : RecyclerView.Adapter<LazyAdapter.LazyViewHolder<DataType>>() {
 
-    private val data = mutableListOf<DataType>()
+    val data = mutableListOf<DataType>()
 
     fun swapData(newData: List<DataType>) {
         data.clear()
         data.addAll(newData)
+        notifyDataSetChanged()
+    }
+
+    fun addData(newData: List<DataType>) {
+        val newFirstIndex = data.size
+        data.addAll(newData)
+        notifyItemRangeInserted(newFirstIndex, newData.size)
+    }
+
+    fun clearData() {
+        data.clear()
         notifyDataSetChanged()
     }
 
@@ -41,6 +52,12 @@ abstract class LazyAdapter <DataType, LayoutClassBinding : ViewDataBinding> (val
 
     interface OnItemClickListener <DataType> {
         fun onLazyItemClick(data: DataType)
+    }
+
+    fun getLastVisibleItemId(): Int {
+        return if (data.isEmpty()) {
+            0
+        } else data.size - 1
     }
 
 }

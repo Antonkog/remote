@@ -23,4 +23,6 @@ public class Screens {
     public static final String SUBS_INFO_FRAGMENT = "subs_info_screen";
     public static final String SUBS_TARIFF_PLANS_FRAGMENT = "subs_tariff_plans_screen";
     public static final String SUBS_PAYMENT_FRAGMENT = "subs_payment_screen";
+    public static final String KIVI_CATALOG_FRAGMENT = "kivi_catalog_fragment";
+    public static final String KIVI_CATALOG_SERIES_FRAGMENT = "kivi_catalog_series_fragment";
 }

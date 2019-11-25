@@ -10,6 +10,7 @@ import com.wezom.kiviremote.di.components.ApplicationComponent;
 import com.wezom.kiviremote.di.components.DaggerApplicationComponent;
 import com.wezom.kiviremote.di.modules.ApplicationModule;
 import com.wezom.kiviremote.di.modules.CiceroneModule;
+import com.wezom.kiviremote.kivi_catalog.Constants;
 
 import io.fabric.sdk.android.Fabric;
 import ru.terrakok.cicerone.Cicerone;
@@ -28,6 +29,8 @@ public class App extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        Constants.updateAppVersion().subscribe((integer, throwable) -> { });
+
         ViewTarget.setTagId(R.id.glide_tag);//deprecated in glide 4.8 (now 4.6)
 
         if (BuildConfig.DEBUG) {
@@ -41,6 +44,7 @@ public class App extends MultiDexApplication {
                 .applicationModule(new ApplicationModule(this))
                 .ciceroneModule(new CiceroneModule(Cicerone.create()))
                 .build();
+
     }
 
     public static boolean isDarkMode() {

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.wezom.kiviremote.views.CustomTabLayout
+                android:id="@+id/tl_series"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="?actionBarSize"
+                app:tabMaxWidth="500dp"
+                app:tabMode="scrollable"
+                app:tabTextAppearance="@style/TabTextNotAllCapsAppearance" />
+
+        </androidx.cardview.widget.CardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_series"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingStart="11dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="11dp"
+            tools:listitem="@layout/item_catalog_series_episode" />
+
+    </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_not_found_placeholder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="85dp"
+                android:layout_height="85dp"
+                app:srcCompat="@drawable/ic_search_placeholder" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/not_found_any_episodes__by_query"
+                android:textColor="@color/silver_chalice"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+
+</layout>
