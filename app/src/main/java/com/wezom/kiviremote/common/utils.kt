@@ -16,11 +16,11 @@ import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.MediaStore
-import android.support.annotation.RequiresApi
-import android.support.v4.content.ContextCompat
 import android.util.Base64
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import com.wezom.kiviremote.bus.GotPreviewsInitialEvent
 import com.wezom.kiviremote.net.model.InputSourceHelper
 import com.wezom.kiviremote.net.model.LauncherBasedData

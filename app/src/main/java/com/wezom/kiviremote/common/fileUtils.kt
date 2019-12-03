@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Build
 import android.os.Environment
 import android.os.storage.StorageManager
-import android.support.annotation.RequiresApi
+import androidx.annotation.RequiresApi
 import timber.log.Timber
 import java.io.BufferedWriter
 import java.io.File

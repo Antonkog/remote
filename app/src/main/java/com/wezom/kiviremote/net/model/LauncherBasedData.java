@@ -1,7 +1,6 @@
 package com.wezom.kiviremote.net.model;
 
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
 
 import java.util.HashMap;
 

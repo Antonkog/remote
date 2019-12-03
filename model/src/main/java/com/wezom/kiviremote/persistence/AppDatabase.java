@@ -1,8 +1,9 @@
 package com.wezom.kiviremote.persistence;
 
 
-import android.arch.persistence.room.Database;
-import android.arch.persistence.room.RoomDatabase;
+
+import androidx.room.Database;
+import androidx.room.RoomDatabase;
 
 import com.wezom.kiviremote.persistence.dao.ChennelsDao;
 import com.wezom.kiviremote.persistence.dao.RecentDevicesDao;

@@ -1,12 +1,12 @@
 package com.wezom.kiviremote.presentation.home.recentdevices
 
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.res.ResourcesCompat
+import androidx.recyclerview.widget.RecyclerView
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.extensions.removeMasks
 import com.wezom.kiviremote.persistence.model.RecentDevice
@@ -54,7 +54,7 @@ class RecentDevicesAdapter(private val listener: RecentDevicesListener, private 
         return data.size
     }
 
-    override fun onBindViewHolder(holder: RowsViewHolder<*>?, position: Int) {
+    override fun onBindViewHolder(holder: RowsViewHolder<*>, position: Int) {
         val element = data[position]
         when (holder) {
             is RecentDevicesAdapter.RecentDeviceHolder -> holder.bind(element as RecentDevice)

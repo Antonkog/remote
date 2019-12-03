@@ -1,6 +1,5 @@
 package com.wezom.kiviremote.presentation.home.subscriptions.subs_payment
 
-import android.arch.lifecycle.ViewModelProviders
 import android.graphics.Color
 import android.os.Bundle
 import android.text.Editable
@@ -16,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
+import androidx.lifecycle.ViewModelProviders
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.databinding.SubsPaymentFragmentBinding
 import com.wezom.kiviremote.presentation.base.BaseFragment

@@ -8,7 +8,7 @@
             type="com.wezom.kiviremote.presentation.home.apps.AppsViewModel" />
     </data>
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -32,13 +32,13 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:textSize="@dimen/font_size_14"
-            android:text="@={viewModel.deviceName}"
+            android:text='@{viewModel.deviceName}'
             android:textColor="@color/colorSecondaryText"
             app:layout_constraintEnd_toEndOf="@+id/apps_label"
             app:layout_constraintStart_toStartOf="@+id/apps_label"
             app:layout_constraintTop_toBottomOf="@+id/apps_label" />
 
-        <android.support.v4.widget.SwipeRefreshLayout
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/apps_swipe_container"
             android:layout_width="0dp"
             android:layout_height="0dp"
@@ -49,11 +49,11 @@
             app:layout_constraintTop_toBottomOf="@+id/apps_current_device">
 
 
-            <android.support.constraint.ConstraintLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <android.support.v7.widget.RecyclerView
+                <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/apps_container"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
@@ -91,7 +91,7 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-            </android.support.constraint.ConstraintLayout>
-        </android.support.v4.widget.SwipeRefreshLayout>
-    </android.support.constraint.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

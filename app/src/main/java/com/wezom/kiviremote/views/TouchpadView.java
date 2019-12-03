@@ -5,11 +5,13 @@ import android.graphics.Canvas;
 import android.graphics.DashPathEffect;
 import android.graphics.Paint;
 import android.graphics.Path;
-import android.support.v4.view.GestureDetectorCompat;
 import android.util.AttributeSet;
 import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
+
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.view.GestureDetectorCompat;
 
 import com.wezom.kiviremote.common.Action;
 import com.wezom.kiviremote.common.extensions.NumUtils;
@@ -23,7 +25,7 @@ import timber.log.Timber;
  * Created by andre on 09.06.2017.
  */
 
-public class TouchpadView extends android.support.v7.widget.AppCompatImageView implements GestureDetector.OnGestureListener {
+public class TouchpadView extends AppCompatImageView implements GestureDetector.OnGestureListener {
     private static final int DOUBLE_FINGER_TAP_TIMEOUT = 100;
 
     private boolean scroll = false;

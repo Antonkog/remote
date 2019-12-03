@@ -1,9 +1,9 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 buildscript {
-    ext.kotlin_version = '1.2.21'
+    ext.kotlin_version = '1.3.41'
     ext.versions = [
             'compileSdk'            : 28,
-            'buildTools'            : '28.0.2',
+            'buildTools'            : '28.0.3',
             'minSdk'                : 19,
             'targetSdk'             : 26,
             'versionMajor'          : 2,
@@ -16,7 +16,7 @@ buildscript {
             'okHttp'                : '3.6.0',
             'moxy'                  : '1.5.3',
             'butterKnife'           : '8.8.1',
-            'glide'                 : '4.6.1',
+            'glide'                 : '4.10.0',
             'anko'                  : '0.10.4',
             'cling'                 : '2.1.1',
             'jetty'                 : '8.2.0.v20160908'
@@ -61,7 +61,7 @@ buildscript {
             ],
             'cicerone'              : "ru.terrakok.cicerone:cicerone:3.+",
             'timber'                : "com.jakewharton.timber:timber:4.5.1",
-            'kotlin'                : "org.jetbrains.kotlin:kotlin-stdlib-jre7:$kotlin_version",
+            'kotlin'                : "org.jetbrains.kotlin:kotlin-stdlib:1.3.41",
             'glide'                 : [
                     'core'           : "com.github.bumptech.glide:glide:${versions.glide}",
                     'compiler'       : "com.github.bumptech.glide:compiler:${versions.glide}",
@@ -75,8 +75,8 @@ buildscript {
             'anko'                  : [
                     'commons'  : "org.jetbrains.anko:anko-commons:${versions.anko}",
                     'commonsV4': "org.jetbrains.anko:anko-support-v4-commons:${versions.anko}"
-            ],
-            'databinding'           : "com.android.databinding:compiler:3.0.1"
+            ]
+//            'databinding'           : "com.android.databinding:compiler:3.0.1"
     ]
 
     repositories {
@@ -87,7 +87,7 @@ buildscript {
     dependencies {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
-        classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.android.tools.build:gradle:3.4.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.google.gms:google-services:4.2.0'
     }

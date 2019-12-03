@@ -1,14 +1,15 @@
 package com.wezom.kiviremote.presentation.home.recommendations
 
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.design.widget.BottomSheetBehavior
-import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.wezom.kiviremote.R
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.common.Action

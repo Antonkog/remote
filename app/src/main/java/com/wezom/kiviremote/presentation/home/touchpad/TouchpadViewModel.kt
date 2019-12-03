@@ -1,9 +1,9 @@
 package com.wezom.kiviremote.presentation.home.touchpad
 
-import android.arch.lifecycle.MutableLiveData
 import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
+import androidx.lifecycle.MutableLiveData
 import com.wezom.kiviremote.bus.*
 import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.RxBus

@@ -1,7 +1,8 @@
 package com.wezom.kiviremote.net.model;
 
-import android.support.annotation.DrawableRes;
-import android.support.annotation.StringRes;
+
+import androidx.annotation.DrawableRes;
+import androidx.annotation.StringRes;
 
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.common.Constants;

@@ -2,15 +2,15 @@ package com.wezom.kiviremote.presentation.home.recentdevice
 
 import android.annotation.SuppressLint
 import android.app.Activity
-import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
-import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.lifecycle.ViewModelProviders
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.bus.NewNameEvent
 import com.wezom.kiviremote.common.RxBus
@@ -25,7 +25,6 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.launch
-import org.jetbrains.anko.support.v4.toast
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -118,7 +117,7 @@ class RecentDeviceFragment : BaseFragment() {
 
     private fun renameDevice(newName: String) {
         if (newName.isEmpty()) {
-            toast(R.string.device_name_cannot_be_empty)
+//            toast(R.string.device_name_cannot_be_empty)
         } else {
             val value = RecentDevice(data.actualName).apply {
                 userDefinedName = newName

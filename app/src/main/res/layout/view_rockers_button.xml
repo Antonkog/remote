@@ -10,7 +10,7 @@
         android:layout_height="@dimen/rockers_height"
         android:orientation="vertical">
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/top_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -28,7 +28,7 @@
             android:textAppearance="@style/KiviMainTextAppearance"
             tools:text="CH" />
 
-        <android.support.v7.widget.AppCompatImageView
+        <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/bottom_image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -1,13 +1,8 @@
 package com.wezom.kiviremote.presentation.home.directories
 
-import android.support.v7.widget.CardView
-import android.support.v7.widget.RecyclerView
-import android.text.Layout
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.wezom.kiviremote.R
 import com.wezom.kiviremote.common.Constants.IMAGE

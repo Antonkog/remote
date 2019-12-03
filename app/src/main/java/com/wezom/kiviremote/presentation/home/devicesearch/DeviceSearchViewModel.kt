@@ -1,10 +1,10 @@
 package com.wezom.kiviremote.presentation.home.devicesearch
 
 import android.annotation.SuppressLint
-import android.arch.lifecycle.MutableLiveData
 import android.content.SharedPreferences
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
+import androidx.lifecycle.MutableLiveData
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.ConnectEvent
 import com.wezom.kiviremote.bus.NetworkStateEvent

@@ -1,9 +1,9 @@
 package com.wezom.kiviremote.presentation.home.recentdevices
 
-import android.arch.lifecycle.MutableLiveData
 import android.content.Context
 import android.content.SharedPreferences
 import android.net.nsd.NsdServiceInfo
+import androidx.lifecycle.MutableLiveData
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.extensions.backToMain

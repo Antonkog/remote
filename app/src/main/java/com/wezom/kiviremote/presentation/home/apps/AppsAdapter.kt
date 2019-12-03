@@ -1,11 +1,11 @@
 package com.wezom.kiviremote.presentation.home.apps
 
 import android.graphics.Bitmap
-import android.support.v7.util.DiffUtil
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.android.databinding.library.baseAdapters.BR
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.RecyclerView
+import com.wezom.kiviremote.BR
 import com.wezom.kiviremote.common.KiviCache
 import com.wezom.kiviremote.databinding.AppItemBinding
 import com.wezom.kiviremote.presentation.base.BaseViewHolder

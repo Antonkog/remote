@@ -1,11 +1,11 @@
 package com.wezom.kiviremote.presentation.home.gallery
 
 import android.content.Context
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.wezom.kiviremote.R
@@ -23,13 +23,13 @@ class GalleryImageAdapter(private val context: Context,
     : RecyclerView.Adapter<GalleryImageAdapter.GalleryImageVideoViewHolder>() {
     override fun getItemId(position: Int): Long = position.toLong()
 
-    override fun onCreateViewHolder(parent: ViewGroup?, viewType: Int) = GalleryImageVideoViewHolder(
-            LayoutInflater.from(parent?.context).inflate(layoutId, parent, false)
-    )
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GalleryImageVideoViewHolder {
+        return GalleryImageVideoViewHolder(LayoutInflater.from(parent.context).inflate(layoutId, parent, false))
+    }
 
     override fun getItemCount(): Int = items?.size ?: 0
 
-    override fun onBindViewHolder(holder: GalleryImageVideoViewHolder?, position: Int) {
+    override fun onBindViewHolder(holder: GalleryImageVideoViewHolder, position: Int) {
         val item = items?.get(position)
         val didlItem = item?.didlObject as IDIDLItem
         var uri = didlItem.uri

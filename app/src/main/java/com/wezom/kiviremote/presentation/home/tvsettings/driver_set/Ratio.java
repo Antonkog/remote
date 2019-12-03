@@ -1,6 +1,7 @@
 package com.wezom.kiviremote.presentation.home.tvsettings.driver_set;
 
-import android.support.annotation.Nullable;
+
+import androidx.annotation.Nullable;
 
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.presentation.home.tvsettings.TextTypedValues;

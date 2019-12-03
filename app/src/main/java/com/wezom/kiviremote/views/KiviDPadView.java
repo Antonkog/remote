@@ -8,9 +8,11 @@ import android.graphics.Path;
 import android.graphics.RectF;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
-import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.util.Pair;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.AppCompatImageView;
 
 import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
@@ -25,7 +27,7 @@ import static com.wezom.kiviremote.common.Utils.getColorCompat;
  * Created by andre on 30.05.2017.
  */
 
-public class KiviDPadView extends android.support.v7.widget.AppCompatImageView {
+public class KiviDPadView extends AppCompatImageView {
 
     private Path arrowsPath;
     private int ownPadding;
