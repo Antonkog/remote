@@ -7,19 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.SeekBar
+import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.wezom.kiviremote.App
-import com.wezom.kiviremote.bus.LaunchRecommendationEvent
-import com.wezom.kiviremote.bus.TVPlayerEvent
-import com.wezom.kiviremote.common.extensions.getIviPreviewDuration
 import com.wezom.kiviremote.common.glide.GlideApp
 import com.wezom.kiviremote.databinding.PlayerFragmentBinding
 import com.wezom.kiviremote.presentation.base.BaseFragment
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import timber.log.Timber
-import java.util.concurrent.TimeUnit
+import com.wezom.kiviremote.presentation.home.HomeActivity
 import javax.inject.Inject
 
 
@@ -30,11 +24,6 @@ class PlayerFragment : BaseFragment() {
 
     private lateinit var binding: PlayerFragmentBinding
     lateinit var viewModel: PlayerViewModel
-
-    var nextPlay = true
-    var totalMillSecTime = 0L
-    var timePassedMillsec = 0L
-
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
@@ -56,106 +45,85 @@ class PlayerFragment : BaseFragment() {
                 }
 
                 override fun onStopTrackingTouch(seekBar: SeekBar) {
+                    if(viewModel.totalTimeMls > 500) //1/2 second - need to do some fix - when we don't have connection
                     viewModel.seekTo(seekBar.progress)
                 }
             })
         }
 
+
         binding.renderPlay.setOnClickListener { view ->
             run {
-                nextPlay = !nextPlay
-                binding.renderPlay.setImageResource(if (nextPlay) com.wezom.kiviremote.R.drawable.ic_image_play else com.wezom.kiviremote.R.drawable.ic_image_pause)
-                viewModel.playOrPause(nextPlay)
+                viewModel.nextPlay = !viewModel.nextPlay
+                viewModel.playOrPause(viewModel.nextPlay)
             }
         }
-
-//        binding.renderPrevious.setOnClickListener { view -> viewModel.playPrev() }
-//        binding.renderNext.setOnClickListener { view -> viewModel.playNext() }
-
         return binding.root
     }
 
-    private val recsObserver = Observer<LaunchRecommendationEvent> {
-        GlideApp.with(this).load(it?.recommendation?.imageUrl).into(binding.renderPreview)
-        binding.renderTitle.text = it?.recommendation?.name
-        Timber.e(it?.recommendation.toString())
-    }
-
-    private val PLAYING = 1
-    private val PAUSED = 2
-    private val STOPPED = 3
-
-    private lateinit var progressDisposable: Disposable
-
-    private fun startPlayerTimer() {
-        val period = totalMillSecTime / (1000 * 60 * 100)
-
-        progressDisposable = Observable.interval(0, period, TimeUnit.SECONDS)
-                .take(100)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    if (binding.renderProgress.progress < 100) {
-                        binding.renderProgress.progress = binding.renderProgress.progress + 1
-
-                        timePassedMillsec = binding.renderProgress.progress * period
-
-                        binding.renderElapsed.text = ("" + timePassedMillsec).getIviPreviewDuration()
-                        binding.renderRemaining.text = ("" + (totalMillSecTime - timePassedMillsec)).getIviPreviewDuration()
-                    } else {
-                        binding.renderElapsed.text = ""
-                        binding.renderRemaining.text = "00:00:00"
-                    }
-                    Timber.e("progress now " + binding.renderProgress.progress)
-                }
-    }
-
-
-    private val playerObserver = Observer<TVPlayerEvent> {
-        when (it?.playerAction) {
-            TVPlayerEvent.PlayerAction.CHANGE_STATE -> {
-                when (it.progress) {
-                    PLAYING -> {
-                        nextPlay = true
-                        binding.renderPlay.setImageResource(com.wezom.kiviremote.R.drawable.ic_image_play)
-                        startPlayerTimer()
-                    }
-                    PAUSED -> {
-                        nextPlay = false
-                        binding.renderPlay.setImageResource(com.wezom.kiviremote.R.drawable.ic_image_pause)
-                        progressDisposable.dispose()
-                    }
-                    STOPPED -> {
-                        nextPlay = false
-                        binding.renderProgress.progress = 0
-                        binding.renderPlay.setImageResource(com.wezom.kiviremote.R.drawable.ic_image_pause)
-                        progressDisposable.dispose()
-                    }
-                }
-            }
-
-            TVPlayerEvent.PlayerAction.LAUNCH_PLAYER -> {
-                GlideApp.with(this).load(it.playerPreview.imageUrl).into(binding.renderPreview)
-//              val  totalTimeCurrent = it.playerPreview?.additionalData?.get("duration").toLongOrNull() ?: 0
-                binding.renderRemaining.text = it.playerPreview?.additionalData?.get("duration")?.getIviPreviewDuration()
-                binding.renderTitle.text = it.playerPreview.name
-                binding.renderProgress.progress = 0
-                totalMillSecTime = it.playerPreview?.additionalData?.get("duration")?.toLongOrNull()
-                        ?: 0
-
-                startPlayerTimer()
-            }
-
-            TVPlayerEvent.PlayerAction.SEEK_TO -> {
-                Timber.e(" from tv SEEK_TO: " + it.progress)
-                val period = totalMillSecTime / (1000 * 60 * 100)
-                timePassedMillsec = totalMillSecTime - period * it.progress
-
-                binding.renderProgress.progress = (it?.progress)
-                binding.renderElapsed.text = ("" + timePassedMillsec).getIviPreviewDuration()
-                binding.renderRemaining.text = ("" + (totalMillSecTime - timePassedMillsec)).getIviPreviewDuration()
-
-            }
+    private val playerObserver = Observer<PlayerViewModel.ProgressEvent> {
+        if (it != null) {
+            showProgress(it.condition, it.progress, it.passedTime, it.leftTime)
         }
+    }
+
+    private val previewObserver = Observer<PlayerViewModel.PreviewEvent> {
+        if (it != null) {
+            showPreview(it.imgUrl, it.title?:"")
+        }
+    }
+
+
+    fun showProgress(condition: Int, progress: Int, timePassed: String, timeLeft: String) {
+
+        viewModel.nextPlay = condition == viewModel.PLAYING
+
+        when (condition) {
+            viewModel.PAUSED -> {
+                binding.renderPlay.setImageResource(com.wezom.kiviremote.R.drawable.ic_image_play)
+            }
+            viewModel.PLAYING -> {
+                binding.renderElapsed.text = timePassed
+                binding.renderRemaining.text = timeLeft
+                binding.renderProgress.progress = progress
+                binding.renderSlideshowProgress.progress = progress
+                binding.renderSlideshowProgressBackground.progress = progress
+                binding.renderPlay.setImageResource(com.wezom.kiviremote.R.drawable.ic_image_pause)
+
+            }
+            viewModel.STOPPED -> {
+                binding.renderPlay.setImageResource(com.wezom.kiviremote.R.drawable.ic_image_play)
+                (activity as HomeActivity).hideSlidingPanel()
+                binding.renderElapsed.text = "00:00:00"
+                binding.renderRemaining.text = "00:00:00"
+//                binding.renderPlay.setImageResource(android.R.color.transparent);
+            }
+            viewModel.SEEK_TO -> {
+                binding.renderElapsed.text = timePassed
+                binding.renderRemaining.text = timeLeft
+                binding.renderProgress.progress = progress
+                binding.renderSlideshowProgress.progress = progress
+                binding.renderSlideshowProgressBackground.progress = progress
+            }
+            viewModel.ERROR -> {
+                binding.renderPlay.setImageResource(com.wezom.kiviremote.R.drawable.ic_image_play)
+                (activity as HomeActivity).hideSlidingPanel()
+                binding.renderElapsed.text = "00:00:00"
+                binding.renderRemaining.text = "00:00:00"
+//                binding.renderPlay.setImageResource(android.R.color.transparent);
+            }
+
+        }
+    }
+
+    fun showPreview(url: String?, title: String) {
+        (activity as HomeActivity).expandSlidingPanel()
+
+        GlideApp.with(this).load(url)
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(binding.renderPreview)
+
+        binding.renderTitle.text = title
     }
 
 
@@ -163,8 +131,8 @@ class PlayerFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
         viewModel.run {
-            tvPlayerEvent.observe(this@PlayerFragment, playerObserver)
-            launchRecommendationEvent.observe(this@PlayerFragment, recsObserver)
+            previewEvent.observe(this@PlayerFragment, previewObserver)
+            progressEvent.observe(this@PlayerFragment, playerObserver)
         }
     }
 }

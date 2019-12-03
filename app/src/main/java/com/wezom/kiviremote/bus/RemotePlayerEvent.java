@@ -32,6 +32,9 @@ public class RemotePlayerEvent {
         PLAY,
         PAUSE,
         SEEK_TO,
-        CLOSE
+        CLOSE,
+        REQUEST_STATE,
+        REQUEST_CONTENT
     }
+
 }

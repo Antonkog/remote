@@ -106,7 +106,7 @@
                 android:layout_gravity="bottom"
                 android:orientation="vertical"
                 app:behavior_hideable="true"
-                app:behavior_peekHeight="40dp"
+                app:behavior_peekHeight="?attr/actionBarSize"
                 app:layout_behavior="com.wezom.kiviremote.views.LockableBottomSheetBehavior"/>
 
 

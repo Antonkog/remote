@@ -25,8 +25,6 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-
-
 class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalCVListener {
 
 
@@ -41,11 +39,11 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private lateinit var adapterChannels: RecommendationsAdapter
     private lateinit var adapterRecommend: RecommendationsAdapter
 
-    val panelObserver=
-    Observer<Boolean> { collapsed -> Timber.i(" pannel collapsed? " + collapsed)
+    val panelObserver =
+            Observer<Boolean> { collapsed ->
+                Timber.i(" pannel collapsed? " + collapsed)
 
-    }
-
+            }
 
 
     private val recommendationsObserver = Observer<List<Comparable<Recommendation>>> {
@@ -87,7 +85,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         viewModel.launchChannel(item)
         (activity as HomeActivity).run {
             moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
-            moveSlider(BottomSheetBehavior.STATE_HIDDEN)
+            hideSlidingPanel()
             changeFabVisibility(View.GONE)
         }
 
@@ -96,18 +94,16 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     override fun onRecommendationChosen(item: Recommendation, position: Int) {
         viewModel.launchRecommendation(item)
         (activity as HomeActivity).run {
-            moveSlider(BottomSheetBehavior.STATE_EXPANDED)
             moveTouchPad(BottomSheetBehavior.STATE_HIDDEN)
             changeFabVisibility(View.GONE)
         }
-
     }
 
     override fun appChosenNeedOpen(appModel: ServerAppInfo, positio: Int) {
         viewModel.launchApp(appModel.packageName)
         (activity as HomeActivity).run {
             moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
-            moveSlider(BottomSheetBehavior.STATE_HIDDEN)
+            hideSlidingPanel()
             changeFabVisibility(View.GONE)
         }
     }

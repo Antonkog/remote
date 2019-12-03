@@ -146,18 +146,20 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
 
                             GlideApp.with(view.context)
                                     .load(it)
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                                     .transform(PreviewsTransformation(5, 5))
                                     .into(imageView)
                         }
                         if (it?.width != null && it.width <= SMALL_BITMAP) {
                             Timber.e(" PreviewsTransformation2 app width ${it?.width} " + item.packageName)
 
-                            GlideApp.with(view.context)
-                                    .load(it)
+
+                            GlideApp.with(view.context).load(it)
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .centerInside()
+                                    .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(dpToPx(view.context, 5), 0, RoundedCornersTransformation.CornerType.ALL)))
                                     .into(imageView)
+
+
                         }
 
                     }

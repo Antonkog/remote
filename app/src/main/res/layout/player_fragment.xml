@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout3">
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -49,39 +50,23 @@
 
             <TextView
                 android:id="@+id/render_title"
+                style="@style/KiviMainTextMedium"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:layout_marginEnd="8dp"
                 android:ellipsize="marquee"
+                android:paddingTop="8dp"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="@string/placeholder"
-                android:textSize="16sp"
+                android:textColor="@color/colorWhite"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="@+id/top_container" />
 
-            <TextView
-                android:id="@+id/render_playing_now"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginEnd="8dp"
-                android:ellipsize="marquee"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="@string/playing_now"
-                android:textColor="@color/playing_now"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/render_title" />
 
             <ImageView
                 android:id="@+id/render_preview"
                 android:layout_width="0dp"
-
                 android:layout_height="0dp"
                 android:layout_margin="24dp"
                 android:layout_marginBottom="433dp"
@@ -126,7 +111,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:indeterminate="false"
-                    android:max="7"
+                    android:max="100"
                     android:progress="0"
                     android:progressDrawable="@drawable/render_progress"
                     android:rotation="-90" />
@@ -244,9 +229,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="24dp"
-                android:visibility="gone"
                 android:text="@string/counter_default"
                 android:textColor="@color/playing_now"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/render_remaining"
                 app:layout_constraintStart_toEndOf="@+id/render_elapsed"

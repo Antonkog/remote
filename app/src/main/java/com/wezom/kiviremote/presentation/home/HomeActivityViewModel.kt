@@ -110,11 +110,11 @@ class HomeActivityViewModel(
                                 apps.forEach { app ->
                                     ids.add(app.packageName)
                                 }
-                                if(ids.isNotEmpty()) RxBus.publish(RequestImgByIds(ids))
+                                if (ids.isNotEmpty()) RxBus.publish(RequestImgByIds(ids))
                             }.await()
 
                             async {
-                                val inputs =   getAppInputs(initialEvent)
+                                val inputs = getAppInputs(initialEvent)
                                 database.serverInputsDao().run {
                                     removeAll()
                                     insertAll(inputs)
@@ -163,7 +163,7 @@ class HomeActivityViewModel(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = { previewsContents ->
                     previewsContents.previewContents.forEach {
-                        Timber.e(" got preview for ${it.id} " )
+                        Timber.e(" got preview for ${it.id} ")
                         updateAppIcon(it)
                     }
                 })
@@ -340,7 +340,7 @@ class HomeActivityViewModel(
         disposables += RxBus.listen(RemotePlayerEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
-                   sendPlayerEvent(it)
+                    sendPlayerEvent(it)
                 }, onError = Timber::e)
 
         disposables += RxBus.listen(SendActionEvent::class.java)
@@ -435,6 +435,7 @@ class HomeActivityViewModel(
                                 database.chennelsDao().removeAll()
                                 database.serverAppDao().removeAll()
                                 RxBus.publish(RequestInitialPreviewEvent())
+                                RxBus.publish(RemotePlayerEvent(RemotePlayerEvent.PlayerAction.REQUEST_CONTENT, null))
                             }
                         }
                     }

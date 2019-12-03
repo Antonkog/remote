@@ -35,7 +35,6 @@ import com.wezom.kiviremote.common.RxBus;
 import com.wezom.kiviremote.common.gson.ListAdapter;
 import com.wezom.kiviremote.net.model.Channel;
 import com.wezom.kiviremote.net.model.ConnectionMessage;
-import com.wezom.kiviremote.net.model.PreviewCommonStructure;
 import com.wezom.kiviremote.net.model.Recommendation;
 import com.wezom.kiviremote.net.model.ServerEvent;
 import com.wezom.kiviremote.net.model.SocketConnectionModel;
@@ -50,7 +49,6 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -69,10 +67,12 @@ public class ChatConnection {
     private static final String HIDE_KEYBOARD = "HIDE_KEYBOARD";
     private static final String VOLUME = "VOLUME";
     private static final String DISCONNECT = "DISCONNECT";
+    private static final String INITIAL = "INITIAL";
     private static final String INITIAL_II = "INITIAL_II";
     private static final String APPS = "APPS";
     private static final String IMG_BY_IDS = "IMG_BY_IDS";
     private static final String SEEK_TO = "SEEK_TO";
+    private static final String LAST_REQUEST_ERROR = "LAST_REQUEST_ERROR";
     private static final String LAUNCH_PLAYER = "LAUNCH_PLAYER";
     private static final String CHANGE_STATE = "CHANGE_STATE";
     private ChatServer mChatServer;
@@ -192,6 +192,16 @@ public class ChatConnection {
                         Timber.d("CHANGE_STATE  event has been received " );
                         RxBus.INSTANCE.publish(new TVPlayerEvent(TVPlayerEvent.PlayerAction.CHANGE_STATE, serverEvent.getVolume()));
                         break;
+                    case LAST_REQUEST_ERROR:
+                        Timber.d("SEEK_TO  event has been received " );
+                        RxBus.INSTANCE.publish(new TVPlayerEvent(TVPlayerEvent.PlayerAction.LAST_REQUEST_ERROR, serverEvent.getVolume()));
+                        break;
+                    case INITIAL_II:
+                        if (serverEvent.getPreviewCommonStructures() != null) {
+                            RxBus.INSTANCE.publish(new GotPreviewsInitialEvent().setPreviewCommonStructures(serverEvent.getPreviewCommonStructures()));
+                        }else {
+                            Timber.e("Initial is null");
+                        }
                     default:
                         Timber.d("12345 Unknown event has been received " + serverEvent.getEvent());
                         break;
@@ -200,10 +210,6 @@ public class ChatConnection {
 
             if (serverEvent.getApps() != null) {
                 RxBus.INSTANCE.publish(new NewAppListEvent().setAppInfo(serverEvent.getApps()));
-            }
-
-            if (serverEvent.getPreviewCommonStructures() != null) {
-                RxBus.INSTANCE.publish(new GotPreviewsInitialEvent().setPreviewCommonStructures(serverEvent.getPreviewCommonStructures()));
             }
 
             if (serverEvent.getPreviewContents()!= null) {

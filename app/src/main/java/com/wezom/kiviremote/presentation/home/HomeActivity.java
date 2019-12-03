@@ -72,7 +72,6 @@ import java.util.Iterator;
 import javax.inject.Inject;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.Disposable;
 import timber.log.Timber;
 
 public class HomeActivity extends BaseActivity implements BackHandler {
@@ -88,7 +87,8 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     protected Toolbar toolbar;
     protected ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
-    private LockableBottomSheetBehavior bottomSheetBehavior, touchpadSheetBehavior = null;
+    private LockableBottomSheetBehavior playerSheetBechavior = null;
+    private LockableBottomSheetBehavior touchpadSheetBehavior = null;
 
     @Inject
     BaseViewModelFactory viewModelFactory;
@@ -138,8 +138,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         initNetworkChangeReceiver();
         setupViews();
         setupObservers();
-
-        expandSlidingPanel();
     }
 
 
@@ -193,8 +191,14 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         touchpadSheetBehavior.setState(state);
     }
 
-    public void moveSlider(int state) {
-        bottomSheetBehavior.setState(state);
+    public void hideSlidingPanel() {
+        if (playerSheetBechavior != null && playerSheetBechavior.getState() != BottomSheetBehavior.STATE_COLLAPSED)
+            playerSheetBechavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+    public void expandSlidingPanel() {
+        if (playerSheetBechavior != null && playerSheetBechavior.getState() != BottomSheetBehavior.STATE_EXPANDED)
+            playerSheetBechavior.setState(BottomSheetBehavior.STATE_EXPANDED);
     }
 
     public void changeToolbarVisibility(int visibility) {
@@ -366,6 +370,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                 .subscribe(event -> {
                     showKeyboard();
                     hideSlidingPanel();
+                    moveTouchPad(BottomSheetBehavior.STATE_COLLAPSED);
                 }, Timber::e);
 
         RxBus.INSTANCE.listen(HideKeyboardEvent.class)
@@ -417,13 +422,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
 
-    private void dispose(Disposable disposable) {
-        if (disposable != null && !disposable.isDisposed()) {
-            disposable.dispose();
-            disposable = null;
-        }
-    }
-
 
     private void setupMediaSlider() {
 
@@ -435,11 +433,11 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         getSupportFragmentManager().beginTransaction().add(frameLayout.getId(), playerFragment, Screens.PLAYER_FRAGMENT).commit();
         binding.mediaSlider.addView(frameLayout);
 
-        bottomSheetBehavior = LockableBottomSheetBehavior.Companion.from(findViewById(R.id.media_slider));
+        playerSheetBechavior = LockableBottomSheetBehavior.Companion.from(findViewById(R.id.media_slider));
 
-        bottomSheetBehavior.setHideable(true);
+        playerSheetBechavior.setHideable(true);
 
-        bottomSheetBehavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
+        playerSheetBechavior.setBottomSheetCallback(new BottomSheetBehavior.BottomSheetCallback() {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
@@ -463,7 +461,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
             }
         });
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        playerSheetBechavior.setState(BottomSheetBehavior.STATE_HIDDEN);
     }
 
 
@@ -573,8 +571,8 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     @Override
     public void onBackPressed() {
-        if (bottomSheetBehavior != null && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED)
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        if (playerSheetBechavior != null && playerSheetBechavior.getState() != BottomSheetBehavior.STATE_COLLAPSED)
+            playerSheetBechavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         if (touchpadSheetBehavior != null && touchpadSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED)
             touchpadSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
         if (!fragmentsBackKeyIntercept())
@@ -616,15 +614,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         }).setNegativeButton(R.string.cancel, null).show();
     }
 
-    public void hideSlidingPanel() {
-        if (bottomSheetBehavior != null && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED)
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-    }
-
-    public void expandSlidingPanel() {
-        if (bottomSheetBehavior != null && bottomSheetBehavior.getState() != BottomSheetBehavior.STATE_EXPANDED)
-            bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-    }
 
     public void showKeyboard() {
         if (!isKeyboardShown)

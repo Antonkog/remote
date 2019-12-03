@@ -33,6 +33,7 @@ public class TVPlayerEvent {
     }
 
     public enum PlayerAction {
+        LAST_REQUEST_ERROR,
         LAUNCH_PLAYER,
         CHANGE_STATE,
         SEEK_TO

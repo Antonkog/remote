@@ -165,16 +165,12 @@ public class NsdHelper {
         }
 
         @Override
-        public boolean equals(Object object) {
-            if (object == null)
-                return false;
-
-            if (this == object) {
-                return true;
-            }
-
-            NsdServiceInfoWrapper serviceInfoWrapper = (NsdServiceInfoWrapper) object;
-            return service.getServiceName().equals(serviceInfoWrapper.service.getServiceName());
+        public boolean equals(Object o) {
+            if (o == null) return false;
+            if (this == o) return true;
+            if (!(o instanceof NsdServiceInfoWrapper)) return false;
+            NsdServiceInfoWrapper wrapper = (NsdServiceInfoWrapper) o;
+            return service.getServiceName().equals(wrapper.service.getServiceName());
         }
 
         @Override
