@@ -14,6 +14,7 @@ buildscript {
             'architectureComponents': '1.0.0',
             'dagger'                : '2.11',
             'okHttp'                : '3.6.0',
+            'retrofit2'             : '2.6.2',
             'moxy'                  : '1.5.3',
             'butterKnife'           : '8.8.1',
             'glide'                 : '4.10.0',
@@ -70,12 +71,22 @@ buildscript {
                     'transformations': "jp.wasabeef:glide-transformations:3.0.1",
 
             ],
+            'retrofit2'             : [
+                    'retrofit'      : "com.squareup.retrofit2:retrofit:${versions.retrofit2}",
+                    'converter_gson'      : "com.squareup.retrofit2:converter-gson:${versions.retrofit2}",
+                    'adapter_rxjava2'      : "com.squareup.retrofit2:adapter-rxjava2:${versions.retrofit2}",
+            ],
+            'okhttp3'               : [
+                    'okhttp'                : "com.squareup.okhttp3:okhttp:${versions.okHttp}",
+                    'logging_interceptor'   : "com.squareup.okhttp3:logging-interceptor:${versions.okHttp}"
+            ],
             'multidex'              : "com.android.support:multidex:1.0.1",
             'coroutines'            : "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.19.3",
             'anko'                  : [
                     'commons'  : "org.jetbrains.anko:anko-commons:${versions.anko}",
                     'commonsV4': "org.jetbrains.anko:anko-support-v4-commons:${versions.anko}"
             ]
+
 //            'databinding'           : "com.android.databinding:compiler:3.0.1"
     ]
 

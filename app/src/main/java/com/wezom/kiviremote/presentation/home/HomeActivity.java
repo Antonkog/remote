@@ -136,7 +136,8 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         startCleanupService();
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeActivityViewModel.class);
         // Entry point
-        viewModel.newRootScreen(Screens.DEVICE_SEARCH_FRAGMENT);
+//        viewModel.newRootScreen(Screens.DEVICE_SEARCH_FRAGMENT);
+        viewModel.newRootScreen(Screens.KIVI_CATALOG_FRAGMENT);
 
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
 

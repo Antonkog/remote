@@ -138,6 +138,14 @@ dependencies {
     implementation deps.anko.commons
     implementation deps.anko.commonsV4
 
+    implementation deps.retrofit2.retrofit
+    implementation deps.retrofit2.converter_gson
+    implementation deps.retrofit2.adapter_rxjava2
+
+    implementation deps.okhttp3.okhttp
+    implementation deps.okhttp3.logging_interceptor
+
+
 //    kapt deps.databinding
 
     kapt 'androidx.annotation:annotation:1.1.0'
@@ -164,12 +172,6 @@ kapt {
 repositories {
     mavenCentral()
     maven { url 'https://maven.fabric.io/public' }
-}
-
-kotlin {
-    experimental {
-        coroutines "enable"
-    }
 }
 
 project.ext {

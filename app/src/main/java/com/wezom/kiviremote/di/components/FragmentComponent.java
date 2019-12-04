@@ -6,6 +6,8 @@ import com.wezom.kiviremote.presentation.home.apps.AppsFragment;
 import com.wezom.kiviremote.presentation.home.devicesearch.DeviceSearchFragment;
 import com.wezom.kiviremote.presentation.home.directories.DirectoriesFragment;
 import com.wezom.kiviremote.presentation.home.gallery.GalleryFragment;
+import com.wezom.kiviremote.presentation.home.kivi_catalog.KiviCatalogFragment;
+import com.wezom.kiviremote.presentation.home.kivi_catalog.KiviCatalogSeriesFragment;
 import com.wezom.kiviremote.presentation.home.media.MediaFragment;
 import com.wezom.kiviremote.presentation.home.player.PlayerFragment;
 import com.wezom.kiviremote.presentation.home.recentdevice.RecentDeviceFragment;
@@ -62,4 +64,9 @@ public interface FragmentComponent {
     void inject(SubsTariffPlansFragment subsTariffPlansFragment);
 
     void inject(SubsPaymentFragment subsPaymentFragment);
+
+    void inject(KiviCatalogFragment kiviCatalogFragment);
+
+    void inject(KiviCatalogSeriesFragment kiviCatalogSeriesFragment);
+
 }

@@ -14,7 +14,8 @@ fun <DataType, LayoutClassBinding : ViewDataBinding> RecyclerView.initWithLinLay
         setHasFixedSize(true)
     }
 
-    adapter.swapData(data)
+    if (data.isNotEmpty())
+        adapter.swapData(data)
 }
 
 
@@ -36,7 +37,8 @@ fun <DataType, LayoutClassBinding : ViewDataBinding> RecyclerView.initWithGridLa
         setHasFixedSize(true)
     }
 
-    adapter.swapData(data)
+    if (data.isNotEmpty())
+        adapter.swapData(data)
 }
 
 fun RecyclerView.addItemDivider() {
