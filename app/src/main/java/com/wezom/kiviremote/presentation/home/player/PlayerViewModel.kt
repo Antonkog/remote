@@ -1,11 +1,12 @@
 package com.wezom.kiviremote.presentation.home.player
 
-import android.arch.lifecycle.MutableLiveData
+import androidx.lifecycle.MutableLiveData
 import com.wezom.kiviremote.bus.LaunchRecommendationEvent
 import com.wezom.kiviremote.bus.RemotePlayerEvent
 import com.wezom.kiviremote.bus.TVPlayerEvent
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.common.extensions.getIviPreviewDuration
+import com.wezom.kiviremote.net.model.Recommendation
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.upnp.UPnPManager
 import io.reactivex.Observable
@@ -25,6 +26,7 @@ class PlayerViewModel(private val router: Router, private val uPnPManager: UPnPM
 
     val progressEvent = MutableLiveData<ProgressEvent>()
     val previewEvent = MutableLiveData<PreviewEvent>()
+    val launchRecEvent = MutableLiveData<Recommendation>()
 
     var nextPlay = true
     var totalTimeMls = 2
@@ -75,8 +77,9 @@ class PlayerViewModel(private val router: Router, private val uPnPManager: UPnPM
                             timeLeftMls = totalTimeMls
                             timePassedMls = 0
                             startPlayerTimer()
+
                             if (it?.playerPreview?.imageUrl != null && it.playerPreview.name != null)
-                                previewEvent.postValue(PreviewEvent(it.playerPreview.imageUrl!!, it.playerPreview.name!!))
+                                previewEvent.postValue(PreviewEvent(it.playerPreview.imageUrl!!, it.playerPreview.name))
                         }
 
                         TVPlayerEvent.PlayerAction.SEEK_TO -> {
@@ -97,9 +100,9 @@ class PlayerViewModel(private val router: Router, private val uPnPManager: UPnPM
                 }, onError = Timber::e
         )
 
-        disposables += RxBus.listen(LaunchRecommendationEvent::class.java).subscribeBy(
+        disposables += RxBus.listen(LaunchRecommendationEvent::class.java).subscribeBy( //when user call
                 onNext = {
-                    previewEvent.postValue(PreviewEvent(it.recommendation.imageUrl, it.recommendation.name))
+                    launchRecEvent.postValue(it.recommendation)
                 }, onError = Timber::e
         )
     }
@@ -143,6 +146,10 @@ class PlayerViewModel(private val router: Router, private val uPnPManager: UPnPM
             RxBus.publish(RemotePlayerEvent(RemotePlayerEvent.PlayerAction.PLAY, null))
         else
             RxBus.publish(RemotePlayerEvent(RemotePlayerEvent.PlayerAction.PAUSE, null))
+    }
+
+    fun closePlayer(){
+        RxBus.publish(RemotePlayerEvent(RemotePlayerEvent.PlayerAction.CLOSE, null))
     }
 
     override fun onCleared() {

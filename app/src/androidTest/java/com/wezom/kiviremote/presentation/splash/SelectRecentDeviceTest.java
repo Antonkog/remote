@@ -1,10 +1,6 @@
 package com.wezom.kiviremote.presentation.splash;
 
 
-import android.support.test.espresso.ViewInteraction;
-import android.support.test.rule.ActivityTestRule;
-import android.support.test.runner.AndroidJUnit4;
-import android.test.suitebuilder.annotation.LargeTest;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -14,34 +10,35 @@ import com.wezom.kiviremote.R;
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.action.ViewActions.click;
-import static android.support.test.espresso.assertion.ViewAssertions.matches;
-import static android.support.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
-import static android.support.test.espresso.matcher.RootMatchers.withDecorView;
-import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
-import static android.support.test.espresso.matcher.ViewMatchers.withId;
-import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static org.hamcrest.CoreMatchers.not;
+import androidx.test.espresso.ViewInteraction;
+import androidx.test.filters.LargeTest;
+import androidx.test.runner.AndroidJUnit4;
+
+import static androidx.test.espresso.Espresso.onView;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withClassName;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.is;
 
 @LargeTest
 @RunWith(AndroidJUnit4.class)
 public class SelectRecentDeviceTest {
-
-    @Rule
-    public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(SplashActivity.class);
+//
+//    @Rule
+//    public ActivityTestRule<SplashActivity> mActivityTestRule = new ActivityTestRule<>(SplashActivity.class);
 
     @Test
     public void selectRecentDeviceTest() {
         ViewInteraction appCompatButton = onView(
-                allOf(withId(R.id.single_device_connect), withText(R.string.discovery_connect),
+                allOf(withId(R.id.device_container), withText(R.string.discovery_connect),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.activity_home_container),
@@ -77,7 +74,7 @@ public class SelectRecentDeviceTest {
         recyclerView.perform(actionOnItemAtPosition(0, click()));
 
         ViewInteraction appCompatButton2 = onView(
-                allOf(withId(R.id.recent_device_save), withText(R.string.save),
+                allOf(withId(R.id.recent_devices_container), withText(R.string.save),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.activity_home_container),
@@ -87,7 +84,7 @@ public class SelectRecentDeviceTest {
         appCompatButton2.perform(click());
 
         onView(withText(R.string.save_success))
-                .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
+//                .inRoot(withDecorView(not(is(mActivityTestRule.getActivity().getWindow().getDecorView()))))
                 .check(matches(isDisplayed()));
     }
 

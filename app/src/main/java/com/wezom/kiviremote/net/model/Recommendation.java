@@ -3,9 +3,11 @@ package com.wezom.kiviremote.net.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import androidx.annotation.NonNull;
+import com.wezom.kiviremote.presentation.home.kivi_catalog.adapters.MovieData;
 
 import java.util.HashMap;
+
+import androidx.annotation.NonNull;
 
 public class Recommendation implements LauncherBasedData, Parcelable {
     String contentID;
@@ -56,6 +58,15 @@ public class Recommendation implements LauncherBasedData, Parcelable {
         return this;
     }
 
+//    data class MovieData(val id: Int, val title: String, val description: String, val posterUrl: String, val seasons: List<IviSeason>? = null, val isSeries: Boolean = false) : Serializable
+
+    public Recommendation setFromMovie(MovieData data) {
+        this.contentID = ""+data.getId();
+        this.description = data.getDescription();
+        this.imageUrl = data.getPosterUrl();
+        return this;
+    }
+
     @Override
     public String getID() {
         return this.contentID+"";
@@ -63,7 +74,7 @@ public class Recommendation implements LauncherBasedData, Parcelable {
 
     @Override
     public String getName() {
-        return null;
+        return title;
     }
 
     @Override

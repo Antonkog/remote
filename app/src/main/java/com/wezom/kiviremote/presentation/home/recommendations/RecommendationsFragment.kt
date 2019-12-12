@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.wezom.kiviremote.R
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.common.Action
@@ -39,13 +38,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private lateinit var adapterApps: RecommendationsAdapter
     private lateinit var adapterChannels: RecommendationsAdapter
     private lateinit var adapterRecommend: RecommendationsAdapter
-
-    val panelObserver =
-            Observer<Boolean> { collapsed ->
-                Timber.i(" pannel collapsed? " + collapsed)
-
-            }
-
 
     private val recommendationsObserver = Observer<List<Comparable<Recommendation>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
@@ -94,10 +86,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
     override fun onRecommendationChosen(item: Recommendation, position: Int) {
         viewModel.launchRecommendation(item)
-        (activity as HomeActivity).run {
-            moveTouchPad(BottomSheetBehavior.STATE_HIDDEN)
-            changeFabVisibility(View.GONE)
-        }
     }
 
     override fun appChosenNeedOpen(appModel: ServerAppInfo, positio: Int) {
@@ -105,7 +93,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         (activity as HomeActivity).run {
             moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
             hideSlidingPanel()
-            changeFabVisibility(View.GONE)
         }
     }
 
@@ -250,18 +237,12 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         (activity as HomeActivity).run {
             changeFabVisibility(View.VISIBLE)
             uncheckMenu()
-            isPlayerCollapsed.observe(this, panelObserver)
         }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         (activity as HomeActivity).run { changeFabVisibility(View.GONE) }
-    }
-
-    fun onPanelShown(shown: Boolean) {
-
-        panelObserver
     }
 }
 

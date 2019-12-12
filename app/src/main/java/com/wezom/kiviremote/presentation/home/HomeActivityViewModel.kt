@@ -30,9 +30,10 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.async
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
@@ -94,7 +95,7 @@ class HomeActivityViewModel(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = { initialEvent ->
                     if (initialEvent.previewCommonStructures != null) {
-                        launch(CommonPool) {
+                        GlobalScope.launch(Dispatchers.Default) {
                             async {
                                 val apps = getApps(initialEvent)
 
@@ -172,7 +173,7 @@ class HomeActivityViewModel(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
                     if (it.appInfo != null) {
-                        launch(CommonPool) {
+                        GlobalScope.launch(Dispatchers.Default) {
                             it.appInfo?.let {
                                 database.serverAppDao().run {
                                     removeAll()
@@ -359,17 +360,16 @@ class HomeActivityViewModel(
     fun updateAppIcon(appData: PreviewContent) { //to update saving old name
         Timber.e(" 12345 updateAppIcon:")
 
-
         if (appData.id != null && appData.img != null)
             decodeFromBase64(appData.img, 120, 90).let { bitmap ->
                 cache.put(appData.id, bitmap)
                 Timber.e("12345 caching app:")
             }
-// need to update
-//        database.serverAppDao().getApp(appData.id).subscribe {
-//            val result = database.serverAppDao().update(it.apply { baseIcon = appData.img })
-//            Timber.e(" insert in serverAppDao: ${appData.id} updating $result")
-//        }
+
+//        database.serverAppDao().update(ServerApp().apply {
+//            packageName = appData.id
+//            baseIcon = appData.img
+//        })
     }
 
 
@@ -396,7 +396,7 @@ class HomeActivityViewModel(
     )
 
     fun clearData() {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             database.recommendationsDao().removeAll()
         }
     }
@@ -414,7 +414,7 @@ class HomeActivityViewModel(
     private fun connect(nsdModel: NsdServiceModel, firstConnection: Boolean) { //research
         val currentConnectionName = currentConnection
         if (nsdModel.name != currentConnectionName) {
-            launch(CommonPool) {
+            GlobalScope.launch(Dispatchers.Default) {
                 AspectHolder.clean()
             }
         }
@@ -428,7 +428,7 @@ class HomeActivityViewModel(
                     currentModel = nsdModel
                     serverConnection?.run {
                         connectToServer(nsdModel.host, nsdModel.port)
-                        launch(CommonPool) {
+                        GlobalScope.launch(Dispatchers.Default) {
                             if (firstConnection) {
                                 database.recommendationsDao().removeAll()
                                 database.serverInputsDao().removeAll()

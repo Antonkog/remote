@@ -124,7 +124,7 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
         if (data.isSeries) {
             viewModel.navigateToCatalogSeries(data)
         } else {
-            //TODO show content with data.id on TV
+            viewModel.showContentOnTv(data)
         }
     }
 

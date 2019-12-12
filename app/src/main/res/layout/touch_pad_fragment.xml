@@ -14,7 +14,7 @@
             android:layout_height="?attr/actionBarSize"
             android:elevation="@dimen/mid"
             android:layout_marginBottom="10dp"
-            app:srcCompat="@drawable/ic_dragger_w" />
+            app:srcCompat="@drawable/ic_drag" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/touch_body"

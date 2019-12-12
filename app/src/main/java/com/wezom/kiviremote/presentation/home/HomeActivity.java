@@ -10,8 +10,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
-import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,24 +20,8 @@ import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatDialog;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.databinding.DataBindingUtil;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.snackbar.Snackbar;
 import com.wezom.kiviremote.App;
@@ -76,13 +58,27 @@ import java.util.Iterator;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatDialog;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
+import androidx.core.view.GravityCompat;
+import androidx.databinding.DataBindingUtil;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
 
 public class HomeActivity extends BaseActivity implements BackHandler {
 
     public final MutableLiveData<Boolean> isTouchPadCollapsed = new MutableLiveData<>();
-    public final MutableLiveData<Boolean> isPlayerCollapsed = new MutableLiveData<>();
+    public final MutableLiveData<Integer> playerPreviewState = new MutableLiveData<>();
 
     private final ArrayList<WeakReference<OnBackClickListener>> backClickListeners = new ArrayList<>();
 
@@ -136,8 +132,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         startCleanupService();
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeActivityViewModel.class);
         // Entry point
-//        viewModel.newRootScreen(Screens.DEVICE_SEARCH_FRAGMENT);
-        viewModel.newRootScreen(Screens.KIVI_CATALOG_FRAGMENT);
+        viewModel.newRootScreen(Screens.DEVICE_SEARCH_FRAGMENT);
 
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
 
@@ -198,8 +193,15 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
     public void hideSlidingPanel() {
-        if (playerSheetBechavior != null && playerSheetBechavior.getState() != BottomSheetBehavior.STATE_COLLAPSED)
+        if (playerSheetBechavior != null && playerSheetBechavior.getState() != BottomSheetBehavior.STATE_HIDDEN){
+            playerSheetBechavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
+    }
+
+    public void showPreviewPanel() {
+        if (playerSheetBechavior != null && playerSheetBechavior.getState() != BottomSheetBehavior.STATE_EXPANDED){
             playerSheetBechavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        }
     }
 
     public void expandSlidingPanel() {
@@ -212,7 +214,13 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
     public void changeFabVisibility(int visibility) {
-        this.runOnUiThread(() -> binding.fab.setVisibility(visibility));
+        this.runOnUiThread(() -> {
+            if (visibility == View.INVISIBLE || visibility == View.GONE)
+                binding.fab.hide();
+            else
+                binding.fab.show();
+
+        });
     }
 
 
@@ -294,12 +302,11 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                     viewModel.goTo(Screens.RECENT_DEVICES_FRAGMENT);
                     break;
 
-//                case R.id.nav_settings:
-//                    viewModel.clearData(); ///test!!!
-//                    Toast.makeText(this, " cleaned db ", Toast.LENGTH_LONG).show();
-////                    viewModel.goToDeviceInfo(new TvDeviceInfo(new RecentDevice(viewModel.getCurrentContentName(), null), null, 0));
-//                    break;
-
+                case R.id.nav_subscriptions:
+                    Toast.makeText(this, " cleaned db ", Toast.LENGTH_LONG).show();
+                    viewModel.goTo(Screens.KIVI_CATALOG_FRAGMENT);
+                    break;
+//                                        viewModel.clearData(); ///test!!!
                 case R.id.nav_support:
                     String url = "https://kivi.ua/support-center";
                     Intent i = new Intent(Intent.ACTION_VIEW);
@@ -428,7 +435,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
 
-
     private void setupMediaSlider() {
 
 // настройка поведения нижнего экрана for player
@@ -447,17 +453,20 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
-                    case BottomSheetBehavior.STATE_COLLAPSED:
                     case BottomSheetBehavior.STATE_HIDDEN:
-                        isPlayerCollapsed.postValue(true);
+                        playerPreviewState.postValue(newState);
                         changeFabVisibility(View.VISIBLE);
                         break;
+                    case BottomSheetBehavior.STATE_COLLAPSED:
+                    case BottomSheetBehavior.STATE_HALF_EXPANDED:
                     case BottomSheetBehavior.STATE_EXPANDED:
-                        isPlayerCollapsed.postValue(false);
+                    case BottomSheetBehavior.STATE_DRAGGING:
+                    case BottomSheetBehavior.STATE_SETTLING:
+                        playerPreviewState.postValue(newState);
                         changeFabVisibility(View.GONE);
                         break;
                     default:
-                        isPlayerCollapsed.postValue(false);
+                        playerPreviewState.postValue(newState);
                         break;
                 }
             }
@@ -486,13 +495,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             @Override
             public void onStateChanged(@NonNull View bottomSheet, int newState) {
                 switch (newState) {
-                    case BottomSheetBehavior.STATE_COLLAPSED:
-                    case BottomSheetBehavior.STATE_HIDDEN:
-                        break;
                     case BottomSheetBehavior.STATE_EXPANDED:
-                        changeFabVisibility(View.GONE);
-                        break;
-                    default:
                         changeFabVisibility(View.GONE);
                         break;
                 }
@@ -577,10 +580,8 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     @Override
     public void onBackPressed() {
-        if (playerSheetBechavior != null && playerSheetBechavior.getState() != BottomSheetBehavior.STATE_COLLAPSED)
-            playerSheetBechavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-        if (touchpadSheetBehavior != null && touchpadSheetBehavior.getState() != BottomSheetBehavior.STATE_COLLAPSED)
-            touchpadSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+        if (touchpadSheetBehavior != null && touchpadSheetBehavior.getState() != BottomSheetBehavior.STATE_HIDDEN)
+            touchpadSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
         if (!fragmentsBackKeyIntercept())
             super.onBackPressed();
     }

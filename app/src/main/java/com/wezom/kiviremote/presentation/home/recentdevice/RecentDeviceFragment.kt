@@ -23,8 +23,9 @@ import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import java.io.Serializable
 import javax.inject.Inject
 
@@ -125,7 +126,7 @@ class RecentDeviceFragment : BaseFragment() {
                 wasConnected = System.currentTimeMillis()
             }
             hideKeyboard(activity as Activity)
-            launch(UI) {
+            GlobalScope.launch(Dispatchers.Main){
                 viewModel.saveChanges(value)
                 RxBus.publish(NewNameEvent(newName))
                 binding.tvDeviceName.text = "УСТРОЙСТВО ${newName.remove032Space()}"

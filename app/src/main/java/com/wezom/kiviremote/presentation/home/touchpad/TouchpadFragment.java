@@ -12,10 +12,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.lifecycle.ViewModelProviders;
-
 import com.wezom.kiviremote.App;
 import com.wezom.kiviremote.R;
 import com.wezom.kiviremote.common.Action;
@@ -31,6 +27,9 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.lifecycle.ViewModelProviders;
 import timber.log.Timber;
 
 
@@ -114,7 +113,7 @@ public class TouchpadFragment extends TvKeysFragment
         binding.powerOff.setImageResource(App.isDarkMode() ? R.drawable.ic_power_dm : R.drawable.ic_power);
 
         binding.touchBody.setBackgroundColor(binding.getRoot().getResources().getColor(App.isDarkMode()? R.color.touch_body :R.color.colorWhite));
-        binding.topContainer.setBackgroundColor(binding.getRoot().getResources().getColor(App.isDarkMode()? R.color.touch_header_dm :R.color.colorWhite));
+        binding.topContainer.setBackgroundColor(binding.getRoot().getResources().getColor(App.isDarkMode()? R.color.touch_header_dm :R.color.white_87));
 
         binding.imgActionMode.setOnClickListener(v -> {
             this.isScrollMode = !isScrollMode;

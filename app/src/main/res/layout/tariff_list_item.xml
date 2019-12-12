@@ -59,7 +59,7 @@
                 android:paddingEnd="8dp"
                 android:paddingBottom="16dp"
                 tools:itemCount="8"
-                tools:layoutManager="android.support.v7.widget.GridLayoutManager"
+                tools:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 tools:listitem="@layout/tariff_item"
                 tools:orientation="horizontal"
                 tools:scrollbars="horizontal"

@@ -8,11 +8,12 @@ import com.wezom.kiviremote.common.Action
 import com.wezom.kiviremote.common.Constants
 import com.wezom.kiviremote.common.KiviCache
 import com.wezom.kiviremote.common.RxBus
+import com.wezom.kiviremote.common.extensions.Run
 import com.wezom.kiviremote.common.extensions.string
 import com.wezom.kiviremote.net.model.*
 import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.presentation.base.BaseViewModel
-import com.wezom.kiviremote.upnp.UPnPManager
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import ru.terrakok.cicerone.Router
@@ -39,6 +40,15 @@ class RecommendationsViewModel(private val router: Router,
     fun requestChannels() = RxBus.publish(SendActionEvent(Action.REQUEST_CHANNELS))
 
     fun populateChannels() {
+        disposables +=   RxBus.listen(GotPreviewsContentEvent::class.java)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeBy(onNext = { _ ->
+                    Run.after(1000){
+                       populateApps() //for review - now using Cache
+                    }
+                })
+
+
         disposables += database.chennelsDao()
                 .all
                 .subscribeOn(Schedulers.computation())

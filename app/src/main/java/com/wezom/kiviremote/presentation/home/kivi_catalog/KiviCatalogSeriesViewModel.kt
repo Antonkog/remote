@@ -1,7 +1,10 @@
 package com.wezom.kiviremote.presentation.home.kivi_catalog
 
 import android.content.Context
+import com.wezom.kiviremote.bus.LaunchRecommendationEvent
+import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.kivi_catalog.IviService
+import com.wezom.kiviremote.net.model.Recommendation
 import com.wezom.kiviremote.persistence.AppDatabase
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import com.wezom.kiviremote.presentation.home.kivi_catalog.adapters.MovieData
@@ -46,4 +49,7 @@ class KiviCatalogSeriesViewModel(val database: AppDatabase, val router: Router) 
         pagination.onNext(from)
     }
 
+        fun showContentOnTv(data: MovieData) {
+            RxBus.publish(LaunchRecommendationEvent(Recommendation().setFromMovie(data)))
+        }
 }

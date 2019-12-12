@@ -6,7 +6,7 @@ import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "apps")
-public class  ServerApp {
+public class ServerApp {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
@@ -22,8 +22,8 @@ public class  ServerApp {
     @ColumnInfo(name = "baseIcon")
     private String baseIcon;
 
-        @ColumnInfo(name = "uri")
-        private String  uri;
+    @ColumnInfo(name = "uri")
+    private String uri;
 
     public int getId() {
         return id;

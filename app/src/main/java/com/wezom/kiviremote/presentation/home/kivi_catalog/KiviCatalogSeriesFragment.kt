@@ -92,7 +92,7 @@ class KiviCatalogSeriesFragment : BaseFragment(), LazyAdapter.OnItemClickListene
     }
 
     override fun onLazyItemClick(data: MovieData) {
-        //TODO show content with data.id on TV
+      viewModel.showContentOnTv(data)
     }
 
     private fun paginationFetchEpisodesData(id: Int, season: Int, from: Int) {

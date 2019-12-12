@@ -22,8 +22,9 @@ import com.wezom.kiviremote.persistence.model.RecentDevice
 import com.wezom.kiviremote.presentation.base.BaseViewModel
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
-import kotlinx.coroutines.experimental.CommonPool
-import kotlinx.coroutines.experimental.launch
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
@@ -39,7 +40,7 @@ class DeviceSearchViewModel(
     private var autoConnect by preferences.boolean(false, Constants.AUTO_CONNECT)
 
     init {
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             // moke all offline
             database.recentDeviceDao().all?.forEach { device ->
               val update =   database.recentDeviceDao().update(device.apply { isOnline = false })
@@ -89,7 +90,7 @@ class DeviceSearchViewModel(
         resolveListener = object : NsdManager.ResolveListener {
             override fun onResolveFailed(serviceInfo: NsdServiceInfo, errorCode: Int) {
                 Timber.e("Resolve failed: $errorCode")
-                if (errorCode != NsdManager.FAILURE_ALREADY_ACTIVE) launch(CommonPool) {
+                if (errorCode != NsdManager.FAILURE_ALREADY_ACTIVE) GlobalScope.launch(Dispatchers.Default) {
                     val updated = database.recentDeviceDao().update(RecentDevice(serviceInfo.serviceName).apply {
                         isOnline = false
                     })
@@ -129,7 +130,7 @@ class DeviceSearchViewModel(
                                     )
                             )
                     )
-                    launch(CommonPool) {
+                    GlobalScope.launch(Dispatchers.Default) {
 
                         val device = RecentDevice(service.serviceName).apply {
                             isOnline = true
@@ -162,7 +163,7 @@ class DeviceSearchViewModel(
     private fun handleDevices(devices: Set<NsdServiceInfo>) {
         nsdDevices.postValue(devices)
         devices.forEach { Timber.d(" found device: ${it}") }
-        launch(CommonPool) {
+        GlobalScope.launch(Dispatchers.Default) {
             devices.takeIf { it != null && it.isNotEmpty() }?.forEach {
                 upsert(it.serviceName, database)
             }

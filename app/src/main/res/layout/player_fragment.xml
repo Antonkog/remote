@@ -4,19 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/layout3">
 
-    <android.support.design.widget.CoordinatorLayout
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/drag_view"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginBottom="10dp"
-            android:elevation="@dimen/mid"
-            app:srcCompat="@drawable/ic_dragger_w" />
 
-        <android.support.constraint.ConstraintLayout
+        <include android:id="@+id/top_container"
+            layout="@layout/player_preview_top"
+            android:elevation="@dimen/mid"/>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/sliding_panel"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,43 +23,6 @@
             android:focusableInTouchMode="false"
             tools:background="@color/touch_body">
 
-
-            <View
-                android:id="@+id/top_container"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                tools:background="@color/touch_header_dm" />
-
-
-            <!--<ImageView-->
-            <!--android:id="@+id/render_background_preview"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:scaleType="centerCrop" />-->
-
-            <!--<View-->
-            <!--android:id="@+id/render_mask"-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="match_parent"-->
-            <!--android:background="@color/kiviDark" />-->
-
-            <TextView
-                android:id="@+id/render_title"
-                style="@style/KiviMainTextMedium"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:ellipsize="marquee"
-                android:paddingTop="8dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:textColor="@color/colorWhite"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/top_container" />
 
 
             <ImageView
@@ -75,7 +36,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/render_progress"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/top_container" />
+                app:layout_constraintTop_toTopOf="@id/sliding_panel" />
 
             <FrameLayout
                 android:id="@+id/render_play_container"
@@ -237,7 +198,9 @@
                 app:layout_constraintStart_toEndOf="@+id/render_elapsed"
                 app:layout_constraintTop_toBottomOf="@+id/render_progress" />
 
-        </android.support.constraint.ConstraintLayout>
-    </android.support.design.widget.CoordinatorLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

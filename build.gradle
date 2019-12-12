@@ -10,8 +10,8 @@ buildscript {
             'versionMinor'          : 0,
             'versionPatch'          : 1,
             //versioning see  https://medium.com/@maxirosson/versioning-android-apps-d6ec171cfd82
-            'supportLibrary'        : '27.0.1',
-            'architectureComponents': '1.0.0',
+            'supportLibrary'        : '1.0.0-beta01',
+            'architectureComponents': '2.0.0-beta01',
             'dagger'                : '2.11',
             'okHttp'                : '3.6.0',
             'retrofit2'             : '2.6.2',
@@ -25,22 +25,22 @@ buildscript {
 
     ext.deps = [
             'support'               : [
-                    'appCompat'       : "com.android.support:appcompat-v7:${versions.supportLibrary}",
-                    'v4'              : "com.android.support:support-v4:${versions.supportLibrary}",
-                    'design'          : "com.android.support:design:${versions.supportLibrary}",
-                    'recyclerView'    : "com.android.support:recyclerview-v7:${versions.supportLibrary}",
-                    'cardView'        : "com.android.support:cardview-v7:${versions.supportLibrary}",
-                    'constraintLayout': "com.android.support.constraint:constraint-layout:1.1.0-beta3",
+                    'appCompat'       : "androidx.appcompat:appcompat:${versions.supportLibrary}",
+                    'v4'              : "androidx.legacy:legacy-support-v4:${versions.supportLibrary}",
+                    'design'          : "com.google.android.material:material:${versions.supportLibrary}",
+                    'recyclerView'    : 'androidx.recyclerview:recyclerview:1.0.0',
+                    'cardView'        : "androidx.cardview:cardview:${versions.supportLibrary}",
+                    'constraintLayout': 'androidx.constraintlayout:constraintlayout:1.1.3',
             ],
             'architectureComponents': [
                     'lifecycle': [
-                            'extensions'     : "android.arch.lifecycle:extensions:${versions.architectureComponents}",
-                            'reactivestreams': "android.arch.lifecycle:reactivestreams:${versions.architectureComponents}"
+                            'extensions'     : "androidx.lifecycle:lifecycle-extensions:${versions.architectureComponents}",
+                            'reactivestreams': "androidx.lifecycle:lifecycle-reactivestreams:${versions.architectureComponents}"
                     ],
                     'room'     : [
-                            'core'    : "android.arch.persistence.room:runtime:${versions.architectureComponents}",
-                            'compiler': "android.arch.persistence.room:compiler:${versions.architectureComponents}",
-                            'rx'      : "android.arch.persistence.room:rxjava2:${versions.architectureComponents}",
+                            'core'    : "androidx.room:room-runtime:${versions.architectureComponents}",
+                            'compiler': "androidx.room:room-compiler:${versions.architectureComponents}",
+                            'rx'      : "androidx.room:room-rxjava2:${versions.architectureComponents}",
                     ]
             ],
             'rx'                    : [
@@ -80,8 +80,8 @@ buildscript {
                     'okhttp'                : "com.squareup.okhttp3:okhttp:${versions.okHttp}",
                     'logging_interceptor'   : "com.squareup.okhttp3:logging-interceptor:${versions.okHttp}"
             ],
-            'multidex'              : "com.android.support:multidex:1.0.1",
-            'coroutines'            : "org.jetbrains.kotlinx:kotlinx-coroutines-android:0.19.3",
+            'multidex'              : 'androidx.multidex:multidex:2.0.0',
+            'coroutines'            : "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.2",
             'anko'                  : [
                     'commons'  : "org.jetbrains.anko:anko-commons:${versions.anko}",
                     'commonsV4': "org.jetbrains.anko:anko-support-v4-commons:${versions.anko}"
