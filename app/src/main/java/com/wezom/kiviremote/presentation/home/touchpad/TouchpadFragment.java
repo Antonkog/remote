@@ -205,6 +205,11 @@ public class TouchpadFragment extends TvKeysFragment
     }
 
     @Override
+    public void longClick(TouchpadButtonClickEvent data) {
+        viewModel.sendClickMessage((int) data.getX(), (int) data.getY(), data.getAction());
+    }
+
+    @Override
     public void sendKey(int keyCode) {
         viewModel.sendKeyEvent(keyCode);
     }

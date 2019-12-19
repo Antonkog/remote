@@ -10,15 +10,14 @@ import android.view.GestureDetector;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
-import androidx.appcompat.widget.AppCompatImageView;
-import androidx.core.view.GestureDetectorCompat;
-
 import com.wezom.kiviremote.common.Action;
 import com.wezom.kiviremote.common.extensions.NumUtils;
 import com.wezom.kiviremote.interfaces.OnTouchPadMessageListener;
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadButtonClickEvent;
 import com.wezom.kiviremote.presentation.home.touchpad.TouchpadMotionModel;
 
+import androidx.appcompat.widget.AppCompatImageView;
+import androidx.core.view.GestureDetectorCompat;
 import timber.log.Timber;
 
 /**
@@ -29,6 +28,7 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
     private static final int DOUBLE_FINGER_TAP_TIMEOUT = 100;
 
     private boolean scroll = false;
+    private boolean longTapStarted = false;
     private GestureDetectorCompat gestureDetectorCompat;
     private double speedMultiplier;
 
@@ -131,8 +131,7 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        if (centerClickArea > Math.sqrt(Math.pow(dx, 2) * Math.pow(dy, 2)));
-                        performClick();
+                        onTouchUpAction();
                         break;
                 }
             }
@@ -178,31 +177,31 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
                         break;
 
                     case MotionEvent.ACTION_UP:
-                        if (centerClickArea > Math.sqrt(Math.pow(dx, 2) * Math.pow(dy, 2)));
-                        performClick();
+                        onTouchUpAction();
                         break;
 
-                    case MotionEvent.ACTION_CANCEL:
-                        Timber.d("Action was CANCEL");
-                        break;
-
-                    case MotionEvent.ACTION_OUTSIDE:
-                        Timber.d("Movement occurred outside bounds of current screen element");
-                        break;
                 }
             }
 
-            // prevent mouse from moving when scrolled with two fingers
-            if (scroll)
-                return true;
+//            // prevent mouse from moving when scrolled with two fingers
+//            if (scroll) // removed after LONG_TAP actions
+//                return true;
 
             xDiff = event.getX() - ix;
             yDiff = event.getY() - iy;
 
             return gestureDetectorCompat.onTouchEvent(event);
         });
+    }
 
+    private void onTouchUpAction() {
+        if (longTapStarted) {
+            longTapStarted = false;
+            listener.longClick(new TouchpadButtonClickEvent(x2 , y2 , Action.LONG_TAP_UP));
+        }
 
+        if (!scroll) performClick();
+        else if (centerClickArea > Math.sqrt(Math.pow(dx, 2) * Math.pow(dy, 2))) performClick();
     }
 
     @Override
@@ -242,7 +241,8 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
 
     @Override
     public void onLongPress(MotionEvent e) {
-
+        longTapStarted = true;
+        listener.longClick(new TouchpadButtonClickEvent(x1 , y1,  Action.LONG_TAP_DOWN));
     }
 
     @Override

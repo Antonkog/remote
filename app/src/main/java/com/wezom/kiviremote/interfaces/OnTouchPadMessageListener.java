@@ -7,5 +7,6 @@ package com.wezom.kiviremote.interfaces;
 public interface OnTouchPadMessageListener <T, S> {
     void sendMotionEvent(T data);
     void buttonClick(S data);
+    void longClick(S data);
     void sendKey(int keyCode);
 }
