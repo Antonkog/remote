@@ -8,7 +8,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.SendActionEvent
 import com.wezom.kiviremote.common.Action
@@ -77,7 +76,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     override fun onChannelChosen(item: Channel, position: Int) {
         viewModel.launchChannel(item)
         (activity as HomeActivity).run {
-            moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
+            showTouchPad()
             hideSlidingPanel()
             changeFabVisibility(View.GONE)
         }
@@ -91,7 +90,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     override fun appChosenNeedOpen(appModel: ServerAppInfo, positio: Int) {
         viewModel.launchApp(appModel.packageName)
         (activity as HomeActivity).run {
-            moveTouchPad(BottomSheetBehavior.STATE_EXPANDED)
+            showTouchPad()
             hideSlidingPanel()
         }
     }
@@ -184,15 +183,15 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             run {
                 when (view.id) {
                     com.wezom.kiviremote.R.id.img_recommend_menu, com.wezom.kiviremote.R.id.text_subscriptions -> {
-                        viewModel.goDeep(Screens.RECS_MOVIE_DEEP_FRAGMENT)
+                        viewModel.navigateTo(Screens.KIVI_CATALOG_FRAGMENT)
                     }
 
                     com.wezom.kiviremote.R.id.img_apps_menu, com.wezom.kiviremote.R.id.text_apps -> {
-                        viewModel.goDeep(Screens.RECS_APPS_DEEP_FRAGMENT)
+                        viewModel.navigateTo(Screens.RECS_APPS_DEEP_FRAGMENT)
                     }
 
                     com.wezom.kiviremote.R.id.img_channels_menu, com.wezom.kiviremote.R.id.text_channel -> {
-                        viewModel.goDeep(Screens.RECS_CHANNELS_DEEP_FRAGMENT)
+                        viewModel.navigateTo(Screens.RECS_CHANNELS_DEEP_FRAGMENT)
                     }
                 }
             }

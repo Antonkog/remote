@@ -16,6 +16,7 @@ import com.wezom.kiviremote.net.ChatConnection
 import com.wezom.kiviremote.net.model.*
 import com.wezom.kiviremote.nsd.NsdServiceModel
 import com.wezom.kiviremote.persistence.AppDatabase
+import com.wezom.kiviremote.persistence.dao.ServerAppsDao
 import com.wezom.kiviremote.persistence.model.ServerApp
 import com.wezom.kiviremote.persistence.model.ServerChannel
 import com.wezom.kiviremote.persistence.model.ServerRecommendation
@@ -101,10 +102,7 @@ class HomeActivityViewModel(
 
                                 database.serverAppDao().run {
                                     removeAll()
-                                    insertMediaShareStaticApp(ServerApp().apply {
-                                        appName = Constants.MEDIA_SHARE_TXT_ID
-                                        packageName = Constants.MEDIA_SHARE_TXT_ID
-                                    })
+//                                    addMediaSharing()
                                     insertAll(apps)
                                 }
                                 val ids = arrayListOf<String>()
@@ -355,6 +353,13 @@ class HomeActivityViewModel(
                 .subscribeBy(onNext = {
                 }, onError = Timber::e)
 
+    }
+
+    private fun ServerAppsDao.addMediaSharing() {
+        insertMediaShareStaticApp(ServerApp().apply {
+            appName = MEDIA_SHARE_TXT_ID
+            packageName = MEDIA_SHARE_TXT_ID
+        })
     }
 
     fun updateAppIcon(appData: PreviewContent) { //to update saving old name

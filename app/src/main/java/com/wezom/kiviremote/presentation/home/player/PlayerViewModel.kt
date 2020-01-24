@@ -28,7 +28,6 @@ class PlayerViewModel(private val router: Router, private val uPnPManager: UPnPM
     val previewEvent = MutableLiveData<PreviewEvent>()
     val launchRecEvent = MutableLiveData<Recommendation>()
 
-    var nextPlay = true
     var totalTimeMls = 2
     var timePassedMls = 1
     var timeLeftMls = 1
@@ -141,11 +140,12 @@ class PlayerViewModel(private val router: Router, private val uPnPManager: UPnPM
     }
 
 
-    fun playOrPause(play: Boolean) {
-        if (play)
-            RxBus.publish(RemotePlayerEvent(RemotePlayerEvent.PlayerAction.PLAY, null))
-        else
-            RxBus.publish(RemotePlayerEvent(RemotePlayerEvent.PlayerAction.PAUSE, null))
+    fun play(){
+        RxBus.publish(RemotePlayerEvent(RemotePlayerEvent.PlayerAction.PLAY, null))
+    }
+
+    fun pause(){
+        RxBus.publish(RemotePlayerEvent(RemotePlayerEvent.PlayerAction.PAUSE, null))
     }
 
     fun closePlayer(){

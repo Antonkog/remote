@@ -114,7 +114,7 @@ class GalleryFragment : BaseFragment() {
         viewModel.renderItem(item, position, imageThumbnails, videoThumbnails, type)
         (activity as HomeActivity).run {
             setUpnpContent(item.title, image, position, type)
-            expandSlidingPanel()
+            showFullPreviewPanel()
         }
     }
 }

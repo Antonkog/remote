@@ -12,6 +12,7 @@ import com.wezom.kiviremote.net.model.ServerAppInfo
 import com.wezom.kiviremote.presentation.base.BaseViewModelFactory
 import com.wezom.kiviremote.presentation.base.recycler.LazyAdapter
 import com.wezom.kiviremote.presentation.base.recycler.initWithManager
+import com.wezom.kiviremote.presentation.home.HomeActivity
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -55,5 +56,9 @@ class RecsAppsDeepFragment : DeepFragment(), LazyAdapter.OnItemClickListener<Ser
 
     override fun onLazyItemClick(data: ServerAppInfo) {
         viewModel.launchApp(data.packageName)
+        (activity as HomeActivity).run {
+            showTouchPad()
+            hideSlidingPanel()
+        }
     }
 }

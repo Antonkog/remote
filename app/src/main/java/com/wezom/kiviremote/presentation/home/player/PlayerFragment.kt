@@ -38,6 +38,11 @@ class PlayerFragment : BaseFragment() {
     val panelObserver: Observer<Int> = Observer { newState ->
         // Update the UI, in this case, a TextView.
         when (newState) {
+            BottomSheetBehavior.STATE_HIDDEN -> {
+                showPlayerStop()
+                viewModel.closePlayer()
+            }
+
             BottomSheetBehavior.STATE_COLLAPSED -> {
                 setSmallPlayer(true)
             } else -> {
@@ -73,8 +78,8 @@ class PlayerFragment : BaseFragment() {
         binding.topContainer.constraint.setBackgroundColor(ResourcesCompat.getColor(resources, if (App.isDarkMode()) R.color.touch_header_dm else R.color.colorWhite, null))
 
         binding.topContainer.previewName.setTextColor(ResourcesCompat.getColor(resources, if (App.isDarkMode()) R.color.colorWhite else R.color.kiviDark, null))
-        binding.renderElapsed.setTextColor(ResourcesCompat.getColor(resources, if (App.isDarkMode()) R.color.colorWhite else R.color.kiviDark , null))
-        binding.renderRemaining.setTextColor( ResourcesCompat.getColor(resources, if (App.isDarkMode()) R.color.colorWhite else R.color.kiviDark , null))
+        binding.renderElapsed.setTextColor(ResourcesCompat.getColor(resources, if (App.isDarkMode()) R.color.colorWhite else R.color.kiviDark, null))
+        binding.renderRemaining.setTextColor(ResourcesCompat.getColor(resources, if (App.isDarkMode()) R.color.colorWhite else R.color.kiviDark, null))
 
         if (binding.renderProgress != null) {
             binding.renderProgress.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
@@ -103,9 +108,10 @@ class PlayerFragment : BaseFragment() {
 
 
         binding.renderPlay.setOnClickListener { view ->
-            run {
-                viewModel.nextPlay = !viewModel.nextPlay
-                viewModel.playOrPause(viewModel.nextPlay)
+            if (view.tag == R.drawable.ic_image_play) {
+                viewModel.play()
+            } else {
+                viewModel.pause()
             }
         }
         return binding.root
@@ -123,7 +129,7 @@ class PlayerFragment : BaseFragment() {
         }
 
         override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
-            (activity as HomeActivity).expandSlidingPanel()
+            (activity as HomeActivity).showFullPreviewPanel()
             return true
         }
 
@@ -170,28 +176,29 @@ class PlayerFragment : BaseFragment() {
     }
 
     private val recsObserver = Observer<Recommendation> {
-        if (it != null && it.imageUrl!= null && it.name!=null) {
-            showFullContent(it.imageUrl, it.name)
+        //means user launched from phone
+        if (it != null && it.imageUrl != null && it.name != null) {
+            showPreview(it.imageUrl, it.name)
         }
     }
 
 
     fun showProgress(condition: Int, progress: Int, timePassed: String, timeLeft: String) {
-
-        viewModel.nextPlay = condition == viewModel.PLAYING
-
         when (condition) {
             viewModel.PAUSED -> {
                 binding.renderPlay.setImageResource(R.drawable.ic_image_play)
+                binding.renderPlay.tag = R.drawable.ic_image_play
             }
             viewModel.PLAYING -> {
-                showPlaying(timePassed, timeLeft, progress)
+                showSeekTo(timePassed, timeLeft, progress)
+                binding.renderPlay.setImageResource(R.drawable.ic_image_pause)
+                binding.renderPlay.tag = R.drawable.ic_image_pause
             }
             viewModel.STOPPED -> {
                 showPlayerStop()
             }
             viewModel.SEEK_TO -> {
-                showPlaying(timePassed, timeLeft, progress)
+                showSeekTo(timePassed, timeLeft, progress)
             }
             viewModel.ERROR -> {
                 showPlayerStop()
@@ -200,41 +207,27 @@ class PlayerFragment : BaseFragment() {
         }
     }
 
-    private fun showPlaying(timePassed: String, timeLeft: String, progress: Int) {
+    private fun showSeekTo(timePassed: String, timeLeft: String, progress: Int) {
         binding.renderElapsed.text = timePassed
         binding.renderRemaining.text = timeLeft
         binding.renderProgress.progress = progress
         binding.renderSlideshowProgress.progress = progress
         binding.renderSlideshowProgressBackground.progress = progress
-        binding.renderPlay.setImageResource(R.drawable.ic_image_pause)
     }
 
     private fun showPlayerStop() {
         binding.renderPlay.setImageResource(R.drawable.ic_image_play)
+        binding.renderPlay.tag = R.drawable.ic_image_play
         (activity as HomeActivity).hideSlidingPanel()
         binding.renderElapsed.text = "00:00:00"
         binding.renderRemaining.text = "00:00:00"
     }
 
-    fun showPreview(url: String?, title: String) {
-        (activity as HomeActivity).showPreviewPanel()
 
-        Glide.with(this).load(url)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(binding.renderPreview)
-
-        Glide.with(this).load(url)
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(binding.topContainer.imgPreview)
-
-        binding.topContainer.previewName.text = title
-    }
-
-
-    fun showFullContent(url: String, title: String) {
+    fun showPreview(url: String, title: String) {
         (activity as HomeActivity).run {
-            expandSlidingPanel()
-            moveTouchPad(BottomSheetBehavior.STATE_HIDDEN)
+            showFullPreviewPanel()
+            hideTouchPad()
         }
 
         Glide.with(this).load(url)

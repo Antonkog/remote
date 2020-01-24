@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto">
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/KiviOldApiCard"
         android:layout_width="@dimen/recom_port"
         android:layout_height="@dimen/recom_port">
@@ -8,11 +11,12 @@
 
         <ImageView
             android:id="@+id/image_port"
-            android:layout_width="@dimen/port_icon_size"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/port_icon_size"
-            android:scaleType="fitXY"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:scaleType="centerInside"
+            app:layout_constraintBottom_toTopOf="@+id/text"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -22,13 +26,13 @@
             style="@style/KiviMainTextSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:gravity="center"
             android:textAllCaps="true"
             android:textSize="8sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/image_port" />
 

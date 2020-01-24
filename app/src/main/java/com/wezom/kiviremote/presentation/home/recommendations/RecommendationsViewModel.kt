@@ -162,9 +162,10 @@ class RecommendationsViewModel(private val router: Router,
         }
     }
 
-    fun goDeep(screen: String) {
+    fun navigateTo(screen: String) {
         router.navigateTo(screen)
     }
+
 
     fun goSearch() = router.navigateTo(Screens.DEVICE_SEARCH_FRAGMENT)
 

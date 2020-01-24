@@ -94,6 +94,8 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         super.onResume()
         (activity as HomeActivity).run {
             uncheckMenu()
+            hideTouchPad()
+            hideSlidingPanel()
             changeFabVisibility(View.GONE)
             setToolbarTxt("")
         }

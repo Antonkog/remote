@@ -42,7 +42,7 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
 
     private float x1, x2, y1, y2, dx, dy;
 
-    private int centerClickArea = 65; //NumUtils.getToDp(50);
+    private int centerClickArea = (getWidth() == 0) ? NumUtils.getToPx(30) : getWidth() / 4;
 
     public void setScrollMode(boolean scroll) {
         this.scroll = scroll;
@@ -102,19 +102,27 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
     private void init(Context context) {
 
         this.gestureDetectorCompat = new GestureDetectorCompat(context, this);
-
         this.setOnTouchListener((v, event) -> {
-//            int pointerCount = event.getPointerCount();
-            if (!scroll) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        eventStart = System.currentTimeMillis();
-                        stop = false;
-                        x1 = NumUtils.getToDp(event.getX());
-                        y1 = NumUtils.getToDp(event.getY());
-                        break;
 
-                    case MotionEvent.ACTION_MOVE:
+            switch (event.getAction()) {
+                case MotionEvent.ACTION_DOWN:
+                    Timber.e(" mouse ACTION_DOWN");
+                    eventStart = System.currentTimeMillis();
+                    stop = false;
+                    x1 = NumUtils.getToDp(event.getX());
+                    y1 = NumUtils.getToDp(event.getY());
+                    break;
+                case MotionEvent.ACTION_UP:
+                    Timber.e(" mouse ACTION_UP longTapStarted  " + longTapStarted);
+
+                    if (longTapStarted) {
+                        longTapStarted = false;
+                        listener.longClick(new TouchpadButtonClickEvent(x2, y2, Action.LONG_TAP_UP));
+                    } else performClick();
+                    break;
+
+                case MotionEvent.ACTION_MOVE:
+                    if (!scroll || longTapStarted) {
                         x2 = NumUtils.getToDp(event.getX());
                         y2 = NumUtils.getToDp(event.getY());
                         dx = x2 - x1;
@@ -128,24 +136,7 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
 
                         double multiplyBy = 2 + speedMultiplier * 1.5;
                         listener.sendMotionEvent(new TouchpadMotionModel(dx * multiplyBy, dy * multiplyBy));
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        onTouchUpAction();
-                        break;
-                }
-            }
-
-            if (scroll) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        eventStart = System.currentTimeMillis();
-                        stop = false;
-                        x1 = NumUtils.getToDp(event.getX());
-                        y1 = NumUtils.getToDp(event.getY());
-                        break;
-
-                    case MotionEvent.ACTION_MOVE:
+                    } else {
                         x2 = NumUtils.getToDp(event.getX());
                         y2 = NumUtils.getToDp(event.getY());
 
@@ -173,19 +164,9 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
                                 stop = true;
                             }
                         }
-
-                        break;
-
-                    case MotionEvent.ACTION_UP:
-                        onTouchUpAction();
-                        break;
-
-                }
+                    }
+                    break;
             }
-
-//            // prevent mouse from moving when scrolled with two fingers
-//            if (scroll) // removed after LONG_TAP actions
-//                return true;
 
             xDiff = event.getX() - ix;
             yDiff = event.getY() - iy;
@@ -194,15 +175,6 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
         });
     }
 
-    private void onTouchUpAction() {
-        if (longTapStarted) {
-            longTapStarted = false;
-            listener.longClick(new TouchpadButtonClickEvent(x2 , y2 , Action.LONG_TAP_UP));
-        }
-
-        if (!scroll) performClick();
-        else if (centerClickArea > Math.sqrt(Math.pow(dx, 2) * Math.pow(dy, 2))) performClick();
-    }
 
     @Override
     public boolean performClick() {
@@ -241,8 +213,9 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
 
     @Override
     public void onLongPress(MotionEvent e) {
+        Timber.e("onLongPress");
         longTapStarted = true;
-        listener.longClick(new TouchpadButtonClickEvent(x1 , y1,  Action.LONG_TAP_DOWN));
+        listener.longClick(new TouchpadButtonClickEvent(x1, y1, Action.LONG_TAP_DOWN));
     }
 
     @Override
