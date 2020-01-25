@@ -3,6 +3,7 @@ package com.wezom.kiviremote.presentation.home.kivi_catalog
 import android.content.Context
 import com.wezom.kiviremote.Screens
 import com.wezom.kiviremote.bus.LaunchRecommendationEvent
+import com.wezom.kiviremote.bus.SendVoiceEvent
 import com.wezom.kiviremote.common.RxBus
 import com.wezom.kiviremote.kivi_catalog.Constants
 import com.wezom.kiviremote.kivi_catalog.IviService
@@ -21,6 +22,7 @@ import ru.terrakok.cicerone.Router
 class KiviCatalogViewModel(val database: AppDatabase, val router: Router) : BaseViewModel() {
 
     private val pagination: PublishProcessor<Int> = PublishProcessor.create()
+
 
     var filterListYears = FilterModel.getYears().map { CatalogFilter(it.id, it.title, it.startYear, it.endYear) }
     var filterListCategories = FilterModel.getCategories().map { CatalogFilter(it.id, it.title, it.startYear, it.endYear) }
@@ -92,5 +94,12 @@ class KiviCatalogViewModel(val database: AppDatabase, val router: Router) : Base
     fun showContentOnTv(data: MovieData) {
         RxBus.publish(LaunchRecommendationEvent(Recommendation().setFromMovie(data)))
     }
+
+
+    fun sendVoiceAsText(text: String) {
+        RxBus.publish(SendVoiceEvent(text))
+    }
+
+
 
 }

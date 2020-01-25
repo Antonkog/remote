@@ -86,10 +86,12 @@
 
     </item>
 
+
     <item
         android:id="@+id/item_microphone"
-        android:icon="@drawable/ic_microphone_white"
+        app:actionLayout="@layout/menu_microphone"
         android:title="Microphone"
+        android:checkable="true"
         android:visible="false"
         app:showAsAction="always" />
 

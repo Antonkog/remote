@@ -1,13 +1,19 @@
 package com.wezom.kiviremote.presentation.home.kivi_catalog
 
+import android.Manifest
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.os.Handler
+import android.speech.RecognitionListener
+import android.speech.RecognizerIntent
+import android.speech.SpeechRecognizer
 import android.view.*
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.appcompat.widget.Toolbar
@@ -30,7 +36,9 @@ import com.wezom.kiviremote.presentation.base.recycler.initWithLinLay
 import com.wezom.kiviremote.presentation.home.HomeActivity
 import com.wezom.kiviremote.presentation.home.kivi_catalog.adapters.*
 import com.wezom.kiviremote.presentation.home.kivi_catalog.adapters.pagination.UserPagination
+import com.wezom.kiviremote.presentation.home.media.MediaFragment.Companion.REQUEST_PERMISSION_CODE
 import java.io.Serializable
+import java.util.*
 import javax.inject.Inject
 
 class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, LazyAdapter.OnItemClickListener<MovieData> {
@@ -63,6 +71,10 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
+    private var speechRecognizerIntent: Intent? = null
+    lateinit var speechListener: SpeechRecognizer
+    lateinit var searchView: SearchView
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = KiviCatalogFragmentBinding.inflate(inflater, container!!, false)
         initViews(inflater)
@@ -72,6 +84,7 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
     private fun initViews(inflater: LayoutInflater) {
         //DialogView
         initDialogView(inflater)
+        setSpeachRecognizer(SpeechRecognizer.createSpeechRecognizer(context))
 
         //Toolbar
         setHasOptionsMenu(true)
@@ -81,7 +94,7 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
         binding.rvCatalogMovies.initWithGridLay(2, moviesCatalogAdapter, listOf())
         binding.rvAutocompleteCatalogMovies.initWithLinLay(LinearLayoutManager.VERTICAL, autocompleteMoviesCatalogAdapter, listOf())
 
-        binding.rvCatalogMovies.addOnScrollListener(object: UserPagination(binding.rvCatalogMovies.layoutManager) {
+        binding.rvCatalogMovies.addOnScrollListener(object : UserPagination(binding.rvCatalogMovies.layoutManager) {
             override fun onLoadMore(currentPage: Int, totalItemCount: Int, view: View?) {
                 if (!viewModel.catalogRequestOnWay) {
                     paginationFetchCatalogData(moviesCatalogAdapter.getLastVisibleItemId() + 1)
@@ -143,7 +156,7 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
         }
 
         val searchItem = menu.findItem(R.id.item_search)
-        val searchView = searchItem.actionView as SearchView
+        searchView = searchItem.actionView as SearchView
         initSearchView(searchView)
         initSearchItemExpandListener(menu)
 
@@ -210,7 +223,42 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
                 return true
             }
         })
+
+        val microphone = menu.findItem(R.id.item_microphone)
+
+        microphone.actionView?.setOnTouchListener { view, motionEvent ->
+            when (motionEvent.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    if ((activity as HomeActivity).hasRecordAudioPermission()) {
+                        startListenIntent()
+                        speechRecognizerIntent?.let {
+                            speechListener.startListening(it)
+                            Toast.makeText(context, "listening ", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        val s = arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE)
+                        requestPermissions(s, REQUEST_PERMISSION_CODE)
+                    }
+                }
+                MotionEvent.ACTION_UP -> speechListener.stopListening()
+            }
+
+            false
+        }
     }
+
+
+    private fun startListenIntent() {
+        if (speechRecognizerIntent == null) {
+            speechRecognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+
+            speechRecognizerIntent?.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            speechRecognizerIntent?.putExtra(RecognizerIntent.EXTRA_LANGUAGE,
+                    Locale.getDefault())
+        }
+    }
+
 
     private fun initDialogView(inflater: LayoutInflater) {
         dialogFilters = AlertDialog.Builder(binding.root.context).create()
@@ -354,6 +402,57 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
             else -> return false
         }
     }
+
+
+    fun setSpeachRecognizer(speechRecognizer: SpeechRecognizer) {
+        speechListener = speechRecognizer
+
+
+        speechListener.setRecognitionListener(object : RecognitionListener {
+            override fun onReadyForSpeech(params: Bundle) {
+
+            }
+
+            override fun onBeginningOfSpeech() {
+
+            }
+
+            override fun onRmsChanged(rmsdB: Float) {
+
+            }
+
+            override fun onBufferReceived(buffer: ByteArray) {
+
+            }
+
+            override fun onEndOfSpeech() {
+
+            }
+
+            override fun onError(error: Int) {
+
+            }
+
+            override fun onResults(results: Bundle) {
+                val matches = results
+                        .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
+
+                //displaying the first match
+                if (matches != null) {
+                    searchView?.setQuery(matches[0], false)
+                }
+            }
+
+            override fun onPartialResults(partialResults: Bundle) {
+
+            }
+
+            override fun onEvent(eventType: Int, params: Bundle) {
+
+            }
+        })
+    }
+
 
     companion object {
         @JvmStatic
