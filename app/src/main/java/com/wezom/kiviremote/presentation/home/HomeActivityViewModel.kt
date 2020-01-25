@@ -209,12 +209,6 @@ class HomeActivityViewModel(
                     sendTouchpadAction(it.x, it.y, it.action)
                 }, onError = Timber::e)
 
-        disposables += RxBus.listen(SendTextEvent::class.java)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribeBy(onNext = {
-                    sendArgAction(Action.TEXT, it.text)
-                }, onError = Timber::e)
-
         disposables += RxBus.listen(SendVoiceEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
@@ -459,6 +453,10 @@ class HomeActivityViewModel(
         )
     }
 
+    fun sendTextToTv(msg: String) {
+        sendArgAction(Action.TEXT, msg)
+    }
+
     private fun sendTouchpadAction(x: Double, y: Double, actionType: Action) =
             serverConnection?.sendMessage(SocketConnectionModel().apply {
                 setAction(actionType)
@@ -484,7 +482,6 @@ class HomeActivityViewModel(
             setAspectMessage(msg)
         })
     }
-
 
     private fun launchChannel(msg: Channel) {
         serverConnection?.launchChannel(msg)

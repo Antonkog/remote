@@ -31,34 +31,18 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <LinearLayout
-                        android:id="@+id/toolbar_e_txt"
+                    <EditText
+                        android:id="@+id/edit_text"
                         android:layout_width="match_parent"
-                        android:layout_height="?android:attr/actionBarSize"
-                        android:background="@color/trans"
-                        android:visibility="gone">
-
-                        <EditText
-                            android:id="@+id/edit_text"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:layout_weight="9"
-                            android:ems="14"
-                            android:hint="@string/input_text_hint"
-                            android:imeOptions="actionDone"
-                            android:inputType="textPersonName" />
-
-                        <ImageView
-                            android:id="@+id/main_text_hide"
-                            android:layout_width="@dimen/close_button_size"
-                            android:layout_height="@dimen/close_button_size"
-                            android:layout_centerInParent="true"
-                            android:layout_marginEnd="@dimen/toolbar_mg_search_padding"
-                            android:layout_weight="1"
-                            android:background="@android:color/transparent"
-                            app:srcCompat="@drawable/ic_close" />
-                    </LinearLayout>
-
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="15dp"
+                        android:layout_alignParentStart="true"
+                        android:layout_toLeftOf="@id/clear_text"
+                        android:ems="14"
+                        android:hint="@string/input_text_hint"
+                        android:imeOptions="actionDone"
+                        android:visibility="gone"
+                        android:inputType="text" />
 
                     <TextView
                         android:id="@+id/toolbar_text"
@@ -72,19 +56,14 @@
 
 
                     <ImageView
-                        android:id="@+id/search"
+                        android:id="@+id/clear_text"
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentTop="true"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginStart="@dimen/toolbar_mg_search_l"
-                        android:layout_marginEnd="@dimen/toolbar_mg_search_padding"
-                        android:clickable="false"
-                        android:contentDescription="search"
-                        android:paddingStart="@dimen/toolbar_mg_search_padding"
-                        android:visibility="invisible"
-                        app:srcCompat="@drawable/ic_search" />
+                        android:layout_centerVertical="true"
+                        android:layout_marginEnd="15dp"
+                        android:visibility="gone"
+                        app:srcCompat="@drawable/ic_close" />
 
                 </RelativeLayout>
 

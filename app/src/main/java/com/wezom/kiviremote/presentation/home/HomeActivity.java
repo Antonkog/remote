@@ -18,6 +18,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
+import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 
@@ -166,14 +167,29 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             }
         });
 
-        binding.search.setOnClickListener(v -> showKeyboard());
+        binding.clearText.setOnClickListener(v -> {
+            binding.editText.setText("");
+            viewModel.sendTextToTv("");
+        });
 
-        binding.mainTextHide.setOnClickListener(v -> hideKeyboard());
 
         binding.fab.setOnClickListener(view -> showTouchPad());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding.fab.setElevation(getResources().getDimension(R.dimen.elevation_small));
         }
+    }
+
+
+    private void configureEditText() {
+        binding.editText.setOnEditorActionListener((v, actionId, event) ->
+                {
+                    if (actionId == EditorInfo.IME_ACTION_DONE) {
+                        viewModel.sendTextToTv(binding.editText.getText().toString());
+                        showTouchPad();
+                    }
+                    return false;
+                }
+        );
     }
 
     public void setToolbarTxt(String text) {
@@ -267,13 +283,11 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         setupMediaSlider();
         setupTouchpadSlider();
         reconnectSnackbar = setupSnackbar();
-//        ActionBarDrawerToggle.Delegate delegate = getDrawerToggleDelegate();
-//        binding.toolbar.setPadding(0, Utils.getStatusBarHeight(getResources()), 0, 0);
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         configureNavigationDrawer();
         configureToolbar();
-
+        configureEditText();
         binding.switchDm.setChecked(App.isDarkMode());
 
         binding.switchDm.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -577,8 +591,10 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     @Override
     public void onBackPressed() {
-        if (!fragmentsBackKeyIntercept())
+        if (!fragmentsBackKeyIntercept()){
+            hideKeyboard();
             super.onBackPressed();
+        }
     }
 
     private boolean fragmentsBackKeyIntercept() {
@@ -629,18 +645,20 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     private void showInput(boolean show) {
         if (show) {
+            binding.toolbarText.setVisibility(View.GONE);
+            binding.clearText.setVisibility(View.VISIBLE);
             binding.editText.clearFocus(); //etxt
-            binding.toolbarLayout.setVisibility(View.GONE);//other toolbar
-            binding.toolbarETxt.setVisibility(View.VISIBLE);// maint tb
+            binding.editText.setVisibility(View.VISIBLE);// maint tb
             binding.editText.requestFocus();//etxt
             binding.editText.setText("");//etxt
             Utils.showKeyboard(this);
             isKeyboardShown = true;
         } else {
             Utils.hideKeyboard(this);
+            binding.toolbarText.setVisibility(View.VISIBLE);
             binding.editText.clearFocus(); //etxt
-            binding.toolbarETxt.setVisibility(View.GONE); // maint tb
-            binding.toolbarLayout.setVisibility(View.VISIBLE); //other toolbar
+            binding.editText.setVisibility(View.GONE); // maint tb
+            binding.clearText.setVisibility(View.GONE);
             isKeyboardShown = false;
         }
     }
