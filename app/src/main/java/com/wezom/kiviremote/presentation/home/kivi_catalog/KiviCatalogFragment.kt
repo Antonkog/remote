@@ -106,6 +106,7 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
     }
 
     private fun paginationFetchCatalogData(from: Int) {
+        binding.progressBar.visibility = View.VISIBLE
         viewModel.paginationFetchCatalogData(context!!, from) { items ->
             if (moviesCatalogAdapter.data.isEmpty() && items.isNullOrEmpty()) {
                 binding.llNotFoundPlaceholder.visibility = View.VISIBLE
@@ -123,13 +124,16 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
 
                 moviesCatalogAdapter.addData(items.filter { !moviesCatalogAdapter.data.contains(it) })
             }
+            binding.progressBar.visibility = View.GONE
         }
     }
 
     private fun fetchAutocompleteData(query: String) {
+        binding.progressBar.visibility = View.VISIBLE
         viewModel.fetchAutocompleteData(context!!, query) { items ->
             binding.llNotFoundPlaceholder.visibility = if (items.isNullOrEmpty()) View.VISIBLE else View.GONE
             autocompleteMoviesCatalogAdapter.swapData(items)
+            binding.progressBar.visibility = View.GONE
         }
     }
 

@@ -57,8 +57,8 @@ class KiviCatalogViewModel(val database: AppDatabase, val router: Router) : Base
                                 .map {
                                     val genre = Constants.getGenresList(it.genres.toIntArray())?.firstOrNull() ?: "Драмы"
                                     val posterUrl = it.posters[0].url
-                                    val year = if (it.year != 0) it.year else it.years.firstOrNull() ?: "2015"
-                                    MovieData(it.id, it.title, "$year , $genre", posterUrl, if (it.isSeries()) it.seasons else null, it.isSeries())
+                                    val year = if (it.year != 0) it.year else "${it.years.firstOrNull() ?: "2015"} - ${it.years.lastOrNull() ?: "2015"}"
+                                    MovieData(it.id, it.title, "$year\n$genre", posterUrl, if (it.isSeries()) it.seasons else null, it.isSeries())
                                 }
 
                         onResult(items)
