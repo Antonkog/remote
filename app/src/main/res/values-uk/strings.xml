@@ -141,6 +141,7 @@
     <string name="auto_connect">Автопідключення</string>
     <string name="really_connect">Ви дійсно бажаєте підключити% s?</string>
     <string name="conection">"Підключення "</string>
+    <string name="close_recommendation">Ви впевнені, що хочете закрити фільм?</string>
 
 
 </resources>

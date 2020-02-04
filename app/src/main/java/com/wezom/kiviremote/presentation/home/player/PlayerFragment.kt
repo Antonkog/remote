@@ -3,6 +3,8 @@ package com.wezom.kiviremote.presentation.home.player
 import android.os.Bundle
 import android.view.*
 import android.widget.SeekBar
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDialog
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.GestureDetectorCompat
 import androidx.lifecycle.Observer
@@ -34,15 +36,14 @@ class PlayerFragment : BaseFragment() {
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
+    private var dialog: AppCompatDialog? = null
 
     val panelObserver: Observer<Int> = Observer { newState ->
         // Update the UI, in this case, a TextView.
         when (newState) {
             BottomSheetBehavior.STATE_HIDDEN -> {
-                showPlayerStop()
-                viewModel.closePlayer()
+                dialog?.show()
             }
-
             BottomSheetBehavior.STATE_COLLAPSED -> {
                 setSmallPlayer(true)
             } else -> {
@@ -114,6 +115,20 @@ class PlayerFragment : BaseFragment() {
                 viewModel.pause()
             }
         }
+
+        dialog = AlertDialog.Builder(context!!, R.style.ThemeOverlay_AppCompat_Dialog_Alert)
+                .setMessage(R.string.close_recommendation)
+                .setNegativeButton(R.string.cancel)
+                { dialog, _ ->
+                    (activity as HomeActivity).showFullPreviewPanel()
+                    dialog.dismiss() }
+                .setPositiveButton(R.string.ok)
+                { dialog, _ ->
+                    showPlayerStop()
+                    viewModel.closePlayer()
+                }
+                .create()
+
         return binding.root
     }
 
@@ -151,7 +166,6 @@ class PlayerFragment : BaseFragment() {
 //                            onSwipeLeft()
 //                        }
                         showPlayerStop()
-                        viewModel.closePlayer()
                         result = true
                     }
                 }

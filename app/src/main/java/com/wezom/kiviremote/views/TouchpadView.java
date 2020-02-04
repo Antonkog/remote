@@ -25,7 +25,7 @@ import timber.log.Timber;
  */
 
 public class TouchpadView extends AppCompatImageView implements GestureDetector.OnGestureListener {
-    private static final int DOUBLE_FINGER_TAP_TIMEOUT = 100;
+    private static final int TAP_TIMEOUT = 150;
 
     private boolean scroll = false;
     private boolean longTapStarted = false;
@@ -181,7 +181,7 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
         long eventEnd = System.currentTimeMillis();
         long eventDifference = eventEnd - eventStart;
 
-        if (eventDifference < DOUBLE_FINGER_TAP_TIMEOUT)
+        if (eventDifference < TAP_TIMEOUT)
             listener.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         return super.performClick();
     }

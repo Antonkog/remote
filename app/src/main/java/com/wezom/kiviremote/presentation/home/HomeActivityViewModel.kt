@@ -403,14 +403,14 @@ class HomeActivityViewModel(
     private fun initConnection(nsdModel: NsdServiceModel, firstConnection: Boolean) {
         killPing()
         serverConnection = ChatConnection()
-        connect(nsdModel, firstConnection)
+        connect(nsdModel)
     }
 
     private fun killPing() {
         serverConnection?.dispose()
     }
 
-    private fun connect(nsdModel: NsdServiceModel, firstConnection: Boolean) { //research
+    private fun connect(nsdModel: NsdServiceModel) { //research
         val currentConnectionName = currentConnection
         if (nsdModel.name != currentConnectionName) {
             GlobalScope.launch(Dispatchers.Default) {
@@ -428,14 +428,8 @@ class HomeActivityViewModel(
                     serverConnection?.run {
                         connectToServer(nsdModel.host, nsdModel.port)
                         GlobalScope.launch(Dispatchers.Default) {
-                            if (firstConnection) {
-                                database.recommendationsDao().removeAll()
-                                database.serverInputsDao().removeAll()
-                                database.chennelsDao().removeAll()
-                                database.serverAppDao().removeAll()
                                 RxBus.publish(RequestInitialPreviewEvent())
                                 RxBus.publish(RemotePlayerEvent(RemotePlayerEvent.PlayerAction.REQUEST_CONTENT, null))
-                            }
                         }
                     }
                 },

@@ -121,6 +121,7 @@
     <string name="conection">Подключение</string>
     <string name="really_connect">Вы действительно хотите подключить %s ?</string>
     <string name="connect">Подключить</string>
+    <string name="close_recommendation">Уверены, что хотите закрыть фильм?</string>
 
 
 </resources>

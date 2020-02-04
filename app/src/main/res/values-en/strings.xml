@@ -143,6 +143,7 @@
     <string name="conection">Connection</string>
     <string name="really_connect">Are you sure you want to connect% s?</string>
     <string name="connect" translatable="false">Connect</string>
+    <string name="close_recommendation">Sure you want to close movie?</string>
 
 
 </resources>

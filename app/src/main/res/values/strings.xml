@@ -47,6 +47,7 @@
 
     <string name="wrong_input">Для корректной работы приложения необходимо изменить настройки ТВ.\nВ меню \&quot;Метод ввода\&quot; выберите пункт \&quot;KIVI Keyboard\&quot;.
         \n\nПерейти в настройки?</string>
+    <string name="close_recommendation" >Уверены, что хотите закрыть фильм?</string>
     <string name="repeat_search">Повторный поиск</string>
     <string name="wifi_settings">Настройки WiFi</string>
     <string name="left_button" translatable="false">Left button</string>
