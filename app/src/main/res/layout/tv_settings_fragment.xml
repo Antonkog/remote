@@ -44,7 +44,7 @@
             app:layout_constraintTop_toBottomOf="@id/toolbar">
 
 
-            <com.wezom.kiviremote.views.AspectHeaderView
+            <com.kivi.remote.views.AspectHeaderView
                 android:id="@+id/aspect_header"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -64,32 +64,32 @@
 
 
 
-            <com.wezom.kiviremote.views.TextSeekBarView
+            <com.kivi.remote.views.TextSeekBarView
                 android:id="@+id/brightness"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:text="@string/brightness" />
 
-            <com.wezom.kiviremote.views.TextSeekBarView
+            <com.kivi.remote.views.TextSeekBarView
                 android:id="@+id/contrast"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:text="@string/contrast" />
 
 
-            <com.wezom.kiviremote.views.TextSeekBarView
+            <com.kivi.remote.views.TextSeekBarView
                 android:id="@+id/saturation"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:text="@string/saturation" />
 
-            <com.wezom.kiviremote.views.TextSeekBarView
+            <com.kivi.remote.views.TextSeekBarView
                 android:id="@+id/sharpness"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:text="@string/sharpness" />
 
-            <com.wezom.kiviremote.views.TextSeekBarView
+            <com.kivi.remote.views.TextSeekBarView
                 android:id="@+id/back_light"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -99,7 +99,7 @@
         </LinearLayout>
 
 
-            <com.wezom.kiviremote.views.HorizontalSwitchView
+            <com.kivi.remote.views.HorizontalSwitchView
                 android:id="@+id/temperature"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -107,7 +107,7 @@
                 app:variant="@string/nature" />
 
 
-            <com.wezom.kiviremote.views.HorizontalSwitchView
+            <com.kivi.remote.views.HorizontalSwitchView
                 android:id="@+id/ratio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

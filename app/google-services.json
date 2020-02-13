@@ -1,84 +1,45 @@
 {
   "project_info": {
-    "project_number": "525035275410",
-    "firebase_url": "https://kiviremote-bef7f.firebaseio.com",
-    "project_id": "kiviremote-bef7f",
-    "storage_bucket": "kiviremote-bef7f.appspot.com"
+    "project_number": "569875391301",
+    "firebase_url": "https://kiviremote2.firebaseio.com",
+    "project_id": "kiviremote2",
+    "storage_bucket": "kiviremote2.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:525035275410:android:5e8375be4cf84201",
+        "mobilesdk_app_id": "1:569875391301:android:fab3ff95f8b8256d23d42c",
         "android_client_info": {
-          "package_name": "com.wezom.kiviremote"
+          "package_name": "com.kivi.remote"
         }
       },
       "oauth_client": [
         {
-          "client_id": "525035275410-7hpdbsuaub08pumuv5qfgf6vr7q3lb77.apps.googleusercontent.com",
+          "client_id": "569875391301-jepifoai1jb29spgbcnp0vln1jcv899s.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.wezom.kiviremote",
-            "certificate_hash": "9ce412bf50bb7c586674929375112d202474cff1"
+            "package_name": "com.kivi.remote",
+            "certificate_hash": "d513caba4ed29b67024a35fe9349a73cd7270c3e"
           }
         },
         {
-          "client_id": "525035275410-jaarhsld6h4ncg91pvok60o6k0lu56os.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.wezom.kiviremote",
-            "certificate_hash": "2144e171cd5d43b0baf33daedacf89f8c580455b"
-          }
-        },
-        {
-          "client_id": "525035275410-fc228t39d5iev2ve2oi089ke5f1d07mg.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.wezom.kiviremote",
-            "certificate_hash": "27196e386b875e76adf700e7ea84e4c6eee33dfa"
-          }
-        },
-        {
-          "client_id": "525035275410-ddjgqr84e65m89vgbmak1fru52gd124b.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.wezom.kiviremote",
-            "certificate_hash": "b560e901c347e51d046d21019c4606f9869efc58"
-          }
-        },
-        {
-          "client_id": "525035275410-63egc43mrve6q34toqajck272igusi0h.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.wezom.kiviremote",
-            "certificate_hash": "3f99a6ff87a633a30d403e02f23b5b8a56faf20e"
-          }
-        },
-        {
-          "client_id": "525035275410-gfmia2s4nojt1b2uieh2kjpatd9o7u9u.apps.googleusercontent.com",
+          "client_id": "569875391301-o7ncklufr57q4p9fg2mkn34g4uje42fl.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCfF_OGL53f5M7VyANkW-4C2opdJiow4lA"
+          "current_key": "AIzaSyDtS3DazG2t81aihEsftCrsy9859kTPFTk"
         }
       ],
       "services": {
-        "analytics_service": {
-          "status": 1
-        },
         "appinvite_service": {
-          "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "525035275410-gfmia2s4nojt1b2uieh2kjpatd9o7u9u.apps.googleusercontent.com",
+              "client_id": "569875391301-o7ncklufr57q4p9fg2mkn34g4uje42fl.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
-        },
-        "ads_service": {
-          "status": 2
         }
       }
     }

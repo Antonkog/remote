@@ -128,7 +128,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <com.wezom.kiviremote.presentation.base.view.masked_edit_text.MaskedEditText
+                <com.kivi.remote.presentation.base.view.masked_edit_text.MaskedEditText
                     android:id="@+id/et_card_number"
                     android:layout_width="0dp"
                     android:layout_height="40dp"
@@ -236,7 +236,7 @@
                     app:layout_constraintStart_toEndOf="@+id/relativeLayout"
                     app:layout_constraintTop_toTopOf="@+id/textView3" />
 
-                <com.wezom.kiviremote.presentation.base.view.masked_edit_text.MaskedEditText
+                <com.kivi.remote.presentation.base.view.masked_edit_text.MaskedEditText
                     android:id="@+id/et_card_cvv"
                     android:layout_width="0dp"
                     android:layout_height="40dp"

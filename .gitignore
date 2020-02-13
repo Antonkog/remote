@@ -8,7 +8,7 @@
 /captures
 .externalNativeBuild
 libs/
-src/main/java/com/wezom/kiviremote/mvp/model/
+src/main/java/com.kivi.remote/mvp/model/
 /.idea/qaplug_profiles.xml
 /.idea/sonarlint
 /app/remote.release.apk

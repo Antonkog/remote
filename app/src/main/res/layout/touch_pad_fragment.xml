@@ -62,7 +62,7 @@
                 app:layout_constraintTop_toTopOf="@+id/top_container"
                 app:srcCompat="@drawable/ic_power" />
 
-            <com.wezom.kiviremote.views.TouchpadView
+            <com.kivi.remote.views.TouchpadView
                 android:id="@+id/touchpad"
                 android:layout_width="0dp"
                 android:layout_height="0dp"

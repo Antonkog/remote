@@ -22,7 +22,7 @@ android {
     compileSdkVersion versions.compileSdk
     buildToolsVersion versions.buildTools
     defaultConfig {
-        applicationId "com.wezom.kiviremote"
+        applicationId "com.kivi.remote"
         minSdkVersion versions.minSdk
         targetSdkVersion versions.targetSdk
         versionCode generateVersionCode()

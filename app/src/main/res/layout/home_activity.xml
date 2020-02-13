@@ -89,7 +89,7 @@
                 android:orientation="vertical"
                 app:behavior_hideable="true"
                 app:behavior_peekHeight="?attr/actionBarSize"
-                app:layout_behavior="com.wezom.kiviremote.views.LockableBottomSheetBehavior"/>
+                app:layout_behavior="com.kivi.remote.views.LockableBottomSheetBehavior"/>
 
 
             <FrameLayout
@@ -101,7 +101,7 @@
                 android:layout_gravity="bottom"
                 app:behavior_hideable="true"
                 app:behavior_peekHeight="0dp"
-                app:layout_behavior="com.wezom.kiviremote.views.LockableBottomSheetBehavior" />
+                app:layout_behavior="com.kivi.remote.views.LockableBottomSheetBehavior" />
 
             <View
                 android:id="@+id/disconnect_status_indicator"
@@ -112,7 +112,7 @@
                 android:background="@color/light_red"
                 android:visibility="visible" />
 
-            <com.wezom.kiviremote.views.MovableFloatingActionButton
+            <com.kivi.remote.views.MovableFloatingActionButton
                 android:id="@+id/fab"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

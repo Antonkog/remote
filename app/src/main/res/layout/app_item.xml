@@ -5,11 +5,11 @@
 
         <variable
             name="model"
-            type="com.wezom.kiviremote.presentation.home.apps.AppsAdapter.AppBindingModel" />
+            type="com.kivi.remote.presentation.home.apps.AppsAdapter.AppBindingModel" />
 
         <variable
             name="adapter"
-            type="com.wezom.kiviremote.presentation.home.apps.AppsAdapter" />
+            type="com.kivi.remote.presentation.home.apps.AppsAdapter" />
     </data>
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"

@@ -103,7 +103,7 @@
             app:layout_constraintTop_toTopOf="@+id/main_viewPager" />
 
 
-        <com.wezom.kiviremote.views.NoSwipeViewPager
+        <com.kivi.remote.views.NoSwipeViewPager
             android:id="@+id/main_viewPager"
             android:layout_width="0dp"
             android:layout_height="0dp"

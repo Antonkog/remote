@@ -47,7 +47,7 @@
 # Gson specific classes
 -dontwarn sun.misc.**
 # Application classes that will be serialized/deserialized over Gson
--keep class com.wezom.kiviremote.net.model.** { *; }
+-keep class com.kivi.remote.net.model.** { *; }
 # Prevent proguard from stripping interface information from TypeAdapterFactory,
 # JsonSerializer, JsonDeserializer instances (so they can be used in @JsonAdapter)
 -keep class * implements com.google.gson.TypeAdapterFactory
