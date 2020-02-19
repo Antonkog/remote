@@ -114,14 +114,6 @@
         <item name="android:textColorSecondary">@color/colorSecondaryText</item>
     </style>
 
-    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorPrimary">@color/colorBlack</item>
-        <item name="colorControlNormal">@color/colorPrimary</item>
-        <item name="android:windowBackground">@color/colorWhite</item>
-        <item name="colorControlActivated">@color/colorPrimary</item>
-    </style>
-
     <style name="DigitButton">
         <item name="android:textSize">@dimen/font_size_24</item>
         <item name="android:textColor">@drawable/selector_digit_button</item>

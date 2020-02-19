@@ -1,10 +1,12 @@
 package com.kivi.remote.presentation.home.recommendations
 
+import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import androidx.lifecycle.MutableLiveData
 import com.kivi.remote.Screens
 import com.kivi.remote.bus.*
-import com.kivi.remote.common.Action
 import com.kivi.remote.common.Constants
 import com.kivi.remote.common.KiviCache
 import com.kivi.remote.common.RxBus
@@ -34,17 +36,28 @@ class RecommendationsViewModel(private val router: Router,
     val inputs = MutableLiveData<List<Comparable<Input>>>()
     val channels = MutableLiveData<List<Comparable<Channel>>>()
 
-    fun requestApps() = RxBus.publish(SendActionEvent(Action.REQUEST_APPS))
-    fun requestInputs() = RxBus.publish(SendActionEvent(Action.REQUEST_INPUTS))
-    fun requestRecommendations() = RxBus.publish(SendActionEvent(Action.REQUEST_RECOMMENDATIONS))
-    fun requestChannels() = RxBus.publish(SendActionEvent(Action.REQUEST_CHANNELS))
+    val oldVersionTv = MutableLiveData<Boolean>()
+
+    init {
+        disposables += RxBus.listen(GotAspectEvent::class.java).subscribeBy(
+                onNext = {
+                    if (it?.msg?.serverVersionCode ?: Constants.VER_FOR_REMOTE_2  <  Constants.VER_FOR_REMOTE_2
+                            || it?.getManufacture() == Constants.SERV_MSTAR) //on mstar always old remote version on realtek on older server versions only. 
+                    {
+                        oldVersionTv.postValue(true)
+                    } else{
+                        oldVersionTv.postValue(false)
+                    }
+                }, onError = Timber::e
+        )
+    }
 
     fun populateChannels() {
-        disposables +=   RxBus.listen(GotPreviewsContentEvent::class.java)
+        disposables += RxBus.listen(GotPreviewsContentEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = { _ ->
-                    Run.after(1000){
-                       populateApps() //for review - now using Cache
+                    Run.after(1000) {
+                        populateApps() //for review - now using Cache
                     }
                 })
 
@@ -170,6 +183,14 @@ class RecommendationsViewModel(private val router: Router,
     fun goSearch() = router.navigateTo(Screens.DEVICE_SEARCH_FRAGMENT)
 
     fun godo(data: Recommendation) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)
+    fun setndToOldRemote( context: Context) {
+        val appPackageName = "com.wezom.kiviremote" //old remote
+        try {
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
+        } catch (anfe: android.content.ActivityNotFoundException) {
+            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
+        }
+    }
 
 
 }

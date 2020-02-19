@@ -3,6 +3,7 @@
 
     <string name="open">открыть</string>
     <string name="close">закрыть</string>
+    <string name="download">СКАЧАТЬ</string>
     <string name="ok" translatable="false">ОК</string>
     <string name="connect">Подключить</string>
     <string name="cancel">Отмена</string>
@@ -235,6 +236,9 @@
     <string name="drawer_exit">Выйти</string>
     <string name="drawer_dark_mode">Тёмный режим</string>
     <string name="drawer_devices">Устройства</string>
+
+    <string name="downgrade_error">Ошибка</string>
+    <string name="downgrade_description">Вы используте невалидную версию KIVI Remote. Скачайте, пожалуйста, подходящую.</string>
 
     <string name="not_found_anything_by_query">По вашему запросу\nничего не найдено</string>
     <string name="not_found_any_episodes__by_query">Серии для этого сезона\nнедоступны</string>

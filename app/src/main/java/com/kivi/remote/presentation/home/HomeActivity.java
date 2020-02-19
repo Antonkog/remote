@@ -559,7 +559,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     public void showSettingsDialog() {
         if (dialog == null) {
-            dialog = new AlertDialog.Builder(this, R.style.DialogTheme)
+            dialog = new AlertDialog.Builder(this)
                     .setMessage(R.string.wrong_input)
                     .setPositiveButton(R.string.ok, (dialog1, which) -> viewModel.openSettings())
                     .setNegativeButton(R.string.close, null)

@@ -144,6 +144,9 @@
     <string name="really_connect">Are you sure you want to connect% s?</string>
     <string name="connect" translatable="false">Connect</string>
     <string name="close_recommendation">Sure you want to close movie?</string>
+    <string name="downgrade_error">ERROR</string>
+    <string name="downgrade_description">" You are using an invalid version of KIVI Remote. Please download the appropriate one."</string>
+    <string name="download">DOWNLOAD</string>
 
 
 </resources>

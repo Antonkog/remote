@@ -122,6 +122,9 @@
     <string name="really_connect">Вы действительно хотите подключить %s ?</string>
     <string name="connect">Подключить</string>
     <string name="close_recommendation">Уверены, что хотите закрыть фильм?</string>
+    <string name="downgrade_error">ERROR</string>
+    <string name="downgrade_description">" You are using an invalid version of KIVI Remote. Please download the appropriate one."</string>
+    <string name="download">DOWNLOAD</string>
 
 
 </resources>

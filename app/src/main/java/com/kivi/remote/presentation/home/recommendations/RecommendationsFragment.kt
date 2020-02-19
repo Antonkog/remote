@@ -4,22 +4,24 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kivi.remote.R
 import com.kivi.remote.Screens
 import com.kivi.remote.bus.SendActionEvent
 import com.kivi.remote.common.Action
 import com.kivi.remote.common.Constants
 import com.kivi.remote.common.RxBus
+import com.kivi.remote.common.extensions.Run
 import com.kivi.remote.common.extensions.removeMasks
 import com.kivi.remote.databinding.RecommendationsFragmentBinding
 import com.kivi.remote.net.model.*
 import com.kivi.remote.presentation.base.BaseFragment
 import com.kivi.remote.presentation.base.BaseViewModelFactory
 import com.kivi.remote.presentation.home.HomeActivity
-import com.kivi.remote.presentation.home.tvsettings.AspectHolder
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -38,11 +40,21 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private lateinit var adapterChannels: RecommendationsAdapter
     private lateinit var adapterRecommend: RecommendationsAdapter
 
+    private lateinit var dialog: AlertDialog
+
+    private val serverOldObserver = Observer<Boolean> {
+        Timber.e(" serverOldObserver " + it.toString())
+        if (it == true) {
+            dialog?.show()
+        } else {
+            dialog?.cancel()
+        }
+    }
+
     private val recommendationsObserver = Observer<List<Comparable<Recommendation>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterRecommend.swapData(it)
             changeMoviesVisible(View.VISIBLE)
-            updateRecommendations(true)
         } ?: changeMoviesVisible(View.GONE)
     }
 
@@ -50,9 +62,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterChannels.swapData(it)
             changeChannelsVisible(View.VISIBLE)
-            updateRecommendations(true)
         } ?: changeChannelsVisible(View.GONE)
-
     }
 
     private val appsObserver = Observer<List<Comparable<ServerAppInfo>>> {
@@ -95,35 +105,16 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         }
     }
 
-    private fun setPortServerCheck(id: Int) {
-        viewModel.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.INPUT_PORT, id)
-        viewModel.requestAspect()
-    }
-
-
-    private fun setPort(portId: Int) {
-        viewModel.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.INPUT_PORT, portId)
-    }
-
-    private fun updateRecommendations(isVisible: Boolean) {
-        if (!isVisible) {
-            binding.recsRefreshBar.visibility = View.VISIBLE
-            binding.scrollTop.visibility = View.INVISIBLE
-        } else {
-            binding.recsRefreshBar.visibility = View.GONE
-            binding.scrollTop.visibility = View.VISIBLE
-        }
-    }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = RecommendationsFragmentBinding.inflate(inflater, container, false)
-        return binding.root
-    }
 
     private fun changeChannelsVisible(visible: Int) {
         binding.imgChannelsMenu.visibility = visible
         binding.reciclerChannels.visibility = visible
         binding.textChannel.visibility = visible
+        if (visible == View.VISIBLE) {
+            hideRefreshBar(true)
+        } else {
+            hideRefreshBar(false)
+        }
     }
 
 
@@ -131,6 +122,11 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         binding.imgRecommendMenu.visibility = visible
         binding.reciclerRecommendations.visibility = visible
         binding.textSubscriptions.visibility = visible
+        if (visible == View.VISIBLE) {
+            hideRefreshBar(true)
+        } else {
+            hideRefreshBar(false)
+        }
     }
 
 
@@ -138,6 +134,22 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         binding.imgAppsMenu.visibility = visible
         binding.reciclerApps.visibility = visible
         binding.textApps.visibility = visible
+    }
+
+    private fun hideRefreshBar(hide: Boolean) {
+        if (hide) {
+            binding.recsRefreshBar.visibility = View.GONE
+            binding.scrollTop.visibility = View.VISIBLE
+        } else {
+            binding.recsRefreshBar.visibility = View.VISIBLE
+            binding.scrollTop.visibility = View.INVISIBLE
+        }
+    }
+
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        binding = RecommendationsFragmentBinding.inflate(inflater, container, false)
+        setupDowgradeDialog()
+        return binding.root
     }
 
 
@@ -172,10 +184,18 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             inputs.observe(this@RecommendationsFragment, inputPortObserver)
             recommendations.observe(this@RecommendationsFragment, recommendationsObserver)
             channels.observe(this@RecommendationsFragment, channelsObserver)
+            oldVersionTv.observe(this@RecommendationsFragment, serverOldObserver)
+
             populateApps()
             populatePorts()
             populateChannels()
             populateRecommendations()
+
+            Run.after(Constants.DELAY_CHANNELS_GET) {
+                if (binding.recsRefreshBar.visibility == View.VISIBLE) {
+                    viewModel.requestAspect()
+                }
+            }
         }
 
 
@@ -209,6 +229,17 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
     }
 
+    private fun setupDowgradeDialog() {
+        dialog = AlertDialog.Builder(binding.root.context)
+                .setTitle(R.string.downgrade_error)
+                .setMessage(R.string.downgrade_description)
+                .setPositiveButton(R.string.download) { dialog1, which -> viewModel.setndToOldRemote(binding.root.context)}
+                .setNegativeButton(R.string.cancel){dialog, which -> dialog.cancel() }
+                .create()
+
+        dialog.setCancelable(true)
+    }
+
 
     override fun injectDependencies() {
         fragmentComponent.inject(this)
@@ -217,17 +248,11 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     fun onPortChecked(id: Int) {
         viewModel.aspectTryCounter = Constants.ASPECT_GET_TRY
         viewModel.lastPortId = id
+        viewModel.sendAspectSingleChangeEvent(AspectMessage.ASPECT_VALUE.INPUT_PORT, id)
         if (id == Constants.INPUT_HOME_ID) {
-            setPort(id)
             RxBus.publish(SendActionEvent(Action.HOME_DOWN))
             RxBus.publish(SendActionEvent(Action.HOME_UP))
             fragmentManager?.popBackStack()
-        } else {
-            if (AspectHolder.message?.serverVersionCode ?: 0 < Constants.VER_ASPECT_XIX) { //old server version does not support port check - some values confused confused
-                setPort(id)
-            } else {
-                setPortServerCheck(id)
-            }
         }
     }
 
@@ -237,6 +262,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             changeFabVisibility(View.VISIBLE)
             uncheckMenu()
         }
+//        askServerVersionIfNoData()
     }
 
     override fun onDestroyView() {

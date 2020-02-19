@@ -142,6 +142,11 @@
     <string name="really_connect">Ви дійсно бажаєте підключити% s?</string>
     <string name="conection">"Підключення "</string>
     <string name="close_recommendation">Ви впевнені, що хочете закрити фільм?</string>
+    <string name="downgrade_description">"Ви використовуєте невалідну версію KIVI Remote. Скачайте, будь ласка, відповідну. "</string>
+    <string name="downgrade_error">Помилка</string>
+    <string name="connect" translatable="false">Підключити</string>
+    <string name="download">СКАЧАТИ</string>
+    <string name="number_of_images">%1$s фото</string>
 
 
 </resources>
