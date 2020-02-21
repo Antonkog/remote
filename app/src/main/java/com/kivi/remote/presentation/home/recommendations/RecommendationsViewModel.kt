@@ -41,8 +41,8 @@ class RecommendationsViewModel(private val router: Router,
     init {
         disposables += RxBus.listen(GotAspectEvent::class.java).subscribeBy(
                 onNext = {
-                    if (it?.msg?.serverVersionCode ?: Constants.VER_FOR_REMOTE_2  <  Constants.VER_FOR_REMOTE_2
-                            || it?.getManufacture() == Constants.SERV_MSTAR) //on mstar always old remote version on realtek on older server versions only. 
+                    if (it?.msg?.serverVersionCode ?: Constants.VER_FOR_REMOTE_2 <  Constants.VER_FOR_REMOTE_2
+                            || it?.getManufacture() == Constants.SERV_MSTAR) //on mstar always old remote version on realtek on older server versions only.
                     {
                         oldVersionTv.postValue(true)
                     } else{

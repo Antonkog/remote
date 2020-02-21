@@ -34,7 +34,7 @@ public class Constants {
     public static final int NO_VALUE = -1;
     public static final int VER_ASPECT_XVIII = 18; // AspectAvailable introduced  - inputs button, aspect settings
     public static final int VER_ASPECT_XIX = 19; // Deiver values instead of AspectAvailable
-    public static final int VER_FOR_REMOTE_2= 210010250; // Deiver values instead of AspectAvailable
+    public static final int VER_FOR_REMOTE_2= 210010254; // version of server with new API
 
     public static final String BUNDLE_REALUNCH_KEY = "relaunch";
     public static final int SERV_REALTEK = 1;

@@ -451,6 +451,11 @@ class HomeActivityViewModel(
         sendArgAction(Action.TEXT, msg)
     }
 
+
+    fun sendKeyEvent(keyEvent: Int) {
+        RxBus.publish(SendKeyEvent(keyEvent))
+    }
+
     private fun sendTouchpadAction(x: Double, y: Double, actionType: Action) =
             serverConnection?.sendMessage(SocketConnectionModel().apply {
                 setAction(actionType)

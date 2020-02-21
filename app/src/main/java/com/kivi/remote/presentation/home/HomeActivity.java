@@ -14,6 +14,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -180,17 +182,41 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     }
 
 
-    private void configureEditText() {
-        binding.editText.setOnEditorActionListener((v, actionId, event) ->
-                {
-                    if (actionId == EditorInfo.IME_ACTION_DONE) {
-                        viewModel.sendTextToTv(binding.editText.getText().toString());
-                        showTouchPad();
-                    }
-                    return false;
+        private void configureEditText() {
+            binding.editText.setOnKeyListener((view1, i, keyEvent) -> {
+                if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL)
+                    viewModel.sendKeyEvent(KeyEvent.KEYCODE_DEL);
+                return false;
+            });
+
+            binding.editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 }
-        );
-    }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+                    viewModel.sendTextToTv(s.toString());
+                }
+            });
+
+            binding.editText.setOnEditorActionListener((textView, actionId, keyEvent) -> {
+                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                    viewModel.sendKeyEvent(KeyEvent.KEYCODE_ENTER);
+                    return true;
+                }
+
+                if (keyEvent.getKeyCode() == KeyEvent.KEYCODE_DEL) {
+                    viewModel.sendKeyEvent(KeyEvent.KEYCODE_DEL);
+                    return true;
+                }
+                return false;
+            });
+        }
 
     public void setToolbarTxt(String text) {
 //        binding.toolbarText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
