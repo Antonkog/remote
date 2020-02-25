@@ -152,7 +152,6 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
             SortType.POP -> menu.findItem(R.id.item_sort_by_popularity).isChecked = true
             SortType.NEW -> menu.findItem(R.id.item_sort_by_appearance_date).isChecked = true
             SortType.IVI -> menu.findItem(R.id.item_sort_by_rating_ivi).isChecked = true
-            SortType.KP -> menu.findItem(R.id.item_sort_by_rating_movie_search).isChecked = true
             SortType.IMDB -> menu.findItem(R.id.item_sort_by_rating_imdb).isChecked = true
             SortType.BUDGET -> menu.findItem(R.id.item_sort_by_budget).isChecked = true
             SortType.BOXOFFICE -> menu.findItem(R.id.item_sort_by_worldwide_fees).isChecked = true
@@ -342,7 +341,6 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
             R.id.item_sort_by_popularity -> SortType.POP
             R.id.item_sort_by_appearance_date -> SortType.NEW
             R.id.item_sort_by_rating_ivi -> SortType.IVI
-            R.id.item_sort_by_rating_movie_search -> SortType.KP
             R.id.item_sort_by_rating_imdb -> SortType.IMDB
             R.id.item_sort_by_budget -> SortType.BUDGET
             R.id.item_sort_by_worldwide_fees -> SortType.BOXOFFICE
@@ -389,7 +387,7 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
         when (item.itemId) {
             //Sort
             R.id.item_sort_by_popularity, R.id.item_sort_by_appearance_date, R.id.item_sort_by_rating_ivi,
-            R.id.item_sort_by_rating_movie_search, R.id.item_sort_by_rating_imdb, R.id.item_sort_by_budget,
+            R.id.item_sort_by_rating_imdb, R.id.item_sort_by_budget,
             R.id.item_sort_by_worldwide_fees, R.id.item_sort_by_release_year -> {
                 item.isChecked = true
                 sortContentBy(item.itemId)

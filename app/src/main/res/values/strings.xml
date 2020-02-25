@@ -224,12 +224,6 @@
     <string name="drawer_close" translatable="false">close menu</string>
     <string name="drawer_open" translatable="false">open menu</string>
 
-
-    <string name="recom_chennel" translatable="false">Телеканалы</string>
-    <string name="recom_apps" translatable="false">Приложения</string>
-    <string name="recom_inputs" translatable="false">Входы</string>
-    <string name="recom_kivi" translatable="false">Рекомендации от Киви</string>
-
     <string name="drawer_subscriptions">Подписки Киви</string>
     <string name="drawer_settings">Настройки приложения</string>
     <string name="drawer_support">Поддержка пользователей</string>
@@ -237,8 +231,12 @@
     <string name="drawer_dark_mode">Тёмный режим</string>
     <string name="drawer_devices">Устройства</string>
 
-    <string name="downgrade_error">Ошибка</string>
-    <string name="downgrade_description">Вы используте невалидную версию KIVI Remote. Скачайте, пожалуйста, подходящую.</string>
+    <string name="downgrade_error">Ой!</string>
+    <string name="downgrade_description">Кажется, Вы используете версию KIVI Remote, которая не подходит для данного ТВ. Установить подходящую версию?</string>
+    <string name="recom_chennel">Телеканалы</string>
+    <string name="recom_apps">Приложения</string>
+    <string name="recom_inputs">Входы</string>
+    <string name="recom_kivi">Рекомендации от Киви</string>
 
     <string name="not_found_anything_by_query">По вашему запросу\nничего не найдено</string>
     <string name="not_found_any_episodes__by_query">Серии для этого сезона\nнедоступны</string>
@@ -250,13 +248,12 @@
 
     <!--sort-->
     <string name="by_popularity">По популярности</string>
-    <string name="by_appearance_date">Дате появления</string>
-    <string name="by_rating_ivi">Рейтингу ivi</string>
-    <string name="by_rating_movie_search">Рейтингу Кинопоиска</string>
-    <string name="by_rating_imdb">Рейтингу IMDB</string>
-    <string name="by_budget">Бюджету</string>
-    <string name="by_worldwide_fees">Сборам в мире</string>
-    <string name="by_release_year">Году выхода</string>
+    <string name="by_appearance_date">Дата появления</string>
+    <string name="by_rating_ivi">Рейтинг IVI</string>
+    <string name="by_rating_imdb">Рейтинг IMDB</string>
+    <string name="by_budget">Бюджет</string>
+    <string name="by_worldwide_fees">Сборы в мире</string>
+    <string name="by_release_year">Год выхода</string>
 
     <!--filter-->
     <string name="by_year">Год</string>

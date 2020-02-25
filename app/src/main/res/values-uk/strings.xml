@@ -142,11 +142,40 @@
     <string name="really_connect">Ви дійсно бажаєте підключити% s?</string>
     <string name="conection">"Підключення "</string>
     <string name="close_recommendation">Ви впевнені, що хочете закрити фільм?</string>
-    <string name="downgrade_description">"Ви використовуєте невалідну версію KIVI Remote. Скачайте, будь ласка, відповідну. "</string>
-    <string name="downgrade_error">Помилка</string>
     <string name="connect" translatable="false">Підключити</string>
     <string name="download">СКАЧАТИ</string>
     <string name="number_of_images">%1$s фото</string>
+
+    <string name="downgrade_error">Ой!</string>
+    <string name="downgrade_description">Здається, Ви використовуєте версію KIVI Remote, яка не підходить для даного ТВ. Встановити актуальну версію?</string>
+
+    <string name="recom_chennel">Телеканали</string>
+    <string name="recom_apps">Додатки</string>
+    <string name="recom_inputs">Входи</string>
+    <string name="recom_kivi">Рекомендації від Ківі</string>
+
+    <string name="not_found_anything_by_query">За вашим запитом\nнічого не знайдено</string>
+    <string name="not_found_any_episodes__by_query">Серії для цього сезону\nнедоступні</string>
+
+    <string name="movies_toolbar_tittle">Фільми</string>
+    <string name="search_movies">Шукати фільми</string>
+    <string name="apply_filters">Застосувати фільтри</string>
+    <string name="reset_filters">Очистити фільтри</string>
+
+    <!--sort-->
+    <string name="by_popularity">За популярністю</string>
+    <string name="by_appearance_date">Дата появи</string>
+    <string name="by_rating_ivi">Рейтинг IVI</string>
+    <string name="by_rating_imdb">Рейтинг IMDB</string>
+    <string name="by_budget">Бюджет</string>
+    <string name="by_worldwide_fees">Збори в світі</string>
+    <string name="by_release_year">Рік виходу</string>
+
+    <!--filter-->
+    <string name="by_year">Рік</string>
+    <string name="by_category">Категорія</string>
+    <string name="by_genre">Жанр</string>
+    <string name="by_country">Країна</string>
 
 
 </resources>

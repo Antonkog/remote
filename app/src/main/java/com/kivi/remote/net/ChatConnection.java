@@ -199,9 +199,10 @@ public class ChatConnection {
                     case INITIAL_II:
                         if (serverEvent.getPreviewCommonStructures() != null) {
                             RxBus.INSTANCE.publish(new GotPreviewsInitialEvent().setPreviewCommonStructures(serverEvent.getPreviewCommonStructures()));
-                        }else {
+                        } else {
                             Timber.e("Initial is null");
                         }
+                        break;
                     default:
                         Timber.d("12345 Unknown event has been received " + serverEvent.getEvent());
                         break;

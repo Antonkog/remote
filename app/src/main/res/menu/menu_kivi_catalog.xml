@@ -34,10 +34,6 @@
                     android:title="@string/by_rating_ivi" />
 
                 <item
-                    android:id="@+id/item_sort_by_rating_movie_search"
-                    android:title="@string/by_rating_movie_search" />
-
-                <item
                     android:id="@+id/item_sort_by_rating_imdb"
                     android:title="@string/by_rating_imdb" />
 

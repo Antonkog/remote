@@ -143,10 +143,41 @@
     <string name="conection">Connection</string>
     <string name="really_connect">Are you sure you want to connect% s?</string>
     <string name="connect" translatable="false">Connect</string>
-    <string name="close_recommendation">Sure you want to close movie?</string>
-    <string name="downgrade_error">ERROR</string>
-    <string name="downgrade_description">" You are using an invalid version of KIVI Remote. Please download the appropriate one."</string>
-    <string name="download">DOWNLOAD</string>
+    <string name="close_recommendation">Sure you want to close movie?</string>    <string name="download">DOWNLOAD</string>
+
+
+
+    <string name="downgrade_error">Oh!</string>
+    <string name="downgrade_description">It seems you are using a version of KIVI Remote that is not suitable for this TV. Do you want to install the appropriate version?</string>
+
+    <string name="recom_chennel">TV channels</string>
+    <string name="recom_apps">Apps</string>
+    <string name="recom_inputs">Inputs</string>
+    <string name="recom_kivi">Recommendations from Kivi</string>
+
+    <string name="not_found_anything_by_query">No results were found\nfor your request</string>
+    <string name="not_found_any_episodes__by_query">There are no series for this season</string>
+
+    <string name="movies_toolbar_tittle">Movies</string>
+    <string name="search_movies">Search Movies</string>
+    <string name="apply_filters">Apply Filters</string>
+    <string name="reset_filters">Reset Filters</string>
+
+    <!--sort-->
+    <string name="by_popularity">By Popularity</string>
+    <string name="by_appearance_date">Date of appearance</string>
+    <string name="by_rating_ivi">IVI Rating</string>
+    <string name="by_rating_imdb">IMDB Rating</string>
+    <string name="by_budget">Budget</string>
+    <string name="by_worldwide_fees">Worldwide Fees</string>
+    <string name="by_release_year">Release Year</string>
+
+    <!--filter-->
+    <string name="by_year">Year</string>
+    <string name="by_category">Category</string>
+    <string name="by_genre">Genre</string>
+    <string name="by_country">Country</string>
+
 
 
 </resources>
