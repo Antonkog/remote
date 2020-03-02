@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="cancel">Болдырмау</string>
+    <string name="cancel">Отмена</string>
     <string name="error">An error occurred, please try again</string>
     <string name="discovery_connect">Қосылыңыз</string>
     <string name="no.contentDirectoryDevice.found">No devices found</string>
     <string name="discovery.in.progress">Searching for available devices</string>
+    <string name="dont_show_anymore">Больше не показывать</string>
     <string name="search_again">Repeat search</string>
     <string name="search_hint">Сұранысты енгізіңіз</string>
     <string name="repeat_search">In the\\&quot;Input Method menu\\&quot; select \\&quot;KIVI Keyboard\\&quot;.</string>
@@ -124,7 +125,8 @@
     <string name="close_recommendation">Уверены, что хотите закрыть фильм?</string>
     <string name="downgrade_error">ERROR</string>
     <string name="downgrade_description">" You are using an invalid version of KIVI Remote. Please download the appropriate one."</string>
-    <string name="download">DOWNLOAD</string>
+    <string name="download">Download</string>
+    <string name="recom_chennel">TV channels</string>
 
 
 </resources>

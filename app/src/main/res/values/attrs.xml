@@ -33,10 +33,6 @@
     <attr name="type" format="string" />
   </declare-styleable>
 
-  <declare-styleable name="ButtonCustomView">
-    <attr name="central_dr" format="reference"/>
-  </declare-styleable>
-
 
   <declare-styleable name="AspectHeaderView">
     <attr name="header" format="string" />

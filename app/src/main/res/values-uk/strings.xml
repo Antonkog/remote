@@ -13,6 +13,7 @@
     <string name="connect_to_lan" formatted="false">Підключено до мережі: "%s"</string>
 
     <string name="discovery_choose_tv">Перелік телевізорів\nв мережі WiFi</string>
+    <string name="dont_show_anymore">Більше не показувати</string>
 
     <string name="discovery_connect">Підключитися</string>
     <string name="no.contentDirectoryDevice.found">Пристрої не знайдені\nБудь ласка, переконайтесь, що смартфон та ТВ підключені до однієї WiFi мережі</string>
@@ -143,7 +144,7 @@
     <string name="conection">"Підключення "</string>
     <string name="close_recommendation">Ви впевнені, що хочете закрити фільм?</string>
     <string name="connect" translatable="false">Підключити</string>
-    <string name="download">СКАЧАТИ</string>
+    <string name="download">Скачати</string>
     <string name="number_of_images">%1$s фото</string>
 
     <string name="downgrade_error">Ой!</string>

@@ -3,10 +3,11 @@
 
     <string name="open">открыть</string>
     <string name="close">закрыть</string>
-    <string name="download">СКАЧАТЬ</string>
+    <string name="download">Скачать</string>
     <string name="ok" translatable="false">ОК</string>
     <string name="connect">Подключить</string>
     <string name="cancel">Отмена</string>
+    <string name="dont_show_anymore">Больше не показывать</string>
     <string name="error">Произошла ошибка, попробуйте ещё раз</string>
     <string name="service_failure_message">Сервис недоступен. Попробуйте позже.</string>
     <string name="network_failure_message">Сеть недоступна</string>

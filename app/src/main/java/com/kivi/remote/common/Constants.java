@@ -20,6 +20,10 @@ public class Constants {
     public static final long DELAY_RECONNECT = 1;
     public static final int PING_PERIOD = 2;
 
+    public static final String CRASH_COUNTER = "crash_counter";
+    public static final String LAUNCH_COUNTER = "launch_counter";
+    public static final String UPDATE_SHOWING = "update_showing";
+
     public final static String LOG_FILE_PREFIX = "KiviLogs";
     public final static String LOG_FILE_EXTENSION = ".txt";
     public final static String MEDIA_SHARE_TXT_ID = "media_share";

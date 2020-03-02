@@ -9,6 +9,7 @@ import com.kivi.remote.Screens
 import com.kivi.remote.bus.*
 import com.kivi.remote.common.Constants
 import com.kivi.remote.common.KiviCache
+import com.kivi.remote.common.PreferencesManager
 import com.kivi.remote.common.RxBus
 import com.kivi.remote.common.extensions.Run
 import com.kivi.remote.common.extensions.string
@@ -44,7 +45,9 @@ class RecommendationsViewModel(private val router: Router,
                     if (it?.msg?.serverVersionCode ?: Constants.VER_FOR_REMOTE_2 <  Constants.VER_FOR_REMOTE_2
                             || it?.getManufacture() == Constants.SERV_MSTAR) //on mstar always old remote version on realtek on older server versions only.
                     {
+                        if(PreferencesManager.getShowUpdate())
                         oldVersionTv.postValue(true)
+                        else{Timber.e("user restricted version update")}
                     } else{
                         oldVersionTv.postValue(false)
                     }

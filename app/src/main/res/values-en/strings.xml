@@ -143,12 +143,14 @@
     <string name="conection">Connection</string>
     <string name="really_connect">Are you sure you want to connect% s?</string>
     <string name="connect" translatable="false">Connect</string>
-    <string name="close_recommendation">Sure you want to close movie?</string>    <string name="download">DOWNLOAD</string>
+    <string name="close_recommendation">Sure you want to close movie?</string>
+    <string name="download">Download</string>
 
 
 
     <string name="downgrade_error">Oh!</string>
     <string name="downgrade_description">It seems you are using a version of KIVI Remote that is not suitable for this TV. Do you want to install the appropriate version?</string>
+    <string name="dont_show_anymore">Don\'t show me anymore</string>
 
     <string name="recom_chennel">TV channels</string>
     <string name="recom_apps">Apps</string>

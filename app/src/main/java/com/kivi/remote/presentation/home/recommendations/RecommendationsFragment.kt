@@ -4,16 +4,19 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.kivi.remote.App
 import com.kivi.remote.R
 import com.kivi.remote.Screens
 import com.kivi.remote.bus.SendActionEvent
 import com.kivi.remote.common.Action
 import com.kivi.remote.common.Constants
+import com.kivi.remote.common.PreferencesManager
 import com.kivi.remote.common.RxBus
 import com.kivi.remote.common.extensions.Run
 import com.kivi.remote.common.extensions.removeMasks
@@ -22,6 +25,7 @@ import com.kivi.remote.net.model.*
 import com.kivi.remote.presentation.base.BaseFragment
 import com.kivi.remote.presentation.base.BaseViewModelFactory
 import com.kivi.remote.presentation.home.HomeActivity
+import kotlinx.android.synthetic.main.home_activity.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,14 +44,14 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private lateinit var adapterChannels: RecommendationsAdapter
     private lateinit var adapterRecommend: RecommendationsAdapter
 
-    private lateinit var dialog: AlertDialog
+    private lateinit var dialogDowngrade: AlertDialog
 
     private val serverOldObserver = Observer<Boolean> {
         Timber.e(" serverOldObserver " + it.toString())
         if (it == true) {
-            dialog?.show()
+            dialogDowngrade?.show()
         } else {
-            dialog?.cancel()
+            dialogDowngrade?.cancel()
         }
     }
 
@@ -148,7 +152,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = RecommendationsFragmentBinding.inflate(inflater, container, false)
-        setupDowgradeDialog()
+        setupDowgradeDialog(inflater)
         return binding.root
     }
 
@@ -229,15 +233,26 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
     }
 
-    private fun setupDowgradeDialog() {
-        dialog = AlertDialog.Builder(binding.root.context)
+    private fun setupDowgradeDialog(inflater: LayoutInflater) {
+
+        val checkBoxView =   inflater.inflate(R.layout.layout_checkbox, null)
+
+        dialogDowngrade = AlertDialog.Builder(binding.root.context, R.style.ThemeOverlay_AppCompat_Dialog_Alert)
                 .setTitle(R.string.downgrade_error)
                 .setMessage(R.string.downgrade_description)
                 .setPositiveButton(R.string.download) { dialog1, which -> viewModel.setndToOldRemote(binding.root.context)}
                 .setNegativeButton(R.string.cancel){dialog, which -> dialog.cancel() }
                 .create()
 
-        dialog.setCancelable(true)
+        checkBoxView.findViewById<CheckBox>(R.id.checkBox).setOnCheckedChangeListener { buttonView, isChecked ->
+            if(isChecked) PreferencesManager.setShowUpdate(false)
+            else  PreferencesManager.setShowUpdate(true)
+        }
+
+        dialogDowngrade.setView(checkBoxView)
+        dialogDowngrade.setCancelable(true)
+
+
     }
 
 
