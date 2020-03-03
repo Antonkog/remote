@@ -129,6 +129,8 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
         override fun bind(item: ServerAppInfo) {
             val imageView = view.findViewById(R.id.image_app) as ImageView
 
+            imageView.contentDescription = item.packageName
+
             if (Constants.MEDIA_SHARE_TXT_ID == item.applicationName) {
                 imageView.setImageResource(R.drawable.ic_media_share)
                 imageView.isClickable = false
@@ -138,8 +140,7 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
 
                         if (it?.width != null && it.width > SMALL_BITMAP) {
 
-                        Timber.e(" PreviewsTransformation app width ${it?.width} " + item.packageName)
-
+                            Timber.d(" PreviewsTransformation app width ${it?.width} " + item.packageName)
                             GlideApp.with(view.context)
                                     .load(it)
                                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -147,9 +148,7 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
                                     .into(imageView)
                         }
                         if (it?.width != null && it.width <= SMALL_BITMAP) {
-                            Timber.e(" PreviewsTransformation2 app width ${it?.width} " + item.packageName)
-
-
+                            Timber.d(" PreviewsTransformation2 app width ${it?.width} " + item.packageName)
                             GlideApp.with(view.context).load(it)
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .centerInside()
@@ -159,6 +158,7 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
                         }
 
                     }
+
 
             view.setOnClickListener(this)
         }

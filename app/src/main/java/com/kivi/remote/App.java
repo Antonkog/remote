@@ -48,6 +48,7 @@ public class App extends MultiDexApplication {
                 .ciceroneModule(new CiceroneModule(Cicerone.create()))
                 .build();
 
+        sutupCrashHandler();
     }
 
 
@@ -59,7 +60,7 @@ public class App extends MultiDexApplication {
             public void uncaughtException(Thread t, Throwable e) {
                 Timber.e(e);
                 PreferencesManager.INSTANCE.incrementCrashCounter();
-                sendLogFile();
+//                sendLogFile();
             }
         });
     }

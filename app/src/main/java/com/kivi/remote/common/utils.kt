@@ -16,7 +16,6 @@ import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.MediaStore
-import android.util.Base64
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.annotation.RequiresApi
@@ -25,7 +24,9 @@ import com.kivi.remote.bus.GotPreviewsInitialEvent
 import com.kivi.remote.net.model.InputSourceHelper
 import com.kivi.remote.net.model.LauncherBasedData
 import com.kivi.remote.persistence.model.ServerApp
+import com.kivi.remote.persistence.model.ServerChannel
 import com.kivi.remote.persistence.model.ServerInput
+import com.kivi.remote.persistence.model.ServerRecommendation
 import com.kivi.remote.presentation.splash.SplashActivity
 import io.reactivex.SingleTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -120,9 +121,7 @@ fun showKeyboard(activity: Activity) {
     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY)
 }
 
-fun decodeFromBase64(bitmapString: String, w: Int, h: Int): Bitmap {
-    val byteArray = Base64.decode(bitmapString, Base64.DEFAULT)
-
+fun getBitmapFromByteArray(byteArray: ByteArray, w: Int, h: Int): Bitmap {
     val options = BitmapFactory.Options().apply {
         outHeight = w
         outWidth = h
@@ -163,6 +162,46 @@ fun calculateInSampleSize(
     return inSampleSize
 }
 
+fun getServerRecomendations(initialEvent: GotPreviewsInitialEvent): List<ServerRecommendation> {
+    val recs = LinkedList<ServerRecommendation>()
+    initialEvent.previewCommonStructures.filter {
+        it.type == LauncherBasedData.TYPE.RECOMMENDATION.name
+    }.forEach {
+        if (it.name != null) {
+            recs.add(ServerRecommendation().apply {
+                contentID = it.id
+                favourite = false
+                title = it.name
+                imageUrl = it.imageUrl
+                kind = it.additionalData?.entries?.firstOrNull { it1 -> it1.key == "kind" }?.value
+                monetizationType = it.additionalData?.entries?.firstOrNull { it2 -> it2.key == "monetizationType" }?.value
+                imdb = it.additionalData?.entries?.firstOrNull { it3 -> it3.key == "imdb" }?.value
+            }
+            )
+        }
+    }
+    return recs
+}
+
+fun getServerChannels(initialEvent: GotPreviewsInitialEvent): List<ServerChannel> {
+    val channels = LinkedList<ServerChannel>()
+    initialEvent.previewCommonStructures.filter {
+        it.type == LauncherBasedData.TYPE.CHANNEL.name
+    }.forEach {
+        if (it.name != null) {
+            channels.add(ServerChannel().apply {
+                serverId = it.id
+                name = it.name
+                is_active = it.is_active
+                imageUrl = it.imageUrl
+                sort = it.additionalData?.entries?.firstOrNull { it1 -> it1.key == "sort" }?.value
+                edited_at = it.additionalData?.entries?.firstOrNull { it2 -> it2.key == "edited_at" }?.value
+                has_timeshift = it.additionalData?.entries?.firstOrNull { it3 -> it3.key == "has_timeshift" }?.value
+            })
+        }
+    }
+    return channels
+}
 
 
 fun getApps(initialEvent: GotPreviewsInitialEvent): List<ServerApp> {
@@ -182,7 +221,7 @@ fun getApps(initialEvent: GotPreviewsInitialEvent): List<ServerApp> {
 }
 
 
-fun getAppInputs(initialEvent: GotPreviewsInitialEvent): List<ServerInput> {
+fun getInputs(initialEvent: GotPreviewsInitialEvent): List<ServerInput> {
     val inputs = LinkedList<ServerInput>()
     initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.INPUT.name }.forEach {
         if (it.id != null) {

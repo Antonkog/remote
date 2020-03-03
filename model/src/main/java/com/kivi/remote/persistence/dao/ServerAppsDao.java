@@ -1,17 +1,17 @@
 package com.kivi.remote.persistence.dao;
 
 
+import com.kivi.remote.persistence.model.ServerApp;
+
+import java.util.List;
 
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
-
-import com.kivi.remote.persistence.model.ServerApp;
-
-import java.util.List;
-
 import io.reactivex.Flowable;
+
+import static androidx.room.OnConflictStrategy.IGNORE;
 
 @Dao
 public interface ServerAppsDao {
@@ -27,6 +27,9 @@ public interface ServerAppsDao {
 
     @Update
     int update(ServerApp app);
+
+    @Insert(onConflict = IGNORE)
+    long insert(ServerApp app);
 
     @Insert
     void insertMediaShareStaticApp(ServerApp app);

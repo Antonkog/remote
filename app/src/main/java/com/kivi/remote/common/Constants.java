@@ -16,7 +16,7 @@ public class Constants {
     public static final int RECONNECT_TRY = 3;
     public static final long DELAY_ASK_APPS = 2;
     public static final long DELAY_APPS_GET = 12000; //or show noResultDelay on swipeRefreshLayoutF
-    public static final long DELAY_CHANNELS_GET = 10000; //or show noResultDelay on swipeRefreshLayoutF
+    public static final long DELAY_CHANNELS_GET = 2000; //or show noResultDelay on swipeRefreshLayoutF
     public static final long DELAY_RECONNECT = 1;
     public static final int PING_PERIOD = 2;
 
@@ -38,7 +38,7 @@ public class Constants {
     public static final int NO_VALUE = -1;
     public static final int VER_ASPECT_XVIII = 18; // AspectAvailable introduced  - inputs button, aspect settings
     public static final int VER_ASPECT_XIX = 19; // Deiver values instead of AspectAvailable
-    public static final int VER_FOR_REMOTE_2= 210010254; // version of server with new API
+    public static final int VER_FOR_REMOTE_2= 210010256; // version of server with new API
 
     public static final String BUNDLE_REALUNCH_KEY = "relaunch";
     public static final int SERV_REALTEK = 1;

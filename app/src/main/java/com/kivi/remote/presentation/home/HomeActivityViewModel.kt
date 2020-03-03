@@ -1,8 +1,10 @@
 package com.kivi.remote.presentation.home
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
+import android.util.Base64
 import androidx.lifecycle.MutableLiveData
 import com.kivi.remote.App
 import com.kivi.remote.Screens.DEVICE_SEARCH_FRAGMENT
@@ -18,8 +20,6 @@ import com.kivi.remote.nsd.NsdServiceModel
 import com.kivi.remote.persistence.AppDatabase
 import com.kivi.remote.persistence.dao.ServerAppsDao
 import com.kivi.remote.persistence.model.ServerApp
-import com.kivi.remote.persistence.model.ServerChannel
-import com.kivi.remote.persistence.model.ServerRecommendation
 import com.kivi.remote.presentation.base.BaseViewModel
 import com.kivi.remote.presentation.home.gallery.GalleryFragment
 import com.kivi.remote.presentation.home.touchpad.TouchpadButtonClickEvent
@@ -31,10 +31,11 @@ import io.reactivex.Single
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
+import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
+import org.jetbrains.anko.doAsync
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
@@ -97,61 +98,43 @@ class HomeActivityViewModel(
                 .subscribeBy(onNext = { initialEvent ->
                     if (initialEvent.previewCommonStructures != null) {
                         GlobalScope.launch(Dispatchers.Default) {
-                            async {
+                            doAsync {
                                 val apps = getApps(initialEvent)
-
-                                database.serverAppDao().run {
-                                    removeAll()
+                                if (apps.isNotEmpty()) {
+                                    database.serverAppDao().run {
+                                        removeAll()
 //                                    addMediaSharing()
-                                    insertAll(apps)
+                                        insertAll(apps)
+                                    }
+
+                                    val ids = arrayListOf<String>()
+                                    apps.forEach { app ->
+                                        ids.add(app.packageName)
+                                    }
+                                    if (ids.isNotEmpty()) RxBus.publish(RequestImgByIds(ids))
+
                                 }
-                                val ids = arrayListOf<String>()
-                                apps.forEach { app ->
-                                    ids.add(app.packageName)
-                                }
-                                if (ids.isNotEmpty()) RxBus.publish(RequestImgByIds(ids))
-                            }.await()
 
-                            async {
-                                val inputs = getAppInputs(initialEvent)
-                                database.serverInputsDao().run {
-                                    removeAll()
-                                    insertAll(inputs)
-                                }
-                            }.await()
+                                val inputs = getInputs(initialEvent)
+                                if (inputs.isNotEmpty())
+                                    database.serverInputsDao().run {
+                                        removeAll()
+                                        insertAll(inputs)
+                                    }
 
+                                val channels = getServerChannels(initialEvent)
+                                if (channels.isNotEmpty())
+                                    database.chennelsDao().run {
+                                        removeAll()
+                                        insertAll(channels)
+                                    }
 
-
-                            database.chennelsDao().run {
-                                removeAll()
-                                insertAll(
-                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.CHANNEL.name }.mapTo(ArrayList()) {
-                                            ServerChannel().apply {
-                                                serverId = it.id
-                                                name = it.name
-                                                is_active = it.is_active
-                                                imageUrl = it.imageUrl
-                                                sort = it.additionalData?.entries?.firstOrNull { it1 -> it1.key == "sort" }?.value
-                                                edited_at = it.additionalData?.entries?.firstOrNull { it2 -> it2.key == "edited_at" }?.value
-                                                has_timeshift = it.additionalData?.entries?.firstOrNull { it3 -> it3.key == "has_timeshift" }?.value
-                                            }
-                                        })
-                            }
-
-                            database.recommendationsDao().run {
-                                removeAll()
-                                insertAll(
-                                        initialEvent.previewCommonStructures.filter { it.type == LauncherBasedData.TYPE.RECOMMENDATION.name }.mapTo(ArrayList()) {
-                                            ServerRecommendation().apply {
-                                                contentID = it.id
-                                                favourite = false
-                                                title = it.name
-                                                imageUrl = it.imageUrl
-                                                kind = it.additionalData?.entries?.firstOrNull { it1 -> it1.key == "kind" }?.value
-                                                monetizationType = it.additionalData?.entries?.firstOrNull { it2 -> it2.key == "monetizationType" }?.value
-                                                imdb = it.additionalData?.entries?.firstOrNull { it3 -> it3.key == "imdb" }?.value
-                                            }
-                                        })
+                                val recs = getServerRecomendations(initialEvent)
+                                if (recs.isNotEmpty())
+                                    database.recommendationsDao().run {
+                                        removeAll()
+                                        insertAll(recs)
+                                    }
                             }
                         }
                     }
@@ -159,11 +142,22 @@ class HomeActivityViewModel(
 
 
         disposables += RxBus.listen(GotPreviewsContentEvent::class.java)
-                .observeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.computation())
                 .subscribeBy(onNext = { previewsContents ->
-                    previewsContents.previewContents.forEach {
-                        Timber.e(" got preview for ${it.id} ")
-                        updateAppIcon(it)
+                    previewsContents.previewContents.forEach { previewContent ->
+                        Timber.e(" got preview for ${previewContent.id} ")
+                        if (previewContent.id != null && previewContent.img != null)
+                            Base64.decode(previewContent.img, Base64.DEFAULT).let { bytearray ->
+                                getBitmapFromByteArray(bytearray, 120, 90).let {
+                                    cache.put(previewContent.id, it)
+                                    Timber.e("12345 caching app: " + previewContent.id)
+                                    upsert(ServerApp().apply {
+                                        packageName = previewContent.id
+                                        baseIcon = previewContent.img
+                                        appIcon = bytearray
+                                    }, database)
+                                }
+                            }
                     }
                 })
 
@@ -356,21 +350,16 @@ class HomeActivityViewModel(
         })
     }
 
-    fun updateAppIcon(appData: PreviewContent) { //to update saving old name
-        Timber.e(" 12345 updateAppIcon:")
 
-        if (appData.id != null && appData.img != null)
-            decodeFromBase64(appData.img, 120, 90).let { bitmap ->
-                cache.put(appData.id, bitmap)
-                Timber.e("12345 caching app:")
-            }
-
-//        database.serverAppDao().update(ServerApp().apply {
-//            packageName = appData.id
-//            baseIcon = appData.img
-//        })
+    @SuppressLint("CheckResult")
+    fun upsert(app: ServerApp, database: AppDatabase) { //to update saving old name
+        val id = database.serverAppDao().insert(app)
+        if (id == -1L) {
+            database.serverAppDao().update(app)
+        } else {
+            Timber.e(" 12345 insert app in db success : ${app.packageName}")
+        }
     }
-
 
     val showSettingsDialog = MutableLiveData<Boolean>()
     val progress = MutableLiveData<ProgressModel>()
@@ -428,8 +417,8 @@ class HomeActivityViewModel(
                     serverConnection?.run {
                         connectToServer(nsdModel.host, nsdModel.port)
                         GlobalScope.launch(Dispatchers.Default) {
-                                RxBus.publish(RequestInitialPreviewEvent())
-                                RxBus.publish(RemotePlayerEvent(RemotePlayerEvent.PlayerAction.REQUEST_CONTENT, null))
+                            RxBus.publish(RequestInitialPreviewEvent())
+                            RxBus.publish(RemotePlayerEvent(RemotePlayerEvent.PlayerAction.REQUEST_CONTENT, null))
                         }
                     }
                 },

@@ -10,7 +10,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.kivi.remote.App
 import com.kivi.remote.R
 import com.kivi.remote.Screens
 import com.kivi.remote.bus.SendActionEvent
@@ -25,7 +24,6 @@ import com.kivi.remote.net.model.*
 import com.kivi.remote.presentation.base.BaseFragment
 import com.kivi.remote.presentation.base.BaseViewModelFactory
 import com.kivi.remote.presentation.home.HomeActivity
-import kotlinx.android.synthetic.main.home_activity.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -47,10 +45,15 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private lateinit var dialogDowngrade: AlertDialog
 
     private val serverOldObserver = Observer<Boolean> {
-        Timber.e(" serverOldObserver " + it.toString())
         if (it == true) {
+            (activity as HomeActivity).run {
+                showTouchPad()
+                hideSlidingPanel()
+            }
+            hideRefreshBar(false)
             dialogDowngrade?.show()
         } else {
+            hideRefreshBar(true)
             dialogDowngrade?.cancel()
         }
     }
@@ -114,11 +117,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         binding.imgChannelsMenu.visibility = visible
         binding.reciclerChannels.visibility = visible
         binding.textChannel.visibility = visible
-        if (visible == View.VISIBLE) {
-            hideRefreshBar(true)
-        } else {
-            hideRefreshBar(false)
-        }
     }
 
 
@@ -126,11 +124,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         binding.imgRecommendMenu.visibility = visible
         binding.reciclerRecommendations.visibility = visible
         binding.textSubscriptions.visibility = visible
-        if (visible == View.VISIBLE) {
-            hideRefreshBar(true)
-        } else {
-            hideRefreshBar(false)
-        }
     }
 
 
@@ -196,9 +189,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             populateRecommendations()
 
             Run.after(Constants.DELAY_CHANNELS_GET) {
-                if (binding.recsRefreshBar.visibility == View.VISIBLE) {
                     viewModel.requestAspect()
-                }
             }
         }
 
@@ -235,18 +226,18 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
     private fun setupDowgradeDialog(inflater: LayoutInflater) {
 
-        val checkBoxView =   inflater.inflate(R.layout.layout_checkbox, null)
+        val checkBoxView = inflater.inflate(R.layout.layout_checkbox, null)
 
         dialogDowngrade = AlertDialog.Builder(binding.root.context, R.style.ThemeOverlay_AppCompat_Dialog_Alert)
                 .setTitle(R.string.downgrade_error)
                 .setMessage(R.string.downgrade_description)
-                .setPositiveButton(R.string.download) { dialog1, which -> viewModel.setndToOldRemote(binding.root.context)}
-                .setNegativeButton(R.string.cancel){dialog, which -> dialog.cancel() }
+                .setPositiveButton(R.string.download) { dialog1, which -> viewModel.setndToOldRemote(binding.root.context) }
+                .setNegativeButton(R.string.cancel) { dialog, which -> dialog.cancel() }
                 .create()
 
         checkBoxView.findViewById<CheckBox>(R.id.checkBox).setOnCheckedChangeListener { buttonView, isChecked ->
-            if(isChecked) PreferencesManager.setShowUpdate(false)
-            else  PreferencesManager.setShowUpdate(true)
+            if (isChecked) PreferencesManager.setShowUpdate(false)
+            else PreferencesManager.setShowUpdate(true)
         }
 
         dialogDowngrade.setView(checkBoxView)
@@ -277,7 +268,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             changeFabVisibility(View.VISIBLE)
             uncheckMenu()
         }
-//        askServerVersionIfNoData()
     }
 
     override fun onDestroyView() {
