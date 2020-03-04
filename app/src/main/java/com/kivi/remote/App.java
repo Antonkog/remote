@@ -1,12 +1,7 @@
 package com.kivi.remote;
 
 
-import android.content.Intent;
-import android.net.Uri;
-
-import com.bumptech.glide.request.target.ViewTarget;
 import com.crashlytics.android.Crashlytics;
-import com.kivi.remote.common.FileUtilsKt;
 import com.kivi.remote.common.PreferencesManager;
 import com.kivi.remote.di.components.ApplicationComponent;
 import com.kivi.remote.di.components.DaggerApplicationComponent;
@@ -16,6 +11,7 @@ import com.kivi.remote.kivi_catalog.Constants;
 
 import androidx.multidex.MultiDexApplication;
 import io.fabric.sdk.android.Fabric;
+import io.fabric.sdk.android.InitializationCallback;
 import ru.terrakok.cicerone.Cicerone;
 import timber.log.Timber;
 
@@ -24,23 +20,48 @@ import timber.log.Timber;
  */
 public class App extends MultiDexApplication {
     private ApplicationComponent appComponent;
+    private Thread.UncaughtExceptionHandler mDefaultUEH;
+    private Thread.UncaughtExceptionHandler mCaughtExceptionHandler =
+            new Thread.UncaughtExceptionHandler() {
+                @Override
+                public void uncaughtException(Thread thread, Throwable ex) {
+                    // Custom logic goes here
+                    com.kivi.remote.common.FileUtilsKt.appendLog("thread \n" + thread.getName() + " message \n" + ex.toString());
+                    PreferencesManager.INSTANCE.incrementCrashCounter();
+                    // This will make Crashlytics do its job
+                    mDefaultUEH.uncaughtException(thread, ex);
+                }
+            };
 
     public ApplicationComponent getApplicationComponent() {
         return appComponent;
     }
 
+
     @Override
     public void onCreate() {
         super.onCreate();
-        Constants.updateAppVersion().subscribe((integer, throwable) -> { });
-
-        ViewTarget.setTagId(R.id.glide_tag);//deprecated in glide 4.8 (now 4.6)
+        Constants.updateAppVersion().subscribe((integer, throwable) -> {
+        });
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
-        } else {
-            Fabric.with(this, new Crashlytics());
         }
+
+        Fabric.with(new Fabric.Builder(this).kits(new Crashlytics.Builder()
+                .build())
+                .initializationCallback(new InitializationCallback<Fabric>() {
+                    @Override
+                    public void success(Fabric fabric) {
+                        mDefaultUEH = Thread.getDefaultUncaughtExceptionHandler();
+                        Thread.setDefaultUncaughtExceptionHandler(mCaughtExceptionHandler);
+                    }
+
+                    @Override
+                    public void failure(Exception e) {
+                        Timber.e("failed to initialize Fabric ");
+                    }
+                }).build());
 
         appComponent = DaggerApplicationComponent
                 .builder()
@@ -48,39 +69,14 @@ public class App extends MultiDexApplication {
                 .ciceroneModule(new CiceroneModule(Cicerone.create()))
                 .build();
 
-        sutupCrashHandler();
+        PreferencesManager.INSTANCE.incrementOnAppLaunch();
     }
-
-
-
-    private void sutupCrashHandler() {
-// Make myHandler the new default uncaught exception handler.
-        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-            @Override
-            public void uncaughtException(Thread t, Throwable e) {
-                Timber.e(e);
-                PreferencesManager.INSTANCE.incrementCrashCounter();
-//                sendLogFile();
-            }
-        });
-    }
-
-//(4) Start an email app (also in my SendLog Activity):
-
-    private void sendLogFile() {
-        String fullName = FileUtilsKt.extractLogToFile(this);
-        if (fullName == null)
-            return;
-        Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.setType("plain/text");
-        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{"log@mydomain.com"});
-        intent.putExtra(Intent.EXTRA_SUBJECT, "MyApp log file");
-        intent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file://" + fullName));
-        intent.putExtra(Intent.EXTRA_TEXT, "Log file attached."); // do this so some email clients don't complain about empty body.
-        startActivity(intent);
-    }
-
 
     public static boolean isDarkMode() {
         return PreferencesManager.INSTANCE.getDarkMode();
-    }}
+    }
+}
+
+
+
+

@@ -20,9 +20,22 @@ public class Constants {
     public static final long DELAY_RECONNECT = 1;
     public static final int PING_PERIOD = 2;
 
-    public static final String CRASH_COUNTER = "crash_counter";
     public static final String LAUNCH_COUNTER = "launch_counter";
+    public static final String CRASH_COUNTER = "crash_counter";
+    public static final String CONNECTION_LOST_COUNTER = "con_lost_counter";
+
+    public static final String RATING_ASKED = "ask_rating_counter";
     public static final String UPDATE_SHOWING = "update_showing";
+
+    public static final String AUTO_CONNECT = "auto_connect";
+    public static final String LAST_NSD_HOLDER_NAME = "current_connection";
+    public static final String MUTE_STATUS_KEY = "muteStatus";
+    public static final String CURSOR_SPEED_KEY = "cursor_speed";
+    public static final String TAB_SELECTED_KEY = "tab_selected";
+    public static final String CURRENT_CONNECTION_IP_KEY = "current_ip";
+
+    public static final String DARK_MODE = "dark_mode";
+
 
     public final static String LOG_FILE_PREFIX = "KiviLogs";
     public final static String LOG_FILE_EXTENSION = ".txt";
@@ -40,7 +53,6 @@ public class Constants {
     public static final int VER_ASPECT_XIX = 19; // Deiver values instead of AspectAvailable
     public static final int VER_FOR_REMOTE_2= 210010256; // version of server with new API
 
-    public static final String BUNDLE_REALUNCH_KEY = "relaunch";
     public static final int SERV_REALTEK = 1;
     public static final int SERV_MSTAR = 0;
     public static final String INPUT_PORT = "INPUT_PORT";
@@ -49,19 +61,12 @@ public class Constants {
     public static final int NOTIFICATION_ID = 212121;
     public static final int RESTART_APP_PI = 214212;
     public static final String UNIDENTIFIED = "unidentified";
-    public static final String DARK_MODE = "dark_mode";
-    public static final String AUTO_CONNECT = "auto_connect";
-
     public static final String IMAGE = "Фото";
     public static final String VIDEO = "Видео";
     public static final String AUDIO = "Аудио";
 
+    public static final String BUNDLE_REALUNCH_KEY = "relaunch";
     public static final String CURRENT_CONNECTION_KEY = "current_connection";
-    public static final String LAST_NSD_HOLDER_NAME = "current_connection";
-    public static final String MUTE_STATUS_KEY = "muteStatus";
-    public static final String CURSOR_SPEED_KEY = "cursor_speed";
-    public static final String TAB_SELECTED_KEY = "tab_selected";
-    public static final String CURRENT_CONNECTION_IP_KEY = "current_ip";
 
     public static final String REALTEK_INPUT_SOURCE = "persist.sys.current_input";
     public static final String SOURCE_DVB_T = "com.realtek.dtv/.tvinput.DTVTvInputService/HW33685505";

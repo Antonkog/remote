@@ -119,7 +119,7 @@
     <string name="audio">Аудіо</string>
     <string name="photo">Фото</string>
     <string name="toastPic">Для налаштування оберить режим користувач</string>
-    <string name="number_of_videos" translatable="false">%1$s відео</string>
+    <string name="number_of_videos">%1$s відео</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="on">Вкл</string>
     <string name="recommendations">Рекомендації від KIVI</string>
@@ -143,7 +143,7 @@
     <string name="really_connect">Ви дійсно бажаєте підключити% s?</string>
     <string name="conection">"Підключення "</string>
     <string name="close_recommendation">Ви впевнені, що хочете закрити фільм?</string>
-    <string name="connect" translatable="false">Підключити</string>
+    <string name="connect">Підключити</string>
     <string name="download">Скачати</string>
     <string name="number_of_images">%1$s фото</string>
 
@@ -177,6 +177,9 @@
     <string name="by_category">Категорія</string>
     <string name="by_genre">Жанр</string>
     <string name="by_country">Країна</string>
+    <string name="rating_description">" Оцініть, будь ласка, наш додаток."</string>
+    <string name="later">Пізніше</string>
+    <string name="rate">Оцінити</string>
 
 
 </resources>

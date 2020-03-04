@@ -31,6 +31,7 @@ import com.kivi.remote.bus.RemotePlayerEvent;
 import com.kivi.remote.bus.TVPlayerEvent;
 import com.kivi.remote.common.Action;
 import com.kivi.remote.common.Constants;
+import com.kivi.remote.common.PreferencesManager;
 import com.kivi.remote.common.RxBus;
 import com.kivi.remote.common.gson.ListAdapter;
 import com.kivi.remote.net.model.Channel;
@@ -362,6 +363,7 @@ public class ChatConnection {
                     if (previousState == 0) {
                         RxBus.INSTANCE.publish(new ReconnectEvent());
                         Timber.d("Reconnecting");
+                        PreferencesManager.INSTANCE.incrementConnectionLost();
                         dispose();
                         return;
                     }

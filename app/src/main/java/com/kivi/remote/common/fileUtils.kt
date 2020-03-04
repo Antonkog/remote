@@ -1,12 +1,15 @@
 package com.kivi.remote.common
 
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Build
 import android.os.Environment
 import android.os.storage.StorageManager
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.startActivity
 import timber.log.Timber
 import java.io.*
 import java.util.*
@@ -69,12 +72,31 @@ fun appendLog(text: String) {
         calendar.timeInMillis = System.currentTimeMillis()
 
         val buf = BufferedWriter(FileWriter(logFile, true))
-        buf.append(text + " " + calendar.time.toString())
+        buf.append(text + " \n" + calendar.time.toString())
         buf.newLine()
         buf.close()
     } catch (e: IOException) {
         e.printStackTrace()
     }
+}
+
+
+//(4) Start an email app (also in my SendLog Activity):
+ fun sendLogFile(context: Context) {
+     var model = Build.MODEL
+     if (!model.startsWith(Build.MANUFACTURER)) model = Build.MANUFACTURER + " " + model
+
+     appendLog(model)
+
+    val intent = Intent(Intent.ACTION_SEND)
+    intent.type = "plain/text"
+
+    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("info@kivitv.com.ua"))
+    intent.putExtra(Intent.EXTRA_SUBJECT, "MyApp log file")
+    intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(getLogFile().absolutePath))
+    intent.putExtra(Intent.EXTRA_TEXT, "Log file attached.") // do this so some email clients don't complain about empty body.
+
+    startActivity(context, intent, null)
 }
 
 fun extractLogToFile(context: Context): String {

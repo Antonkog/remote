@@ -154,5 +154,8 @@
     <string name="by_category">Категория</string>
     <string name="by_genre">Жанр</string>
     <string name="by_country">Страна</string>
+    <string name="rating_description">"Please, rate our app."</string>
+    <string name="later">Later</string>
+    <string name="rate">Rate</string>
 
 </resources>

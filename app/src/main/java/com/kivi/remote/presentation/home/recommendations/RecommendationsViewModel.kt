@@ -9,8 +9,9 @@ import com.kivi.remote.Screens
 import com.kivi.remote.bus.*
 import com.kivi.remote.common.Constants
 import com.kivi.remote.common.KiviCache
-import com.kivi.remote.common.PreferencesManager
 import com.kivi.remote.common.RxBus
+import com.kivi.remote.common.extensions.boolean
+import com.kivi.remote.common.extensions.int
 import com.kivi.remote.common.extensions.string
 import com.kivi.remote.net.model.*
 import com.kivi.remote.persistence.AppDatabase
@@ -27,6 +28,12 @@ class RecommendationsViewModel(private val router: Router,
 
     var lastNsdHolderName by preferences.string(Constants.UNIDENTIFIED, key = Constants.LAST_NSD_HOLDER_NAME)
 
+    var updateAsked by preferences.boolean(false, key = Constants.UPDATE_SHOWING)
+    var ratingAsked by preferences.boolean(false,key = Constants.RATING_ASKED)
+
+    var launchCount by preferences.int(0,key = Constants.LAUNCH_COUNTER)
+    var reconnectCount by preferences.int(0,key = Constants.CONNECTION_LOST_COUNTER)
+
     var aspectTryCounter = Constants.ASPECT_GET_TRY
     var lastPortId = Constants.INPUT_HOME_ID
 
@@ -36,13 +43,20 @@ class RecommendationsViewModel(private val router: Router,
     val channels = MutableLiveData<List<Comparable<Channel>>>()
 
     val oldVersionTv = MutableLiveData<Boolean>()
+    val showRatingDialog = MutableLiveData<Boolean>()
 
     init {
+
+        if(launchCount > 10 && launchCount % 10  == 0 && reconnectCount/launchCount < 0.3 && !ratingAsked){
+            showRatingDialog.postValue(true)
+        }
+
+
         disposables += RxBus.listen(GotAspectEvent::class.java).subscribeBy(
                 onNext = {
                     if (it?.msg?.serverVersionCode ?: Int.MAX_VALUE < Constants.VER_FOR_REMOTE_2) //on mstar always old remote version on realtek on older server versions only.
                     {
-                        if (PreferencesManager.getShowUpdate())
+                        if (!updateAsked)
                             oldVersionTv.postValue(true)
                         else {
                             Timber.d("user restricted version update")
@@ -52,6 +66,8 @@ class RecommendationsViewModel(private val router: Router,
                     }
                 }, onError = Timber::e
         )
+
+//        if(PreferencesManager.getShowUpdate())
     }
 
     fun populateChannels() {
@@ -176,15 +192,15 @@ class RecommendationsViewModel(private val router: Router,
     fun goSearch() = router.navigateTo(Screens.DEVICE_SEARCH_FRAGMENT)
 
     fun godo(data: Recommendation) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)
-    fun setndToOldRemote(context: Context) {
-        val appPackageName = "com.wezom.kiviremote" //old remote
+
+    fun sendToRemoteApp(context: Context, toOldRemote : Boolean) {
+        val appPackageName =  if(toOldRemote) "com.wezom.kiviremote" else "com.kivi.remote"
         try {
             context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=$appPackageName")))
         } catch (anfe: android.content.ActivityNotFoundException) {
             context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=$appPackageName")))
         }
     }
-
 
 }
 

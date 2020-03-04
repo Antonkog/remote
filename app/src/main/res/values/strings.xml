@@ -7,6 +7,8 @@
     <string name="ok" translatable="false">ОК</string>
     <string name="connect">Подключить</string>
     <string name="cancel">Отмена</string>
+    <string name="later">Позже</string>
+    <string name="rate">Оценить</string>
     <string name="dont_show_anymore">Больше не показывать</string>
     <string name="error">Произошла ошибка, попробуйте ещё раз</string>
     <string name="service_failure_message">Сервис недоступен. Попробуйте позже.</string>
@@ -234,6 +236,7 @@
 
     <string name="downgrade_error">Ой!</string>
     <string name="downgrade_description">Кажется, Вы используете версию KIVI Remote, которая не подходит для данного ТВ. Установить подходящую версию?</string>
+    <string name="rating_description">Оцените, пожалуйста, наше приложение.</string>
     <string name="recom_chennel">Телеканалы</string>
     <string name="recom_apps">Приложения</string>
     <string name="recom_inputs">Входы</string>

@@ -120,7 +120,7 @@
     <string name="audio">Audio</string>
     <string name="photo">Photo</string>
     <string name="toastPic">To set picture, choose user mode</string>
-    <string name="number_of_videos" translatable="false">%1$s video</string>
+    <string name="number_of_videos">%1$s video</string>
     <string name="dark_mode">Dark Mode</string>
     <string name="recommendations">Recommendations from KIVI</string>
     <string name="channels">Chanels</string>
@@ -142,7 +142,7 @@
     <string name="auto_connect">Auto connect</string>
     <string name="conection">Connection</string>
     <string name="really_connect">Are you sure you want to connect% s?</string>
-    <string name="connect" translatable="false">Connect</string>
+    <string name="connect">Connect</string>
     <string name="close_recommendation">Sure you want to close movie?</string>
     <string name="download">Download</string>
 
@@ -179,7 +179,9 @@
     <string name="by_category">Category</string>
     <string name="by_genre">Genre</string>
     <string name="by_country">Country</string>
-
+    <string name="rating_description">"Please, rate our app. "</string>
+    <string name="later">Later</string>
+    <string name="rate">Rate</string>
 
 
 </resources>
