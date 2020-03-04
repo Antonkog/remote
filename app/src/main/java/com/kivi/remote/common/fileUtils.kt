@@ -1,5 +1,6 @@
 package com.kivi.remote.common
 
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageInfo
@@ -9,10 +10,11 @@ import android.os.Build
 import android.os.Environment
 import android.os.storage.StorageManager
 import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.startActivity
+import com.kivi.remote.R
 import timber.log.Timber
 import java.io.*
 import java.util.*
+
 
 @RequiresApi(Build.VERSION_CODES.N)
 fun getRoots(context: Context): List<Pair<String, File>> {
@@ -82,21 +84,31 @@ fun appendLog(text: String) {
 
 
 //(4) Start an email app (also in my SendLog Activity):
- fun sendLogFile(context: Context) {
-     var model = Build.MODEL
-     if (!model.startsWith(Build.MANUFACTURER)) model = Build.MANUFACTURER + " " + model
+fun sendLogFile(context: Context) {
+    var model = Build.MODEL
+    if (!model.startsWith(Build.MANUFACTURER)) model = Build.MANUFACTURER + " " + model
 
-     appendLog(model)
+    appendLog(model)
 
-    val intent = Intent(Intent.ACTION_SEND)
-    intent.type = "plain/text"
 
-    intent.putExtra(Intent.EXTRA_EMAIL, arrayOf("info@kivitv.com.ua"))
-    intent.putExtra(Intent.EXTRA_SUBJECT, "MyApp log file")
-    intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(getLogFile().absolutePath))
-    intent.putExtra(Intent.EXTRA_TEXT, "Log file attached.") // do this so some email clients don't complain about empty body.
+    try {
+        val intent = Intent(Intent.ACTION_SEND)
+                .setType("plain/text")
+                .putExtra(Intent.EXTRA_EMAIL, arrayOf("info@kivitv.com.ua"))
+                .putExtra(Intent.EXTRA_SUBJECT, "Kivi.remote support")
 
-    startActivity(context, intent, null)
+        if (getLogFile().exists()) {
+            intent.putExtra(Intent.EXTRA_STREAM, Uri.parse(getLogFile().absolutePath))
+                    .putExtra(Intent.EXTRA_TEXT, context.resources.getString(R.string.log_file_attached))
+        }
+
+        context.startActivity(intent)
+
+    } catch (e: ActivityNotFoundException) {
+        Timber.e(e)
+    } catch (e: Exception) {
+        Timber.e(e)
+    }
 }
 
 fun extractLogToFile(context: Context): String {

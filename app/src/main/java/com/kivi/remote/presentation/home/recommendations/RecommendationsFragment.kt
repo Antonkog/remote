@@ -1,5 +1,8 @@
 package com.kivi.remote.presentation.home.recommendations
 
+import android.content.ActivityNotFoundException
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,7 +22,6 @@ import com.kivi.remote.common.Constants
 import com.kivi.remote.common.RxBus
 import com.kivi.remote.common.extensions.Run
 import com.kivi.remote.common.extensions.removeMasks
-import com.kivi.remote.common.sendLogFile
 import com.kivi.remote.databinding.RecommendationsFragmentBinding
 import com.kivi.remote.net.model.*
 import com.kivi.remote.presentation.base.BaseFragment
@@ -43,8 +45,8 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private lateinit var adapterChannels: RecommendationsAdapter
     private lateinit var adapterRecommend: RecommendationsAdapter
 
-    private lateinit var dialogDowngrade : AlertDialog
-    private lateinit var ratingDialog : AlertDialog
+    private lateinit var dialogDowngrade: AlertDialog
+    private lateinit var ratingDialog: AlertDialog
 
     private val serverOldObserver = Observer<Boolean> {
         if (it == true) {
@@ -62,11 +64,11 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
 
     private val showRatingObserver = Observer<Boolean> {
-       if(it == true){
-           ratingDialog.show()
-       }else{
-           ratingDialog.cancel()
-       }
+        if (it == true) {
+            ratingDialog.show()
+        } else {
+            ratingDialog.cancel()
+        }
     }
 
     private val recommendationsObserver = Observer<List<Comparable<Recommendation>>> {
@@ -93,12 +95,16 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private val inputPortObserver = Observer<List<Comparable<Input>>> {
         it?.takeIf { it.isNotEmpty() }?.let {
             adapterPorts.swapData(it)
-        } ?: Timber.d("TYPE_INPUTS empty")
+            changePortsVisible(View.VISIBLE)
+        } ?: changePortsVisible(View.GONE)
     }
 
 
     override fun onInputChosen(item: Input, position: Int) {
         onPortChecked(item.intID)
+
+        throw Exception("testing crash")
+
     }
 
     override fun onChannelChosen(item: Channel, position: Int) {
@@ -142,6 +148,12 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         binding.imgAppsMenu.visibility = visible
         binding.reciclerApps.visibility = visible
         binding.textApps.visibility = visible
+    }
+
+
+    private fun changePortsVisible(visible: Int) {
+        binding.reciclerPorts.visibility = visible
+        binding.textPorts.visibility = visible
     }
 
     private fun hideRefreshBar(hide: Boolean) {
@@ -202,7 +214,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             populateRecommendations()
 
             Run.after(Constants.DELAY_CHANNELS_GET) {
-                    viewModel.requestAspect()
+                viewModel.requestAspect()
             }
         }
 
@@ -243,7 +255,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         dialogDowngrade = AlertDialog.Builder(binding.root.context, R.style.ThemeOverlay_AppCompat_Dialog_Alert)
                 .setTitle(R.string.downgrade_error)
                 .setMessage(R.string.downgrade_description)
-                .setPositiveButton(R.string.download) { dialog1, which -> viewModel.sendToRemoteApp(binding.root.context, toOldRemote = false)}
+                .setPositiveButton(R.string.download) { dialog1, which -> viewModel.sendToRemoteApp(binding.root.context, toOldRemote = true) }
                 .setNegativeButton(R.string.cancel) { dialog, which -> dialog.cancel() }
                 .create()
 
@@ -262,27 +274,30 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
 
         val ratingView = inflater.inflate(R.layout.layout_rating, null)
 
-        dialogDowngrade = AlertDialog.Builder(binding.root.context, R.style.ThemeOverlay_AppCompat_Dialog_Alert)
-                .setTitle(R.string.downgrade_error)
+        ratingDialog = AlertDialog.Builder(binding.root.context, R.style.ThemeOverlay_AppCompat_Dialog_Alert)
                 .setMessage(R.string.rating_description)
-                .setPositiveButton(R.string.rate) { dialog1, which -> viewModel.sendToRemoteApp(binding.root.context, toOldRemote = true) }
-                .setNegativeButton(R.string.later) {
-                    dialog, which -> dialog.cancel()
+                .setPositiveButton(R.string.rate) { dialog1, which -> viewModel.sendToRemoteApp(binding.root.context, toOldRemote = false) }
+                .setNegativeButton(R.string.later) { dialog, which ->
+                    dialog.cancel()
                     viewModel.ratingAsked = true
                 }
                 .create()
 
         ratingView.findViewById<RatingBar>(R.id.rating_bar).setOnRatingBarChangeListener { ratingBar, rating, fromUser ->
-            if(rating > 3){
-                viewModel.sendToRemoteApp(binding.root.context, toOldRemote = true)
+            if (rating > 3) {
+                viewModel.sendToRemoteApp(binding.root.context, toOldRemote = false)
             } else {
-                sendLogFile(binding.root.context)
+                val emailIntent = Intent(Intent.ACTION_SENDTO)
+                emailIntent.data = Uri.parse("mailto:info@kivitv.com.ua")
+                try {
+                    startActivity(emailIntent)
+                } catch (e: ActivityNotFoundException) { //TODO: Handle case where no email app is available
+                    Timber.e(e)
+                }
             }
         }
-        dialogDowngrade.setView(ratingView)
-        dialogDowngrade.setCancelable(true)
-
-
+        ratingDialog.setView(ratingView)
+        ratingDialog.setCancelable(false)
     }
 
 

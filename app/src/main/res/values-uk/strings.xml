@@ -180,6 +180,7 @@
     <string name="rating_description">" Оцініть, будь ласка, наш додаток."</string>
     <string name="later">Пізніше</string>
     <string name="rate">Оцінити</string>
+    <string name="log_file_attached">" Файл з останньою помилкою прикріплений до листа."</string>
 
 
 </resources>

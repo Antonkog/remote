@@ -20,9 +20,7 @@ object PreferencesManager {
         }
     }
 
-    fun incrementOnAppLaunch(): () -> Unit = {
-        setLaunchCounter(getLaunchCounter() + 1)
-    }
+    fun incrementOnAppLaunch() = setLaunchCounter(getLaunchCounter() + 1)
 
     fun incrementCrashCounter() = setCrashCounter(getCrashCounter() + 1)
 

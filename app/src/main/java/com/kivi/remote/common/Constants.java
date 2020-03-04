@@ -24,7 +24,7 @@ public class Constants {
     public static final String CRASH_COUNTER = "crash_counter";
     public static final String CONNECTION_LOST_COUNTER = "con_lost_counter";
 
-    public static final String RATING_ASKED = "ask_rating_counter";
+    public static final String RATING_ASKED = "rating_asked";
     public static final String UPDATE_SHOWING = "update_showing";
 
     public static final String AUTO_CONNECT = "auto_connect";

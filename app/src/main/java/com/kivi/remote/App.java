@@ -1,7 +1,6 @@
 package com.kivi.remote;
 
 
-import com.crashlytics.android.Crashlytics;
 import com.kivi.remote.common.PreferencesManager;
 import com.kivi.remote.di.components.ApplicationComponent;
 import com.kivi.remote.di.components.DaggerApplicationComponent;
@@ -10,8 +9,6 @@ import com.kivi.remote.di.modules.CiceroneModule;
 import com.kivi.remote.kivi_catalog.Constants;
 
 import androidx.multidex.MultiDexApplication;
-import io.fabric.sdk.android.Fabric;
-import io.fabric.sdk.android.InitializationCallback;
 import ru.terrakok.cicerone.Cicerone;
 import timber.log.Timber;
 
@@ -20,18 +17,18 @@ import timber.log.Timber;
  */
 public class App extends MultiDexApplication {
     private ApplicationComponent appComponent;
-    private Thread.UncaughtExceptionHandler mDefaultUEH;
-    private Thread.UncaughtExceptionHandler mCaughtExceptionHandler =
-            new Thread.UncaughtExceptionHandler() {
-                @Override
-                public void uncaughtException(Thread thread, Throwable ex) {
-                    // Custom logic goes here
-                    com.kivi.remote.common.FileUtilsKt.appendLog("thread \n" + thread.getName() + " message \n" + ex.toString());
-                    PreferencesManager.INSTANCE.incrementCrashCounter();
-                    // This will make Crashlytics do its job
-                    mDefaultUEH.uncaughtException(thread, ex);
-                }
-            };
+//    private Thread.UncaughtExceptionHandler mDefaultUEH;
+//    private Thread.UncaughtExceptionHandler mCaughtExceptionHandler =
+//            new Thread.UncaughtExceptionHandler() {
+//                @Override
+//                public void uncaughtException(Thread thread, Throwable ex) {
+//                    // Custom logic goes here
+//                    com.kivi.remote.common.FileUtilsKt.appendLog("thread \n" + thread.getName() + " message \n" + ex.toString());
+//                    PreferencesManager.INSTANCE.incrementCrashCounter();
+//                    // This will make Crashlytics do its job
+//                    mDefaultUEH.uncaughtException(thread, ex);
+//                }
+//            };
 
     public ApplicationComponent getApplicationComponent() {
         return appComponent;
@@ -41,27 +38,16 @@ public class App extends MultiDexApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+
+//        mDefaultUEH = Thread.getDefaultUncaughtExceptionHandler();
+//        Thread.setDefaultUncaughtExceptionHandler(mCaughtExceptionHandler);
+
         Constants.updateAppVersion().subscribe((integer, throwable) -> {
         });
 
         if (BuildConfig.DEBUG) {
             Timber.plant(new Timber.DebugTree());
         }
-
-        Fabric.with(new Fabric.Builder(this).kits(new Crashlytics.Builder()
-                .build())
-                .initializationCallback(new InitializationCallback<Fabric>() {
-                    @Override
-                    public void success(Fabric fabric) {
-                        mDefaultUEH = Thread.getDefaultUncaughtExceptionHandler();
-                        Thread.setDefaultUncaughtExceptionHandler(mCaughtExceptionHandler);
-                    }
-
-                    @Override
-                    public void failure(Exception e) {
-                        Timber.e("failed to initialize Fabric ");
-                    }
-                }).build());
 
         appComponent = DaggerApplicationComponent
                 .builder()

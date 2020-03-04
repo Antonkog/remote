@@ -48,6 +48,7 @@
     <string name="chanels_string" translatable="false">CH</string>
     <string name="volume_string" translatable="false">VOL</string>
     <string name="search_hint">Введите запрос</string>
+    <string name="log_file_attached">Файл с последней ошибкой прикреплен к письму.</string>
 
     <string name="wrong_input">Для корректной работы приложения необходимо изменить настройки ТВ.\nВ меню \&quot;Метод ввода\&quot; выберите пункт \&quot;KIVI Keyboard\&quot;.
         \n\nПерейти в настройки?</string>

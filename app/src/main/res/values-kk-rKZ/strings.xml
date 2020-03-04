@@ -157,5 +157,6 @@
     <string name="rating_description">"Please, rate our app."</string>
     <string name="later">Later</string>
     <string name="rate">Rate</string>
+    <string name="log_file_attached">Log file attached</string>
 
 </resources>
