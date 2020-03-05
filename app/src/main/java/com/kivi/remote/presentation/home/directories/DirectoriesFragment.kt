@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -13,7 +14,6 @@ import com.kivi.remote.R
 import com.kivi.remote.common.Constants.*
 import com.kivi.remote.common.extensions.toPx
 import com.kivi.remote.databinding.DirectoriesFragmentBinding
-import com.kivi.remote.presentation.base.BaseFragment
 import com.kivi.remote.presentation.base.BaseViewModelFactory
 import com.kivi.remote.presentation.home.HomeActivity
 import com.kivi.remote.upnp.ContentCallback
@@ -22,7 +22,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class DirectoriesFragment : BaseFragment() {
+class DirectoriesFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
@@ -32,7 +32,7 @@ class DirectoriesFragment : BaseFragment() {
 
     private val panelObserver = Observer<Boolean>(this::modifyPadding)
 
-    override fun injectDependencies() = fragmentComponent.inject(this)
+//    override fun injectDependencies() = fragmentComponent.inject(this)
 
     private val contentCallBack: ContentCallback = object : ContentCallback {
         private var content: ArrayList<DIDLObjectDisplay>? = null

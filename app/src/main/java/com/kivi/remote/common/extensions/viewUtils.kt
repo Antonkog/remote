@@ -39,7 +39,7 @@ val whiteMatrix =
 fun setBitmapMatrix(src: Bitmap, matrix : ColorMatrix): Bitmap {
     val colorMatrix = ColorMatrix(matrix)
 
-    val cf: ColorFilter = ColorMatrixColorFilter(colorMatrix);
+    val cf: ColorFilter = ColorMatrixColorFilter(colorMatrix)
     val bitmap: Bitmap = Bitmap.createBitmap(src.width, src.height,
             Bitmap.Config.ARGB_8888)
 

@@ -1,20 +1,22 @@
 package com.kivi.remote.persistence.model;
 
 
+import org.jetbrains.annotations.NotNull;
+
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "apps")
 public class ServerApp {
-    @PrimaryKey(autoGenerate = true)
-    private int id;
+
+    @PrimaryKey
+    @ColumnInfo(name = "package_name")
+    @NotNull
+    private String packageName;
 
     @ColumnInfo(name = "app_name")
     private String appName;
-
-    @ColumnInfo(name = "package_name")
-    private String packageName;
 
     @ColumnInfo(name = "app_icon")
     private byte[] appIcon;
@@ -25,12 +27,12 @@ public class ServerApp {
     @ColumnInfo(name = "uri")
     private String uri;
 
-    public int getId() {
-        return id;
+    public String getId() {
+        return packageName;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(@NotNull String id) {
+        this.packageName = id;
     }
 
     public String getAppName() {

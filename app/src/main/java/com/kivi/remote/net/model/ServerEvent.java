@@ -26,7 +26,6 @@ public class ServerEvent {
 
     private AspectMessage aspectMessage;
     private AspectAvailable availableAspectValues;
-    private InitialMessage initialMessage;
     private List<PreviewContent> previewContents;
     private List<PreviewCommonStructure> previewCommonStructures;
 
@@ -34,9 +33,6 @@ public class ServerEvent {
         return event;
     }
 
-    public InitialMessage getInitialMessage() {
-        return initialMessage;
-    }
 
     public List<ServerAppInfo> getApps() {
         return apps;

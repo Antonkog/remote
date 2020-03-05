@@ -45,7 +45,7 @@ class PlayerViewModel(private val router: Router, private val uPnPManager: UPnPM
     init {
         disposables += RxBus.listen(TVPlayerEvent::class.java).subscribeBy(
                 onNext = {
-                    when (it?.playerAction) {
+                    when (it.playerAction) {
                         TVPlayerEvent.PlayerAction.CHANGE_STATE -> {
                             when (it.progress) {
                                 PLAYING -> {
@@ -77,14 +77,14 @@ class PlayerViewModel(private val router: Router, private val uPnPManager: UPnPM
                             timePassedMls = 0
                             startPlayerTimer()
 
-                            if (it?.playerPreview?.imageUrl != null && it.playerPreview.name != null)
+                            if (it.playerPreview?.imageUrl != null && it.playerPreview.name != null)
                                 previewEvent.postValue(PreviewEvent(it.playerPreview.imageUrl!!, it.playerPreview.name))
                         }
 
                         TVPlayerEvent.PlayerAction.SEEK_TO -> {
                             Timber.e(" from tv SEEK_TO: " + it.progress)
 
-                            timePassedMls = it?.progress
+                            timePassedMls = it.progress
                             timeLeftMls = totalTimeMls - timePassedMls
 
                             showProgress(SEEK_TO)

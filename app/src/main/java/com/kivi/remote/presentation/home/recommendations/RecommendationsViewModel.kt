@@ -54,7 +54,7 @@ class RecommendationsViewModel(private val router: Router,
 
         disposables += RxBus.listen(GotAspectEvent::class.java).subscribeBy(
                 onNext = {
-                    if (it?.msg?.serverVersionCode ?: Int.MAX_VALUE < Constants.VER_FOR_REMOTE_2) //on mstar always old remote version on realtek on older server versions only.
+                    if (it.msg?.serverVersionCode ?: Int.MAX_VALUE < Constants.VER_FOR_REMOTE_2) //on mstar always old remote version on realtek on older server versions only.
                     {
                         if (!updateAsked)
                             oldVersionTv.postValue(true)
@@ -172,8 +172,6 @@ class RecommendationsViewModel(private val router: Router,
     fun launchRecommendation(recommendation: Recommendation) {
         RxBus.publish(LaunchRecommendationEvent(recommendation))
     }
-
-    fun requestAspect() = RxBus.publish(RequestAspectEvent())
 
     fun launchApp(name: String) {
         if (name != Constants.MEDIA_SHARE_TXT_ID) {

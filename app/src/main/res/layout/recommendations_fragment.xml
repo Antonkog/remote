@@ -15,7 +15,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginBottom="@dimen/xx_large"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -27,13 +27,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
-            android:visibility="invisible">
+            android:visibility="visible">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/recommendations_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="28dp">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/recommendations_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="28dp">
 
                 <TextView
                     android:id="@+id/text_subscriptions"
@@ -58,15 +58,15 @@
                     app:layout_constraintTop_toTopOf="@+id/text_subscriptions"
                     app:srcCompat="@drawable/js_right" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recicler_recommendations"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/KiviRecommendRecicler"
-                android:layout_below="@+id/type"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_subscriptions" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recicler_recommendations"
+                    style="@style/KiviRecommendRecicler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/type"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_subscriptions" />
 
 
                 <TextView
@@ -95,16 +95,16 @@
                     app:srcCompat="@drawable/js_right" />
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recicler_channels"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/type"
-                style="@style/KiviRecommendRecicler"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_channel" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recicler_channels"
+                    style="@style/KiviRecommendRecicler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/type"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_channel" />
 
 
                 <TextView
@@ -131,17 +131,17 @@
                     app:srcCompat="@drawable/js_right" />
 
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recicler_apps"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/type"
-                style="@style/KiviRecommendRecicler"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_apps" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recicler_apps"
+                    style="@style/KiviRecommendRecicler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/type"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_apps" />
 
                 <TextView
                     android:id="@+id/text_ports"
@@ -153,18 +153,17 @@
                     app:layout_constraintTop_toBottomOf="@+id/recicler_apps" />
 
 
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recicler_ports"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/type"
-                style="@style/KiviRecommendRecicler"
-                android:visibility="visible"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/text_ports" />
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recicler_ports"
+                    style="@style/KiviRecommendRecicler"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/type"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/text_ports" />
 
 
                 <Space
@@ -175,7 +174,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/recicler_ports" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
         </ScrollView>
 

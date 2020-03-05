@@ -28,7 +28,7 @@ class AppsDeepAdapter(itemClickListener: OnItemClickListener<ServerAppInfo>, val
 
                     if(it?.width!= null &&  it.width > SMALL_BITMAP){
 
-                        Timber.e(" PreviewsTransformation app width ${it?.width} " + item.packageName)
+                        Timber.e(" PreviewsTransformation app width ${it.width} " + item.packageName)
 
                         GlideApp.with(imageView.context)
                                 .load(it)
@@ -37,7 +37,7 @@ class AppsDeepAdapter(itemClickListener: OnItemClickListener<ServerAppInfo>, val
                                 .into(imageView)
                     }
                     if(it?.width!= null &&  it.width <= SMALL_BITMAP){
-                        Timber.e(" PreviewsTransformation2 app width ${it?.width} " + item.packageName)
+                        Timber.e(" PreviewsTransformation2 app width ${it.width} " + item.packageName)
 
                         GlideApp.with(imageView.context)
                                 .load(it)

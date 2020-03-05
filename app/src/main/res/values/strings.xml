@@ -5,183 +5,57 @@
     <string name="close">закрыть</string>
     <string name="download">Скачать</string>
     <string name="ok" translatable="false">ОК</string>
-    <string name="connect">Подключить</string>
     <string name="cancel">Отмена</string>
     <string name="later">Позже</string>
     <string name="rate">Оценить</string>
     <string name="dont_show_anymore">Больше не показывать</string>
-    <string name="error">Произошла ошибка, попробуйте ещё раз</string>
-    <string name="service_failure_message">Сервис недоступен. Попробуйте позже.</string>
-    <string name="network_failure_message">Сеть недоступна</string>
-    <string name="really_connect">Вы действительно хотите подключить %s ?</string>
-    <string name="conection">Подключение</string>
 
     <!--CLIENT SIDE strings-->
-    <string name="type_command">Type Command&#8230;</string>
-    <string name="server_ip" formatted="false" translatable="false">Server at IP: %s, port: %s</string>
-    <string name="connect_to_lan" formatted="false">Подключено к сети: "%s"</string>
 
-    <string name="lorem_ipsum" translatable="false">"Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet, Lorem ipsum dolor sit amet</string>
-    <string name="discovery_choose_tv">Список телевизоров\nв сети WiFi</string>
-
-    <string name="k.up" translatable="false">UP</string>
-    <string name="k.down" translatable="false">DOWN</string>
-    <string name="k.left" translatable="false">LEFT</string>
-    <string name="k.right" translatable="false">RIGNT</string>
-    <string name="k.ok" translatable="false">OK</string>
-    <string name="k.volume.up" translatable="false">VOL +</string>
-    <string name="k.volume.down" translatable="false">VOL -</string>
-    <string name="k.home" translatable="false">Home</string>
-    <string name="k.back" translatable="false">Back</string>
-    <string name="k.search" translatable="false">Search</string>
-    <string name="k.clear" translatable="false">Clear</string>
-    <string name="k.power" translatable="false">POWER</string>
-    <string name="k.menu" translatable="false">MENU</string>
-    <string name="k.media.menu" translatable="false">MENU_media</string>
-    <string name="k.channel.up" translatable="false">channel_up</string>
-    <string name="k.channel.down" translatable="false">channel_down</string>
-    <string name="k.enter" translatable="false">Enter</string>
     <string name="discovery_connect">Подключиться</string>
-    <string name="no.contentDirectoryDevice.found">Устройства не найдены\nПожалуйста, убедитесь, что смартфон и ТВ подключены к одной WiFi сети</string>
     <string name="discovery.in.progress">Идет поиск доступных устройств</string>
-    <string name="search_again">Повторный поиск</string>
-    <string name="chanels_string" translatable="false">CH</string>
-    <string name="volume_string" translatable="false">VOL</string>
-    <string name="search_hint">Введите запрос</string>
     <string name="log_file_attached">Файл с последней ошибкой прикреплен к письму.</string>
 
     <string name="wrong_input">Для корректной работы приложения необходимо изменить настройки ТВ.\nВ меню \&quot;Метод ввода\&quot; выберите пункт \&quot;KIVI Keyboard\&quot;.
         \n\nПерейти в настройки?</string>
     <string name="close_recommendation" >Уверены, что хотите закрыть фильм?</string>
-    <string name="repeat_search">Повторный поиск</string>
-    <string name="wifi_settings">Настройки WiFi</string>
-    <string name="left_button" translatable="false">Left button</string>
-    <string name="right_button" translatable="false">Right button</string>
     <string name="input_text_hint">Введите текст</string>
-    <string name="apps">Приложения</string>
-    <string name="recommendations">Рекомендации от KIVI</string>
 
-    <string name="current_device">Установленные на %1$s</string>
     <string name="placeholder" translatable="false">placeholdeefwefewfwefwefewfewfwefr</string>
     <string name="unknown_wifi" translatable="false">unknown</string>
 
-    <string name="devices_list_of_connections">Список подключений</string>
-    <string name="devices_list_edit">Редактировать список</string>
     <string name="devices_kivi">Устройства KIVI</string>
     <string name="mine_devices">Мои устройства</string>
     <string name="other_devices">Другие устройства</string>
 
-    <string name="connected">Подключен</string>
-    <string name="online">В сети</string>
-    <string name="offline">Не в сети</string>
-    <string name="connection_name">Название подключения</string>
-
     <string name="save">Сохранить</string>
 
     <string name="save_success">Изменения сохранены</string>
-    <string name="confirm">Готово</string>
     <string name="connected_to">Подключено к сети:</string>
 
-    <string name="digit_zero" translatable="false">0</string>
-    <string name="digit_one" translatable="false">1</string>
-    <string name="digit_two" translatable="false">2</string>
-    <string name="digit_three" translatable="false">3</string>
-    <string name="digit_four" translatable="false">4</string>
-    <string name="digit_five" translatable="false">5</string>
-    <string name="digit_six" translatable="false">6</string>
-    <string name="digit_seven" translatable="false">7</string>
-    <string name="digit_eight" translatable="false">8</string>
-    <string name="digit_nine" translatable="false">9</string>
-
-    <string name="channels">Chanels</string>
-    <string name="channels_placeholder" translatable="false">000</string>
-    <string name="refresh">ОБНОВИТЬ</string>
-
-    <string name="connectivity_error">Произошла ошибка при соединении с ТВ</string>
-    <string name="server_connection_error">Сервер разорвал соединение</string>
-
     <string name="app_url" translatable="false">vvvvvvvv</string>
-    <string name="selectRenderer" translatable="false">Select a Renderer</string>
-    <string name="host_error">Хост не распознан приложением</string>
 
-    <string name="device_name_cannot_be_empty">Имя устройства не может быть пустым</string>
-
-    <string name="letters_and_digits" translatable="false">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQR‌​STUVWXYZ абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФЧЦЧШЩЪЫЬЭЮЯабвгґдеєжзиіїйклмнопрстуфхцчшщьюяАБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ1234567890@</string>
     <string name="playing_now">Сейчас играет</string>
 
-    <string name="current_position" translatable="false">%1$s/%2$s</string>
-    <string name="user_denied_permission">Некоторый функционал приложения не будет работать без разрешения</string>
     <string name="open_settings_dialog">Для продолжения необходимо разрешение.\nОткрыть настройки?</string>
     <string name="start_time" translatable="false">00:00:00</string>
     <string name="counter_default" translatable="false">123/123</string>
-    <string name="search_title" translatable="false">Search</string>
 
     <string name="connection_is_lost">Соединение с телевизором прервано</string>
-
-    <string name="restart_application">перезапустить?</string>
 
     <string name="return_to_home_screen">вернуться?</string>
     <string name="folder_name" translatable="false">folder name</string>
     <string name="number_of_items" translatable="false">number of items</string>
     <string name="number_of_images">%1$s фото</string>
     <string name="number_of_videos">%1$s видео</string>
-    <string name="empty_directory">Директория пуста</string>
 
     <string name="dark_mode">Темная тема</string>
-    <string name="ratio">соотношение</string>
-    <string name="channel">канал</string>
-    <string name="optimization">Начать оптимизацию</string>
-    <string name="sleep">Выключить</string>
-    <string name="mode">Режим</string>
-    <string name="normal">Нормальный</string>
-    <string name="soft">Мягкий</string>
-    <string name="economy">Эконом</string>
-    <string name="vivid">Яркий</string>
-    <string name="auto">Авто</string>
     <string name="auto_connect">Автоподключение</string>
-    <string name="user">Пользовательский</string>
-    <string name="r_16x9" translatable="false">16x9</string>
-    <string name="default_r">По умолчанию</string>
-    <string name="r_4x3" translatable="false">4x3</string>
-    <string name="picture_des">Изображение (только для видео)</string>
-    <string name="sleep_desc">Выключить через %s</string>
-    <string name="temperature_des">Температура</string>
-    <string name="color_g">Зеленый</string>
-    <string name="color_b">Синий</string>
-    <string name="color_r">Красный</string>
-    <string name="sharpness">Четкость</string>
-    <string name="saturation">Насыщенность</string>
-    <string name="contrast">Контрастность</string>
-    <string name="brightness">Яркость</string>
-    <string name="backlight">Подсветка</string>
-    <string name="mode_desc">Режим изображения (только для видео)</string>
-    <string name="picture_mode">Режим изображения</string>
-    <string name="ratio_desc">Соотношение сторон (только для видео)</string>
-    <string name="timer_off">Таймер выключен</string>
-    <string name="off">Выкл</string>
-    <string name="minutes">" мин"</string>
-    <string name="hours">" ч"</string>
-    <string name="cool">Холодный</string>
-    <string name="nature">Натуральный</string>
-    <string name="warm">Теплый</string>
-    <string name="high">Высокий</string>
-    <string name="middle">Средний</string>
-    <string name="low">Низкий</string>
-    <string name="hdr" translatable="false">HDR</string>
-    <string name="warmer">Теплый 2</string>
-    <string name="cooler">Холодный 2</string>
-    <string name="movie">Кино</string>
-    <string name="sport">Спорт</string>
-    <string name="game">Игра</string>
-    <string name="support">Поддержка 24/7</string>
 
 
-    <string name="wifi" translatable="false">Wi-Fi</string>
-    <string name="video_sound">Видео и Звук</string>
     <string name="video">Видео</string>
     <string name="audio">Аудио</string>
     <string name="photo">Фото</string>
-    <string name="info">Про устройство</string>
 
     <string name="vga" translatable="false">VGA</string>
     <string name="atv" translatable="false">АТВ</string>
@@ -190,32 +64,13 @@
     <string name="hdmi3" translatable="false">HDMI 3</string>
     <string name="hdmi4" translatable="false">HDMI 4</string>
 
-    <string name="input_none" translatable="false">UNKNOWN</string>
-    <string name="input_vga" translatable="false">VGA</string>
-    <string name="input_svideo" translatable="false">S VIDEO</string>
-    <string name="input_scart" translatable="false">SCART</string>
-    <string name="input_cvbs" translatable="false">CVBS</string>
-    <string name="input_dtv" translatable="false">DTV</string>
-    <string name="input_storage" translatable="false">STORAGE</string>
-    <string name="input_ktv" translatable="false">KTV</string>
-    <string name="input_jpeg" translatable="false">JPEG</string>
-    <string name="input_num" translatable="false">NUM</string>
-    <string name="input_scaler_op" translatable="false">SCALER OP</string>
-    <string name="input_ruv" translatable="false">RUV</string>
-
 
     <string name="dtv">Телевидение</string>
     <string name="dvi" translatable="false">DVI</string>
     <string name="av" translatable="false">AV</string>
-    <string name="input_placeholder" translatable="false">Input0</string>
-    <string name="to_usb" translatable="false">USB</string>
     <string name="ypbpr">Компонент</string>
     <string name="dvbc" translatable="false">DVB-C</string>
     <string name="dvbs" translatable="false">DVB-S</string>
-    <string name="image_setting" translatable="false">IMAGE\nSETTINGS</string>
-    <string name="ports">Входы</string>
-    <string name="toastPic">Для настройки изображение выберети пользователький режим</string>
-    <string name="on">Вкл</string>
     <string name="if_you_dont_see_your_device" translatable="false">Если вы не видите ваше устройство в списке,\nто убедитесь в том, что оно находится\nв одной сети с вашим телефоном.</string>
 
     <string name="subscriptions">Подписки</string>
@@ -228,11 +83,8 @@
     <string name="drawer_close" translatable="false">close menu</string>
     <string name="drawer_open" translatable="false">open menu</string>
 
-    <string name="drawer_subscriptions">Подписки Киви</string>
-    <string name="drawer_settings">Настройки приложения</string>
     <string name="drawer_support">Поддержка пользователей</string>
     <string name="drawer_exit">Выйти</string>
-    <string name="drawer_dark_mode">Тёмный режим</string>
     <string name="drawer_devices">Устройства</string>
 
     <string name="downgrade_error">Ой!</string>

@@ -179,29 +179,29 @@ public class ChatConnection {
                     case APPS:
                         break;
                     case IMG_BY_IDS:
-                        Timber.d("IMG_BY_IDS  event has been received " );
+                        Timber.d("IMG_BY_IDS  event has been received ");
                         break;
                     case SEEK_TO:
-                        Timber.d("SEEK_TO  event has been received " );
+                        Timber.d("SEEK_TO  event has been received ");
                         RxBus.INSTANCE.publish(new TVPlayerEvent(TVPlayerEvent.PlayerAction.SEEK_TO, serverEvent.getVolume()));
                         break;
                     case LAUNCH_PLAYER:
-                        Timber.d("LAUNCH_PLAYER  event has been received " );
+                        Timber.d("LAUNCH_PLAYER  event has been received ");
                         RxBus.INSTANCE.publish(new TVPlayerEvent(serverEvent.getPreviewCommonStructures().get(0)));
                         break;
                     case CHANGE_STATE:
-                        Timber.d("CHANGE_STATE  event has been received " );
+                        Timber.d("CHANGE_STATE  event has been received ");
                         RxBus.INSTANCE.publish(new TVPlayerEvent(TVPlayerEvent.PlayerAction.CHANGE_STATE, serverEvent.getVolume()));
                         break;
                     case LAST_REQUEST_ERROR:
-                        Timber.d("SEEK_TO  event has been received " );
+                        Timber.d("SEEK_TO  event has been received ");
                         RxBus.INSTANCE.publish(new TVPlayerEvent(TVPlayerEvent.PlayerAction.LAST_REQUEST_ERROR, serverEvent.getVolume()));
                         break;
                     case INITIAL_II:
                         if (serverEvent.getPreviewCommonStructures() != null) {
                             RxBus.INSTANCE.publish(new GotPreviewsInitialEvent().setPreviewCommonStructures(serverEvent.getPreviewCommonStructures()));
                         } else {
-                            Timber.e("Initial is null");
+                            Timber.e("Initial2 is null");
                         }
                         break;
                     default:
@@ -214,11 +214,11 @@ public class ChatConnection {
                 RxBus.INSTANCE.publish(new NewAppListEvent().setAppInfo(serverEvent.getApps()));
             }
 
-            if (serverEvent.getPreviewContents()!= null) {
+            if (serverEvent.getPreviewContents() != null) {
                 RxBus.INSTANCE.publish(new GotPreviewsContentEvent(serverEvent.getPreviewContents()));
             }
 
-            if (!msg.isEmpty()){
+            if (!msg.isEmpty()) {
                 RxBus.INSTANCE.publish(new ConnectionMessage(msg,
                         !keyboardNotSet,
                         showKeyboard,
@@ -226,11 +226,9 @@ public class ChatConnection {
                         volume,
                         TextUtils.equals(serverEvent.getEvent(), DISCONNECT))
                         .addAspectMessage(serverEvent.getAspectMessage())
-                        .addInitial(serverEvent.getInitialMessage())
                         .addAvailable(serverEvent.getAvailableAspectValues())
                 );
-            }
-            else Timber.d("Server message is empty");
+            } else Timber.d("Server message is empty");
         } else Timber.d("Server event is null");
     }
 

@@ -3,133 +3,46 @@
     <string name="open">відкрити</string>
     <string name="close">закрити</string>
     <string name="cancel">Скасувати</string>
-    <string name="error">Сталася помилка, спробуйте ще раз</string>
-    <string name="service_failure_message">Сервіс недоступний. Спробуйте пізніше.</string>
-    <string name="network_failure_message">Мережа Ви дійсно хочете підключити %s ?</string>
 
 
     <!--CLIENT SIDE strings-->
-    <string name="type_command">Type Command&#8230;</string>
-    <string name="connect_to_lan" formatted="false">Підключено до мережі: "%s"</string>
 
-    <string name="discovery_choose_tv">Перелік телевізорів\nв мережі WiFi</string>
     <string name="dont_show_anymore">Більше не показувати</string>
 
     <string name="discovery_connect">Підключитися</string>
-    <string name="no.contentDirectoryDevice.found">Пристрої не знайдені\nБудь ласка, переконайтесь, що смартфон та ТВ підключені до однієї WiFi мережі</string>
     <string name="discovery.in.progress">Йде пошук доступних пристроїв</string>
-    <string name="search_again">Повторний пошук</string>
-    <string name="search_hint">Введіть запит</string>
 
     <string name="wrong_input">Для коректної роботи програми необхідно змінити налаштування ТВ.\nВ меню \&quot;Метод вводу\&quot; оберіть пункт \&quot;KIVI Keyboard\&quot;.
         \n\nПерейти в налаштування?</string>
-    <string name="repeat_search">Повторний пошук</string>
-    <string name="wifi_settings">Налаштування WiFi</string>
     <string name="input_text_hint">Введіть текст</string>
-    <string name="apps">Додатки</string>
 
-    <string name="current_device">Встановлені на %1$s</string>
-
-    <string name="devices_list_of_connections">Список підключень</string>
-    <string name="devices_list_edit">Редагувати список</string>
     <string name="devices_kivi">Пристрої KIVI</string>
     <string name="mine_devices">Мої пристрої</string>
     <string name="other_devices">Інші пристрої</string>
 
-    <string name="connected">Підключений</string>
-    <string name="online">В мережі</string>
-    <string name="offline">Не в мережі</string>
-    <string name="connection_name">Назва підключення</string>
-
     <string name="save">Зберегти</string>
 
     <string name="save_success">Зміни збережені</string>
-    <string name="confirm">Готово</string>
     <string name="connected_to">Підключено до мережі:</string>
-
-    <string name="refresh">ОНОВИТИ</string>
-
-    <string name="connectivity_error">Сталася помилка при з\'єднанні з ТВ</string>
-    <string name="server_connection_error">Сервер розірвав з\'єднання</string>
-
-    <string name="host_error">Хост не розпізнано додатком</string>
-
-    <string name="device_name_cannot_be_empty">Ім\'я пристрою не може бути порожнім</string>
 
     <string name="playing_now">Зараз грає</string>
 
-    <string name="user_denied_permission">Деякий функціонал програми не буде працювати без дозволу</string>
     <string name="open_settings_dialog">Для продовження необхідно надати дозвіл.\nВідкрити налаштування?</string>
 
     <string name="connection_is_lost">З\'єднання з телевізором перервано</string>
 
-    <string name="restart_application">перезавантажити?</string>
-
     <string name="return_to_home_screen">повернутись?</string>
-    <string name="empty_directory">Директорія порожня</string>
 
-    <string name="sharpness">Різкість</string>
-    <string name="saturation">Насиченість</string>
-    <string name="contrast">Контрастність</string>
-    <string name="brightness">Яскравість</string>
-    <string name="backlight">Підсвічування</string>
-    <string name="color_g">Зелений</string>
-    <string name="ratio">Співвідношення</string>
-    <string name="channel">Канал</string>
-    <string name="optimization">Почати оптимізацію</string>
-    <string name="sleep">Вимкнути</string>
-    <string name="mode">Режим</string>
-    <string name="picture_mode">Режим зображення</string>
-    <string name="cooler">Холодний 2</string>
-    <string name="warmer">Теплий 2</string>
-    <string name="auto">Авто</string>
-    <string name="movie">Кіно</string>
-    <string name="sport">Спорт</string>
-    <string name="game">Ігра</string>
-    <string name="support">Підтримка</string>
-    <string name="low">Низький</string>
-    <string name="middle">Середній</string>
-    <string name="high">Високий</string>
-    <string name="warm">Теплий</string>
-    <string name="nature">Натуральний</string>
-    <string name="cool">Холодний</string>
-    <string name="hours">х</string>
-    <string name="minutes">мін</string>
-    <string name="off">Вимк</string>
-    <string name="timer_off">Таймер вимкнутий</string>
-    <string name="ratio_desc">Співвідношення</string>
-    <string name="color_r">Красний</string>
-    <string name="color_b">Сіний</string>
-    <string name="temperature_des">Температура</string>
-    <string name="picture_des">Зображення</string>
-    <string name="sleep_desc">Вимкнути через %s</string>
-    <string name="default_r">По замовченню</string>
-    <string name="user">Користувач</string>
-    <string name="vivid">Яскравий</string>
-    <string name="economy">Економ</string>
-    <string name="soft">Мякий</string>
-    <string name="normal">Нормальний</string>
     <string name="ypbpr">Компонент</string>
     <string name="dtv">Телебачення</string>
-    <string name="info">Про пристрій</string>
-    <string name="video_sound">Відео та Звук</string>
-    <string name="mode_desc">Режим зображення</string>
-    <string name="ports">Входи</string>
     <string name="video">Відео</string>
     <string name="audio">Аудіо</string>
     <string name="photo">Фото</string>
-    <string name="toastPic">Для налаштування оберить режим користувач</string>
     <string name="number_of_videos">%1$s відео</string>
     <string name="dark_mode">Dark Mode</string>
-    <string name="on">Вкл</string>
-    <string name="recommendations">Рекомендації від KIVI</string>
-    <string name="channels">Канали</string>
     <string name="drawer_devices">Пристрої</string>
-    <string name="drawer_subscriptions">Підписка Ківі</string>
-    <string name="drawer_settings">Налаштування програми</string>
     <string name="drawer_support">Підтримка користувачів</string>
     <string name="drawer_exit">Вийти</string>
-    <string name="drawer_dark_mode">Темний режим</string>
 
 
     <string name="subscriptions">Передплати</string>
@@ -140,10 +53,7 @@
     <string name="cvv_code">CVV-код</string>
     <string name="make_payment">Оплатити</string>
     <string name="auto_connect">Автопідключення</string>
-    <string name="really_connect">Ви дійсно бажаєте підключити% s?</string>
-    <string name="conection">"Підключення "</string>
     <string name="close_recommendation">Ви впевнені, що хочете закрити фільм?</string>
-    <string name="connect">Підключити</string>
     <string name="download">Скачати</string>
     <string name="number_of_images">%1$s фото</string>
 

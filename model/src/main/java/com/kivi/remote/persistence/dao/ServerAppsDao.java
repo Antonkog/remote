@@ -38,3 +38,16 @@ public interface ServerAppsDao {
     @Query("DELETE FROM apps")
     void removeAll();
 }
+/*
+
+    @SuppressLint("CheckResult")
+    fun upsert(app: ServerApp, database:AppDatabase) { //to update saving old name
+        val id = database.serverAppDao().insert(app)
+        if (id == -1L) {
+            database.serverAppDao().update(app)
+        } else {
+            Timber.e(" 12345 insert app in db success : ${app.packageName}")
+        }
+    }
+
+ */

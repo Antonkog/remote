@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="video_container_size">300dp</dimen>
-    <dimen name="dpad_arrow_size">7dp</dimen>
-    <dimen name="dpad_padding">68dp</dimen>
 </resources>

@@ -20,7 +20,6 @@ import com.kivi.remote.bus.SendActionEvent
 import com.kivi.remote.common.Action
 import com.kivi.remote.common.Constants
 import com.kivi.remote.common.RxBus
-import com.kivi.remote.common.extensions.Run
 import com.kivi.remote.common.extensions.removeMasks
 import com.kivi.remote.databinding.RecommendationsFragmentBinding
 import com.kivi.remote.net.model.*
@@ -54,11 +53,9 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
                 showTouchPad()
                 hideSlidingPanel()
             }
-            hideRefreshBar(false)
-            dialogDowngrade?.show()
+            dialogDowngrade.show()
         } else {
-            hideRefreshBar(true)
-            dialogDowngrade?.cancel()
+            dialogDowngrade.cancel()
         }
     }
 
@@ -134,6 +131,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         binding.imgChannelsMenu.visibility = visible
         binding.reciclerChannels.visibility = visible
         binding.textChannel.visibility = visible
+        hideRefreshBar(visible == View.VISIBLE)
     }
 
 
@@ -141,6 +139,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         binding.imgRecommendMenu.visibility = visible
         binding.reciclerRecommendations.visibility = visible
         binding.textSubscriptions.visibility = visible
+        hideRefreshBar(visible == View.VISIBLE)
     }
 
 
@@ -148,6 +147,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         binding.imgAppsMenu.visibility = visible
         binding.reciclerApps.visibility = visible
         binding.textApps.visibility = visible
+        hideRefreshBar(visible == View.VISIBLE)
     }
 
 
@@ -213,9 +213,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             populateChannels()
             populateRecommendations()
 
-            Run.after(Constants.DELAY_CHANNELS_GET) {
-                viewModel.requestAspect()
-            }
         }
 
 

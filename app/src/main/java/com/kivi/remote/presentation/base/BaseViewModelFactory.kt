@@ -11,7 +11,6 @@ import com.kivi.remote.di.scopes.ActivityScope
 import com.kivi.remote.nsd.NsdHelper
 import com.kivi.remote.persistence.AppDatabase
 import com.kivi.remote.presentation.home.HomeActivityViewModel
-import com.kivi.remote.presentation.home.apps.AppsViewModel
 import com.kivi.remote.presentation.home.devicesearch.DeviceSearchViewModel
 import com.kivi.remote.presentation.home.directories.DirectoriesViewModel
 import com.kivi.remote.presentation.home.gallery.GalleryViewModel
@@ -30,7 +29,6 @@ import com.kivi.remote.presentation.home.subscriptions.subs_payment.SubsPaymentV
 import com.kivi.remote.presentation.home.subscriptions.subs_price_list.SubsPriceListViewModel
 import com.kivi.remote.presentation.home.subscriptions.subs_tariff_plans.SubsTariffPlansViewModel
 import com.kivi.remote.presentation.home.touchpad.TouchpadViewModel
-import com.kivi.remote.presentation.home.tvsettings.TvSettingsViewModel
 import com.kivi.remote.upnp.UPnPManager
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
@@ -56,17 +54,11 @@ class BaseViewModelFactory @Inject constructor(private val database: AppDatabase
         modelClass.isAssignableFrom(TouchpadViewModel::class.java) ->
             TouchpadViewModel(router) as T
 
-        modelClass.isAssignableFrom(AppsViewModel::class.java) ->
-            AppsViewModel(database, cache, preferences, resourceProvider) as T
-
         modelClass.isAssignableFrom(RecentDevicesViewModel::class.java) ->
             RecentDevicesViewModel(router, database, preferences) as T
 
         modelClass.isAssignableFrom(RecentDeviceViewModel::class.java) ->
             RecentDeviceViewModel(database, router, preferences) as T
-
-        modelClass.isAssignableFrom(TvSettingsViewModel::class.java) ->
-            TvSettingsViewModel(router) as T
 
         modelClass.isAssignableFrom(DeviceSearchViewModel::class.java) ->
             DeviceSearchViewModel(nsdHelper, router, database, preferences) as T

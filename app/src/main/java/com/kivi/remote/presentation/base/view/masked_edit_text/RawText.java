@@ -22,7 +22,7 @@ public class RawText {
             firstPart = text.substring(0, range.getStart());
         }
         if(range.getEnd() >= 0 && range.getEnd() < text.length()) {
-            lastPart = text.substring(range.getEnd(), text.length());
+            lastPart = text.substring(range.getEnd());
         }
         text = firstPart.concat(lastPart);
     }
@@ -54,7 +54,7 @@ public class RawText {
             firstPart = text.substring(0, start);
         }
         if(start >= 0 && start < text.length()) {
-            lastPart = text.substring(start, text.length());
+            lastPart = text.substring(start);
         }
         if(text.length() + newString.length() > maxLength) {
             count = maxLength - text.length();

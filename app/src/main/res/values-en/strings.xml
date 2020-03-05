@@ -3,134 +3,46 @@
     <string name="open">open</string>
     <string name="close">close</string>
     <string name="cancel">Cancel</string>
-    <string name="error">An error occurred, please try again</string>
-    <string name="service_failure_message">Service is unavailable. Try again later.</string>
-    <string name="network_failure_message">You really want to connect %s ?</string>
 
 
     <!--CLIENT SIDE strings-->
-    <string name="type_command">Type Command&#8230;</string>
-    <string name="connect_to_lan" formatted="false">Connected to network: "%s"</string>
-
-    <string name="discovery_choose_tv">List of TVs in WiFi</string>
 
     <string name="discovery_connect">Connect</string>
-    <string name="no.contentDirectoryDevice.found">No devices found\nPlease make sure your smartphone and TV are connected to the same WiFi network.</string>
     <string name="discovery.in.progress">Searching for available devices</string>
-    <string name="search_again">Repeat search</string>
-    <string name="search_hint">Type your search</string>
 
     <string name="wrong_input">To make application work correctly, please change the TV settings.\nIn the\&quot;Input Method menu\&quot; select \&quot;KIVI Keyboard\&quot;.
         \n\nGo to settings?</string>
-    <string name="repeat_search">Repeat search</string>
-    <string name="wifi_settings">WiFi settings</string>
     <string name="input_text_hint">Enter text</string>
-    <string name="apps">Applications</string>
 
-    <string name="current_device">Installed on %1$s</string>
-
-    <string name="devices_list_edit">Edit list</string>
     <string name="devices_kivi">Devices KIVI</string>
     <string name="mine_devices">My devices</string>
     <string name="other_devices">Other devices</string>
 
-    <string name="connected">Connected</string>
-    <string name="online">Online</string>
-    <string name="offline">Offline</string>
-    <string name="connection_name">Connection name</string>
-
     <string name="save">Save</string>
 
     <string name="save_success">Changes saved</string>
-    <string name="confirm">Done</string>
     <string name="connected_to">Connected to network:</string>
-
-    <string name="refresh">Refresh</string>
-
-    <string name="connectivity_error">An error occurred while connecting to the TV</string>
-    <string name="server_connection_error">Server disconnected</string>
-
-    <string name="host_error">The host is not recognized by the application</string>
-
-    <string name="device_name_cannot_be_empty">Device name cannot be empty</string>
 
     <string name="playing_now">Now playing</string>
 
-    <string name="user_denied_permission">Some application functionality will not work without permission.</string>
     <string name="open_settings_dialog">Permission is required to continue.\nOpen settings?</string>
 
     <string name="connection_is_lost">TV connection is interrupted</string>
 
-    <string name="restart_application">restart?</string>
-
     <string name="return_to_home_screen">return?</string>
     <string name="number_of_images">%1$s photo</string>
-    <string name="empty_directory">Directory is empty</string>
 
-    <string name="sharpness">Sharpness</string>
-    <string name="saturation">Saturation</string>
-    <string name="contrast">Contrast</string>
-    <string name="brightness">Brightness</string>
-    <string name="backlight">Backlight</string>
-    <string name="ratio">Ratio</string>
-    <string name="channel">Chanel</string>
-    <string name="optimization">Start optimization</string>
-    <string name="sleep">Switch off</string>
-    <string name="mode">Mode</string>
-    <string name="normal">Normal</string>
-    <string name="soft">Soft</string>
-    <string name="economy">Economy</string>
-    <string name="vivid">Vivid</string>
-    <string name="auto">Auto</string>
-    <string name="user">User</string>
-    <string name="default_r">Default</string>
-    <string name="picture_des">Picture (only for video)</string>
-    <string name="sleep_desc">Remove afrer %s</string>
-    <string name="temperature_des">Tempirature</string>
-    <string name="color_g">Green</string>
-    <string name="color_b">Blue</string>
-    <string name="color_r">Red</string>
-    <string name="mode_desc">Picture Mode (only for video)</string>
-    <string name="ratio_desc">Picture Ratio (only for video)</string>
-    <string name="timer_off">Timer off</string>
-    <string name="off">off</string>
-    <string name="on">on</string>
-    <string name="minutes">min</string>
-    <string name="hours">h</string>
-    <string name="cool">Cold</string>
-    <string name="nature">Natural</string>
-    <string name="warm">Warm</string>
-    <string name="high">High</string>
-    <string name="middle">Middle</string>
-    <string name="low">Low</string>
-    <string name="movie">Movie</string>
-    <string name="sport">Sport</string>
-    <string name="game">Game</string>
-    <string name="support">Support 24/7</string>
-    <string name="cooler">Cold2</string>
-    <string name="warmer">Warm 2</string>
-    <string name="picture_mode">Mode</string>
-    <string name="ports">Inputs</string>
     <string name="dtv">TV</string>
     <string name="ypbpr">Component</string>
-    <string name="info">About device</string>
-    <string name="video_sound">Video and Audio</string>
-    <string name="devices_list_of_connections">Device list</string>
     <string name="video">Video</string>
     <string name="audio">Audio</string>
     <string name="photo">Photo</string>
-    <string name="toastPic">To set picture, choose user mode</string>
     <string name="number_of_videos">%1$s video</string>
     <string name="dark_mode">Dark Mode</string>
-    <string name="recommendations">Recommendations from KIVI</string>
-    <string name="channels">Chanels</string>
 
     <string name="drawer_devices">"Devices "</string>
-    <string name="drawer_subscriptions">Kiwi subscriptions</string>
-    <string name="drawer_settings">Application Settings</string>
     <string name="drawer_support">User Support</string>
     <string name="drawer_exit">Log out</string>
-    <string name="drawer_dark_mode">Dark mode</string>
 
     <string name="subscriptions">Subscriptions</string>
     <string name="select_the_appropriate_subs">Select the appropriate subscription term\nfor you:</string>
@@ -140,9 +52,6 @@
     <string name="cvv_code">CVV-code</string>
     <string name="make_payment">Pay</string>
     <string name="auto_connect">Auto connect</string>
-    <string name="conection">Connection</string>
-    <string name="really_connect">Are you sure you want to connect% s?</string>
-    <string name="connect">Connect</string>
     <string name="close_recommendation">Sure you want to close movie?</string>
     <string name="download">Download</string>
 

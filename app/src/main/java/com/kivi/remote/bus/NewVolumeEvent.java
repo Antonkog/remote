@@ -1,7 +1,7 @@
 package com.kivi.remote.bus;
 
 
-import com.kivi.remote.presentation.home.tvsettings.LastVolume;
+import com.kivi.remote.net.model.LastVolume;
 
 public class NewVolumeEvent {
     private int volume;

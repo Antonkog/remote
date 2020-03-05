@@ -80,7 +80,7 @@ public class TouchpadFragment extends TvKeysFragment
             if (((HomeActivity) getActivity()).hasRecordAudioPermission()) {
                 startListenIntent();
             } else {
-                String s[] = {Manifest.permission.READ_EXTERNAL_STORAGE};
+                String[] s = {Manifest.permission.READ_EXTERNAL_STORAGE};
                 requestPermissions(s, REQUEST_PERMISSION_CODE);
             }
         });

@@ -11,7 +11,6 @@ public class ConnectionMessage {
     private String message;
     private boolean isSetKeyboard;
     @SerializedName("app_info")
-    private InitialMessage initialMessage;
     private AspectMessage aspectMessage;
     private AspectAvailable available;
 
@@ -30,11 +29,6 @@ public class ConnectionMessage {
     }
 
 
-
-    public ConnectionMessage addInitial (InitialMessage initialMessage) {
-        this.initialMessage = initialMessage;
-        return this;
-    }
 
     public ConnectionMessage addAvailable (AspectAvailable available) {
         this.available = available;
@@ -56,10 +50,6 @@ public class ConnectionMessage {
 
     public boolean isSetKeyboard() {
         return isSetKeyboard;
-    }
-
-    public InitialMessage getInitialMessage() {
-        return initialMessage;
     }
 
     public AspectMessage getAspectMessage() {

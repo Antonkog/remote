@@ -7,10 +7,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.kivi.remote.common.Constants.*
 import com.kivi.remote.databinding.MediaFragmentBinding
-import com.kivi.remote.presentation.base.BaseFragment
 import com.kivi.remote.presentation.base.BaseViewModelFactory
 import com.kivi.remote.presentation.home.HomeActivity
 import com.kivi.remote.upnp.ContentCallback
@@ -19,7 +19,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 
-class MediaFragment : BaseFragment() {
+class MediaFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
@@ -155,7 +155,7 @@ class MediaFragment : BaseFragment() {
         }
     }
 
-    override fun injectDependencies() = fragmentComponent.inject(this)
+//    override fun injectDependencies() = fragmentComponent.inject(this)
 
     private fun browseTo(id: String, title: String?): Boolean = checkPermission {
         currentTitle = title

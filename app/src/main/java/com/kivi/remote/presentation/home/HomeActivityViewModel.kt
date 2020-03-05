@@ -1,6 +1,5 @@
 package com.kivi.remote.presentation.home
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
@@ -11,7 +10,6 @@ import com.kivi.remote.Screens.DEVICE_SEARCH_FRAGMENT
 import com.kivi.remote.bus.*
 import com.kivi.remote.common.*
 import com.kivi.remote.common.Constants.*
-import com.kivi.remote.common.extensions.Run
 import com.kivi.remote.common.extensions.boolean
 import com.kivi.remote.common.extensions.string
 import com.kivi.remote.net.ChatConnection
@@ -23,8 +21,6 @@ import com.kivi.remote.persistence.model.ServerApp
 import com.kivi.remote.presentation.base.BaseViewModel
 import com.kivi.remote.presentation.home.gallery.GalleryFragment
 import com.kivi.remote.presentation.home.touchpad.TouchpadButtonClickEvent
-import com.kivi.remote.presentation.home.tvsettings.AspectHolder
-import com.kivi.remote.presentation.home.tvsettings.LastVolume
 import com.kivi.remote.upnp.UPnPManager
 import io.reactivex.Completable
 import io.reactivex.Single
@@ -34,6 +30,7 @@ import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
 import ru.terrakok.cicerone.Navigator
@@ -56,21 +53,6 @@ class HomeActivityViewModel(
         disposables += RxBus.listen(ConnectionMessage::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
-
-                    if (it.aspectMessage != null && it.available != null) {
-                        AspectHolder.setAspectValues(it.aspectMessage, it.available, it.initialMessage)
-
-                        // no massage recieved in this session, check AspectHolder/set/clean.
-                        if (AspectHolder.initialMsg == null)
-                            if (AspectHolder.message?.serverVersionCode ?: 0 >= Constants.VER_ASPECT_XIX) {
-                                Run.after(1000) {
-                                    RxBus.publish(RequestInitialEvent())
-                                }
-                            }
-                        RxBus.publish(GotAspectEvent(it.aspectMessage, it.available, it.initialMessage
-                                ?: AspectHolder.initialMsg))
-                    }
-
                     if (it.isShowKeyboard) {
                         RxBus.publish(ShowKeyboardEvent())
                     }
@@ -97,6 +79,7 @@ class HomeActivityViewModel(
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = { initialEvent ->
                     if (initialEvent.previewCommonStructures != null) {
+                        Timber.e(" 12345 initial previews: " + initialEvent.previewCommonStructures.size)
                         GlobalScope.launch(Dispatchers.Default) {
                             doAsync {
                                 val apps = getApps(initialEvent)
@@ -150,12 +133,15 @@ class HomeActivityViewModel(
                             Base64.decode(previewContent.img, Base64.DEFAULT).let { bytearray ->
                                 getBitmapFromByteArray(bytearray, 120, 90).let {
                                     cache.put(previewContent.id, it)
-                                    Timber.e("12345 caching app: " + previewContent.id)
-                                    upsert(ServerApp().apply {
+
+                                   val result =  database.serverAppDao().update(ServerApp().apply {
                                         packageName = previewContent.id
                                         baseIcon = previewContent.img
                                         appIcon = bytearray
-                                    }, database)
+                                    })
+
+                                    Timber.e("12345 caching app: " + previewContent.id + " db update : "+ result)
+
                                 }
                             }
                     }
@@ -351,16 +337,6 @@ class HomeActivityViewModel(
     }
 
 
-    @SuppressLint("CheckResult")
-    fun upsert(app: ServerApp, database: AppDatabase) { //to update saving old name
-        val id = database.serverAppDao().insert(app)
-        if (id == -1L) {
-            database.serverAppDao().update(app)
-        } else {
-            Timber.e(" 12345 insert app in db success : ${app.packageName}")
-        }
-    }
-
     val showSettingsDialog = MutableLiveData<Boolean>()
     val progress = MutableLiveData<ProgressModel>()
     val slidingPanelContent = MutableLiveData<UPnPManager.SlidingContentModel>()
@@ -400,12 +376,12 @@ class HomeActivityViewModel(
     }
 
     private fun connect(nsdModel: NsdServiceModel) { //research
-        val currentConnectionName = currentConnection
-        if (nsdModel.name != currentConnectionName) {
-            GlobalScope.launch(Dispatchers.Default) {
-                AspectHolder.clean()
-            }
-        }
+//        val currentConnectionName = currentConnection
+//        if (nsdModel.name != currentConnectionName) {
+//            GlobalScope.launch(Dispatchers.Default) {
+//                AspectHolder.clean()
+//            }
+//        }
 
         currentConnection = nsdModel.name
         Timber.d("Current connection ip: ${nsdModel.host.hostAddress}, port: ${nsdModel.port}")
@@ -417,8 +393,12 @@ class HomeActivityViewModel(
                     serverConnection?.run {
                         connectToServer(nsdModel.host, nsdModel.port)
                         GlobalScope.launch(Dispatchers.Default) {
+                            delay(1000)
                             RxBus.publish(RequestInitialPreviewEvent())
+                            delay(1000)
                             RxBus.publish(RemotePlayerEvent(RemotePlayerEvent.PlayerAction.REQUEST_CONTENT, null))
+                            delay(1000)
+                            RxBus.publish(RequestAspectEvent())
                         }
                     }
                 },
@@ -529,6 +509,6 @@ class HomeActivityViewModel(
     }
 
     fun goTo(screenKey: String) {
-        router.navigateTo(screenKey);
+        router.navigateTo(screenKey)
     }
 }

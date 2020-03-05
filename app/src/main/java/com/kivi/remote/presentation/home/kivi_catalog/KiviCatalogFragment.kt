@@ -441,7 +441,7 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
 
                 //displaying the first match
                 if (matches != null) {
-                    searchView?.setQuery(matches[0], false)
+                    searchView.setQuery(matches[0], false)
                 }
             }
 

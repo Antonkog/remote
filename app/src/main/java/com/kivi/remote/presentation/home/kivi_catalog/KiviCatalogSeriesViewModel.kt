@@ -36,7 +36,7 @@ class KiviCatalogSeriesViewModel(val database: AppDatabase, val router: Router) 
                         catalogRequestOnWay = false
                         val items = it.result.filter { !it.title.isNullOrEmpty() && !it.thumbs.isNullOrEmpty() }
                                 .map {
-                                    val posterUrl = it.thumbs[0]?.url ?: ""
+                                    val posterUrl = it.thumbs[0].url
                                     MovieData(it.id, it.title, "${it.season} сезон, ${it.episode} серия", posterUrl)
                                 }
 

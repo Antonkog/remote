@@ -33,7 +33,7 @@ class GalleryImageAdapter(private val context: Context,
         val item = items?.get(position)
         val didlItem = item?.didlObject as IDIDLItem
         var uri = didlItem.uri
-        holder?.run {
+        holder.run {
             images.asSequence().forEach {
                 val remoteFileTitle = item.title
                 val thumbTitle = it.title

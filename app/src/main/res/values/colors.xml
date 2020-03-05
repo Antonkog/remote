@@ -16,7 +16,6 @@
     <color name="colorWhite">#ffffff</color>
     <color name="light_red">#fd6666</color>
     <color name="trans">#00FFFFFF</color>
-    <color name="colorLightGray">#dadada</color>
 
     <color name="colorTextPrimary">#515254</color>
     <color name="colorSecondaryText">#94969A</color>
@@ -32,31 +31,20 @@
     <color name="inactive_progress">#e2e2e2</color>
     <color name="playback">@color/colorWhite</color>
 
-    <color name="sliding_panel_image_title">@color/colorSecondaryText</color>
-    <color name="sliding_panel_video_title">@color/colorWhite</color>
-    <color name="sliding_panel_video_black">@color/colorBlack</color>
-    <color name="progress">@color/colorAccent</color>
-
-    <color name="image_counter">#B6BAC1</color>
-
     <color name="directory_title">@color/colorTextPrimary</color>
 
     <color name="black_87">#de000000</color>
-    <color name="black_40">#66000000</color>
-    <color name="black_19">#33000000</color>
     <color name="mine_shaft_3">#232323</color>
     <color name="mine_shaft_4">#242424</color>
 
     <color name="white_87">#deffffff</color>
     <color name="blue_ribbon">#0f6bfb</color>
-    <color name="blue_50">#800091ff</color>
-    
+
     <color name="cod_gray">#1a1a1a</color>
     <color name="athens_gray">#ececf1</color>
     <color name="gray">#8c8c8c</color>
 
     <color name="mine_shaft_33">#333333</color>
-    <color name="dusty_gray">#979797</color>
     <color name="limed_spruce">#3b4952</color>
 
     <color name="tab_indicator_light">#0091ff</color>

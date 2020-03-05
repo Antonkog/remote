@@ -140,7 +140,7 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
 
                         if (it?.width != null && it.width > SMALL_BITMAP) {
 
-                            Timber.d(" PreviewsTransformation app width ${it?.width} " + item.packageName)
+                            Timber.d(" PreviewsTransformation app width ${it.width} " + item.packageName)
                             GlideApp.with(view.context)
                                     .load(it)
                                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
@@ -148,7 +148,7 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
                                     .into(imageView)
                         }
                         if (it?.width != null && it.width <= SMALL_BITMAP) {
-                            Timber.d(" PreviewsTransformation2 app width ${it?.width} " + item.packageName)
+                            Timber.d(" PreviewsTransformation2 app width ${it.width} " + item.packageName)
                             GlideApp.with(view.context).load(it)
                                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                                     .centerInside()

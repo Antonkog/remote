@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
@@ -24,7 +25,7 @@ import com.kivi.remote.upnp.org.droidupnp.model.upnp.didl.IDIDLItem
 import javax.inject.Inject
 
 
-class GalleryFragment : BaseFragment() {
+class GalleryFragment : Fragment() {
     enum class MediaType {
         IMAGE, VIDEO
     }
@@ -38,7 +39,7 @@ class GalleryFragment : BaseFragment() {
 
     private val panelObserver = Observer<Boolean>(this::modifyPadding)
 
-    override fun injectDependencies() = fragmentComponent.inject(this)
+//    override fun injectDependencies() = fragmentComponent.inject(this)
 
     private fun modifyPadding(modify: Boolean?) {
         modify?.let {

@@ -26,15 +26,6 @@
     </style>
 
 
-    <style name="Theme.Transparent" parent="@android:style/Theme">
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="android:windowNoTitle">true</item>
-        <item name="android:windowIsFloating">true</item>
-        <item name="android:windowIsTranslucent">true</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:backgroundDimEnabled">false</item>
-    </style>
-
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
@@ -107,18 +98,6 @@
         <item name="android:textSize">9sp</item>
     </style>
 
-    <style name="DiscoveryCheckBoxTheme" parent="Widget.AppCompat.CompoundButton.CheckBox">
-        <!--<item name="colorButtonNormal">@color/teal_blue</item>-->
-        <item name="colorControlHighlight">@color/colorSecondaryText</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="android:textColorSecondary">@color/colorSecondaryText</item>
-    </style>
-
-    <style name="DigitButton">
-        <item name="android:textSize">@dimen/font_size_24</item>
-        <item name="android:textColor">@drawable/selector_digit_button</item>
-    </style>
-
     <style name="Divider">
         <item name="android:id">@id/divider</item>
         <item name="android:layout_width">match_parent</item>
@@ -126,11 +105,6 @@
         <item name="android:background">@color/divider</item>
     </style>
 
-
-    <style name="RecsText">
-        <item name="android:textSize">@dimen/font_size_20</item>
-        <item name="android:textColor">@color/colorWhite</item>
-    </style>
 
     <style name="TabTextNotAllCapsAppearance" parent="TextAppearance.Design.Tab">
         <item name="textAllCaps">false</item>

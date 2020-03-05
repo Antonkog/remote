@@ -27,7 +27,7 @@ class GalleryVideoAdapter(
     override fun getItemId(position: Int): Long = position.toLong()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) = GalleryImageViewHolder(
-            LayoutInflater.from(parent?.context).inflate(layoutId, parent, false)
+            LayoutInflater.from(parent.context).inflate(layoutId, parent, false)
     )
 
     override fun getItemCount(): Int = items?.size ?: 0
@@ -36,7 +36,7 @@ class GalleryVideoAdapter(
         val item = items?.get(position)
         val didlItem = item?.didlObject as IDIDLItem
         var uri = didlItem.uri
-        holder?.run {
+        holder.run {
             if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP)
                 icon.clipToOutline = true
             title.text = item.title

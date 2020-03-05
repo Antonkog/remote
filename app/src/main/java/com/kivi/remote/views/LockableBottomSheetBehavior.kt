@@ -14,7 +14,7 @@ class LockableBottomSheetBehavior<V : View> : BottomSheetBehavior<V> {
     constructor() : super()
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs)
 
-    private var scrollHinDp = 60;
+    private var scrollHinDp = 60
 
 
     companion object {
