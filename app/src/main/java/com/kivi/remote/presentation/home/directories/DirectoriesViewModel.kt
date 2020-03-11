@@ -1,13 +1,14 @@
 package com.kivi.remote.presentation.home.directories
 
-import com.kivi.remote.Screens.GALLERY_FRAGMENT
+import androidx.navigation.NavController
+import com.kivi.remote.R
 import com.kivi.remote.presentation.base.BaseViewModel
 import com.kivi.remote.upnp.UPnPManager
-import ru.terrakok.cicerone.Router
 
 
-class DirectoriesViewModel(private val router: Router, val uPnPManager: UPnPManager) :
+class DirectoriesViewModel(private val navController: NavController, val uPnPManager: UPnPManager) :
     BaseViewModel() {
 
-    fun navigateToGallery() = router.navigateTo(GALLERY_FRAGMENT)
+    fun navigateToGallery() =  navController.navigate(R.id.action_directoriesFragment_to_galleryFragment)
+
 }

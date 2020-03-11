@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.res.ResourcesCompat
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.tabs.TabLayout
 import com.kivi.remote.App
@@ -18,12 +19,12 @@ import com.kivi.remote.presentation.base.recycler.initWithLinLay
 import com.kivi.remote.presentation.home.kivi_catalog.adapters.CatalogEpisodeAdapter
 import com.kivi.remote.presentation.home.kivi_catalog.adapters.MovieData
 import com.kivi.remote.presentation.home.kivi_catalog.adapters.pagination.UserPagination
-import java.io.Serializable
 import javax.inject.Inject
 
 class KiviCatalogSeriesFragment : BaseFragment(), LazyAdapter.OnItemClickListener<MovieData> {
 
     private lateinit var data: MovieData
+    private val KiviCataloArgs by navArgs<KiviCatalogFragmentArgs>()
 
     @Inject
     lateinit var viewModelFactory: BaseViewModelFactory
@@ -35,14 +36,19 @@ class KiviCatalogSeriesFragment : BaseFragment(), LazyAdapter.OnItemClickListene
     override fun injectDependencies() = fragmentComponent.inject(this)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        data = arguments!!.getSerializable("data") as MovieData
         binding = KiviCatalogSeriesFragmentBinding.inflate(inflater, container!!, false)
+
+        data = KiviCataloArgs.movieData
+//        arguments?.let {
+//            val args = KiviCatalogFragmentArgs.fromBundle(it)
+//            data = args.movieData
+//        }
 
         initTabLayout()
         initTabs()
         binding.rvSeries.initWithLinLay(LinearLayoutManager.VERTICAL, episodesAdapter, listOf())
 
-        binding.rvSeries.addOnScrollListener(object: UserPagination(binding.rvSeries.layoutManager) {
+        binding.rvSeries.addOnScrollListener(object : UserPagination(binding.rvSeries.layoutManager) {
             override fun onLoadMore(currentPage: Int, totalItemCount: Int, view: View?) {
                 if (!viewModel.catalogRequestOnWay) {
                     val seasonNumber = if (binding.tlSeries.selectedTabPosition < 0) {
@@ -75,6 +81,7 @@ class KiviCatalogSeriesFragment : BaseFragment(), LazyAdapter.OnItemClickListene
                     episodesAdapter.clearData()
                     paginationFetchEpisodesData(data.id, data.seasons!![selectedTabPosition].number, 0)
                 }
+
                 override fun onTabUnselected(tab: TabLayout.Tab) {}
                 override fun onTabReselected(tab: TabLayout.Tab) {}
             })
@@ -92,7 +99,7 @@ class KiviCatalogSeriesFragment : BaseFragment(), LazyAdapter.OnItemClickListene
     }
 
     override fun onLazyItemClick(data: MovieData) {
-      viewModel.showContentOnTv(data)
+        viewModel.showContentOnTv(data)
     }
 
     private fun paginationFetchEpisodesData(id: Int, season: Int, from: Int) {
@@ -118,16 +125,4 @@ class KiviCatalogSeriesFragment : BaseFragment(), LazyAdapter.OnItemClickListene
             }
         }
     }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(value: Serializable): KiviCatalogSeriesFragment {
-            val fragment = KiviCatalogSeriesFragment()
-            val args = Bundle()
-            args.putSerializable("data", value)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
 }

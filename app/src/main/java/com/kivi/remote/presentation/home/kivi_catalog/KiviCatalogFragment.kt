@@ -145,8 +145,8 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
         }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater?) {
-        inflater!!.inflate(R.menu.menu_kivi_catalog, menu)
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_kivi_catalog, menu)
 
         when (viewModel.catalogSortType) {
             SortType.POP -> menu.findItem(R.id.item_sort_by_popularity).isChecked = true

@@ -4,17 +4,17 @@ import android.os.Bundle
 import android.speech.RecognitionListener
 import android.speech.SpeechRecognizer
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavController
 import com.kivi.remote.bus.*
 import com.kivi.remote.common.Action
 import com.kivi.remote.common.RxBus
 import com.kivi.remote.presentation.base.BaseViewModel
 import com.kivi.remote.presentation.base.TvKeysViewModel
 import io.reactivex.rxkotlin.subscribeBy
-import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
 
-class TouchpadViewModel(private val router: Router) : BaseViewModel(), TvKeysViewModel {
+class TouchpadViewModel(private val navController: NavController) : BaseViewModel(), TvKeysViewModel {
 
 
     lateinit var speechListener: SpeechRecognizer
@@ -84,9 +84,9 @@ class TouchpadViewModel(private val router: Router) : BaseViewModel(), TvKeysVie
                 val matches = results
                         .getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
 
-                //displaying the first match
-                if (matches != null)
-                    router.showSystemMessage(matches[0])
+//                //displaying the first match
+//                if (matches != null)
+//                    router.showSystemMessage(matches[0])
 
                 sendVoiceAsText(matches[0])
             }

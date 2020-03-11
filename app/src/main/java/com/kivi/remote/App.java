@@ -5,11 +5,9 @@ import com.kivi.remote.common.PreferencesManager;
 import com.kivi.remote.di.components.ApplicationComponent;
 import com.kivi.remote.di.components.DaggerApplicationComponent;
 import com.kivi.remote.di.modules.ApplicationModule;
-import com.kivi.remote.di.modules.CiceroneModule;
 import com.kivi.remote.kivi_catalog.Constants;
 
 import androidx.multidex.MultiDexApplication;
-import ru.terrakok.cicerone.Cicerone;
 import timber.log.Timber;
 
 /**
@@ -52,7 +50,6 @@ public class App extends MultiDexApplication {
         appComponent = DaggerApplicationComponent
                 .builder()
                 .applicationModule(new ApplicationModule(this))
-                .ciceroneModule(new CiceroneModule(Cicerone.create()))
                 .build();
 
         PreferencesManager.INSTANCE.incrementOnAppLaunch();

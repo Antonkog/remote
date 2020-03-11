@@ -1,11 +1,11 @@
 package com.kivi.remote.presentation.home.media
 
-import com.kivi.remote.Screens
+import androidx.navigation.NavController
+import com.kivi.remote.R
 import com.kivi.remote.presentation.base.BaseViewModel
 import com.kivi.remote.upnp.UPnPManager
-import ru.terrakok.cicerone.Router
 
-class MediaViewModel(private val router: Router, val manager: UPnPManager) : BaseViewModel() {
+class MediaViewModel(private val navController: NavController, val manager: UPnPManager) : BaseViewModel() {
 
     fun addObservers() = manager.addObservers()
 
@@ -13,9 +13,9 @@ class MediaViewModel(private val router: Router, val manager: UPnPManager) : Bas
 
     fun browseTo(id: String, title: String?) = manager.browseTo(id, title)
 
-    fun navigateToGallery() = router.navigateTo(Screens.GALLERY_FRAGMENT)
+//    fun navigateToGallery() = router.navigateTo(Screens.GALLERY_FRAGMENT)
 
-    fun navigateToDirectories() = router.navigateTo(Screens.DIRECTORIES_FRAGMENT)
+    fun navigateToDirectories() = navController.navigate(R.id.action_mediaFragment_to_directoriesFragment)
 
     fun initContent() = manager.controller.serviceListener.initContent()
 }

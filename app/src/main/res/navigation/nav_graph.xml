@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_nav"
+    app:startDestination="@id/deviceSearchFragment">
+
+<!--    <fragment-->
+<!--    android:id="@+id/splashFragment"-->
+<!--    android:name="com.kivi.remote.presentation.home.splash"-->
+<!--    android:label="SplashFragment"-->
+<!--    tools:layout="@layout/layout_splash">-->
+<!--    <action-->
+<!--        android:id="@+id/action_splashFragment_to_homeFragment"-->
+<!--        app:popUpTo="@id/splashFragment"-->
+<!--        app:popUpToInclusive="true"/>-->
+<!--</fragment>-->
+
+    <fragment
+        android:id="@+id/deviceSearchFragment"
+        android:name="com.kivi.remote.presentation.home.devicesearch.DeviceSearchFragment"
+        android:label="DeviceSearchFragment"
+        tools:layout="@layout/home_fragment">
+        <action
+            android:id="@+id/action_deviceSearchFragment_to_recommendationsFragment"
+            app:destination="@id/recommendationsFragment" />
+        <action
+            android:id="@+id/action_deviceSearchFragment_to_kiviCatalogFragment"
+            app:destination="@id/kiviCatalogFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/recsAppsDeepFragment"
+        android:name="com.kivi.remote.presentation.home.recommendations.deep.RecsAppsDeepFragment"
+        android:label="RecsAppsDeepFragment"
+        tools:layout="@layout/recs_deep_fragment" >
+        <action
+            android:id="@+id/action_recsAppsDeepFragment_to_mediaFragment"
+            app:destination="@id/mediaFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recsChannelsDeepFragment"
+        android:name="com.kivi.remote.presentation.home.recommendations.deep.RecsChannelsDeepFragment"
+        android:label="RecsChannelsDeepFragment"
+        tools:layout="@layout/recs_deep_fragment" />
+    <fragment
+        android:id="@+id/recommendationsFragment"
+        android:name="com.kivi.remote.presentation.home.recommendations.RecommendationsFragment"
+        tools:layout="@layout/recommendations_fragment"
+        android:label="RecommendationsFragment" >
+        <action
+            android:id="@+id/action_recommendationsFragment_to_recsAppsDeepFragment"
+            app:destination="@id/recsAppsDeepFragment" />
+        <action
+            android:id="@+id/action_recommendationsFragment_to_recsChannelsDeepFragment"
+            app:destination="@id/recsChannelsDeepFragment" />
+        <action
+            android:id="@+id/action_recommendationsFragment_to_mediaFragment"
+            app:destination="@id/mediaFragment" />
+        <action
+            android:id="@+id/action_recommendationsFragment_to_kiviCatalogFragment"
+            app:destination="@id/kiviCatalogFragment" />
+    </fragment>
+
+    <action android:id="@+id/action_global_deviceSearchFragment" app:destination="@id/deviceSearchFragment" />
+
+    <fragment
+        android:id="@+id/recentDevicesFragment"
+        android:name="com.kivi.remote.presentation.home.recentdevices.RecentDevicesFragment"
+        android:label="RecentDevicesFragment"
+        tools:layout="@layout/recent_devices_fragment" >
+        <argument
+            android:name="recent_device"
+            app:argType="com.kivi.remote.persistence.model.RecentDevice" />
+        <action
+            android:id="@+id/action_recentDevicesFragment_to_recentDeviceFragment"
+            app:destination="@id/recentDeviceFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/kiviCatalogFragment"
+        android:name="com.kivi.remote.presentation.home.kivi_catalog.KiviCatalogFragment"
+        android:label="KiviCatalogFragment"
+        tools:layout="@layout/kivi_catalog_fragment">
+        <action
+            android:id="@+id/action_kiviCatalogFragment_to_kiviCatalogSeriesFragment"
+            app:destination="@id/kiviCatalogSeriesFragment" />
+        <argument
+            android:name="movie_data"
+            app:argType="com.kivi.remote.presentation.home.kivi_catalog.adapters.MovieData" />
+    </fragment>
+    <fragment
+        android:id="@+id/kiviCatalogSeriesFragment"
+        android:name="com.kivi.remote.presentation.home.kivi_catalog.KiviCatalogSeriesFragment"
+        android:label="KiviCatalogSeriesFragment"
+        tools:layout="@layout/kivi_catalog_series_fragment">
+        <argument
+            android:name="movie_data"
+            app:argType="com.kivi.remote.presentation.home.kivi_catalog.adapters.MovieData" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/mediaFragment"
+        android:name="com.kivi.remote.presentation.home.media.MediaFragment"
+        android:label="MediaFragment"
+        tools:layout="@layout/kivi_catalog_series_fragment">
+        <action
+            android:id="@+id/action_mediaFragment_to_directoriesFragment"
+            app:destination="@id/directoriesFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/directoriesFragment"
+        android:name="com.kivi.remote.presentation.home.directories.DirectoriesFragment"
+        android:label="DirectoriesFragment"
+        tools:layout="@layout/directories_fragment">
+        <action
+            android:id="@+id/action_directoriesFragment_to_galleryFragment"
+            app:destination="@id/galleryFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/recentDeviceFragment"
+        android:name="com.kivi.remote.presentation.home.recentdevice.RecentDeviceFragment"
+        android:label="RecentDeviceFragment"
+        tools:layout="@layout/recent_device_fragment">
+        <action
+            android:id="@+id/action_recentDeviceFragment_to_deviceSearchFragment"
+            app:destination="@id/deviceSearchFragment"
+            app:popUpTo="@+id/deviceSearchFragment"
+            app:popUpToInclusive="true"/>
+        <argument
+            android:name="recent_device"
+            app:argType="com.kivi.remote.persistence.model.RecentDevice" />
+    </fragment>
+
+
+    <fragment
+        android:id="@+id/subsInfoFragment"
+        android:name="com.kivi.remote.presentation.home.subscriptions.subs_info.SubsInfoFragment"
+        tools:layout="@layout/subs_info_fragment"
+        android:label="SubsInfoFragment" >
+        <action
+            android:id="@+id/action_subsInfoFragment_to_subsTariffPlansFragment"
+            app:destination="@id/subsTariffPlansFragment" />
+        <argument
+            android:name="price_per_time"
+            app:argType="com.kivi.remote.presentation.home.subscriptions.subs_price_list.PricePerTime" />
+    </fragment>
+    <fragment
+        android:id="@+id/subsTariffPlansFragment"
+        tools:layout="@layout/subs_tariff_plans_fragment"
+        android:name="com.kivi.remote.presentation.home.subscriptions.subs_tariff_plans.SubsTariffPlansFragment"
+        android:label="SubsTariffPlansFragment" >
+        <action
+            android:id="@+id/action_subsTariffPlansFragment_to_subsPaymentFragment"
+            app:destination="@id/subsPaymentFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/subsPaymentFragment"
+        tools:layout="@layout/subs_payment_fragment"
+
+        android:name="com.kivi.remote.presentation.home.subscriptions.subs_payment.SubsPaymentFragment"
+        android:label="SubsPaymentFragment" >
+        <action
+            android:id="@+id/action_subsPaymentFragment_to_subsTariffPlansFragment"
+            app:destination="@id/subsTariffPlansFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/subsPriceListFragment"
+        tools:layout="@layout/subs_price_list_fragment"
+        android:name="com.kivi.remote.presentation.home.subscriptions.subs_price_list.SubsPriceListFragment"
+        android:label="SubsPriceListFragment" >
+        <action
+            android:id="@+id/action_subsPriceListFragment_to_subsInfoFragment"
+            app:destination="@id/subsInfoFragment" />
+        <argument
+            android:name="price_per_time"
+            app:argType="com.kivi.remote.presentation.home.subscriptions.subs_price_list.PricePerTime" />
+    </fragment>
+    <fragment
+        android:id="@+id/galleryFragment"
+        tools:layout="@layout/gallery_fragment"
+        android:name="com.kivi.remote.presentation.home.gallery.GalleryFragment"
+        android:label="GalleryFragment" />
+
+        <action android:id="@+id/action_global_recentDevicesFragment" app:destination="@id/recentDevicesFragment"/>
+
+
+</navigation>

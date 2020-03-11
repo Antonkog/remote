@@ -1,17 +1,18 @@
 package com.kivi.remote.presentation.home.subscriptions.subs_info
 
+//import com.kivi.remote.presentation.home.subscriptions.subs_price_list.SubsPriceListFragmentArgs
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kivi.remote.databinding.SubsInfoFragmentBinding
 import com.kivi.remote.presentation.base.BaseFragment
 import com.kivi.remote.presentation.base.BaseViewModelFactory
 import com.kivi.remote.presentation.base.recycler.initWithLinLay
-import com.kivi.remote.presentation.home.subscriptions.subs_price_list.PricePerTime
-import java.io.Serializable
+import com.kivi.remote.presentation.home.subscriptions.subs_price_list.SubsPriceListFragmentArgs
 import javax.inject.Inject
 
 class SubsInfoFragment : BaseFragment() {
@@ -21,6 +22,8 @@ class SubsInfoFragment : BaseFragment() {
 
     private lateinit var binding: SubsInfoFragmentBinding
     private lateinit var viewModel: SubsInfoViewModel
+
+   private val SubsPriceFragmentArgs by navArgs<SubsPriceListFragmentArgs>()
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
@@ -37,7 +40,14 @@ class SubsInfoFragment : BaseFragment() {
             viewModel.navigateToSubsTariffs()
         }
 
-        val data = arguments!!.getSerializable("data") as PricePerTime
+        val data = SubsPriceFragmentArgs.pricePerTime  // arguments!!.getSerializable("data") as PricePerTime
+//
+//        arguments?.let {
+//            val args = SubsPriceListFragmentArgs.fromBundle(it)
+//          val  data = args.pricePerTime
+//        }
+
+
         val dataList = listOf(
                 TvProgramsChunk("Познавательные", listOf("", "", "", "", "", "", "", "")),
                 TvProgramsChunk("Фильмовые", listOf("", "", "", "", "", "", "", "")),
@@ -46,16 +56,4 @@ class SubsInfoFragment : BaseFragment() {
         binding.rvTvprograms.initWithLinLay(LinearLayoutManager.VERTICAL, TvProgramListAdapter(), dataList)
         binding.rvTvprograms.isNestedScrollingEnabled = false
     }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(value: Serializable): SubsInfoFragment {
-            val fragment = SubsInfoFragment()
-            val args = Bundle()
-            args.putSerializable("data", value)
-            fragment.arguments = args
-            return fragment
-        }
-    }
-
 }

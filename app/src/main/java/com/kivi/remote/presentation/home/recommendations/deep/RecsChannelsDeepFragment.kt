@@ -38,7 +38,7 @@ class RecsChannelsDeepFragment : DeepFragment(), LazyAdapter.OnItemClickListener
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ChannelsDeepViewModel::class.java)
 
         viewModel.populateChannels()
-        viewModel.channels.observe(this@RecsChannelsDeepFragment, channelsObserver)
+        viewModel.channels.observe(viewLifecycleOwner, channelsObserver)
         val manager = GridLayoutManager(this.context, 4)
         manager.initialPrefetchItemCount = 9
         binding.recommendationsRecicler.initWithManager(manager, adapter, listOf())

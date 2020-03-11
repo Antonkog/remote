@@ -17,15 +17,13 @@ public class ConnectionMessage {
     private boolean showKeyboard;
     private boolean hideKeyboard;
     private int volume;
-    private boolean disconnect;
 
-    public ConnectionMessage(String message, boolean isSetKeyboard, boolean showKeyboard, boolean hideKeyboard, int volume, boolean disconnect) {
+    public ConnectionMessage(String message, boolean isSetKeyboard, boolean showKeyboard, boolean hideKeyboard, int volume) {
         this.message = message;
         this.isSetKeyboard = isSetKeyboard;
         this.showKeyboard = showKeyboard;
         this.hideKeyboard = hideKeyboard;
         this.volume = volume;
-        this.disconnect = disconnect;
     }
 
 
@@ -74,10 +72,6 @@ public class ConnectionMessage {
 
     public void setVolume(int volume) {
         this.volume = volume;
-    }
-
-    public boolean isDisconnect() {
-        return disconnect;
     }
 
 }

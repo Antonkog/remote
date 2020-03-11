@@ -25,6 +25,7 @@ import timber.log.Timber;
  */
 public class NsdHelper {
     public static final String SERVICE_MASK = "(KIVI_TV)";
+    public static final String SERVICE_SUB_MASK = "KIVI";
     private static final String SERVICE_TYPE = "_http._tcp.";
 
     private final NsdManager mNsdManager;
@@ -75,7 +76,7 @@ public class NsdHelper {
                     Timber.d("Unknown Service Type: " + service.getServiceType());
                 } else if (service.getServiceName().equals(SERVICE_MASK)) {
                     Timber.d("Same machine: " + SERVICE_MASK);
-                } else if (service.getServiceName().contains(SERVICE_MASK)) {
+                } else if (service.getServiceName().contains(SERVICE_SUB_MASK)) {
                     killTimer();
                     serviceWrappers.add(new NsdServiceInfoWrapper(service));
                     nsdServices.accept(toServiceSet(serviceWrappers));

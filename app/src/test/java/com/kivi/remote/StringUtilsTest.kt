@@ -28,6 +28,7 @@ internal class StringUtilsUnitTest {
         assertEquals("Домашний кинотеатр", "Домашний кинотеатр [49790](KIVI_TV)".removeMasks())
         assertEquals("Sleeping room", "Sleeping room [49790](KIVI_TV)".removeMasks())
         assertEquals("MyHome01", "MyHome01 [49790](KIVI_TV)".removeMasks())
+        assertEquals("Телевизор в большой комнате", "Телевизор в большой комнате [49790](KIVI_TV)".removeMasks())
         assertEquals("KIVI 50UK32G", "50UK32G [2c73](KIVI_TV)".removeMasks())
         assertEquals("KIVI 49UP30g", "49UP30g [ewgge](KIVI_TV)".removeMasks())
         assertEquals("KIVI 24fk30g", "24fk30g [ewgge](KIVI_TV)".removeMasks())

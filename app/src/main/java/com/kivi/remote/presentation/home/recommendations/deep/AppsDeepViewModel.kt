@@ -1,7 +1,8 @@
 package com.kivi.remote.presentation.home.recommendations.deep
 
 import androidx.lifecycle.MutableLiveData
-import com.kivi.remote.Screens
+import androidx.navigation.NavController
+import com.kivi.remote.R
 import com.kivi.remote.bus.LaunchAppEvent
 import com.kivi.remote.bus.NavigateToRemoteEvent
 import com.kivi.remote.common.Constants
@@ -12,10 +13,9 @@ import com.kivi.remote.persistence.AppDatabase
 import com.kivi.remote.presentation.base.BaseViewModel
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
-class AppsDeepViewModel (val router: Router, val cache: KiviCache, val database : AppDatabase): BaseViewModel() {
+class AppsDeepViewModel(val navController: NavController, val cache: KiviCache, val database: AppDatabase): BaseViewModel() {
 
     val apps = MutableLiveData<List<ServerAppInfo>>()
 
@@ -41,7 +41,7 @@ class AppsDeepViewModel (val router: Router, val cache: KiviCache, val database 
             RxBus.publish(LaunchAppEvent(name))
             RxBus.publish(NavigateToRemoteEvent())
         } else {
-            router.navigateTo(Screens.MEDIA_FRAGMENT)
+            navController.navigate(R.id.action_recsAppsDeepFragment_to_mediaFragment)
         }
     }
 

@@ -20,7 +20,8 @@ buildscript {
             'glide'                 : '4.10.0',
             'anko'                  : '0.10.4',
             'cling'                 : '2.1.1',
-            'jetty'                 : '8.2.0.v20160908'
+            'jetty'                 : '8.2.0.v20160908',
+            'nav_version'           : '2.3.0-alpha03'
     ]
 
     ext.deps = [
@@ -49,6 +50,20 @@ buildscript {
                     'binding': "com.jakewharton.rxbinding2:rxbinding:2.0.0",
                     'relay'  : "com.jakewharton.rxrelay2:rxrelay:2.0.0",
                     'kotlin' : "io.reactivex.rxjava2:rxkotlin:2.2.0",
+            ],
+            'navigation'            : [
+                    // Java language implementation
+                    "androidx.navigation:navigation-fragment:${versions.nav_version}",
+                    "androidx.navigation:navigation-ui:${versions.nav_version}",
+                    // Kotlin
+                    "androidx.navigation:navigation-fragment-ktx:${versions.nav_version}",
+                    "androidx.navigation:navigation-ui-ktx:${versions.nav_version}",
+                    // Dynamic Feature Module Support
+                    "androidx.navigation:navigation-dynamic-features-fragment:${versions.nav_version}",
+                    // Testing Navigation
+                    "androidx.navigation:navigation-testing:${versions.nav_version}",
+//                    "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.nav_version}",
+
             ],
             'dagger'                : [
                     'core'      : "com.google.dagger:dagger:${versions.dagger}",
@@ -101,6 +116,7 @@ buildscript {
     dependencies {
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
+        classpath "androidx.navigation:navigation-safe-args-gradle-plugin:${versions.nav_version}"
         classpath 'com.android.tools.build:gradle:3.4.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'io.fabric.tools:gradle:1.31.2'

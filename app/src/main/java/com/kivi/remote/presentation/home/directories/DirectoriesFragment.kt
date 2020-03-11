@@ -113,7 +113,7 @@ class DirectoriesFragment : Fragment() {
                 setDisplayShowHomeEnabled(true)
             }
             modifyPadding(isTouchPadCollapsed.value)
-            isTouchPadCollapsed.observe(this, panelObserver)
+            isTouchPadCollapsed.observe(viewLifecycleOwner, panelObserver)
         }
 
         when (viewModel.uPnPManager.currentDirType) {

@@ -5,7 +5,8 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.net.Uri
 import androidx.lifecycle.MutableLiveData
-import com.kivi.remote.Screens
+import androidx.navigation.NavController
+import com.kivi.remote.R
 import com.kivi.remote.bus.*
 import com.kivi.remote.common.Constants
 import com.kivi.remote.common.KiviCache
@@ -18,10 +19,9 @@ import com.kivi.remote.persistence.AppDatabase
 import com.kivi.remote.presentation.base.BaseViewModel
 import io.reactivex.rxkotlin.subscribeBy
 import io.reactivex.schedulers.Schedulers
-import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
-class RecommendationsViewModel(private val router: Router,
+class RecommendationsViewModel(private val navController: NavController,
                                val database: AppDatabase,
                                val cache: KiviCache,
                                preferences: SharedPreferences) : BaseViewModel() {
@@ -178,18 +178,15 @@ class RecommendationsViewModel(private val router: Router,
             RxBus.publish(LaunchAppEvent(name))
             RxBus.publish(NavigateToRemoteEvent())
         } else {
-            //  router.navigateTo(Screens.MEDIA_FRAGMENT) todo next version
+              navController.navigate(R.id.action_recommendationsFragment_to_mediaFragment)
         }
     }
 
-    fun navigateTo(screen: String) {
-        router.navigateTo(screen)
+
+
+    fun navigate(screenKey: Int) {
+        navController.navigate(screenKey)
     }
-
-
-    fun goSearch() = router.navigateTo(Screens.DEVICE_SEARCH_FRAGMENT)
-
-    fun godo(data: Recommendation) = router.navigateTo(Screens.RECENT_DEVICE_FRAGMENT, data)
 
     fun sendToRemoteApp(context: Context, toOldRemote : Boolean) {
         val appPackageName =  if(toOldRemote) "com.wezom.kiviremote" else "com.kivi.remote"

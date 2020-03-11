@@ -4,6 +4,7 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
+apply plugin: "androidx.navigation.safeargs"
 apply plugin: 'io.fabric'
 
 GoogleServicesPlugin.config.disableVersionCheck = true
@@ -62,6 +63,9 @@ android {
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
     dataBinding.enabled = true
 }
@@ -125,6 +129,8 @@ dependencies {
     implementation deps.multidex
 
     implementation deps.coroutines
+
+    implementation deps.navigation
 
     implementation deps.anko.commons
     implementation deps.anko.commonsV4

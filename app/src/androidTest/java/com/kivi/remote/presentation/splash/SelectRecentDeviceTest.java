@@ -41,7 +41,7 @@ public class SelectRecentDeviceTest {
                 allOf(withId(R.id.device_container), withText(R.string.discovery_connect),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.activity_home_container),
+                                        withId(R.id.nav_host_fragment),
                                         0),
                                 11),
                         isDisplayed()));
@@ -57,7 +57,7 @@ public class SelectRecentDeviceTest {
         }
 
         ViewInteraction appCompatImageView = onView(
-                allOf(withId(R.id.devices),
+                allOf(withId(R.id.devices_container),
                         childAtPosition(
                                 allOf(withId(R.id.top_container),
                                         childAtPosition(
@@ -69,7 +69,7 @@ public class SelectRecentDeviceTest {
         ViewInteraction recyclerView = onView(
                 allOf(withId(R.id.devices_container),
                         childAtPosition(
-                                withClassName(is("android.support.design.widget.CoordinatorLayout")),
+                                withClassName(is("androidx.coordinatorlayout.widget.CoordinatorLayout")),
                                 0)));
         recyclerView.perform(actionOnItemAtPosition(0, click()));
 
@@ -77,7 +77,7 @@ public class SelectRecentDeviceTest {
                 allOf(withId(R.id.recent_devices_container), withText(R.string.save),
                         childAtPosition(
                                 childAtPosition(
-                                        withId(R.id.activity_home_container),
+                                        withId(R.id.nav_host_fragment),
                                         0),
                                 8),
                         isDisplayed()));

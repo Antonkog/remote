@@ -1,11 +1,11 @@
 package com.kivi.remote.presentation.home.subscriptions.subs_info
 
-import com.kivi.remote.Screens
+import androidx.navigation.NavController
+import com.kivi.remote.R
 import com.kivi.remote.presentation.base.BaseViewModel
-import ru.terrakok.cicerone.Router
 
-class SubsInfoViewModel(private val router: Router) : BaseViewModel() {
+class SubsInfoViewModel(private val navController: NavController) : BaseViewModel() {
 
-    fun navigateToSubsTariffs() = router.navigateTo(Screens.SUBS_TARIFF_PLANS_FRAGMENT)
+    fun navigateToSubsTariffs() = navController.navigate(R.id.action_subsInfoFragment_to_subsTariffPlansFragment)
 
 }

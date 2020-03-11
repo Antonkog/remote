@@ -18,7 +18,6 @@ import com.kivi.remote.common.extensions.toPx
 import com.kivi.remote.common.getAllImages
 import com.kivi.remote.common.getAllVideos
 import com.kivi.remote.databinding.GalleryFragmentBinding
-import com.kivi.remote.presentation.base.BaseFragment
 import com.kivi.remote.presentation.base.BaseViewModelFactory
 import com.kivi.remote.presentation.home.HomeActivity
 import com.kivi.remote.upnp.org.droidupnp.model.upnp.didl.IDIDLItem
@@ -61,7 +60,7 @@ class GalleryFragment : Fragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(GalleryViewModel::class.java)
 
         (activity as HomeActivity).run {
-            isTouchPadCollapsed.observe(this, panelObserver)
+            isTouchPadCollapsed.observe(viewLifecycleOwner, panelObserver)
         }
 
         binding.galleryTitle.text = viewModel.manager.currentDir

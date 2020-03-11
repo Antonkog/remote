@@ -5,8 +5,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.util.Base64
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavController
 import com.kivi.remote.App
-import com.kivi.remote.Screens.DEVICE_SEARCH_FRAGMENT
+import com.kivi.remote.R
 import com.kivi.remote.bus.*
 import com.kivi.remote.common.*
 import com.kivi.remote.common.Constants.*
@@ -33,21 +34,39 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.jetbrains.anko.doAsync
-import ru.terrakok.cicerone.Navigator
-import ru.terrakok.cicerone.NavigatorHolder
-import ru.terrakok.cicerone.Router
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 
 class HomeActivityViewModel(
         private val database: AppDatabase,
-        private val navigatorHolder: NavigatorHolder,
         private val cache: KiviCache,
-        private val router: Router,
+        private val navController: NavController,
         preferences: SharedPreferences
 ) : BaseViewModel() {
-    var autoConnect by preferences.boolean(false, Constants.AUTO_CONNECT)
+    var autoConnect by preferences.boolean(true, Constants.AUTO_CONNECT)
+
+    private var currentConnection: String by preferences.string(
+            UNIDENTIFIED,
+            CURRENT_CONNECTION_KEY
+    )
+
+    private var currentConnectionIp: String by preferences.string("", CURRENT_CONNECTION_IP_KEY)
+    private var muteStatus: Boolean by preferences.boolean(false, MUTE_STATUS_KEY)
+
+    private var serverConnection: ChatConnection? = null
+    private var currentModel: NsdServiceModel? = null
+
+    private var reconnectTimer: Disposable? = null
+
+    data class ProgressModel(
+            val rendererModel: UPnPManager.RendererModel,
+            val currentMediaType: GalleryFragment.MediaType
+    )
+
+    val showSettingsDialog = MutableLiveData<Boolean>()
+    val progress = MutableLiveData<ProgressModel>()
+    val triggerRebirth = MutableLiveData<Boolean>()
 
     init {
         disposables += RxBus.listen(ConnectionMessage::class.java)
@@ -63,10 +82,6 @@ class HomeActivityViewModel(
 
                     if (!it.isSetKeyboard) {
                         showSettingsDialog.postValue(true)
-                    }
-
-                    if (it.isDisconnect) {
-                        disconnect()
                     }
 
                     if (it.volume != NO_VALUE) {
@@ -325,6 +340,7 @@ class HomeActivityViewModel(
         disposables += RxBus.listen(DisconnectEvent::class.java)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribeBy(onNext = {
+                    disconnect()
                 }, onError = Timber::e)
 
     }
@@ -337,27 +353,6 @@ class HomeActivityViewModel(
     }
 
 
-    val showSettingsDialog = MutableLiveData<Boolean>()
-    val progress = MutableLiveData<ProgressModel>()
-    val slidingPanelContent = MutableLiveData<UPnPManager.SlidingContentModel>()
-    val triggerRebirth = MutableLiveData<Boolean>()
-
-    private var currentConnection: String by preferences.string(
-            UNIDENTIFIED,
-            CURRENT_CONNECTION_KEY
-    )
-    private var currentConnectionIp: String by preferences.string("", CURRENT_CONNECTION_IP_KEY)
-    private var muteStatus: Boolean by preferences.boolean(false, MUTE_STATUS_KEY)
-
-    private var serverConnection: ChatConnection? = null
-    private var currentModel: NsdServiceModel? = null
-
-    private var reconnectTimer: Disposable? = null
-
-    data class ProgressModel(
-            val rendererModel: UPnPManager.RendererModel,
-            val currentMediaType: GalleryFragment.MediaType
-    )
 
     fun clearData() {
         GlobalScope.launch(Dispatchers.Default) {
@@ -479,7 +474,7 @@ class HomeActivityViewModel(
     }
 
     private fun disconnect() {
-        router.backTo(DEVICE_SEARCH_FRAGMENT)
+        navigate(R.id.action_global_deviceSearchFragment)
     }
 
     fun tearConnectionDown() {
@@ -489,12 +484,6 @@ class HomeActivityViewModel(
     fun openSettings() {
         sendAction(Action.OPEN_SETTINGS)
     }
-
-    fun setNavigator(navigator: Navigator) = navigatorHolder.setNavigator(navigator)
-
-    fun removeNavigator() = navigatorHolder.removeNavigator()
-
-    fun newRootScreen(screenKey: String) = router.newRootScreen(screenKey)
 
     fun restartColorScheme(ctx: Activity?) {
         if (ctx != null) {
@@ -508,7 +497,7 @@ class HomeActivityViewModel(
         }
     }
 
-    fun goTo(screenKey: String) {
-        router.navigateTo(screenKey)
+    fun navigate(screenKey: Int) {
+        navController.navigate(screenKey)
     }
 }

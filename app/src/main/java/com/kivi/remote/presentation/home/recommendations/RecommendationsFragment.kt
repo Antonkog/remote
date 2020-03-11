@@ -15,7 +15,6 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kivi.remote.R
-import com.kivi.remote.Screens
 import com.kivi.remote.bus.SendActionEvent
 import com.kivi.remote.common.Action
 import com.kivi.remote.common.Constants
@@ -201,12 +200,12 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             binding.reciclerChannels.layoutManager = GridLayoutManager(context, 2, GridLayoutManager.HORIZONTAL, false)
             binding.reciclerChannels.adapter = adapterChannels
 
-            apps.observe(this@RecommendationsFragment, appsObserver)
-            inputs.observe(this@RecommendationsFragment, inputPortObserver)
-            recommendations.observe(this@RecommendationsFragment, recommendationsObserver)
-            channels.observe(this@RecommendationsFragment, channelsObserver)
-            oldVersionTv.observe(this@RecommendationsFragment, serverOldObserver)
-            showRatingDialog.observe(this@RecommendationsFragment, showRatingObserver)
+            apps.observe(viewLifecycleOwner, appsObserver)
+            inputs.observe(viewLifecycleOwner, inputPortObserver)
+            recommendations.observe(viewLifecycleOwner, recommendationsObserver)
+            channels.observe(viewLifecycleOwner, channelsObserver)
+            oldVersionTv.observe(viewLifecycleOwner, serverOldObserver)
+            showRatingDialog.observe(viewLifecycleOwner, showRatingObserver)
 
             populateApps()
             populatePorts()
@@ -220,15 +219,15 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             run {
                 when (view.id) {
                     com.kivi.remote.R.id.img_recommend_menu, com.kivi.remote.R.id.text_subscriptions -> {
-                        viewModel.navigateTo(Screens.KIVI_CATALOG_FRAGMENT)
+                        viewModel.navigate(R.id.action_recommendationsFragment_to_kiviCatalogFragment)
                     }
 
                     com.kivi.remote.R.id.img_apps_menu, com.kivi.remote.R.id.text_apps -> {
-                        viewModel.navigateTo(Screens.RECS_APPS_DEEP_FRAGMENT)
+                        viewModel.navigate(R.id.action_recommendationsFragment_to_recsAppsDeepFragment)
                     }
 
                     com.kivi.remote.R.id.img_channels_menu, com.kivi.remote.R.id.text_channel -> {
-                        viewModel.navigateTo(Screens.RECS_CHANNELS_DEEP_FRAGMENT)
+                        viewModel.navigate(R.id.action_recommendationsFragment_to_recsChannelsDeepFragment)
                     }
                 }
             }

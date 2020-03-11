@@ -5,7 +5,8 @@ import android.content.SharedPreferences
 import android.net.nsd.NsdManager
 import android.net.nsd.NsdServiceInfo
 import androidx.lifecycle.MutableLiveData
-import com.kivi.remote.Screens
+import androidx.navigation.NavController
+import com.kivi.remote.R
 import com.kivi.remote.bus.ConnectEvent
 import com.kivi.remote.bus.NetworkStateEvent
 import com.kivi.remote.common.Constants
@@ -25,13 +26,12 @@ import io.reactivex.rxkotlin.subscribeBy
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
 
 class DeviceSearchViewModel(
         private val nsdHelper: NsdHelper,
-        private val router: Router,
+        private val navController: NavController,
         private val database: AppDatabase,
         private val preferences: SharedPreferences
 ) : BaseViewModel() {
@@ -207,7 +207,7 @@ class DeviceSearchViewModel(
     private fun navigateToRecommendations(service: NsdServiceInfo) {
         if (service.host != null) {
             nsdHelper.stopDiscovery()
-            router.navigateTo(Screens.RECOMMENDATIONS_FRAGMENT)
+            navController.navigate(R.id.action_deviceSearchFragment_to_recommendationsFragment)
         }
     }
 }

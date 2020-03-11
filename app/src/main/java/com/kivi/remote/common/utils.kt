@@ -27,7 +27,7 @@ import com.kivi.remote.persistence.model.ServerApp
 import com.kivi.remote.persistence.model.ServerChannel
 import com.kivi.remote.persistence.model.ServerInput
 import com.kivi.remote.persistence.model.ServerRecommendation
-import com.kivi.remote.presentation.splash.SplashActivity
+import com.kivi.remote.presentation.home.HomeActivity
 import io.reactivex.SingleTransformer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import timber.log.Timber
@@ -307,7 +307,7 @@ fun getLocalIpAddress(ctx: Context): InetAddress {
 }
 
 fun triggerRebirth(context: Context, vararg intents: Intent) {
-    val intent = Intent(context, SplashActivity::class.java)
+    val intent = Intent(context, HomeActivity::class.java)
     intent.addFlags(FLAG_ACTIVITY_NEW_TASK) // In case we are called with non-Activity context.
     intent.putParcelableArrayListExtra(keyRestartIntents, java.util.ArrayList(intents.asList()))
     context.startActivity(intent)

@@ -17,12 +17,12 @@
 package com.kivi.remote.net;
 
 import android.os.StrictMode;
-import android.text.TextUtils;
 
 import com.crashlytics.android.Crashlytics;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.kivi.remote.bus.ChangeSnackbarStateEvent;
+import com.kivi.remote.bus.DisconnectEvent;
 import com.kivi.remote.bus.GotPreviewsContentEvent;
 import com.kivi.remote.bus.GotPreviewsInitialEvent;
 import com.kivi.remote.bus.NewAppListEvent;
@@ -204,6 +204,10 @@ public class ChatConnection {
                             Timber.e("Initial2 is null");
                         }
                         break;
+                    case DISCONNECT:
+                        RxBus.INSTANCE.publish(new DisconnectEvent());
+                        Timber.e("DISCONNECT event");
+                        break;
                     default:
                         Timber.d("12345 Unknown event has been received " + serverEvent.getEvent());
                         break;
@@ -223,8 +227,7 @@ public class ChatConnection {
                         !keyboardNotSet,
                         showKeyboard,
                         hideKeyboard,
-                        volume,
-                        TextUtils.equals(serverEvent.getEvent(), DISCONNECT))
+                        volume)
                         .addAspectMessage(serverEvent.getAspectMessage())
                         .addAvailable(serverEvent.getAvailableAspectValues())
                 );

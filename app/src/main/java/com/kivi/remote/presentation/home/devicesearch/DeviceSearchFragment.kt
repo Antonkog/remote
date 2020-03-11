@@ -73,8 +73,8 @@ class DeviceSearchFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Nsd
         viewModel.discoverDevices()
 
         setWifiName(true)
-        viewModel.nsdDevices.observe(this, nsdDevicesObserver)
-        viewModel.networkState.observe(this, networkStateObserver)
+        viewModel.nsdDevices.observe(viewLifecycleOwner, nsdDevicesObserver)
+        viewModel.networkState.observe(viewLifecycleOwner, networkStateObserver)
 
         // recyclerview init
         binding.devicesContainer.initWithLinLay(LinearLayoutManager.VERTICAL, adapter, listOf())

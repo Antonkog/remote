@@ -1,7 +1,7 @@
 package com.kivi.remote.presentation.home.kivi_catalog
 
 import android.content.Context
-import com.kivi.remote.Screens
+import androidx.navigation.NavController
 import com.kivi.remote.bus.LaunchRecommendationEvent
 import com.kivi.remote.bus.SendVoiceEvent
 import com.kivi.remote.common.RxBus
@@ -17,9 +17,8 @@ import com.kivi.remote.presentation.home.kivi_catalog.adapters.MovieData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.processors.PublishProcessor
 import io.reactivex.schedulers.Schedulers
-import ru.terrakok.cicerone.Router
 
-class KiviCatalogViewModel(val database: AppDatabase, val router: Router) : BaseViewModel() {
+class KiviCatalogViewModel(val database: AppDatabase, val navController: NavController) : BaseViewModel() {
 
     private val pagination: PublishProcessor<Int> = PublishProcessor.create()
 
@@ -34,7 +33,7 @@ class KiviCatalogViewModel(val database: AppDatabase, val router: Router) : Base
 
     private var isPaginationCreated = false
 
-    fun navigateToCatalogSeries(data: MovieData) = router.navigateTo(Screens.KIVI_CATALOG_SERIES_FRAGMENT, data)
+    fun navigateToCatalogSeries(data: MovieData) = navController.navigate(KiviCatalogFragmentDirections.actionKiviCatalogFragmentToKiviCatalogSeriesFragment(data))//navController.navigate(R.id.action_kiviCatalogFragment_to_kiviCatalogSeriesFragment)
 
     fun paginationFetchCatalogData(context: Context, from: Int, onResult: (data: List<MovieData>) -> Unit) {
         if (!isPaginationCreated) {

@@ -1,6 +1,7 @@
 package com.kivi.remote.presentation.home.kivi_catalog
 
 import android.content.Context
+import androidx.navigation.NavController
 import com.kivi.remote.bus.LaunchRecommendationEvent
 import com.kivi.remote.common.RxBus
 import com.kivi.remote.kivi_catalog.IviService
@@ -10,9 +11,8 @@ import com.kivi.remote.presentation.base.BaseViewModel
 import com.kivi.remote.presentation.home.kivi_catalog.adapters.MovieData
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.processors.PublishProcessor
-import ru.terrakok.cicerone.Router
 
-class KiviCatalogSeriesViewModel(val database: AppDatabase, val router: Router) : BaseViewModel() {
+class KiviCatalogSeriesViewModel(val database: AppDatabase, val navController: NavController) : BaseViewModel() {
 
     private val pagination: PublishProcessor<Int> = PublishProcessor.create()
 

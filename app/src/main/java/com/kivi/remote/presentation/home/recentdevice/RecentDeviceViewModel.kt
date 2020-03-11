@@ -1,6 +1,8 @@
 package com.kivi.remote.presentation.home.recentdevice
 
 import android.content.SharedPreferences
+import androidx.navigation.NavController
+import com.kivi.remote.R
 import com.kivi.remote.common.Constants
 import com.kivi.remote.common.extensions.string
 import com.kivi.remote.persistence.AppDatabase
@@ -9,11 +11,10 @@ import com.kivi.remote.presentation.base.BaseViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import ru.terrakok.cicerone.Router
 import timber.log.Timber
 
 
-class RecentDeviceViewModel(val database: AppDatabase, val router: Router, preferences: SharedPreferences) : BaseViewModel() {
+class RecentDeviceViewModel(val database: AppDatabase, val navController: NavController, preferences: SharedPreferences) : BaseViewModel() {
 
     var lastNsdHolderName by preferences.string(Constants.UNIDENTIFIED, key = Constants.LAST_NSD_HOLDER_NAME)
 
@@ -25,8 +26,11 @@ class RecentDeviceViewModel(val database: AppDatabase, val router: Router, prefe
     }
 
     fun goBack(recentDevice: RecentDevice) {
-        database.recentDeviceDao().removeByName(recentDevice.actualName)
-        router.exit()
+        GlobalScope.launch(Dispatchers.Default) {
+            database.recentDeviceDao().removeByName(recentDevice.actualName)
+        }
+        navController.navigate(R.id.action_recentDeviceFragment_to_deviceSearchFragment)
+//        navController.navigate(R.id.action_global_deviceSearchFragment)
     }
 
 }

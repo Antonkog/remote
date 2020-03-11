@@ -5,6 +5,7 @@ package com.kivi.remote.presentation.base
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavController
 import com.kivi.remote.common.KiviCache
 import com.kivi.remote.common.ResourceProvider
 import com.kivi.remote.di.scopes.ActivityScope
@@ -30,77 +31,75 @@ import com.kivi.remote.presentation.home.subscriptions.subs_price_list.SubsPrice
 import com.kivi.remote.presentation.home.subscriptions.subs_tariff_plans.SubsTariffPlansViewModel
 import com.kivi.remote.presentation.home.touchpad.TouchpadViewModel
 import com.kivi.remote.upnp.UPnPManager
-import ru.terrakok.cicerone.NavigatorHolder
-import ru.terrakok.cicerone.Router
 import javax.inject.Inject
 
 @ActivityScope
-class BaseViewModelFactory @Inject constructor(private val database: AppDatabase,
-                                               private val cache: KiviCache,
-                                               private val router: Router,
-                                               private val uPnPManager: UPnPManager,
-                                               private val navigatorHolder: NavigatorHolder,
-                                               private val nsdHelper: NsdHelper,
-                                               private val preferences: SharedPreferences,
-                                               private val resourceProvider: ResourceProvider) : ViewModelProvider.Factory {
+class BaseViewModelFactory @Inject constructor(
+        private val database: AppDatabase,
+        private val cache: KiviCache,
+        private val navController: NavController,
+        private val uPnPManager: UPnPManager,
+        private val nsdHelper: NsdHelper,
+        private val preferences: SharedPreferences,
+        private val resourceProvider: ResourceProvider) : ViewModelProvider.Factory {
 
     override fun <T : ViewModel?> create(modelClass: Class<T>): T = when {
         modelClass.isAssignableFrom(HomeActivityViewModel::class.java) ->
-            HomeActivityViewModel(database, navigatorHolder, cache, router, preferences) as T
+            HomeActivityViewModel(database, cache, navController, preferences) as T
 
         modelClass.isAssignableFrom(RecommendationsViewModel::class.java) ->
-            RecommendationsViewModel(router, database, cache, preferences) as T
+            RecommendationsViewModel(navController, database, cache, preferences) as T
 
         modelClass.isAssignableFrom(TouchpadViewModel::class.java) ->
-            TouchpadViewModel(router) as T
+            TouchpadViewModel(navController) as T
 
         modelClass.isAssignableFrom(RecentDevicesViewModel::class.java) ->
-            RecentDevicesViewModel(router, database, preferences) as T
+            RecentDevicesViewModel(navController, database, preferences) as T
 
         modelClass.isAssignableFrom(RecentDeviceViewModel::class.java) ->
-            RecentDeviceViewModel(database, router, preferences) as T
+            RecentDeviceViewModel(database, navController, preferences) as T
 
         modelClass.isAssignableFrom(DeviceSearchViewModel::class.java) ->
-            DeviceSearchViewModel(nsdHelper, router, database, preferences) as T
+            DeviceSearchViewModel(nsdHelper, navController, database, preferences) as T
 
         modelClass.isAssignableFrom(SubsPriceListViewModel::class.java) ->
-            SubsPriceListViewModel(router) as T
+            SubsPriceListViewModel(navController) as T
 
         modelClass.isAssignableFrom(SubsInfoViewModel::class.java) ->
-            SubsInfoViewModel(router) as T
+            SubsInfoViewModel(navController) as T
 
         modelClass.isAssignableFrom(SubsTariffPlansViewModel::class.java) ->
-            SubsTariffPlansViewModel(router) as T
+            SubsTariffPlansViewModel(navController) as T
 
         modelClass.isAssignableFrom(SubsPaymentViewModel::class.java) ->
-            SubsPaymentViewModel(router) as T
+            SubsPaymentViewModel(navController) as T
 
         modelClass.isAssignableFrom(RecsDeepViewModel::class.java) ->
-            RecsDeepViewModel(router, database) as T
+            RecsDeepViewModel(navController, database) as T
 
         modelClass.isAssignableFrom(ChannelsDeepViewModel::class.java) ->
-            ChannelsDeepViewModel(router, database) as T
+            ChannelsDeepViewModel(navController, database) as T
 
         modelClass.isAssignableFrom(AppsDeepViewModel::class.java) ->
-            AppsDeepViewModel(router, cache, database) as T
+            AppsDeepViewModel(navController, cache, database) as T
 
         modelClass.isAssignableFrom(DirectoriesViewModel::class.java) ->
-            DirectoriesViewModel(router, uPnPManager) as T
+            DirectoriesViewModel(navController, uPnPManager) as T
 
         modelClass.isAssignableFrom(GalleryViewModel::class.java) ->
             GalleryViewModel(uPnPManager) as T
 
         modelClass.isAssignableFrom(MediaViewModel::class.java) ->
-            MediaViewModel(router, uPnPManager) as T
+            MediaViewModel(navController, uPnPManager) as T
 
         modelClass.isAssignableFrom(PlayerViewModel::class.java) ->
-            PlayerViewModel(router, uPnPManager) as T
+            PlayerViewModel(navController, uPnPManager) as T
 
         modelClass.isAssignableFrom(KiviCatalogViewModel::class.java) ->
-            KiviCatalogViewModel(database, router) as T
+            KiviCatalogViewModel(database, navController) as T
 
         modelClass.isAssignableFrom(KiviCatalogSeriesViewModel::class.java) ->
-            KiviCatalogSeriesViewModel(database, router) as T
+            KiviCatalogSeriesViewModel(database, navController) as T
 
         else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.canonicalName}")
     }

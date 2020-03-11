@@ -52,7 +52,7 @@ class RecentDevicesFragment : BaseFragment(), RecentDevicesListener {
 
         viewModel.run {
             requestRecentDevices()
-            recentDevices.observe(this@RecentDevicesFragment, recentDevicesObserver)
+            recentDevices.observe(viewLifecycleOwner, recentDevicesObserver)
         }
     }
 

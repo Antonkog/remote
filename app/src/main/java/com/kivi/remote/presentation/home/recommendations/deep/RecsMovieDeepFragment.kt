@@ -47,7 +47,7 @@ class RecsMovieDeepFragment : DeepFragment(), LazyAdapter.OnItemClickListener<Re
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecsDeepViewModel::class.java)
         viewModel.populateRecommendations()
-        viewModel.recommendations.observe(this@RecsMovieDeepFragment, recommendationsObserver)
+        viewModel.recommendations.observe(viewLifecycleOwner, recommendationsObserver)
         val manager = GridLayoutManager(this.context, 3)
         manager.initialPrefetchItemCount = 5
 

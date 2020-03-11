@@ -72,6 +72,15 @@ class PlayerFragment : BaseFragment() {
     }
 
 
+    override fun onPause() {
+        super.onPause()
+        (activity as HomeActivity).run {
+            playerPreviewState.removeObserver( panelObserver)
+        }
+    }
+
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = PlayerFragmentBinding.inflate(inflater, container!!, false)
 
@@ -209,7 +218,14 @@ class PlayerFragment : BaseFragment() {
                 binding.renderPlay.tag = R.drawable.ic_image_pause
             }
             viewModel.STOPPED -> {
+                (activity as HomeActivity).run {
+                    playerPreviewState.removeObserver(panelObserver)
+                }
                 showPlayerStop()
+
+                (activity as HomeActivity).run {
+                    playerPreviewState.observe(this, panelObserver)
+                }
             }
             viewModel.SEEK_TO -> {
                 showSeekTo(timePassed, timeLeft, progress)
@@ -217,7 +233,6 @@ class PlayerFragment : BaseFragment() {
             viewModel.ERROR -> {
                 showPlayerStop()
             }
-
         }
     }
 
@@ -260,9 +275,9 @@ class PlayerFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(PlayerViewModel::class.java)
         viewModel.run {
-            launchRecEvent.observe(this@PlayerFragment, recsObserver)
-            previewEvent.observe(this@PlayerFragment, previewObserver)
-            progressEvent.observe(this@PlayerFragment, playerObserver)
+            launchRecEvent.observe(viewLifecycleOwner, recsObserver)
+            previewEvent.observe(viewLifecycleOwner, previewObserver)
+            progressEvent.observe(viewLifecycleOwner, playerObserver)
         }
     }
 }

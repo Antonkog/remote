@@ -1,6 +1,7 @@
 package com.kivi.remote.presentation.home.player
 
 import androidx.lifecycle.MutableLiveData
+import androidx.navigation.NavController
 import com.kivi.remote.bus.LaunchRecommendationEvent
 import com.kivi.remote.bus.RemotePlayerEvent
 import com.kivi.remote.bus.TVPlayerEvent
@@ -14,12 +15,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.disposables.Disposable
 import io.reactivex.rxkotlin.subscribeBy
-import ru.terrakok.cicerone.Router
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
 
 
-class PlayerViewModel(private val router: Router, private val uPnPManager: UPnPManager) : BaseViewModel() {
+class PlayerViewModel(private val navController: NavController, private val uPnPManager: UPnPManager) : BaseViewModel() {
 
     data class ProgressEvent(val condition: Int, val progress: Int, val passedTime: String, val leftTime: String)
     data class PreviewEvent(val imgUrl: String, val title: String?)
@@ -50,7 +50,7 @@ class PlayerViewModel(private val router: Router, private val uPnPManager: UPnPM
                             when (it.progress) {
                                 PLAYING -> {
                                     showProgress(PLAYING)
-                                    startPlayerTimer()
+//                                    startPlayerTimer()
                                 }
                                 PAUSED -> {
                                     showProgress(PAUSED)
@@ -75,7 +75,7 @@ class PlayerViewModel(private val router: Router, private val uPnPManager: UPnPM
                                     ?: 0
                             timeLeftMls = totalTimeMls
                             timePassedMls = 0
-                            startPlayerTimer()
+//                            startPlayerTimer()
 
                             if (it.playerPreview?.imageUrl != null && it.playerPreview.name != null)
                                 previewEvent.postValue(PreviewEvent(it.playerPreview.imageUrl!!, it.playerPreview.name))

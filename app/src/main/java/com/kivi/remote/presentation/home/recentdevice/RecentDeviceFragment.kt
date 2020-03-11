@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.kivi.remote.R
 import com.kivi.remote.bus.NewNameEvent
@@ -20,13 +21,13 @@ import com.kivi.remote.databinding.RecentDeviceFragmentBinding
 import com.kivi.remote.persistence.model.RecentDevice
 import com.kivi.remote.presentation.base.BaseFragment
 import com.kivi.remote.presentation.base.BaseViewModelFactory
+import com.kivi.remote.presentation.home.recentdevices.RecentDevicesFragmentArgs
 import io.reactivex.Completable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
-import java.io.Serializable
 import javax.inject.Inject
 
 class RecentDeviceFragment : BaseFragment() {
@@ -41,6 +42,8 @@ class RecentDeviceFragment : BaseFragment() {
 
     private lateinit var dialog: AlertDialog
     private lateinit var dialogEditText: EditText
+
+    private val RecentDevicesArgs by navArgs<RecentDevicesFragmentArgs>()
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
@@ -69,7 +72,12 @@ class RecentDeviceFragment : BaseFragment() {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(RecentDeviceViewModel::class.java)
 
         val adapter = TvInfoAdapter()
-        data = arguments!!.getSerializable("data") as RecentDevice
+          data = RecentDevicesArgs.recentDevice  //arguments!!.getSerializable("data") as RecentDevice
+
+//        arguments?.let {
+//            val args = RecentDevicesFragmentArgs.fromBundle(it)
+//            data = args.recentDevice
+//        }
 
         dialogEditText.setText((data.userDefinedName ?: "").remove032Space())
 
@@ -131,17 +139,6 @@ class RecentDeviceFragment : BaseFragment() {
                 RxBus.publish(NewNameEvent(newName))
                 binding.tvDeviceName.text = "УСТРОЙСТВО ${newName.remove032Space()}"
             }
-        }
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance(value: Serializable): RecentDeviceFragment {
-            val fragment = RecentDeviceFragment()
-            val args = Bundle()
-            args.putSerializable("data", value)
-            fragment.arguments = args
-            return fragment
         }
     }
 

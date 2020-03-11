@@ -18,6 +18,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewParent;
 import android.view.WindowManager;
 import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
@@ -74,8 +75,12 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.navigation.NavController;
+import androidx.navigation.ui.NavigationUI;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
+
+import static androidx.navigation.Navigation.findNavController;
 
 public class HomeActivity extends BaseActivity implements BackHandler {
 
@@ -132,17 +137,28 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         notificationManager = (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
 
         startCleanupService();
-        viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeActivityViewModel.class);
         // Entry point
-        viewModel.newRootScreen(Screens.DEVICE_SEARCH_FRAGMENT);
-
+//        viewModel.newRootScreen(Screens.DEVICE_SEARCH_FRAGMENT);
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
+
+        injectDependency();
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeActivityViewModel.class);
 
         initNetworkChangeReceiver();
         setupViews();
         setupObservers();
     }
 
+    public NavController getNavController(){
+        return findNavController(this, R.id.nav_host_fragment);
+    }
+
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        getNavController().navigateUp();
+        return true;
+    }
 
     // I've implemented it in setContentView(), but you can implement it in onCreate()
 //    @Override
@@ -287,6 +303,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == GpsUtils.INSTANCE.getRESULT_CODE()) {
             if (resultCode == Activity.RESULT_OK) {
                 RxBus.INSTANCE.publish(new LocationEnabledEvent(true));
@@ -330,7 +347,8 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     // to call when router need arrow back
     private void configureNavigationDrawer() {
         drawerLayout = findViewById(R.id.drawer_layout);
-
+//        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
+//        NavigationUI.setupWithNavController(binding.navView, getNavController());
         binding.navView.setNavigationItemSelectedListener(menuItem -> {
 
             drawerLayout.closeDrawer(GravityCompat.START);
@@ -338,7 +356,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
 
             switch (menuItem.getItemId()) {
                 case R.id.nav_devices:
-                    viewModel.goTo(Screens.RECENT_DEVICES_FRAGMENT);
+                    viewModel.navigate(R.id.action_global_recentDevicesFragment);
                     break;
 
 //                case R.id.nav_subscriptions:
@@ -362,7 +380,17 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                     break;
 
             }
-            return false;
+
+            // You need this line to handle the navigation
+            boolean handled = NavigationUI.onNavDestinationSelected(menuItem, getNavController());
+            if (handled) {
+                ViewParent parent = binding.navView.getParent();
+                if (parent instanceof DrawerLayout) {
+                    ((DrawerLayout) parent).closeDrawer(binding.navView);
+                }
+            }
+
+            return handled;
         });
     }
 
@@ -548,18 +576,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         hideSlidingPanel();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        viewModel.setNavigator(baseNavigator);
-    }
-
-    @Override
-    protected void onPause() {
-        viewModel.removeNavigator();
-//        viewModel.stopUPnPController();
-        super.onPause();
-    }
 
     @Override
     protected void onDestroy() {

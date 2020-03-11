@@ -1,7 +1,6 @@
 package com.kivi.remote.persistence.model;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
@@ -9,10 +8,8 @@ import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
 
-import java.io.Serializable;
-
 @Entity(tableName = "recent_devices", indices = {@Index(value = {"actual_name"}, unique = true)})
-public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Serializable {
+public class RecentDevice implements Comparable<RecentDevice>, Serializable {
 
     public RecentDevice(String actualName) {
         this.actualName = replace032(actualName);
@@ -89,37 +86,4 @@ public class RecentDevice implements Parcelable, Comparable<RecentDevice>, Seria
                 ", online=" + online +
                 '}';
     }
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.actualName);
-        dest.writeString(this.userDefinedName);
-        dest.writeByte(this.online ? (byte) 1 : (byte) 0);
-        dest.writeValue(this.wasConnected);
-    }
-
-    protected RecentDevice(Parcel in) {
-        this.actualName = in.readString();
-        this.userDefinedName = in.readString();
-        this.online = in.readByte() != 0;
-        this.wasConnected = (Long) in.readValue(Long.class.getClassLoader());
-    }
-
-    public static final Creator<RecentDevice> CREATOR = new Creator<RecentDevice>() {
-        @Override
-        public RecentDevice createFromParcel(Parcel source) {
-            return new RecentDevice(source);
-        }
-
-        @Override
-        public RecentDevice[] newArray(int size) {
-            return new RecentDevice[size];
-        }
-    };
 }

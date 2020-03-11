@@ -6,8 +6,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
-import androidx.room.Room;
-
 import com.kivi.remote.common.KiviCache;
 import com.kivi.remote.common.PreferencesManager;
 import com.kivi.remote.common.ResourceProvider;
@@ -18,10 +16,11 @@ import com.kivi.remote.upnp.UPnPManager;
 import com.kivi.remote.upnp.org.droidupnp.controller.upnp.IUPnPServiceController;
 import com.kivi.remote.upnp.org.droidupnp.model.upnp.IFactory;
 
+import androidx.room.Room;
 import dagger.Module;
 import dagger.Provides;
 
-@Module(includes = {CiceroneModule.class, UPnPModule.class})
+@Module(includes =  UPnPModule.class)
 public class ApplicationModule {
     private Application application;
 

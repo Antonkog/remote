@@ -39,7 +39,7 @@ class RecsAppsDeepFragment : DeepFragment(), LazyAdapter.OnItemClickListener<Ser
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(AppsDeepViewModel::class.java)
         adapter = AppsDeepAdapter(this, viewModel.cache)
         viewModel.populateApps()
-        viewModel.apps.observe(this@RecsAppsDeepFragment, recommendationsObserver)
+        viewModel.apps.observe(viewLifecycleOwner, recommendationsObserver)
 
         val manager = GridLayoutManager(this.context, 2)
 
