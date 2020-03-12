@@ -14,6 +14,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.kivi.remote.App
 import com.kivi.remote.R
+import com.kivi.remote.common.extensions.getIviPreviewDuration
 import com.kivi.remote.databinding.PlayerFragmentBinding
 import com.kivi.remote.net.model.Recommendation
 import com.kivi.remote.presentation.base.BaseFragment
@@ -36,24 +37,28 @@ class PlayerFragment : BaseFragment() {
 
     override fun injectDependencies() = fragmentComponent.inject(this)
 
-    private var dialog: AppCompatDialog? = null
+    private var closeDialog: AppCompatDialog? = null
+
+    private var stopByUser = false
 
     val panelObserver: Observer<Int> = Observer { newState ->
         // Update the UI, in this case, a TextView.
         when (newState) {
             BottomSheetBehavior.STATE_HIDDEN -> {
-                dialog?.show()
+                if(stopByUser) closeDialog?.show()
             }
             BottomSheetBehavior.STATE_COLLAPSED -> {
                 setSmallPlayer(true)
-            } else -> {
+            }
+            else -> {
                 setSmallPlayer(false)
             }
         }
     }
 
     fun setSmallPlayer(visible: Boolean) {
-        binding.topContainer.arrow.setImageResource(if (!visible) android.R.color.transparent else R.drawable.arrow_up_selector)
+        if (!visible) binding.topContainer.imageView.setImageResource(android.R.color.transparent)
+        else binding.topContainer.imageView.setImageResource(if (App.isDarkMode()) R.drawable.ic_close_dm else R.drawable.ic_close)
         binding.topContainer.dragView.visibility = if (!visible) View.VISIBLE else View.GONE
         binding.topContainer.imgPreview.visibility = if (!visible) View.GONE else View.VISIBLE
         binding.topContainer.previewName.visibility = if (!visible) View.GONE else View.VISIBLE
@@ -75,10 +80,9 @@ class PlayerFragment : BaseFragment() {
     override fun onPause() {
         super.onPause()
         (activity as HomeActivity).run {
-            playerPreviewState.removeObserver( panelObserver)
+            playerPreviewState.removeObserver(panelObserver)
         }
     }
-
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -116,6 +120,11 @@ class PlayerFragment : BaseFragment() {
 
         }
 
+        binding.topContainer.imageView.setOnClickListener(View.OnClickListener {
+            stopByUser = true
+            (activity as HomeActivity).hideSlidingPanel()
+        })
+
 
         binding.renderPlay.setOnClickListener { view ->
             if (view.tag == R.drawable.ic_image_play) {
@@ -125,14 +134,16 @@ class PlayerFragment : BaseFragment() {
             }
         }
 
-        dialog = AlertDialog.Builder(context!!, R.style.ThemeOverlay_AppCompat_Dialog_Alert)
+        closeDialog = AlertDialog.Builder(context!!, R.style.ThemeOverlay_AppCompat_Dialog_Alert)
                 .setMessage(R.string.close_recommendation)
                 .setNegativeButton(R.string.cancel)
                 { dialog, _ ->
                     (activity as HomeActivity).showFullPreviewPanel()
-                    dialog.dismiss() }
+                    dialog.dismiss()
+                }
                 .setPositiveButton(R.string.ok)
                 { dialog, _ ->
+                    stopByUser = true
                     showPlayerStop()
                     viewModel.closePlayer()
                 }
@@ -169,12 +180,8 @@ class PlayerFragment : BaseFragment() {
                 val diffX = e2.x - e1.x
                 if (Math.abs(diffX) > Math.abs(diffY)) {
                     if (Math.abs(diffX) > SWIPE_THRESHOLD && Math.abs(velocityX) > SWIPE_VELOCITY_THRESHOLD) {
-//                        if (diffX > 0) {
-//                            onSwipeRight()
-//                        } else {
-//                            onSwipeLeft()
-//                        }
-                        showPlayerStop()
+                        stopByUser = true
+                        (activity as HomeActivity).hideSlidingPanel()
                         result = true
                     }
                 }
@@ -218,19 +225,18 @@ class PlayerFragment : BaseFragment() {
                 binding.renderPlay.tag = R.drawable.ic_image_pause
             }
             viewModel.STOPPED -> {
-                (activity as HomeActivity).run {
-                    playerPreviewState.removeObserver(panelObserver)
-                }
+                stopByUser = false
                 showPlayerStop()
-
-                (activity as HomeActivity).run {
-                    playerPreviewState.observe(this, panelObserver)
-                }
             }
             viewModel.SEEK_TO -> {
                 showSeekTo(timePassed, timeLeft, progress)
+                if (binding.renderPlay.tag == R.drawable.ic_image_play) {
+                    binding.renderPlay.setImageResource(R.drawable.ic_image_pause)
+                    binding.renderPlay.tag = R.drawable.ic_image_pause
+                }
             }
             viewModel.ERROR -> {
+                stopByUser = false
                 showPlayerStop()
             }
         }
@@ -268,6 +274,9 @@ class PlayerFragment : BaseFragment() {
                 .into(binding.topContainer.imgPreview)
 
         binding.topContainer.previewName.text = title
+        binding.renderPlay.setImageResource(R.drawable.ic_image_pause)
+        binding.renderPlay.tag = R.drawable.ic_image_pause
+        showSeekTo("0".getIviPreviewDuration(),"0".getIviPreviewDuration(),0)
     }
 
 

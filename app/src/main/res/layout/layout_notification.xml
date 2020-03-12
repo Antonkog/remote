@@ -74,5 +74,5 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_close" />
+        app:srcCompat="@drawable/ic_close_dm" />
 </LinearLayout>

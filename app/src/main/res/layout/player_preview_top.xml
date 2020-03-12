@@ -20,7 +20,7 @@
             app:srcCompat="@drawable/ic_drag" />
 
         <ImageView
-            android:id="@+id/arrow"
+            android:id="@+id/image_view"
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:layout_marginEnd="16dp"
@@ -41,11 +41,15 @@
 
         <TextView
             android:id="@+id/preview_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textColor="@color/colorWhite"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
             android:layout_marginStart="16dp"
+            android:gravity="left|center_vertical"
+            android:textColor="@color/colorWhite"
+            android:maxLines="2"
+            android:ellipsize="end"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/image_view"
             app:layout_constraintStart_toEndOf="@+id/img_preview"
             app:layout_constraintTop_toTopOf="parent" />
 
