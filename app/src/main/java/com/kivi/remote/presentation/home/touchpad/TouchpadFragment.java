@@ -74,7 +74,7 @@ public class TouchpadFragment extends TvKeysFragment
     }
 
     private void init() {
-        binding.touchpad.setListener(this);
+        binding.touchpad.setMessageListener(this);
         binding.powerOff.setOnClickListener(view -> viewModel.switchOff());
         binding.microphone.setOnClickListener(view -> {
             if (((HomeActivity) getActivity()).hasRecordAudioPermission()) {

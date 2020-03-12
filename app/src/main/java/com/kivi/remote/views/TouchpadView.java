@@ -25,14 +25,14 @@ import timber.log.Timber;
  */
 
 public class TouchpadView extends AppCompatImageView implements GestureDetector.OnGestureListener {
-    private static final int TAP_TIMEOUT = 150;
+    private static final int TAP_TIMEOUT = 100;
 
     private boolean scroll = false;
     private boolean longTapStarted = false;
     private GestureDetectorCompat gestureDetectorCompat;
     private double speedMultiplier;
 
-    private OnTouchPadMessageListener<TouchpadMotionModel, TouchpadButtonClickEvent> listener;
+    private OnTouchPadMessageListener<TouchpadMotionModel, TouchpadButtonClickEvent> messageListener;
     private long eventStart;
 
     private boolean stop;
@@ -42,7 +42,7 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
 
     private float x1, x2, y1, y2, dx, dy;
 
-    private int centerClickArea = (getWidth() == 0) ? NumUtils.getToPx(30) : getWidth() / 4;
+    private int centerClickArea = 65; //(getWidth() == 0) ? NumUtils.getToPx(30) : getWidth() / 4;
 
     public void setScrollMode(boolean scroll) {
         this.scroll = scroll;
@@ -63,8 +63,8 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
         init(context);
     }
 
-    public void setListener(OnTouchPadMessageListener<TouchpadMotionModel, TouchpadButtonClickEvent> listener) {
-        this.listener = listener;
+    public void setMessageListener(OnTouchPadMessageListener<TouchpadMotionModel, TouchpadButtonClickEvent> messageListener) {
+        this.messageListener = messageListener;
     }
 
     Path path = new Path();
@@ -103,31 +103,22 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
 
         this.gestureDetectorCompat = new GestureDetectorCompat(context, this);
         this.setOnTouchListener((v, event) -> {
-
+//            int pointerCount = event.getPointerCount();
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    Timber.e(" mouse ACTION_DOWN");
                     eventStart = System.currentTimeMillis();
                     stop = false;
                     x1 = NumUtils.getToDp(event.getX());
                     y1 = NumUtils.getToDp(event.getY());
                     break;
-                case MotionEvent.ACTION_UP:
-                    Timber.e(" mouse ACTION_UP longTapStarted  " + longTapStarted);
-
-                    if (longTapStarted) {
-                        longTapStarted = false;
-                        listener.longClick(new TouchpadButtonClickEvent(x2, y2, Action.LONG_TAP_UP));
-                    } else performClick();
-                    break;
-
                 case MotionEvent.ACTION_MOVE:
-                    if (!scroll || longTapStarted) {
-                        x2 = NumUtils.getToDp(event.getX());
-                        y2 = NumUtils.getToDp(event.getY());
-                        dx = x2 - x1;
-                        dy = y2 - y1;
+                    x2 = NumUtils.getToDp(event.getX());
+                    y2 = NumUtils.getToDp(event.getY());
 
+                    dx = x2 - x1;
+                    dy = y2 - y1;
+
+                    if (!scroll) {
                         x1 = x2;
                         y1 = y2;
 
@@ -135,43 +126,47 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
                         Timber.d("Dy: " + dy);
 
                         double multiplyBy = 2 + speedMultiplier * 1.5;
-                        listener.sendMotionEvent(new TouchpadMotionModel(dx * multiplyBy, dy * multiplyBy));
+                        messageListener.sendMotionEvent(new TouchpadMotionModel(dx * multiplyBy, dy * multiplyBy));
                     } else {
-                        x2 = NumUtils.getToDp(event.getX());
-                        y2 = NumUtils.getToDp(event.getY());
-
-                        dx = x2 - x1;
-                        dy = y2 - y1;
-
-                        if (!stop) {
+                        if (!stop && !longTapStarted) {
                             if (dy < -centerClickArea) {
-                                listener.sendKey(KeyEvent.KEYCODE_DPAD_UP);
+                                messageListener.sendKey(KeyEvent.KEYCODE_DPAD_UP);
                                 stop = true;
                             }
 
                             if (dy > centerClickArea) {
-                                listener.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
+                                messageListener.sendKey(KeyEvent.KEYCODE_DPAD_DOWN);
                                 stop = true;
                             }
 
                             if (dx > centerClickArea) {
-                                listener.sendKey(KeyEvent.KEYCODE_DPAD_RIGHT);
+                                messageListener.sendKey(KeyEvent.KEYCODE_DPAD_RIGHT);
                                 stop = true;
                             }
 
                             if (dx < -centerClickArea) {
-                                listener.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
+                                messageListener.sendKey(KeyEvent.KEYCODE_DPAD_LEFT);
                                 stop = true;
                             }
                         }
                     }
                     break;
+                case MotionEvent.ACTION_UP:
+                    if (longTapStarted) {
+                        longTapStarted = false;
+                        messageListener.longClick(new TouchpadButtonClickEvent(x2, y2, Action.LONG_TAP_UP));
+                    } else if (scroll && centerClickArea > Math.sqrt(Math.pow(dx, 2) * Math.pow(dy, 2)))
+                        performClick();
+                    break;
             }
 
-            xDiff = event.getX() - ix;
-            yDiff = event.getY() - iy;
-
-            return gestureDetectorCompat.onTouchEvent(event);
+//            if (!scroll) {
+                xDiff = event.getX() - ix;
+                yDiff = event.getY() - iy;
+                return gestureDetectorCompat.onTouchEvent(event);
+//            } else {
+//                return true;
+//            }
         });
     }
 
@@ -182,7 +177,7 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
         long eventDifference = eventEnd - eventStart;
 
         if (eventDifference < TAP_TIMEOUT)
-            listener.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
+            messageListener.sendKey(KeyEvent.KEYCODE_DPAD_CENTER);
         return super.performClick();
     }
 
@@ -199,8 +194,8 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
 
     @Override
     public boolean onSingleTapUp(MotionEvent e) {
-        if (Math.abs(xDiff) <= 3 && Math.abs(yDiff) <= 3) {
-            listener.buttonClick(new TouchpadButtonClickEvent(xDiff, yDiff, Action.LEFT_CLICK));
+        if (!scroll && Math.abs(xDiff) <= 3 && Math.abs(yDiff) <= 3) {
+            messageListener.buttonClick(new TouchpadButtonClickEvent(xDiff, yDiff, Action.LEFT_CLICK));
             return true;
         }
         return false;
@@ -215,7 +210,7 @@ public class TouchpadView extends AppCompatImageView implements GestureDetector.
     public void onLongPress(MotionEvent e) {
         Timber.e("onLongPress");
         longTapStarted = true;
-        listener.longClick(new TouchpadButtonClickEvent(x1, y1, Action.LONG_TAP_DOWN));
+        messageListener.longClick(new TouchpadButtonClickEvent(x1, y1, Action.LONG_TAP_DOWN));
     }
 
     @Override
