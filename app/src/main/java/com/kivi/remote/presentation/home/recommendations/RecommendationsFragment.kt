@@ -284,7 +284,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
                 viewModel.sendToRemoteApp(binding.root.context, toOldRemote = false)
             } else {
                 val emailIntent = Intent(Intent.ACTION_SENDTO)
-                emailIntent.data = Uri.parse("mailto:remote@kivismart.com")
+                emailIntent.data = Uri.parse("mailto:dev@kivismart.com")
                 try {
                     startActivity(emailIntent)
                 } catch (e: ActivityNotFoundException) { //TODO: Handle case where no email app is available
