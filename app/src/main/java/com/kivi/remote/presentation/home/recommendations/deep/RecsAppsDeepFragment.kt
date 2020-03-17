@@ -9,6 +9,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.kivi.remote.databinding.RecsDeepFragmentBinding
 import com.kivi.remote.net.model.ServerAppInfo
+import com.kivi.remote.presentation.base.BaseFragment
 import com.kivi.remote.presentation.base.BaseViewModelFactory
 import com.kivi.remote.presentation.base.recycler.LazyAdapter
 import com.kivi.remote.presentation.base.recycler.initWithManager
@@ -16,7 +17,7 @@ import com.kivi.remote.presentation.home.HomeActivity
 import timber.log.Timber
 import javax.inject.Inject
 
-class RecsAppsDeepFragment : DeepFragment(), LazyAdapter.OnItemClickListener<ServerAppInfo> {
+class RecsAppsDeepFragment : BaseFragment(), LazyAdapter.OnItemClickListener<ServerAppInfo> {
 
 
     @Inject

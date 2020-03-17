@@ -1,7 +1,6 @@
 package com.kivi.remote.presentation.home;
 
 import android.Manifest;
-import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -10,6 +9,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -17,10 +17,10 @@ import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewParent;
 import android.view.WindowManager;
-import android.view.animation.DecelerateInterpolator;
 import android.view.inputmethod.EditorInfo;
 import android.widget.FrameLayout;
 import android.widget.TextView;
@@ -62,7 +62,6 @@ import java.util.Iterator;
 import javax.inject.Inject;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDialog;
@@ -76,6 +75,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
+import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import timber.log.Timber;
@@ -90,11 +90,12 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     private final ArrayList<WeakReference<OnBackClickListener>> backClickListeners = new ArrayList<>();
 
     // define a variable to track hamburger-arrow state
-    protected boolean isHomeAsUp = false;
     protected boolean isKeyboardShown = false;
     protected Toolbar toolbar;
     protected ActionBarDrawerToggle toggle;
     private DrawerLayout drawerLayout;
+    private AppBarConfiguration appBarConfiguration;
+
     private LockableBottomSheetBehavior playerSheetBechavior = null;
     private LockableBottomSheetBehavior touchpadSheetBehavior = null;
 
@@ -149,40 +150,139 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         setupObservers();
     }
 
-    public NavController getNavController(){
+    public NavController getNavController() {
         return findNavController(this, R.id.nav_host_fragment);
     }
 
 
     @Override
     public boolean onSupportNavigateUp() {
-        getNavController().navigateUp();
-        return true;
+        return NavigationUI.navigateUp(getNavController(), appBarConfiguration)
+                || super.onSupportNavigateUp();
     }
+
 
     // I've implemented it in setContentView(), but you can implement it in onCreate()
 //    @Override
 //    public void setContentView(@LayoutRes int layoutResID) {
 //        super.setContentView(layoutResID);
 
-    private void configureToolbar() {
-        toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        toggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        toggle.onConfigurationChanged(newConfig);
+    }
+
+
+    public void setToolbarTxt(String text) {
+        binding.toolbarText.setText(text);
+    }
+
+    public void uncheckMenu() {
+        for (int i = 0; i < binding.navView.getMenu().size(); i++) {
+            binding.navView.getMenu().getItem(i).setChecked(false);
+        }
+    }
+
+    public void showTouchPad() {
+        touchpadSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
+
+    public void hideTouchPad() {
+        touchpadSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
+    }
+
+
+    public void hideSlidingPanel() {
+        if (playerSheetBechavior != null && playerSheetBechavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
+            playerSheetBechavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+        }
+    }
+
+    public void showFullPreviewPanel() {
+        if (playerSheetBechavior != null && playerSheetBechavior.getState() != BottomSheetBehavior.STATE_EXPANDED)
+            playerSheetBechavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+    }
+
+//    public void changeToolbarVisibility(int visibility) {
+//        this.runOnUiThread(() -> toolbar.setVisibility(visibility));
+//    }
+
+    public void changeFabVisibility(int visibility) {
+        this.runOnUiThread(() -> {
+            if (visibility == View.INVISIBLE || visibility == View.GONE)
+                binding.fab.hide();
+            else
+                binding.fab.show();
+
+        });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == GpsUtils.INSTANCE.getRESULT_CODE()) {
+            if (resultCode == Activity.RESULT_OK) {
+                RxBus.INSTANCE.publish(new LocationEnabledEvent(true));
+            } else {
+                RxBus.INSTANCE.publish(new LocationEnabledEvent(false));
+            }
+        }
+    }
+
+    private void startCleanupService() {
+        try {
+            startService(new Intent(this, CleanupService.class));
+        } catch (IllegalStateException e) {
+            Timber.e("cant start CleanupService in background " + e.getMessage());
+        }
+    }
+
+    private void setupViews() {
+        setupMediaSlider();
+        setupTouchpadSlider();
+        reconnectSnackbar = setupSnackbar();
+
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
+
         drawerLayout = findViewById(R.id.drawer_layout);
+        toolbar = findViewById(R.id.toolbar);
+        drawerLayout = findViewById(R.id.drawer_layout);
+
+        setSupportActionBar(toolbar);
 
         toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.drawer_open, R.string.drawer_close);
         drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
 
-        // overwrite Navigation OnClickListener that is set by ActionBarDrawerToggle
-        toolbar.setNavigationOnClickListener(v -> {
-            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                drawerLayout.closeDrawer(GravityCompat.START);
-            } else if (isHomeAsUp) {
-                onBackPressed();
-            } else {
-                drawerLayout.openDrawer(GravityCompat.START);
-            }
+        appBarConfiguration = new AppBarConfiguration.Builder(R.id.deviceSearchFragment, R.id.recommendationsFragment) // getNavController().getGraph()
+                .setOpenableLayout(drawerLayout)
+                .build();
+
+        NavigationUI.setupWithNavController(toolbar, getNavController(), appBarConfiguration);
+//        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
+//        NavigationUI.setupWithNavController(binding.navView, getNavController());
+
+        binding.navView.setNavigationItemSelectedListener(menuItem -> {
+            return onMenuDrawerClick(menuItem);
+        });
+
+        configureEditText();
+        binding.switchDm.setChecked(App.isDarkMode());
+        binding.switchDm.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            viewModel.restartColorScheme(this);
+        });
+
+        binding.autoConnect.setChecked(viewModel.getAutoConnect());
+        binding.autoConnect.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            viewModel.setAutoConnect(isChecked);
         });
 
         binding.clearText.setOnClickListener(v -> {
@@ -196,6 +296,19 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             binding.fab.setElevation(getResources().getDimension(R.dimen.elevation_small));
         }
     }
+//        getNavController().addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+//            @Override
+//            public void onDestinationChanged(@NonNull NavController controller,
+//                                             @NonNull NavDestination destination, @Nullable Bundle arguments) {
+//                if(destination.getId() == R.id.recsAppsDeepFragment) {
+//                    toolbar.setVisibility(View.GONE);
+//                    bottomNavigationView.setVisibility(View.GONE);
+//                } else {
+//                    toolbar.setVisibility(View.VISIBLE);
+//                    bottomNavigationView.setVisibility(View.VISIBLE);
+//                }
+//            }
+//        });
 
 
     private void configureEditText() {
@@ -234,164 +347,47 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         });
     }
 
-    public void setToolbarTxt(String text) {
-//        binding.toolbarText.setCompoundDrawablesWithIntrinsicBounds(0, 0, 0, 0);
-        binding.toolbarText.setText(text);
-    }
+    private boolean onMenuDrawerClick(MenuItem menuItem) {
+        drawerLayout.closeDrawer(GravityCompat.START);
+        menuItem.setChecked(true);
 
-    public void uncheckMenu() {
-        for (int i = 0; i < binding.navView.getMenu().size(); i++) {
-            binding.navView.getMenu().getItem(i).setChecked(false);
-        }
-    }
-
-    public void showTouchPad() {
-        touchpadSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-    }
-
-
-    public void hideTouchPad() {
-        touchpadSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED);
-    }
-
-
-    public void hideSlidingPanel() {
-        if (playerSheetBechavior != null && playerSheetBechavior.getState() != BottomSheetBehavior.STATE_HIDDEN) {
-            playerSheetBechavior.setState(BottomSheetBehavior.STATE_HIDDEN);
-        }
-    }
-
-    public void showFullPreviewPanel() {
-        if (playerSheetBechavior != null && playerSheetBechavior.getState() != BottomSheetBehavior.STATE_EXPANDED)
-            playerSheetBechavior.setState(BottomSheetBehavior.STATE_EXPANDED);
-    }
-
-    public void changeToolbarVisibility(int visibility) {
-        this.runOnUiThread(() -> toolbar.setVisibility(visibility));
-    }
-
-    public void changeFabVisibility(int visibility) {
-        this.runOnUiThread(() -> {
-            if (visibility == View.INVISIBLE || visibility == View.GONE)
-                binding.fab.hide();
-            else
-                binding.fab.show();
-
-        });
-    }
-
-
-    // call this method for animation between hamburged and arrow
-    public void setHomeAsUp(boolean isHomeAsUp) {
-        if (this.isHomeAsUp != isHomeAsUp) {
-            this.isHomeAsUp = isHomeAsUp;
-
-            ValueAnimator anim = isHomeAsUp ? ValueAnimator.ofFloat(0, 1) : ValueAnimator.ofFloat(1, 0);
-            anim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                @Override
-                public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                    float slideOffset = (Float) valueAnimator.getAnimatedValue();
-                    toggle.onDrawerSlide(drawerLayout, slideOffset);
-                }
-            });
-            anim.setInterpolator(new DecelerateInterpolator());
-            // You can change this duration to more closely match that of the default animation.
-            anim.setDuration(400);
-            anim.start();
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == GpsUtils.INSTANCE.getRESULT_CODE()) {
-            if (resultCode == Activity.RESULT_OK) {
-                RxBus.INSTANCE.publish(new LocationEnabledEvent(true));
-            } else {
-                RxBus.INSTANCE.publish(new LocationEnabledEvent(false));
-            }
-        }
-    }
-
-    private void startCleanupService() {
-        try {
-            startService(new Intent(this, CleanupService.class));
-        } catch (IllegalStateException e) {
-            Timber.e("cant start CleanupService in background " + e.getMessage());
-        }
-    }
-
-    private void setupViews() {
-
-        setupMediaSlider();
-        setupTouchpadSlider();
-        reconnectSnackbar = setupSnackbar();
-
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN | WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
-        configureNavigationDrawer();
-        configureToolbar();
-        configureEditText();
-        binding.switchDm.setChecked(App.isDarkMode());
-
-        binding.switchDm.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            viewModel.restartColorScheme(this);
-        });
-
-        binding.autoConnect.setChecked(viewModel.getAutoConnect());
-        binding.autoConnect.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            viewModel.setAutoConnect(isChecked);
-        });
-
-    }
-
-    // to call when router need arrow back
-    private void configureNavigationDrawer() {
-        drawerLayout = findViewById(R.id.drawer_layout);
-//        NavigationUI.setupActionBarWithNavController(this, navController, drawerLayout);
-//        NavigationUI.setupWithNavController(binding.navView, getNavController());
-        binding.navView.setNavigationItemSelectedListener(menuItem -> {
-
-            drawerLayout.closeDrawer(GravityCompat.START);
-            menuItem.setChecked(true);
-
-            switch (menuItem.getItemId()) {
-                case R.id.nav_devices:
-                    viewModel.navigate(R.id.action_global_recentDevicesFragment);
-                    break;
+        switch (menuItem.getItemId()) {
+            case R.id.nav_devices:
+                viewModel.navigate(R.id.action_global_recentDevicesFragment);
+                break;
 
 //                case R.id.nav_subscriptions:
 //                    Toast.makeText(this, " cleaned db ", Toast.LENGTH_LONG).show();
 //                    viewModel.goTo(Screens.KIVI_CATALOG_FRAGMENT);
 //                    break;
 //                                        viewModel.clearData(); ///test!!!
-                case R.id.nav_support:
-                    String url = "https://kivi.ua/support-center";
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    try {
-                        startActivity(i);
-                    } catch (ActivityNotFoundException e) {
-                        Timber.e("can't go to support " + e);
-                    }
-                    break;
-
-                case R.id.nav_exit:
-                    this.finish();
-                    break;
-
-            }
-
-            // You need this line to handle the navigation
-            boolean handled = NavigationUI.onNavDestinationSelected(menuItem, getNavController());
-            if (handled) {
-                ViewParent parent = binding.navView.getParent();
-                if (parent instanceof DrawerLayout) {
-                    ((DrawerLayout) parent).closeDrawer(binding.navView);
+            case R.id.nav_support:
+                String url = "https://kivi.ua/support-center";
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                try {
+                    startActivity(i);
+                } catch (ActivityNotFoundException e) {
+                    Timber.e("can't go to support " + e);
                 }
-            }
+                break;
 
-            return handled;
-        });
+            case R.id.nav_exit:
+                this.finish();
+                break;
+
+        }
+
+        // You need this line to handle the navigation
+        boolean handled = NavigationUI.onNavDestinationSelected(menuItem, getNavController());
+        if (handled) {
+            ViewParent parent = binding.navView.getParent();
+            if (parent instanceof DrawerLayout) {
+                ((DrawerLayout) parent).closeDrawer(binding.navView);
+            }
+        }
+
+        return handled;
     }
 
     @Override
@@ -483,14 +479,14 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         return count > 0;
     }
 
-    public void showReconnectSnackbar() {
+    private void showReconnectSnackbar() {
         if (!reconnectSnackbar.isShown())
             reconnectSnackbar.show();
 //        changeFabVisibility(View.GONE);
         binding.disconnectStatusIndicator.setVisibility(View.VISIBLE);
     }
 
-    public void hideReconnectSnackbar() {
+    private void hideReconnectSnackbar() {
         if (reconnectSnackbar.isShown())
             reconnectSnackbar.dismiss();
 //        changeFabVisibility(View.VISIBLE);
@@ -589,15 +585,6 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     @Override
     public void injectDependency() {
         getActivityComponent().inject(this);
-    }
-
-    public void showBackButton() {
-        ActionBar bar = getSupportActionBar();
-        if (bar != null) {
-            bar.setDisplayHomeAsUpEnabled(true);
-            bar.setDisplayShowHomeEnabled(true);
-        }
-        binding.toolbar.setNavigationOnClickListener(v -> onBackPressed());
     }
 
     public void showSettingsDialog() {

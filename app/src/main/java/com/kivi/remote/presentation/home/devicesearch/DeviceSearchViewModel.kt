@@ -156,7 +156,7 @@ class DeviceSearchViewModel(
     fun discoverDevices() {
         disposable?.takeIf { !it.isDisposed }?.dispose()
         disposable =
-                nsdHelper.nsdRelay.subscribe(this::handleDevices, { e -> Timber.e(e, e.message) })
+                nsdHelper.nsdRelay.subscribe(this::handleDevices) { e -> Timber.e(e, e.message) }
         nsdHelper.discoverServices()
     }
 
@@ -207,7 +207,9 @@ class DeviceSearchViewModel(
     private fun navigateToRecommendations(service: NsdServiceInfo) {
         if (service.host != null) {
             nsdHelper.stopDiscovery()
-            navController.navigate(R.id.action_deviceSearchFragment_to_recommendationsFragment)
+            GlobalScope.launch(Dispatchers.Main){ //todo: recheck if navController is ready.
+                navController.navigate(R.id.action_deviceSearchFragment_to_recommendationsFragment)
+            }
         }
     }
 }

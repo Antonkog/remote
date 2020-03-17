@@ -88,8 +88,10 @@ class KiviCatalogFragment : BaseFragment(), Toolbar.OnMenuItemClickListener, Laz
 
         //Toolbar
         setHasOptionsMenu(true)
-        (activity as HomeActivity).setToolbarTxt(getString(R.string.movies_toolbar_tittle))
-        (activity as HomeActivity).toolbar.setOnMenuItemClickListener(this@KiviCatalogFragment)
+        (activity as HomeActivity).run {
+            setToolbarTxt(getString(R.string.movies_toolbar_tittle))
+            toolbar.setOnMenuItemClickListener(this@KiviCatalogFragment)
+        }
 
         binding.rvCatalogMovies.initWithGridLay(2, moviesCatalogAdapter, listOf())
         binding.rvAutocompleteCatalogMovies.initWithLinLay(LinearLayoutManager.VERTICAL, autocompleteMoviesCatalogAdapter, listOf())

@@ -5,7 +5,5 @@
         android:id="@+id/image_app"
         style="@style/KiviOldApiCard"
         android:layout_width="@dimen/recom_app_w"
-        android:layout_height="@dimen/recom_app_h"
-        android:adjustViewBounds="true"
-        android:scaleType="fitXY" />
+        android:layout_height="@dimen/recom_app_h" />
 </layout>

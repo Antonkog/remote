@@ -2,14 +2,16 @@ package com.kivi.remote.common.glide;
 
 import android.graphics.Bitmap;
 
-import androidx.annotation.NonNull;
-
 import com.bumptech.glide.load.engine.bitmap_recycle.BitmapPool;
 import com.bumptech.glide.load.resource.bitmap.BitmapTransformation;
 import com.bumptech.glide.load.resource.bitmap.TransformationUtils;
 
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
+
+import androidx.annotation.NonNull;
+
+import static com.kivi.remote.common.Constants.SMALL_BITMAP;
 
 public class PreviewsTransformation extends BitmapTransformation {
 
@@ -25,16 +27,14 @@ public class PreviewsTransformation extends BitmapTransformation {
         this.mRadius = mRadius;
     }
 
-    public PreviewsTransformation(int mRadius, int oldApiMargins) {
-        this.mRadius = mRadius;
-        this.oldApiMargins = oldApiMargins;
-    }
 
     @Override
     protected Bitmap transform(@NonNull BitmapPool pool, @NonNull Bitmap toTransform, int outWidth, int outHeight) {
-        outWidth = outWidth - oldApiMargins;
-        outHeight = outHeight - oldApiMargins;
-        return TransformationUtils.roundedCorners(pool, TransformationUtils.fitCenter(pool, toTransform, outWidth,outHeight), mRadius);
+        if (toTransform.getWidth() >= SMALL_BITMAP) {
+            return TransformationUtils.roundedCorners(pool, TransformationUtils.centerCrop(pool, toTransform, outWidth,outHeight), mRadius);
+        } else {
+            return TransformationUtils.fitCenter(pool, toTransform, outWidth,outHeight);
+        }
     }
 
     @Override

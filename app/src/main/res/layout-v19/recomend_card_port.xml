@@ -5,6 +5,7 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         style="@style/KiviOldApiCard"
+        android:scaleType="fitXY"
         android:layout_width="@dimen/recom_port"
         android:layout_height="@dimen/recom_port">
 

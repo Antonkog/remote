@@ -9,13 +9,14 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.GridLayoutManager
 import com.kivi.remote.databinding.RecsDeepFragmentBinding
 import com.kivi.remote.net.model.Channel
+import com.kivi.remote.presentation.base.BaseFragment
 import com.kivi.remote.presentation.base.BaseViewModelFactory
 import com.kivi.remote.presentation.base.recycler.LazyAdapter
 import com.kivi.remote.presentation.base.recycler.initWithManager
 import timber.log.Timber
 import javax.inject.Inject
 
-class RecsChannelsDeepFragment : DeepFragment(), LazyAdapter.OnItemClickListener<Channel> {
+class RecsChannelsDeepFragment : BaseFragment(), LazyAdapter.OnItemClickListener<Channel> {
 
 
     @Inject

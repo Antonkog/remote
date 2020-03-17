@@ -49,8 +49,8 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     private val serverOldObserver = Observer<Boolean> {
         if (it == true) {
             (activity as HomeActivity).run {
-                showTouchPad()
                 hideSlidingPanel()
+                showTouchPad()
             }
             dialogDowngrade.show()
         } else {
@@ -106,9 +106,8 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     override fun onChannelChosen(item: Channel, position: Int) {
         viewModel.launchChannel(item)
         (activity as HomeActivity).run {
-            showTouchPad()
             hideSlidingPanel()
-            changeFabVisibility(View.GONE)
+            showTouchPad()
         }
 
     }
@@ -120,8 +119,8 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
     override fun appChosenNeedOpen(appModel: ServerAppInfo, positio: Int) {
         viewModel.launchApp(appModel.packageName)
         (activity as HomeActivity).run {
-            showTouchPad()
             hideSlidingPanel()
+            showTouchPad()
         }
     }
 
@@ -211,7 +210,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             populatePorts()
             populateChannels()
             populateRecommendations()
-
         }
 
 
@@ -310,19 +308,6 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
             RxBus.publish(SendActionEvent(Action.HOME_UP))
             fragmentManager?.popBackStack()
         }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        (activity as HomeActivity).run {
-            changeFabVisibility(View.VISIBLE)
-            uncheckMenu()
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        (activity as HomeActivity).run { changeFabVisibility(View.GONE) }
     }
 }
 

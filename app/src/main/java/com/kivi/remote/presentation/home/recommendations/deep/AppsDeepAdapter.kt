@@ -4,8 +4,8 @@ import android.widget.ImageView
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.kivi.remote.R
 import com.kivi.remote.common.Constants
-import com.kivi.remote.common.Constants.SMALL_BITMAP
 import com.kivi.remote.common.KiviCache
+import com.kivi.remote.common.dpToPx
 import com.kivi.remote.common.glide.GlideApp
 import com.kivi.remote.common.glide.PreviewsTransformation
 import com.kivi.remote.databinding.RecomendCardAppBinding
@@ -24,27 +24,16 @@ class AppsDeepAdapter(itemClickListener: OnItemClickListener<ServerAppInfo>, val
             imageView.isClickable = false
         } else
             if (item.packageName != null)
-                cache.get(item.packageName).let {
-
-                    if(it?.width!= null &&  it.width > SMALL_BITMAP){
-
+                cache.get(item.packageName)?.let {
                         Timber.e(" PreviewsTransformation app width ${it.width} " + item.packageName)
 
                         GlideApp.with(imageView.context)
                                 .load(it)
                                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .transform(PreviewsTransformation(5, 5))
+                                .transform(PreviewsTransformation(dpToPx(imageView.context, 5)))
                                 .into(imageView)
-                    }
-                    if(it?.width!= null &&  it.width <= SMALL_BITMAP){
-                        Timber.e(" PreviewsTransformation2 app width ${it.width} " + item.packageName)
 
-                        GlideApp.with(imageView.context)
-                                .load(it)
-                                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                .centerInside()
-                                .into(imageView)
-                    }
+
                 }
 
     }

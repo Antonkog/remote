@@ -56,17 +56,9 @@ class RecentDevicesFragment : BaseFragment(), RecentDevicesListener {
         }
     }
 
-    override fun onPause() {
-        (activity as (HomeActivity)).run {
-            setHomeAsUp(false)
-        }
-        super.onPause()
-    }
-
     override fun onResume() {
         (activity as (HomeActivity)).run {
             setToolbarTxt(resources.getString(R.string.devices_kivi))
-            setHomeAsUp(true)
         }
         super.onResume()
     }

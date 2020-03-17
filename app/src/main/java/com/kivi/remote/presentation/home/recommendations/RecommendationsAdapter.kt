@@ -10,7 +10,6 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.kivi.remote.R
 import com.kivi.remote.common.Constants
-import com.kivi.remote.common.Constants.SMALL_BITMAP
 import com.kivi.remote.common.KiviCache
 import com.kivi.remote.common.dpToPx
 import com.kivi.remote.common.glide.GlideApp
@@ -136,30 +135,14 @@ class RecommendationsAdapter(private val listener: HorizontalCVContract.Horizont
                 imageView.isClickable = false
             } else
                 if (item.packageName != null)
-                    cache.get(item.packageName).let {
-
-                        if (it?.width != null && it.width > SMALL_BITMAP) {
-
-                            Timber.d(" PreviewsTransformation app width ${it.width} " + item.packageName)
-                            GlideApp.with(view.context)
-                                    .load(it)
-                                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                                    .transform(PreviewsTransformation(5, 5))
-                                    .into(imageView)
-                        }
-                        if (it?.width != null && it.width <= SMALL_BITMAP) {
-                            Timber.d(" PreviewsTransformation2 app width ${it.width} " + item.packageName)
-                            GlideApp.with(view.context).load(it)
-                                    .diskCacheStrategy(DiskCacheStrategy.ALL)
-                                    .centerInside()
-                                    .into(imageView)
-
-
-                        }
-
+                    cache.get(item.packageName)?.let {
+                        GlideApp.with(view.context)
+                                .load(it)
+                                .diskCacheStrategy(DiskCacheStrategy.ALL)
+//                                .apply(RequestOptions.bitmapTransform(RoundedCornersTransformation(dpToPx(view.context, 5), 0, RoundedCornersTransformation.CornerType.ALL)))
+                                .transform(PreviewsTransformation(dpToPx(view.context, 5)))
+                                .into(imageView)
                     }
-
-
             view.setOnClickListener(this)
         }
 
