@@ -17,6 +17,9 @@ import com.kivi.remote.presentation.home.subscriptions.subs_payment.SubsPaymentF
 import com.kivi.remote.presentation.home.subscriptions.subs_price_list.SubsPriceListFragment;
 import com.kivi.remote.presentation.home.subscriptions.subs_tariff_plans.SubsTariffPlansFragment;
 import com.kivi.remote.presentation.home.touchpad.TouchpadFragment;
+import com.kivi.remote.presentation.home.tutorial.TutorialFragment;
+
+import org.jetbrains.annotations.NotNull;
 
 import dagger.Subcomponent;
 
@@ -54,4 +57,5 @@ public interface FragmentComponent {
 
     void inject(KiviCatalogSeriesFragment kiviCatalogSeriesFragment);
 
+    void inject(@NotNull TutorialFragment tutorialFragment);
 }

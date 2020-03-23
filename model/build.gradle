@@ -26,15 +26,15 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0-alpha4', {
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.3.0-alpha05', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testImplementation 'junit:junit:4.12'
+    testImplementation 'junit:junit:4.13'
 
     api deps.architectureComponents.room.core
     annotationProcessor deps.architectureComponents.room.compiler
     api deps.architectureComponents.room.rx
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.3.41"
+    implementation 'org.jetbrains.kotlin:kotlin-stdlib:1.3.70'
 }
 repositories {
     mavenCentral()

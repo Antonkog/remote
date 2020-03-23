@@ -12,6 +12,18 @@
     <string name="discovery_connect">Підключитися</string>
     <string name="discovery.in.progress">Йде пошук доступних пристроїв</string>
 
+    <string name="tutorial_title_I">Дякую за вибір продукції KIVI!</string>
+    <string name="tutorial_title_II">Пульт управління ТВ</string>
+    <string name="tutorial_title_III">Бібліотека фільмів</string>
+    <string name="tutorial_title_IV">Канали</string>
+    <string name="tutorial_title_V">Закриття пульта</string>
+
+    <string name="tutorial_desc_I">Вітаємо у програмі KIVI Remote 3.0! Давайте проведемо коротку екскурсію основних можливостей</string>
+    <string name="tutorial_desc_II">У додатку реалізовано 2 типу управління: свайп пульт і курсор. Для перемикання між ними натисніть на іконку в правому нижньому кутку.</string>
+    <string name="tutorial_desc_III">Натисніть на іконку переходу щоб потрапити в бібліотеку з понад 30 тис. ліцензійних фільмів. Для запуску просто натисніть на фільм, який сподобався.</string>
+    <string name="tutorial_desc_IV">Ми зібрали для Вас найпопулярніші канали України. Щоб отримати доступ до повного списку каналів натисніть на іконку праворуч</string>
+    <string name="tutorial_desc_V">Щоб приховати пульт або плеєр - просто змахніть його вниз</string>
+
     <string name="wrong_input">Для коректної роботи програми необхідно змінити налаштування ТВ.\nВ меню \&quot;Метод вводу\&quot; оберіть пункт \&quot;KIVI Keyboard\&quot;.
         \n\nПерейти в налаштування?</string>
     <string name="input_text_hint">Введіть текст</string>
@@ -91,6 +103,8 @@
     <string name="later">Пізніше</string>
     <string name="rate">Оцінити</string>
     <string name="log_file_attached">" Файл з останньою помилкою прикріплений до листа."</string>
+    <string name="skip">пропустити</string>
+    <string name="start_using">Почати використання</string>
 
 
 </resources>

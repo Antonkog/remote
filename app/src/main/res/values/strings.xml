@@ -12,6 +12,17 @@
 
     <!--CLIENT SIDE strings-->
 
+    <string name="tutorial_title_I">Спасибо за выбор продукции KIVI!</string>
+    <string name="tutorial_title_II">Пульт управления ТВ.</string>
+    <string name="tutorial_title_III">Библиотека фильмов</string>
+    <string name="tutorial_title_IV">Каналы</string>
+    <string name="tutorial_title_V">Закрытие пульта</string>
+    <string name="tutorial_desc_I">Добро пожаловать в приложение KIVI Remote 3.0! Давайте проведем краткую экскурсию по основным возможностям</string>
+    <string name="tutorial_desc_II">В приложении реализовано 2 типа управления: свайп пульт и курсор. Для переключения между ними нажмите на иконку в правом нижнем углу.</string>
+    <string name="tutorial_desc_III">Нажмите на иконку перехода чтобы перейти в библиотеку с более 30 тыс. лицензионных фильмов. Для запуска просто нажмите на понравившийся фильм.</string>
+    <string name="tutorial_desc_IV">Мы собрали для Вас самые популярные каналы Украины. Чтобы получить доступ к полному списку каналов нажмите на иконку справа</string>
+    <string name="tutorial_desc_V"> Чтобы скрыть пульт или плеер – просто смахните его вниз</string>
+
     <string name="discovery_connect">Подключиться</string>
     <string name="discovery.in.progress">Идет поиск доступных устройств</string>
     <string name="log_file_attached">Файл с последней ошибкой прикреплен к письму.</string>
@@ -117,5 +128,7 @@
     <string name="by_category">Категория</string>
     <string name="by_genre">Жанр</string>
     <string name="by_country">Страна</string>
+    <string name="skip">пропустить</string>
+    <string name="start_using">Начать использование</string>
 
 </resources>

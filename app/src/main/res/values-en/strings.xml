@@ -18,6 +18,19 @@
     <string name="mine_devices">My devices</string>
     <string name="other_devices">Other devices</string>
 
+    <string name="tutorial_title_I">Thank you for choosing KIVI!</string>
+    <string name="tutorial_title_II">TV Remote control</string>
+    <string name="tutorial_title_III">Films library</string>
+    <string name="tutorial_title_IV">Channels</string>
+    <string name="tutorial_title_V">Hiding the remote control</string>
+    <string name="tutorial_desc_I">Welcome to KIVI 3.0! Let’s make a short overview of the main features</string>
+    <string name="tutorial_desc_II">2 types of control are released in the app: swipe and cursor. To switch them, press the icon at the bottom right.</string>
+    <string name="tutorial_desc_III">Press the more icon to get into the library with more than 30 thousand license films. To launch just click on a film</string>
+    <string name="tutorial_desc_IV">We\'ve picked the most popular Ukrainian channels for you. To get the full list just press the icon above channels at the main screen</string>
+    <string name="tutorial_desc_V">To hide the tv player – swipe it down!</string>
+    <string name="skip">skip</string>
+    <string name="start_using">Let\'s start!</string>
+
     <string name="save">Save</string>
 
     <string name="save_success">Changes saved</string>

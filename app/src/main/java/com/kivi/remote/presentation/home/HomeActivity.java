@@ -523,8 +523,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
                         break;
                     case BottomSheetBehavior.STATE_COLLAPSED:
                     case BottomSheetBehavior.STATE_EXPANDED:
-                        changeFabVisibility(View.GONE);
-
+                         changeFabVisibility(View.GONE);
                         break;
                 }
             }

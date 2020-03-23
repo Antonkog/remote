@@ -30,6 +30,7 @@ import com.kivi.remote.presentation.home.subscriptions.subs_payment.SubsPaymentV
 import com.kivi.remote.presentation.home.subscriptions.subs_price_list.SubsPriceListViewModel
 import com.kivi.remote.presentation.home.subscriptions.subs_tariff_plans.SubsTariffPlansViewModel
 import com.kivi.remote.presentation.home.touchpad.TouchpadViewModel
+import com.kivi.remote.presentation.home.tutorial.TutorialViewModel
 import com.kivi.remote.upnp.UPnPManager
 import javax.inject.Inject
 
@@ -52,6 +53,9 @@ class BaseViewModelFactory @Inject constructor(
 
         modelClass.isAssignableFrom(TouchpadViewModel::class.java) ->
             TouchpadViewModel(navController) as T
+
+        modelClass.isAssignableFrom(TutorialViewModel::class.java) ->
+            TutorialViewModel(navController, preferences) as T
 
         modelClass.isAssignableFrom(RecentDevicesViewModel::class.java) ->
             RecentDevicesViewModel(navController, database, preferences) as T

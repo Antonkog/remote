@@ -27,6 +27,9 @@
         <action
             android:id="@+id/action_deviceSearchFragment_to_kiviCatalogFragment"
             app:destination="@id/kiviCatalogFragment" />
+        <action
+            android:id="@+id/action_deviceSearchFragment_to_tutorialFragment"
+            app:destination="@id/tutorialFragment" />
     </fragment>
 
     <fragment
@@ -184,6 +187,14 @@
         android:label="GalleryFragment" />
 
         <action android:id="@+id/action_global_recentDevicesFragment" app:destination="@id/recentDevicesFragment"/>
+    <fragment
+        android:id="@+id/tutorialFragment"
+        android:name="com.kivi.remote.presentation.home.tutorial.TutorialFragment"
+        android:label="TutorialFragment" >
+        <action
+            android:id="@+id/action_tutorialFragment_to_deviceSearchFragment"
+            app:destination="@id/deviceSearchFragment" />
+    </fragment>
 
 
 </navigation>

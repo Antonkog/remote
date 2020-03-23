@@ -38,6 +38,7 @@ class DeviceSearchViewModel(
 
     private var lastNsdHolderName by preferences.string(Constants.UNIDENTIFIED, key = Constants.LAST_NSD_HOLDER_NAME)
     private var autoConnect by preferences.boolean(false, Constants.AUTO_CONNECT)
+    private var tuturialDone by preferences.boolean(false, Constants.TUTORIAL_DONE)
 
     init {
         GlobalScope.launch(Dispatchers.Default) {
@@ -59,6 +60,10 @@ class DeviceSearchViewModel(
                     }
                 }, onError = Timber::e
         )
+
+        if(!tuturialDone){
+            navController.navigate(R.id.action_deviceSearchFragment_to_tutorialFragment)
+        }
     }
 
     val networkState = MutableLiveData<Boolean>()

@@ -28,6 +28,7 @@ public class Constants {
     public static final String UPDATE_SHOWING = "update_showing";
 
     public static final String AUTO_CONNECT = "auto_connect";
+    public static final String TUTORIAL_DONE = "tutorial_done";
     public static final String LAST_NSD_HOLDER_NAME = "current_connection";
     public static final String MUTE_STATUS_KEY = "muteStatus";
     public static final String CURSOR_SPEED_KEY = "cursor_speed";

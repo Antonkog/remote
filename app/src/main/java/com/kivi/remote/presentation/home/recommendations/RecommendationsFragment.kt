@@ -179,6 +179,7 @@ class RecommendationsFragment : BaseFragment(), HorizontalCVContract.HorizontalC
         viewModel.lastNsdHolderName.let {
             (activity as HomeActivity).setToolbarTxt(it.removeMasks())
         }
+        (activity as HomeActivity).changeFabVisibility(View.VISIBLE)
 
         adapterApps = RecommendationsAdapter(this, viewModel.cache)
         adapterPorts = RecommendationsAdapter(this, viewModel.cache)
