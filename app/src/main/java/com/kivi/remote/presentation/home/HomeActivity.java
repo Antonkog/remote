@@ -75,6 +75,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDestination;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -143,10 +144,19 @@ public class HomeActivity extends BaseActivity implements BackHandler {
         binding = DataBindingUtil.setContentView(this, R.layout.home_activity);
 
         injectDependency();
+        setupViews();// nav controller creation before viewbodel
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(HomeActivityViewModel.class);
+        binding.autoConnect.setChecked(viewModel.getAutoConnect());
+        binding.autoConnect.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            viewModel.setAutoConnect(isChecked);
+        });
+
+        binding.clearText.setOnClickListener(v -> {
+            binding.editText.setText("");
+            viewModel.sendTextToTv("");
+        });
 
         initNetworkChangeReceiver();
-        setupViews();
         setupObservers();
     }
 
@@ -280,35 +290,27 @@ public class HomeActivity extends BaseActivity implements BackHandler {
             viewModel.restartColorScheme(this);
         });
 
-        binding.autoConnect.setChecked(viewModel.getAutoConnect());
-        binding.autoConnect.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            viewModel.setAutoConnect(isChecked);
-        });
-
-        binding.clearText.setOnClickListener(v -> {
-            binding.editText.setText("");
-            viewModel.sendTextToTv("");
-        });
-
 
         binding.fab.setOnClickListener(view -> showTouchPad());
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             binding.fab.setElevation(getResources().getDimension(R.dimen.elevation_small));
         }
+
+        getNavController().addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
+            @Override
+            public void onDestinationChanged(@NonNull NavController controller,
+                                             @NonNull NavDestination destination, @Nullable Bundle arguments) {
+                if (destination.getId() == R.id.tutorialFragment) {
+                    toolbar.setVisibility(View.GONE);
+                    binding.toolbarSpace.setVisibility(View.GONE);
+                } else {
+                    toolbar.setVisibility(View.VISIBLE);
+                    binding.toolbarSpace.setVisibility(View.VISIBLE);
+                }
+            }
+        });
+
     }
-//        getNavController().addOnDestinationChangedListener(new NavController.OnDestinationChangedListener() {
-//            @Override
-//            public void onDestinationChanged(@NonNull NavController controller,
-//                                             @NonNull NavDestination destination, @Nullable Bundle arguments) {
-//                if(destination.getId() == R.id.recsAppsDeepFragment) {
-//                    toolbar.setVisibility(View.GONE);
-//                    bottomNavigationView.setVisibility(View.GONE);
-//                } else {
-//                    toolbar.setVisibility(View.VISIBLE);
-//                    bottomNavigationView.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
 
 
     private void configureEditText() {
@@ -622,6 +624,7 @@ public class HomeActivity extends BaseActivity implements BackHandler {
     public void onBackPressed() {
         if (!fragmentsBackKeyIntercept()) {
             hideKeyboard();
+            uncheckMenu();
             super.onBackPressed();
         }
     }

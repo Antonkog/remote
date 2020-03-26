@@ -23,8 +23,9 @@
             android:id="@+id/tutorial_img"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:scaleType="fitStart"
             android:src="@drawable/tutorial_first"
-            app:layout_constraintBottom_toTopOf="@+id/text_title"
+            app:layout_constraintBottom_toBottomOf="@+id/imageView2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -37,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="156dp"
             android:text="@string/dark_mode"
+            android:gravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -48,6 +50,7 @@
             android:paddingLeft="22dp"
             android:layout_marginTop="5dp"
             android:paddingRight="22dp"
+            android:gravity="center"
             android:text="Description"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

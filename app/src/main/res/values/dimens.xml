@@ -20,6 +20,12 @@
     <dimen name="scroll_margin">12dp</dimen>
     <dimen name="scroll_width">32dp</dimen>
 
+
+    <dimen name="button_height_standard">45dp</dimen>
+    <dimen name="button_text_standard">@dimen/txt_XIII</dimen>
+    <dimen name="txt_XIII">13sp</dimen>
+
+
     <dimen name="video_container_size">300dp</dimen>
     <dimen name="preview_thumbnail_size">48dp</dimen>
     <dimen name="next_prev_size">54dp</dimen>

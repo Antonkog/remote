@@ -60,13 +60,13 @@ class TutorialFragment : BaseFragment() {
                 when (position) {
                     4 -> {
                         binding.textSkipTutorial.visibility = View.GONE
-                        binding.buttonStartContainer.visibility = View.VISIBLE
+                        binding.buttonStart.visibility = View.VISIBLE
                         binding.tabsTutorial.visibility = View.GONE
                     }
                     else -> {
                         binding.textSkipTutorial.visibility = View.VISIBLE
                         binding.tabsTutorial.visibility = View.VISIBLE
-                        binding.buttonStartContainer.visibility = View.GONE
+                        binding.buttonStart.visibility = View.GONE
                     }
                 }
             }

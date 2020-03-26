@@ -59,51 +59,22 @@
             android:text="@string/skip"
             android:textColor="@color/colorAccent" />
 
-
-
-<!--        <Button-->
-<!--            android:id="@+id/button"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_alignParentBottom="true"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_alignParentLeft="true"-->
-<!--            android:text="@string/start_using"-->
-<!--            style="@style/TextAppearance.AppCompat.Button"-->
-
-<!--            />-->
-
-
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/buttonStartContainer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            app:cardCornerRadius="5dp"
-            android:visibility="visible"
-            android:layout_marginBottom="60dp"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentLeft="true">
-
-
             <TextView
                 android:id="@+id/buttonStart"
+                style="@style/KiviButton"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
-                android:background="@drawable/shape_rectangle_blue_r3"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentLeft="true"
+                android:layout_marginStart="22.5dp"
+                android:layout_marginEnd="22.5dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:layout_marginBottom="45dp"
                 android:gravity="center"
                 android:text="@string/start_using"
                 android:textSize="15sp"
                 tools:textColor="@color/colorWhite" />
-
-
-        </androidx.cardview.widget.CardView>
-
 
     </RelativeLayout>
 

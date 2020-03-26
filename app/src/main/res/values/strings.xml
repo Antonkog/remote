@@ -128,7 +128,7 @@
     <string name="by_category">Категория</string>
     <string name="by_genre">Жанр</string>
     <string name="by_country">Страна</string>
-    <string name="skip">пропустить</string>
+    <string name="skip">Пропустить</string>
     <string name="start_using">Начать использование</string>
 
 </resources>

@@ -193,7 +193,10 @@
         android:label="TutorialFragment" >
         <action
             android:id="@+id/action_tutorialFragment_to_deviceSearchFragment"
-            app:destination="@id/deviceSearchFragment" />
+            app:destination="@id/deviceSearchFragment"
+            app:popUpTo="@+id/deviceSearchFragment"
+            app:popUpToInclusive="true"
+            />
     </fragment>
 
 

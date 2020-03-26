@@ -71,18 +71,28 @@
 
 
 
-            <fragment
-                android:id="@+id/nav_host_fragment"
-                android:name="androidx.navigation.fragment.NavHostFragment"
+            <LinearLayout
+                android:id="@+id/fragment_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:defaultNavHost="true"
-                app:navGraph="@navigation/nav_graph"
-                android:layout_below="@+id/toolbar"
                 android:layout_gravity="top"
-                android:layout_marginTop="?attr/actionBarSize"
-                android:gravity="top"
-                />
+                android:orientation="vertical"
+                android:gravity="top">
+
+                <Space
+                    android:id="@+id/toolbar_space"
+                    android:layout_width="wrap_content"
+                    android:layout_height="?actionBarSize"/>
+
+                <fragment
+                    android:id="@+id/nav_host_fragment"
+                    android:name="androidx.navigation.fragment.NavHostFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:defaultNavHost="true"
+                    app:navGraph="@navigation/nav_graph" />
+            </LinearLayout>
+
 <!--            -->
 <!--            <FrameLayout-->
 <!--                android:id="@+id/activity_home_container"-->
@@ -98,7 +108,7 @@
                 android:id="@+id/media_slider"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/nav_host_fragment"
+                android:layout_below="@+id/fragment_container"
                 android:layout_gravity="bottom"
                 android:orientation="vertical"
                 app:behavior_hideable="true"
@@ -111,7 +121,7 @@
                 android:id="@+id/touchpad_slider"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/nav_host_fragment"
+                android:layout_below="@+id/fragment_container"
                 android:orientation="vertical"
                 android:layout_gravity="bottom"
                 app:behavior_hideable="true"
@@ -133,7 +143,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="end|bottom"
-                android:visibility="gone"
                 android:layout_margin="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="32dp"

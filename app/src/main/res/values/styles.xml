@@ -107,4 +107,21 @@
         <item name="android:textSize">16sp</item>
     </style>
 
+
+
+    <style name="KiviButton" parent="AppTheme">
+        <!--        <item name="colorControlHighlight">@color/blue</item>-->
+        <item name="android:layout_height">@dimen/button_height_standard</item>
+        <item name="android:textSize">@dimen/button_text_standard</item>
+        <item name="android:textColor">@color/colorWhite</item>
+
+        <item name="android:gravity">center</item>
+        <item name="android:focusable">true</item>
+        <item name="android:textAllCaps">false</item>
+        <!--        <item name="android:backgroundTint">@color/gray_III</item>-->
+        <item name="android:elevation">0dp</item>
+        <item name="android:translationZ">0dp</item>
+        <item name="android:background">@drawable/button</item>
+    </style>
+
 </resources>
